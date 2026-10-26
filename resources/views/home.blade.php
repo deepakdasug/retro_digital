@@ -57,8 +57,9 @@
         --t-border: #e5e7eb;
         --t-star: #f59e0b;
 
-        padding: 5rem 0;
-        background-color: var(--t-bg);
+        padding: 4rem 0;
+        background: transparent;
+        /* background-color: var(--t-bg); */
         overflow: hidden;
         font-family: inherit; /* Inter, from the site */
     }
