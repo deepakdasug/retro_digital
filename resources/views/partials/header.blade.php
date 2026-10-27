@@ -21,53 +21,53 @@
             <div class="dropdown-arrow-indicator"></div>
             <div class="services-mega-columns">
               <section class="services-mega-group" aria-labelledby="marketing-services-heading">
-                <h2 id="marketing-services-heading"><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'marketing-platform']) }}">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="marketing-services-heading"><a href="#">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Explore technology services for secure operations and responsible asset lifecycle management.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'search-engine-optimization']) }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'paid-marketing']) }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'email-marketing']) }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'video-marketing']) }}"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'content-marketing']) }}"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>Content Marketing</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'orm-services']) }}"><i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>ORM Services</a></li>
+                  <li><a href="{{ route('services.show', 'search-engine-optimization') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
+                  <li><a href="{{ route('services.show', 'social-media-marketing') }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
+                  <li><a href="{{ route('services.show', 'paid-marketing') }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
+                  <li><a href="{{ route('services.show', 'email-marketing') }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
+                  <li><a href="{{ route('services.show', 'video-marketing') }}"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
+                  <li><a href="{{ route('services.show', 'content-marketing') }}"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>Content Marketing</a></li>
+                  <li><a href="{{ route('services.show', 'orm-services') }}"><i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>ORM Services</a></li>
                 </ul>
               </section>
 
               <section class="services-mega-group" aria-labelledby="development-services-heading">
-                <h2 id="development-services-heading"><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-development']) }}">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="development-services-heading"><a href="#">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Plan and support the digital systems your organization relies on every day.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'web-development']) }}"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'custom-application']) }}"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'saas-application']) }}"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'api-development']) }}"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'software-development']) }}"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
-                  <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
+                  <li><a href="#"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
+                  <li><a href="#"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
+                  <li><a href="#"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
+                  <li><a href="#"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
+                  <li><a href="#"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
+                  <li><a href="#"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
+                  <li><a href="#"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
+                  <li><a href="#"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
                 </ul>
               </section>
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'our-platform']) }}">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Bring technology lifecycle services together around your organization’s needs.</p>
                 </article>
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-exploration']) }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-solutions']) }}">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Find support for equipment, data, and operational requirements.</p>
                 </article>
               </section>
             </div>
             <div class="services-mega-cards">
-              <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-support']) }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Support</strong><small>Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
-              <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-services']) }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Services</strong><small>End-to-end IT solutions including infrastructure management, cloud services, cybersecurity, system integration, and ongoing maintenance.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
-              <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'digital-marketing-services']) }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Support</strong><small>Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Services</strong><small>End-to-end IT solutions including infrastructure management, cloud services, cybersecurity, system integration, and ongoing maintenance.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
             </div>
           </div>
         </li>
@@ -81,34 +81,34 @@
             <div class="dropdown-arrow-indicator"></div>
             <div class="industries-mega-columns">
               <ul class="industries-mega-list">
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'ecommerce-multivendor']) }}"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span><strong>Ecommerce &amp; Multivendor</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'real-estate-construction']) }}"><i class="fa-solid fa-building" aria-hidden="true"></i><span><strong>Real Estate &amp; Construction</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'manufacturing']) }}"><i class="fa-solid fa-industry" aria-hidden="true"></i><span><strong>Manufacturing</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'media-entertainment']) }}"><i class="fa-solid fa-film" aria-hidden="true"></i><span><strong>Media &amp; Entertainment</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'medical-healthcare']) }}"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i><span><strong>Medical &amp; Healthcare</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'personal-beauty-care']) }}"><i class="fa-solid fa-spa" aria-hidden="true"></i><span><strong>Personal Beauty Care</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span><strong>Ecommerce &amp; Multivendor</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-building" aria-hidden="true"></i><span><strong>Real Estate &amp; Construction</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-industry" aria-hidden="true"></i><span><strong>Manufacturing</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-film" aria-hidden="true"></i><span><strong>Media &amp; Entertainment</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i><span><strong>Medical &amp; Healthcare</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-spa" aria-hidden="true"></i><span><strong>Personal Beauty Care</strong><small>IT asset and data lifecycle support</small></span></a></li>
               </ul>
 
               <ul class="industries-mega-list">
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'edtech-elearning']) }}"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span><strong>EdTech &amp; E-Learning</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'travel-hospitality']) }}"><i class="fa-solid fa-plane" aria-hidden="true"></i><span><strong>Travel &amp; Hospitality</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'transportation-logistics']) }}"><i class="fa-solid fa-truck" aria-hidden="true"></i><span><strong>Transportation &amp; Logistics</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'oil-and-gas']) }}"><i class="fa-solid fa-oil-well" aria-hidden="true"></i><span><strong>Oil and Gas</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'finance-insurance']) }}"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i><span><strong>Finance &amp; Insurance</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'other-industries']) }}"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Other Industries</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span><strong>EdTech &amp; E-Learning</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-plane" aria-hidden="true"></i><span><strong>Travel &amp; Hospitality</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-truck" aria-hidden="true"></i><span><strong>Transportation &amp; Logistics</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-oil-well" aria-hidden="true"></i><span><strong>Oil and Gas</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i><span><strong>Finance &amp; Insurance</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="#"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Other Industries</strong><small>IT asset and data lifecycle support</small></span></a></li>
               </ul>
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'our-platform']) }}">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Bring technology lifecycle services together around your organization’s needs.</p>
                 </article>
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'tech-exploration']) }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>
-                  <h2><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'tech-solutions']) }}">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="#">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Find support for equipment, data, and operational requirements.</p>
                 </article>
               </section>

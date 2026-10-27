@@ -9,29 +9,29 @@
       <details>
         <summary class="mobile-nav-link">Services</summary>
         <ul class="mobile-services-links">
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'marketing-platform']) }}">Marketing Platform</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'search-engine-optimization']) }}">Search Engine Optimization</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'paid-marketing']) }}">Paid Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'email-marketing']) }}">Email Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'video-marketing']) }}">Video Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'content-marketing']) }}">Content Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'orm-services']) }}">ORM Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-development']) }}">Tech Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'web-development']) }}">Web Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}">Mobile App Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'custom-application']) }}">Custom Application</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}">Salesforce &amp; ERPNext Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'saas-application']) }}">SaaS Application</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'api-development']) }}">API Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'software-development']) }}">Software Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}">WhatsApp Integration</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'our-platform']) }}">Our Platform</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-exploration']) }}">Tech Exploration</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-solutions']) }}">Tech Solutions</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-support']) }}">IT Support</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-services']) }}">IT Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'digital-marketing-services']) }}">Digital Marketing Services</a></li>
+          <li><a href="#">Marketing Platform</a></li>
+          <li><a href="{{ route('services.show', 'search-engine-optimization') }}">Search Engine Optimization</a></li>
+          <li><a href="{{ route('services.show', 'social-media-marketing') }}">Social Media Marketing</a></li>
+          <li><a href="{{ route('services.show', 'paid-marketing') }}">Paid Marketing</a></li>
+          <li><a href="{{ route('services.show', 'email-marketing') }}">Email Marketing</a></li>
+          <li><a href="#">Video Marketing</a></li>
+          <li><a href="#">Content Marketing</a></li>
+          <li><a href="#">ORM Services</a></li>
+          <li><a href="#">Tech Development</a></li>
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Mobile App Development</a></li>
+          <li><a href="#">Custom Application</a></li>
+          <li><a href="#">Salesforce &amp; ERPNext Services</a></li>
+          <li><a href="#">SaaS Application</a></li>
+          <li><a href="#">API Development</a></li>
+          <li><a href="#">Software Development</a></li>
+          <li><a href="#">WhatsApp Integration</a></li>
+          <li><a href="#">Our Platform</a></li>
+          <li><a href="#">Tech Exploration</a></li>
+          <li><a href="#">Tech Solutions</a></li>
+          <li><a href="#">IT Support</a></li>
+          <li><a href="#">IT Services</a></li>
+          <li><a href="#">Digital Marketing Services</a></li>
         </ul>
       </details>
     </li>
@@ -39,21 +39,21 @@
       <details>
         <summary class="mobile-nav-link">Industries</summary>
         <ul class="mobile-services-links">
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'ecommerce-multivendor']) }}">Ecommerce &amp; Multivendor</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'real-estate-construction']) }}">Real Estate &amp; Construction</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'manufacturing']) }}">Manufacturing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'media-entertainment']) }}">Media &amp; Entertainment</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'medical-healthcare']) }}">Medical &amp; Healthcare</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'personal-beauty-care']) }}">Personal Beauty Care</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'edtech-elearning']) }}">EdTech &amp; E-Learning</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'travel-hospitality']) }}">Travel &amp; Hospitality</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'transportation-logistics']) }}">Transportation &amp; Logistics</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'oil-and-gas']) }}">Oil and Gas</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'finance-insurance']) }}">Finance &amp; Insurance</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'other-industries']) }}">Other Industries</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'our-platform']) }}">Our Platform</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'tech-exploration']) }}">Tech Exploration</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'tech-solutions']) }}">Tech Solutions</a></li>
+          <li><a href="#">Ecommerce &amp; Multivendor</a></li>
+          <li><a href="#">Real Estate &amp; Construction</a></li>
+          <li><a href="#">Manufacturing</a></li>
+          <li><a href="#">Media &amp; Entertainment</a></li>
+          <li><a href="#">Medical &amp; Healthcare</a></li>
+          <li><a href="#">Personal Beauty Care</a></li>
+          <li><a href="#">EdTech &amp; E-Learning</a></li>
+          <li><a href="#">Travel &amp; Hospitality</a></li>
+          <li><a href="#">Transportation &amp; Logistics</a></li>
+          <li><a href="#">Oil and Gas</a></li>
+          <li><a href="#">Finance &amp; Insurance</a></li>
+          <li><a href="#">Other Industries</a></li>
+          <li><a href="#">Our Platform</a></li>
+          <li><a href="#">Tech Exploration</a></li>
+          <li><a href="#">Tech Solutions</a></li>
         </ul>
       </details>
     </li>

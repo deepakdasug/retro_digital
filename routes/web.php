@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Models\BlogPost; 
-use App\Http\Controllers\DynamicPageController;
+use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -104,25 +104,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| 4. DYNAMIC CATALOG ROUTES (Must be at the very bottom)
-|--------------------------------------------------------------------------
-| This is a "catch-all" route. It MUST be last, otherwise it will 
-| intercept /blog/slug and /admin/... requests.
-*/
-Route::get('/{section}/{slug}', function (string $section, string $slug) {
-    abort_unless(in_array($section, ['services', 'industries'], true), 404);
-
-    $sectionData = config("site_pages.$section");
-    $page = collect($sectionData['items'])->firstWhere('slug', $slug);
-    if (!$page && $section === 'industries') {
-        $sectionData = config('footer_industries');
-        $page = collect($sectionData['items'])->firstWhere('slug', $slug);
-    }
-    abort_unless($page, 404);
-
-    return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
-})->where('section', 'services|industries')->name('catalog.show');
-
+// Service pages dynamic route using ServiceController and service-page.blade
+Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 

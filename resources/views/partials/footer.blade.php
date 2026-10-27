@@ -40,39 +40,39 @@
         <section class="footer-column" aria-labelledby="footer-services-heading">
           <h2 class="footer-heading" id="footer-services-heading">Services</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-asset-remarketing']) }}">IT Asset Re-Marketing</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-data-destruction']) }}">IT Data Destruction</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-asset-disposition']) }}">IT Asset Disposition (ITAD)</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-asset-management']) }}">IT Asset Management (ITAM)</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'data-center-decommissioning']) }}">Data Center Decommissioning</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'hard-drive-disposal']) }}">Harddrive Disposal</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'hard-disk-destruction']) }}">Hard disk Destruction</a></li>
+            <li><a href="#">IT Asset Re-Marketing</a></li>
+            <li><a href="#">IT Data Destruction</a></li>
+            <li><a href="#">IT Asset Disposition (ITAD)</a></li>
+            <li><a href="#">IT Asset Management (ITAM)</a></li>
+            <li><a href="#">Data Center Decommissioning</a></li>
+            <li><a href="#">Harddrive Disposal</a></li>
+            <li><a href="#">Hard disk Destruction</a></li>
           </ul>
         </section>
 
         <section class="footer-column" aria-labelledby="footer-industries-heading">
           <h2 class="footer-heading" id="footer-industries-heading">Industries</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'small-business']) }}">Small Business</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'manufacturing']) }}">Manufacturers</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'edtech-elearning']) }}">Education</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'finance-insurance']) }}">Banking &amp; Finance</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'government-nonprofit']) }}">Government &amp; Nonprofit</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'medical-healthcare']) }}">Healthcare</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'finance-insurance']) }}">Insurance</a></li>
+            <li><a href="#">Small Business</a></li>
+            <li><a href="#">Manufacturers</a></li>
+            <li><a href="#">Education</a></li>
+            <li><a href="#">Banking &amp; Finance</a></li>
+            <li><a href="#">Government &amp; Nonprofit</a></li>
+            <li><a href="#">Healthcare</a></li>
+            <li><a href="#">Insurance</a></li>
           </ul>
         </section>
 
         <section class="footer-column" aria-labelledby="footer-more-industries-heading">
           <h2 class="footer-heading" id="footer-more-industries-heading">More Industries</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'legal-corporate']) }}">Legal &amp; Corporate</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'research-development']) }}">Research &amp; Development</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'pharmaceutical']) }}">Pharmaceutical</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'real-estate-construction']) }}">Real Estate</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'tech-cloud-providers']) }}">Tech &amp; Cloud Providers</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'distributors-resellers']) }}">Distributors &amp; Resellers</a></li>
-            <li><a href="{{ route('catalog.show', ['section' => 'industries', 'slug' => 'ecommerce-multivendor']) }}">Retail</a></li>
+            <li><a href="#">Legal &amp; Corporate</a></li>
+            <li><a href="#">Research &amp; Development</a></li>
+            <li><a href="#">Pharmaceutical</a></li>
+            <li><a href="#">Real Estate</a></li>
+            <li><a href="#">Tech &amp; Cloud Providers</a></li>
+            <li><a href="#">Distributors &amp; Resellers</a></li>
+            <li><a href="#">Retail</a></li>
           </ul>
         </section>
 

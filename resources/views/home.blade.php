@@ -389,7 +389,7 @@
           <div class="service-card-content">
             <h3>IT Data Destruction</h3>
             <p>Securely destroy sensitive data and protect organizations from compliance and security risks.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-data-destruction']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -400,7 +400,7 @@
           <div class="service-card-content">
             <h3>IT Asset Remarketing</h3>
             <p>Maximize asset value through secure resale, reuse, and responsible technology lifecycle management.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-asset-remarketing']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -411,7 +411,7 @@
           <div class="service-card-content">
             <h3>IT Asset Management</h3>
             <p>Maximize asset value through secure resale, reuse, and responsible technology lifecycle management.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-asset-management']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -422,7 +422,7 @@
           <div class="service-card-content">
             <h3>Hard Drive Disposal</h3>
             <p>Secure disposal of hard drives ensuring data protection and environmental compliance.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'hard-drive-disposal']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -433,7 +433,7 @@
           <div class="service-card-content">
             <h3>Data Center Decommissioning</h3>
             <p>Secure and efficient decommissioning of data centers ensuring compliance, safety, and asset recovery.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'data-center-decommissioning']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -444,7 +444,7 @@
           <div class="service-card-content">
             <h3>Hard Disk Destruction</h3>
             <p>Certified hard disk destruction ensuring irreversible data removal, compliance, and auditability.</p>
-            <a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'hard-disk-destruction']) }}" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#" class="service-card-btn icon-label-control"><span>Learn more</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
       </div>
