@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Models\BlogPost; 
-
+use App\Http\Controllers\DynamicPageController;
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -124,3 +124,5 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
 
     return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
 })->where('section', 'services|industries')->name('catalog.show');
+
+

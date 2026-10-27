@@ -1895,34 +1895,16 @@ body.inner-page section[id] {
   margin-bottom: 0;
 }
 
-/* Process Steps Container */
+/* Process Steps Container
+   4 equal columns; arrows are absolutely positioned
+   on the column boundaries (25%, 50%, 75%) */
 .process-steps {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 5rem minmax(0, 1fr);
-  grid-template-areas:
-    "first arrow-one second"
-    ". turn ."
-    "third arrow-three fourth";
-  grid-template-rows: auto 3rem auto;
-  align-items: center;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
   justify-items: center;
-  gap: 1.5rem 1rem;
-}
-
-.process-step:nth-child(1) {
-  grid-area: first;
-}
-
-.process-step:nth-child(3) {
-  grid-area: second;
-}
-
-.process-step:nth-child(5) {
-  grid-area: third;
-}
-
-.process-step:nth-child(7) {
-  grid-area: fourth;
+  gap: 0;
 }
 
 .process-step {
@@ -2051,43 +2033,58 @@ body.inner-page section[id] {
   letter-spacing: 0.01em;
 }
 
+/* Curved arrows between the circles */
 .process-arrow {
+  position: absolute;
+  top: 100px; /* just below the circle's center (circle is 180px tall) */
+  transform: translate(-50%, -50%);
   color: var(--accent-cyan);
-  font-size: 1.5rem;
-  animation: arrowBounce 1.5s ease-in-out infinite;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  animation: arrowNudge 1.5s ease-in-out infinite;
 }
 
+/* arrows are children 2, 4 and 6: one on each column boundary */
 .process-arrow:nth-child(2) {
-  grid-area: arrow-one;
+  left: 25%;
 }
 
 .process-arrow:nth-child(4) {
-  grid-area: turn;
-  animation: arrowTurnBounce 1.5s ease-in-out infinite;
+  left: 50%;
 }
 
 .process-arrow:nth-child(6) {
-  grid-area: arrow-three;
+  left: 75%;
 }
 
-@keyframes arrowBounce {
+.process-arrow svg {
+  width: 76px;
+  height: auto;
+  display: block;
+}
+
+/* middle arrow curves the opposite way, like the reference image */
+.process-arrow:nth-child(4) svg {
+  transform: scaleY(-1);
+}
+
+@keyframes arrowNudge {
   0%, 100% {
-    transform: translateX(0);
+    transform: translate(-50%, -50%);
   }
   50% {
-    transform: translateX(8px);
+    transform: translate(calc(-50% + 6px), -50%);
   }
 }
 
-@keyframes arrowTurnBounce {
+@keyframes arrowNudgeDown {
   0%, 100% {
-    transform: rotate(135deg) translateX(0);
+    transform: rotate(90deg) translateX(0);
   }
   50% {
-    transform: rotate(135deg) translateX(8px);
+    transform: rotate(90deg) translateX(8px);
   }
 }
 
@@ -2096,30 +2093,27 @@ body.inner-page section[id] {
   .process-steps {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 3rem;
   }
 
-  .process-step,
-  .process-arrow {
-    grid-area: auto;
-  }
-
-  .process-arrow {
+  .process-arrow,
+  .process-arrow:nth-child(2),
+  .process-arrow:nth-child(4),
+  .process-arrow:nth-child(6) {
+    position: static;
+    left: auto;
+    top: auto;
     transform: rotate(90deg);
-    animation: arrowBounce 1.5s ease-in-out infinite;
+    animation: arrowNudgeDown 1.5s ease-in-out infinite;
   }
 
-  .process-arrow:nth-child(4) {
-    animation: arrowBounce 1.5s ease-in-out infinite;
+  .process-arrow:nth-child(4) svg {
+    transform: none;
   }
 
-  @keyframes arrowBounce {
-    0%, 100% {
-      transform: rotate(90deg) translateX(0);
-    }
-    50% {
-      transform: rotate(90deg) translateX(8px);
-    }
+  .process-arrow svg {
+    width: 60px;
   }
 }
 

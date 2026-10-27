@@ -479,7 +479,10 @@
         </div>
 
         <div class="process-arrow" aria-hidden="true">
-          <i class="fa-solid fa-arrow-right"></i>
+          <svg viewBox="0 0 120 34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12 C 40 2, 75 4, 108 22"/>
+            <path d="M97 15 L109 22.5 L95 26"/>
+          </svg>
         </div>
 
         <div class="process-step" data-process-step>
@@ -496,7 +499,10 @@
         </div>
 
         <div class="process-arrow" aria-hidden="true">
-          <i class="fa-solid fa-arrow-right"></i>
+          <svg viewBox="0 0 120 34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12 C 40 2, 75 4, 108 22"/>
+            <path d="M97 15 L109 22.5 L95 26"/>
+          </svg>
         </div>
 
         <div class="process-step" data-process-step>
@@ -513,7 +519,10 @@
         </div>
 
         <div class="process-arrow" aria-hidden="true">
-          <i class="fa-solid fa-arrow-right"></i>
+          <svg viewBox="0 0 120 34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12 C 40 2, 75 4, 108 22"/>
+            <path d="M97 15 L109 22.5 L95 26"/>
+          </svg>
         </div>
 
         <div class="process-step" data-process-step>
