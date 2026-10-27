@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Admin\BlogController; 
-use App\Http\Controllers\Admin\DashboardController; 
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Models\BlogPost; 
-use App\Http\Controllers\DynamicPageController;
+use App\Models\BlogPost;
+use App\Http\Controllers\TechDevelopmentController;
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -17,28 +17,28 @@ Route::get('/', function () {
     $testimonials = \App\Models\Testimonial::latest()->get();
     return view('home', compact('testimonials'));
 })->name('home');
-Route::get('/about-us', fn () => view('about'))->name('about');
-Route::get('/careers', fn () => view('careers'))->name('careers');
-Route::get('/faqs', fn () => view('faqs'))->name('faqs');
+Route::get('/about-us', fn() => view('about'))->name('about');
+Route::get('/careers', fn() => view('careers'))->name('careers');
+Route::get('/faqs', fn() => view('faqs'))->name('faqs');
 
 // --- BLOG ROUTES ---
 Route::get('/blog', function () {
     $posts = BlogPost::where('is_published', true)->latest('published_at')->get();
-    return view('blog', compact('posts')); 
-})->name('blog'); 
+    return view('blog', compact('posts'));
+})->name('blog');
 
 Route::get('/blog/{slug}', function ($slug) {
     $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
-    return view('blog.show', compact('post')); 
+    return view('blog.show', compact('post'));
 })->name('blog.show');
 
 // --- CONTACT ROUTES ---
-Route::get('/contact', fn () => view('contact'))->name('contact.page');
-Route::get('/contact-us', fn () => view('contact'))->name('contact.us');
+Route::get('/contact', fn() => view('contact'))->name('contact.page');
+Route::get('/contact-us', fn() => view('contact'))->name('contact.us');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
 // --- LEGAL ROUTES ---
-Route::get('/privacy-policy', fn () => view('legal', [
+Route::get('/privacy-policy', fn() => view('legal', [
     'title' => 'Privacy Policy',
     'summary' => 'How information shared through a project enquiry may be used while discussing IT asset and data lifecycle services.',
     'notice' => 'Sample website copy for layout purposes. Retrotech should review and adapt this draft to its actual privacy practices before publishing.',
@@ -54,7 +54,7 @@ Route::get('/privacy-policy', fn () => view('legal', [
     ],
 ]))->name('privacy-policy');
 
-Route::get('/terms-and-conditions', fn () => view('legal', [
+Route::get('/terms-and-conditions', fn() => view('legal', [
     'title' => 'Terms and Conditions',
     'summary' => 'General information about using this website and enquiring about Retrotech IT asset lifecycle services.',
     'notice' => 'Sample website copy for layout purposes. Retrotech should review this draft and have it checked for its business and applicable locations before publishing.',
@@ -114,6 +114,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::get('/{section}/{slug}', function (string $section, string $slug) {
     abort_unless(in_array($section, ['services', 'industries'], true), 404);
 
+    // Redirect any old tech development service URLs to the new implementation
+    $techSlugs = [
+        'web-development' => 'web-development',
+        'mobile-app-development' => 'mobile-app-development',
+        'custom-application' => 'custom-application',
+        'salesforce-erpnext-services' => 'crm-development',
+        'crm-development' => 'crm-development',
+        'saas-application' => 'saas-application',
+        'api-development' => 'api-development',
+        'software-development' => 'software-development',
+        'whatsapp-integration' => 'whatsapp-integration',
+        'tech-development' => 'web-development',
+    ];
+
+    if ($section === 'services' && isset($techSlugs[$slug])) {
+        return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
+    }
+
     $sectionData = config("site_pages.$section");
     $page = collect($sectionData['items'])->firstWhere('slug', $slug);
     if (!$page && $section === 'industries') {
@@ -126,3 +144,6 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
 })->where('section', 'services|industries')->name('catalog.show');
 
 
+// tech-development
+Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'])
+    ->name('tech-development.show');

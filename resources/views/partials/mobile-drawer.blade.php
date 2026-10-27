@@ -17,15 +17,15 @@
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'video-marketing']) }}">Video Marketing</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'content-marketing']) }}">Content Marketing</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'orm-services']) }}">ORM Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-development']) }}">Tech Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'web-development']) }}">Web Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}">Mobile App Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'custom-application']) }}">Custom Application</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}">Salesforce &amp; ERPNext Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'saas-application']) }}">SaaS Application</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'api-development']) }}">API Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'software-development']) }}">Software Development</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}">WhatsApp Integration</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Development</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">Mobile App Development</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce &amp; ERPNext Services</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}">SaaS Application</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}">API Development</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}">Software Development</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">WhatsApp Integration</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'our-platform']) }}">Our Platform</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-exploration']) }}">Tech Exploration</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-solutions']) }}">Tech Solutions</a></li>
