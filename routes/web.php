@@ -5,8 +5,10 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Models\BlogPost;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TechDevelopmentController;
+use App\Models\BlogPost;
+
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -17,6 +19,7 @@ Route::get('/', function () {
     $testimonials = \App\Models\Testimonial::latest()->get();
     return view('home', compact('testimonials'));
 })->name('home');
+
 Route::get('/about-us', fn() => view('about'))->name('about');
 Route::get('/careers', fn() => view('careers'))->name('careers');
 Route::get('/faqs', fn() => view('faqs'))->name('faqs');
@@ -73,18 +76,14 @@ Route::get('/terms-and-conditions', fn() => view('legal', [
 
 /*
 |--------------------------------------------------------------------------
-| 2. ADMIN AUTHENTICATION ROUTES
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
-| 3. ADMIN ROUTES (Authentication and admin role required)
+| 2. ADMIN ROUTES (Authentication and admin role required)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Blog
     Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create');
     Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store');
     Route::post('/admin/blog/upload-media', [BlogController::class, 'uploadMedia'])->name('admin.blog.upload_media');
@@ -92,12 +91,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/blog/{post}', [BlogController::class, 'update'])->name('admin.blog.update');
     Route::delete('/admin/blog/{post}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
 
-    // --- TESTIMONIAL ROUTES (Added) ---
+    // Testimonials
     Route::get('/admin/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.index');
     Route::get('/admin/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create');
     Route::post('/admin/testimonials', [TestimonialController::class, 'store'])->name('admin.testimonials.store');
-
-    // ADD THESE NEW ROUTES:
     Route::get('/admin/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
     Route::put('/admin/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
     Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
@@ -106,44 +103,60 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 4. DYNAMIC CATALOG ROUTES (Must be at the very bottom)
+| 3. TECH DEVELOPMENT ROUTES
 |--------------------------------------------------------------------------
-| This is a "catch-all" route. It MUST be last, otherwise it will 
-| intercept /blog/slug and /admin/... requests.
+*/
+Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'])
+    ->name('tech-development.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| 4. DYNAMIC SERVICES ROUTE (Must come BEFORE the catch-all)
+|--------------------------------------------------------------------------
+| All 7 marketing service pages route through ServiceController.
+| The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'.
+*/
+Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| 5. DYNAMIC CATALOG CATCH-ALL (Industries + legacy service redirects)
+|--------------------------------------------------------------------------
+| MUST be the LAST route — otherwise it captures /blog/{slug}, /services/{slug}, etc.
 */
 Route::get('/{section}/{slug}', function (string $section, string $slug) {
     abort_unless(in_array($section, ['services', 'industries'], true), 404);
 
-    // Redirect any old tech development service URLs to the new implementation
+    // Legacy tech-development service slugs → redirect to the tech-development controller
     $techSlugs = [
-        'web-development' => 'web-development',
-        'mobile-app-development' => 'mobile-app-development',
-        'custom-application' => 'custom-application',
-        'salesforce-erpnext-services' => 'crm-development',
-        'crm-development' => 'crm-development',
-        'saas-application' => 'saas-application',
-        'api-development' => 'api-development',
-        'software-development' => 'software-development',
-        'whatsapp-integration' => 'whatsapp-integration',
-        'tech-development' => 'web-development',
+        'web-development'              => 'web-development',
+        'mobile-app-development'       => 'mobile-app-development',
+        'custom-application'           => 'custom-application',
+        'salesforce-erpnext-services'  => 'crm-development',
+        'crm-development'              => 'crm-development',
+        'saas-application'             => 'saas-application',
+        'api-development'              => 'api-development',
+        'software-development'         => 'software-development',
+        'whatsapp-integration'         => 'whatsapp-integration',
+        'tech-development'             => 'web-development',
     ];
 
     if ($section === 'services' && isset($techSlugs[$slug])) {
         return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
     }
 
+    // Industry pages from config
     $sectionData = config("site_pages.$section");
-    $page = collect($sectionData['items'])->firstWhere('slug', $slug);
+    $page = $sectionData ? collect($sectionData['items'])->firstWhere('slug', $slug) : null;
+
     if (!$page && $section === 'industries') {
         $sectionData = config('footer_industries');
         $page = collect($sectionData['items'])->firstWhere('slug', $slug);
     }
+
     abort_unless($page, 404);
 
     return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
 })->where('section', 'services|industries')->name('catalog.show');
-
-
-// tech-development
-Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'])
-    ->name('tech-development.show');
