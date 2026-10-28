@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TechDevelopmentController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
@@ -113,44 +114,81 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 3. DYNAMIC CATALOG ROUTES (Industries only)
+| 3. TECH DEVELOPMENT ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/{section}/{slug}', function (string $section, string $slug) {
-    // Only allow 'industries' here
-    abort_unless($section === 'industries', 404);
-
-    $sectionData = config('footer_industries');
-    $page = collect($sectionData['items'])->firstWhere('slug', $slug);
-    
-    abort_unless($page, 404);
-
-    return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
-})->where('section', 'industries')->name('catalog.show');
+Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'])
+    ->name('tech-development.show');
 
 
 /*
 |--------------------------------------------------------------------------
-| 4. DYNAMIC SERVICES ROUTE (Must be at the very bottom)
+| 4. DYNAMIC SERVICES ROUTE
 |--------------------------------------------------------------------------
+| All 7 marketing service pages route through ServiceController.
+| The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'.
 */
 Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
 
+/*
+|--------------------------------------------------------------------------
+| 5. INDUSTRY ROUTES (Database Driven)
+|--------------------------------------------------------------------------
+| Must be declared BEFORE any generic catch-all route.
+*/
 Route::get('/industries', [IndustryController::class, 'index'])
     ->name('industries.index');
 
 Route::get('/industries/{slug}', [IndustryController::class, 'show'])
     ->name('industries.show');
 
+
 /*
 |--------------------------------------------------------------------------
-| 5. DYNAMIC WEB PAGES (Frontend Renderer)
+| 6. DYNAMIC WEB PAGES (Frontend Renderer)
 |--------------------------------------------------------------------------
 */
 Route::get('/web/{webPage}', [FrontendWebPageController::class, 'show'])->name('web-pages.show');
 
-// Restore this route so the existing header doesn't crash
-Route::get('/tech-development/{slug}', function ($slug) {
-    return redirect('/')->with('info', 'Tech Development page coming soon.');
-})->name('tech-development.show');
+
+/*
+|--------------------------------------------------------------------------
+| 7. DYNAMIC CATALOG CATCH-ALL (Legacy service redirects + fallback)
+|--------------------------------------------------------------------------
+| MUST be the LAST route — otherwise it captures /industries/{slug}, /services/{slug}, etc.
+*/
+Route::get('/{section}/{slug}', function (string $section, string $slug) {
+    abort_unless(in_array($section, ['services', 'industries'], true), 404);
+
+    // Legacy tech-development service slugs → redirect to the tech-development controller
+    $techSlugs = [
+        'web-development' => 'web-development',
+        'mobile-app-development' => 'mobile-app-development',
+        'custom-application' => 'custom-application',
+        'salesforce-erpnext-services' => 'crm-development',
+        'crm-development' => 'crm-development',
+        'saas-application' => 'saas-application',
+        'api-development' => 'api-development',
+        'software-development' => 'software-development',
+        'whatsapp-integration' => 'whatsapp-integration',
+        'tech-development' => 'web-development',
+    ];
+
+    if ($section === 'services' && isset($techSlugs[$slug])) {
+        return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
+    }
+
+    // Industry pages from config
+    $sectionData = config("site_pages.$section");
+    $page = $sectionData ? collect($sectionData['items'])->firstWhere('slug', $slug) : null;
+
+    if (!$page && $section === 'industries') {
+        $sectionData = config('footer_industries');
+        $page = collect($sectionData['items'])->firstWhere('slug', $slug);
+    }
+
+    abort_unless($page, 404);
+
+    return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
+})->where('section', 'services|industries')->name('catalog.show');
