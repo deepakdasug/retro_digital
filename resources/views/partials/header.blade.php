@@ -81,21 +81,21 @@
             <div class="dropdown-arrow-indicator"></div>
             <div class="industries-mega-columns">
               <ul class="industries-mega-list">
-                <li><a href="#"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span><strong>Ecommerce &amp; Multivendor</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-building" aria-hidden="true"></i><span><strong>Real Estate &amp; Construction</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-industry" aria-hidden="true"></i><span><strong>Manufacturing</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-film" aria-hidden="true"></i><span><strong>Media &amp; Entertainment</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i><span><strong>Medical &amp; Healthcare</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-spa" aria-hidden="true"></i><span><strong>Personal Beauty Care</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i><span><strong>Ecommerce &amp; Multivendor</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}"><i class="fa-solid fa-building" aria-hidden="true"></i><span><strong>Real Estate &amp; Construction</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'manufacturing') }}"><i class="fa-solid fa-industry" aria-hidden="true"></i><span><strong>Manufacturing</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'media-and-entertainment') }}"><i class="fa-solid fa-film" aria-hidden="true"></i><span><strong>Media &amp; Entertainment</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i><span><strong>Medical &amp; Healthcare</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'personal-beauty-care') }}"><i class="fa-solid fa-spa" aria-hidden="true"></i><span><strong>Personal Beauty Care</strong><small>IT asset and data lifecycle support</small></span></a></li>
               </ul>
 
               <ul class="industries-mega-list">
-                <li><a href="#"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span><strong>EdTech &amp; E-Learning</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-plane" aria-hidden="true"></i><span><strong>Travel &amp; Hospitality</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-truck" aria-hidden="true"></i><span><strong>Transportation &amp; Logistics</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-oil-well" aria-hidden="true"></i><span><strong>Oil and Gas</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i><span><strong>Finance &amp; Insurance</strong><small>IT asset and data lifecycle support</small></span></a></li>
-                <li><a href="#"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Other Industries</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'edtech-and-e-learning') }}"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span><strong>EdTech &amp; E-Learning</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'travel-and-hospitality') }}"><i class="fa-solid fa-plane" aria-hidden="true"></i><span><strong>Travel &amp; Hospitality</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'transportation-and-logistics') }}"><i class="fa-solid fa-truck" aria-hidden="true"></i><span><strong>Transportation &amp; Logistics</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'oil-and-gas') }}"><i class="fa-solid fa-oil-well" aria-hidden="true"></i><span><strong>Oil and Gas</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'finance-and-insurance') }}"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i><span><strong>Finance &amp; Insurance</strong><small>IT asset and data lifecycle support</small></span></a></li>
+                <li><a href="{{ route('industries.show', 'other-industries') }}"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Other Industries</strong><small>IT asset and data lifecycle support</small></span></a></li>
               </ul>
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">

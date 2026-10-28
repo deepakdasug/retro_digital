@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\BlogController; 
 use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
@@ -135,6 +136,12 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
 */
 Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
+
+Route::get('/industries', [IndustryController::class, 'index'])
+    ->name('industries.index');
+
+Route::get('/industries/{slug}', [IndustryController::class, 'show'])
+    ->name('industries.show');
 
 /*
 |--------------------------------------------------------------------------
