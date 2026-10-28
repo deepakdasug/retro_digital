@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         // tech development seeder
         $this->call([
             TechDevelopmentSeeder::class,
+            TestimonialSeeder::class,
         ]);
     }
 }

@@ -23,7 +23,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
+  @unless (request()->routeIs('admin.*'))
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
+  @endunless
   @stack('styles')
 </head>
 
@@ -45,8 +47,10 @@
     @include('partials.whatsapp-widget')
   @endunless
 
-  <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
-  <script src="{{ asset('js/main.js') }}"></script>
+  @unless (request()->routeIs('admin.*'))
+    <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+  @endunless
   @stack('scripts')
 </body>
 

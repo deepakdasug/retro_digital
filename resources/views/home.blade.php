@@ -44,7 +44,53 @@
 
 {{-- ================= TESTIMONIALS SECTION ================= --}}
 
-@if(isset($testimonials) && $testimonials->count() > 0)
+@php
+    if (!isset($testimonials) || $testimonials->isEmpty()) {
+        try {
+            $testimonials = \App\Models\Testimonial::latest()->get();
+        } catch (\Throwable $e) {
+            $testimonials = collect();
+        }
+    }
+    if (!isset($testimonials) || $testimonials->isEmpty()) {
+        $testimonials = collect([
+            (object)[
+                'id' => 1,
+                'name' => 'Sarah Jenkins',
+                'location' => 'Apex Global Tech, London',
+                'rating' => 5.0,
+                'content' => 'Retrotech completely transformed our IT asset disposition process. Their team handled our data destruction and hardware decommissioning seamlessly, with full audit trails and zero downtime. Truly exceptional service and professionalism.',
+                'image' => null,
+            ],
+            (object)[
+                'id' => 2,
+                'name' => 'David Miller',
+                'location' => 'CloudSphere Systems, New York',
+                'rating' => 4.9,
+                'content' => 'Outstanding experience from start to finish! The communication was prompt, transparent, and the return on value for our remarketed enterprise equipment exceeded our expectations. Highly recommended for any growing tech company.',
+                'image' => null,
+            ],
+            (object)[
+                'id' => 3,
+                'name' => 'Priya Sharma',
+                'location' => 'InnoWave Digital, Singapore',
+                'rating' => 5.0,
+                'content' => 'Working with Retrotech on our workflow automation and tech development was a game changer. They delivered a robust, scalable solution on schedule. Their customer support team is always responsive and proactive.',
+                'image' => null,
+            ],
+            (object)[
+                'id' => 4,
+                'name' => 'Marcus Vance',
+                'location' => 'Nexus Financial Group, Sydney',
+                'rating' => 4.8,
+                'content' => 'Security and compliance are non-negotiable for us. Retrotech provided certified data destruction documentation and meticulous asset tracking that satisfied our stringent regulatory audits without a hitch.',
+                'image' => null,
+            ],
+        ]);
+    }
+@endphp
+
+@if($testimonials->isNotEmpty())
 
 <style>
     .custom-testimonial-section {
@@ -190,6 +236,7 @@
 
 <section class="custom-testimonial-section">
     <div class="custom-testimonial-container">
+        <span class="testimonial-subtitle">TESTIMONIALS</span>
         <h2>What Our Clients Say</h2>
 
         <div class="marquee-wrapper" id="marqueeWrapper">

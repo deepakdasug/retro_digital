@@ -98,6 +98,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
     Route::put('/admin/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
     Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
+
+    // Webpages
+    Route::post('/admin/webpages', [DashboardController::class, 'storeWebpage'])->name('admin.webpages.store');
 });
 
 
