@@ -55,6 +55,13 @@
     @endif
 
     <section id="section-overview" class="admin-overview-section" role="tabpanel" aria-label="Dashboard overview">
+    <section class="admin-dashboard-metrics" aria-label="Website overview">
+      <article class="admin-metric-card"><div class="admin-metric-icon is-green"><i class="fa-regular fa-address-card"></i></div><div><span class="admin-metric-label">Total enquiries</span><strong>{{ $contacts->count() }}</strong><small>{{ $contactsThisWeek }} received this week</small></div></article>
+      <article class="admin-metric-card"><div class="admin-metric-icon is-violet"><i class="fa-regular fa-newspaper"></i></div><div><span class="admin-metric-label">Published articles</span><strong>{{ $publishedBlogs }}</strong><small>{{ $blogsThisMonth }} created this month</small></div></article>
+      <article class="admin-metric-card"><div class="admin-metric-icon is-teal"><i class="fa-solid fa-globe"></i></div><div><span class="admin-metric-label">Web content</span><strong>{{ $webpagesCount }}</strong><small>{{ $services->count() }} services + {{ $techDevelopments->count() }} tech</small></div></article>
+      <article class="admin-metric-card"><div class="admin-metric-icon is-orange"><i class="fa-solid fa-star"></i></div><div><span class="admin-metric-label">Testimonials</span><strong>{{ $testimonialsCount }}</strong><small>{{ $averageRating }} avg rating</small></div></article>
+    </section>
+
     <section class="admin-traffic-panel" aria-label="Interactive contact and blog activity">
       <div class="admin-traffic-heading">
         <div><span class="admin-section-eyebrow">SITE ACTIVITY</span><h2>Enquiries &amp; publishing</h2><p>Explore how contact enquiries and blog publishing change over time.</p></div>
@@ -76,13 +83,6 @@
         <div id="adminChartTooltip" class="admin-chart-tooltip" role="status" aria-live="polite">Hover or focus a graph point to see its details.</div>
       </div>
       <script type="application/json" id="adminChartData">@json($overviewChartData)</script>
-    </section>
-
-    <section class="admin-dashboard-metrics" aria-label="Website overview">
-      <article class="admin-metric-card"><div class="admin-metric-icon is-green"><i class="fa-regular fa-address-card"></i></div><div><span class="admin-metric-label">Total enquiries</span><strong>{{ $contacts->count() }}</strong><small>{{ $contactsThisWeek }} received this week</small></div></article>
-      <article class="admin-metric-card"><div class="admin-metric-icon is-blue"><i class="fa-solid fa-arrow-trend-up"></i></div><div><span class="admin-metric-label">This month</span><strong>{{ $contactsThisMonth }}</strong><small>Website enquiries this month</small></div></article>
-      <article class="admin-metric-card"><div class="admin-metric-icon is-violet"><i class="fa-regular fa-newspaper"></i></div><div><span class="admin-metric-label">Published articles</span><strong>{{ $publishedBlogs }}</strong><small>{{ $blogsThisMonth }} created this month</small></div></article>
-      <article class="admin-metric-card"><div class="admin-metric-icon is-amber"><i class="fa-regular fa-pen-to-square"></i></div><div><span class="admin-metric-label">Draft articles</span><strong>{{ $draftBlogs }}</strong><small>Ready for review or editing</small></div></article>
     </section>
 
     <section class="admin-insights-grid" aria-label="Contact and blog analysis">
@@ -148,6 +148,92 @@
           <p class="admin-insight-empty">There are no drafts waiting for review.</p>
         @endif
         <button class="admin-inline-link" type="button" onclick="showAdminTab('blogs')">Open blog library <i class="fa-solid fa-arrow-right"></i></button>
+      </article>
+    </section>
+
+    <section class="admin-insights-grid admin-overview-extended" aria-label="Comprehensive analysis across all sections">
+      {{-- Testimonials Analysis --}}
+      <article class="admin-insight-panel">
+        <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">TESTIMONIALS</span><h2>Customer feedback</h2><p>Client ratings and reviews analysis.</p></div><span class="admin-insight-icon is-amber"><i class="fa-solid fa-star"></i></span></div>
+        <div class="admin-rating-summary">
+          <div class="admin-rating-primary">
+            <span class="admin-rating-number">{{ $averageRating }}</span>
+            <span class="admin-rating-label">Average rating</span>
+          </div>
+          <div class="admin-rating-stats">
+            <div><span>Total reviews</span><strong>{{ $testimonialsCount }}</strong></div>
+            <div><span>5-star reviews</span><strong>{{ $fiveStarCount }}</strong></div>
+            <div><span>5-star rate</span><strong>{{ $testimonialsCount ? round(($fiveStarCount / $testimonialsCount) * 100) : 0 }}%</strong></div>
+          </div>
+        </div>
+        <div class="admin-insight-foot"><span><i class="fa-regular fa-star"></i> {{ $averageRating }}/5.0 average</span><span><i class="fa-solid fa-trophy"></i> {{ $fiveStarCount }} excellent reviews</span></div>
+      </article>
+
+      {{-- Webpages Analysis --}}
+      <article class="admin-insight-panel">
+        <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">WEB CONTENT</span><h2>Pages &amp; Services</h2><p>Marketing services and tech developments.</p></div><span class="admin-insight-icon is-green"><i class="fa-solid fa-globe"></i></span></div>
+        <div class="admin-publishing-summary">
+          <div><span>Total pages</span><strong>{{ $webpagesCount }}</strong></div>
+          <div><span>Services</span><strong>{{ $services->count() }}</strong></div>
+          <div><span>Tech dev</span><strong>{{ $techDevelopments->count() }}</strong></div>
+        </div>
+        @if($webpages->isNotEmpty())
+          <div class="admin-activity-list">
+            @foreach($webpages->take(3) as $page)
+              <div class="admin-activity-item">
+                <span class="admin-activity-icon {{ $page->category === 'Marketing Service' ? 'is-green' : 'is-blue' }}">
+                  <i class="fa-solid {{ $page->category === 'Marketing Service' ? 'fa-bullhorn' : 'fa-code' }}"></i>
+                </span>
+                <div>
+                  <strong>{{ $page->title }}</strong>
+                  <small>{{ $page->category }} · {{ $page->status }}</small>
+                </div>
+                <a href="{{ $page->url }}" target="_blank" rel="noopener" aria-label="View {{ $page->title }}" title="View page">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <p class="admin-insight-empty">No webpages created yet.</p>
+        @endif
+        <div class="admin-insight-foot"><span><i class="fa-regular fa-file-lines"></i> {{ $webpagesCount }} total pages</span><button class="admin-inline-link" type="button" onclick="showAdminTab('webpage')">Manage webpages <i class="fa-solid fa-arrow-right"></i></button></div>
+      </article>
+
+      {{-- Contact Enrichment Analysis --}}
+      <article class="admin-insight-panel">
+        <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">ENQUIRY QUALITY</span><h2>Lead enrichment</h2><p>Information completeness metrics.</p></div><span class="admin-insight-icon is-blue"><i class="fa-solid fa-magnifying-glass"></i></span></div>
+        <div class="admin-publishing-summary">
+          <div><span>With company</span><strong>{{ $companyEnquiries }}</strong></div>
+          <div><span>With website</span><strong>{{ $enquiriesWithWebsite }}</strong></div>
+          <div><span>With message</span><strong>{{ $enquiriesWithMessage }}</strong></div>
+        </div>
+        <div class="admin-breakdown-list">
+          @php($enrichmentRate = $contacts->count() ? round(($enquiriesWithWebsite + $enquiriesWithMessage) / $contacts->count() * 100) : 0)
+          <div class="admin-breakdown-item">
+            <div><strong>Enriched enquiries</strong><span>{{ $enquiriesWithWebsite + $enquiriesWithMessage }} · {{ $enrichmentRate }}%</span></div>
+            <div class="admin-breakdown-track"><span style="width: {{ $enrichmentRate }}%; background: #398158;"></span></div>
+          </div>
+        </div>
+        <div class="admin-insight-foot"><span><i class="fa-regular fa-building"></i> {{ $companyEnquiries }} company leads</span><span><i class="fa-regular fa-user"></i> {{ $enquiriesWithoutCompany }} individual enquiries</span></div>
+      </article>
+
+      {{-- Blog Content Quality --}}
+      <article class="admin-insight-panel">
+        <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">CONTENT QUALITY</span><h2>Blog completeness</h2><p>Content depth and media coverage.</p></div><span class="admin-insight-icon is-violet"><i class="fa-regular fa-file-lines"></i></span></div>
+        <div class="admin-publishing-summary">
+          <div><span>With content</span><strong>{{ $blogContentCount }}</strong></div>
+          <div><span>Missing image</span><strong>{{ $blogsWithoutImage }}</strong></div>
+          <div><span>Avg words</span><strong>{{ $averageArticleWords }}</strong></div>
+        </div>
+        <div class="admin-breakdown-list">
+          @php($publicationRate)
+          <div class="admin-breakdown-item">
+            <div><strong>Publication rate</strong><span>{{ $publishedBlogs }} of {{ $blogs->count() }} · {{ $publicationRate }}%</span></div>
+            <div class="admin-breakdown-track"><span style="width: {{ $publicationRate }}%; background: #6b4c8a;"></span></div>
+          </div>
+        </div>
+        <div class="admin-insight-foot"><span><i class="fa-regular fa-user"></i> {{ $blogAuthors->count() }} {{ \Illuminate\Support\Str::plural('author', $blogAuthors->count()) }}</span><span><i class="fa-solid fa-pen"></i> {{ $blogsUpdatedThisWeek }} updated this week</span></div>
       </article>
     </section>
 
@@ -302,9 +388,9 @@
         </div>
         <div style="display:flex;align-items:center;gap:0.75rem;">
           <span class="admin-section-total"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ $webpagesCount }} total</span>
-          <button type="button" class="admin-action-button" onclick="openWebpageModal()" aria-label="Add a web page" title="Add a web page">
+          <a href="{{ route('admin.web-pages.create') }}" class="admin-action-button" aria-label="Add a web page" title="Add a web page" style="display: inline-flex; align-items: center; text-decoration: none;">
             <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add a web page
-          </button>
+          </a>
         </div>
       </div>
 
@@ -566,119 +652,7 @@
   </div>
 </main>
 
-<!-- Add Webpage Modal Dialog -->
-<div id="addWebpageModal" class="admin-modal-backdrop" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(15,23,42,0.48); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:1.25rem;">
-  <div class="admin-modal-card" style="background:#ffffff; width:100%; max-width:620px; max-height:92vh; overflow-y:auto; border-radius:1.15rem; box-shadow:0 24px 50px rgba(0,0,0,0.2); border:1px solid #e0e9e1; padding:2rem; position:relative;">
-    
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.5rem; gap:1rem;">
-      <div>
-        <span class="admin-section-eyebrow" style="color:#397b4e; font-size:0.75rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">PAGE CREATOR</span>
-        <h2 style="font-size:1.45rem; color:#1f2937; margin:0.25rem 0 0.35rem 0; font-weight:700;">Add a web page</h2>
-        <p style="color:#6b7280; font-size:0.875rem; margin:0;">Create a new service webpage with dynamic URL routing.</p>
-      </div>
-      <button type="button" onclick="closeWebpageModal()" aria-label="Close modal" style="background:none; border:none; color:#9ca3af; font-size:1.4rem; cursor:pointer; padding:0.25rem 0.5rem; line-height:1; border-radius:0.375rem;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#9ca3af'">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <form action="{{ route('admin.webpages.store') }}" method="POST">
-      @csrf
-
-      <div style="margin-bottom:1.25rem;">
-        <label for="webpage_title" style="display:block; font-size:0.875rem; font-weight:600; color:#1f2937; margin-bottom:0.4rem;">
-          Page Title <span style="color:#dc2626;">*</span>
-        </label>
-        <input type="text" id="webpage_title" name="title" required placeholder="e.g. AI Workflow Automation"
-               oninput="updateWebpageSlug(this.value)"
-               style="width:100%; padding:0.7rem 0.85rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.92rem; outline:none; transition:border-color 0.2s;"
-               onfocus="this.style.borderColor='#398158'" onblur="this.style.borderColor='#d1d5db'">
-      </div>
-
-      <div style="margin-bottom:1.25rem;">
-        <label for="webpage_slug" style="display:block; font-size:0.875rem; font-weight:600; color:#1f2937; margin-bottom:0.4rem;">
-          URL Slug <span style="color:#dc2626;">*</span>
-        </label>
-        <div style="display:flex; align-items:center; border:1px solid #d1d5db; border-radius:0.5rem; overflow:hidden; background:#f9fafb;">
-          <span style="padding:0.7rem 0.85rem; color:#6b7280; font-size:0.85rem; background:#f3f4f6; border-right:1px solid #d1d5db; user-select:none;">
-            /services/
-          </span>
-          <input type="text" id="webpage_slug" name="slug" required placeholder="ai-workflow-automation"
-                 style="flex:1; border:none; outline:none; padding:0.7rem 0.85rem; font-size:0.92rem; background:#ffffff;"
-                 onfocus="this.parentElement.style.borderColor='#398158'" onblur="this.parentElement.style.borderColor='#d1d5db'">
-        </div>
-        <small style="display:block; color:#6b7280; font-size:0.76rem; margin-top:0.3rem;">Unique URL slug for this page.</small>
-      </div>
-
-      <div style="margin-bottom:1.25rem;">
-        <label for="webpage_short_desc" style="display:block; font-size:0.875rem; font-weight:600; color:#1f2937; margin-bottom:0.4rem;">
-          Short Description
-        </label>
-        <textarea id="webpage_short_desc" name="short_description" rows="2" placeholder="Brief summary of the services provided on this webpage..."
-                  style="width:100%; padding:0.7rem 0.85rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.92rem; outline:none; resize:vertical; font-family:inherit; transition:border-color 0.2s;"
-                  onfocus="this.style.borderColor='#398158'" onblur="this.style.borderColor='#d1d5db'"></textarea>
-      </div>
-
-      <div style="margin-bottom:1.25rem;">
-        <label for="webpage_meta_desc" style="display:block; font-size:0.875rem; font-weight:600; color:#1f2937; margin-bottom:0.4rem;">
-          Meta Description (SEO)
-        </label>
-        <textarea id="webpage_meta_desc" name="meta_description" rows="2" placeholder="SEO meta description for search engines and social cards..."
-                  style="width:100%; padding:0.7rem 0.85rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.92rem; outline:none; resize:vertical; font-family:inherit; transition:border-color 0.2s;"
-                  onfocus="this.style.borderColor='#398158'" onblur="this.style.borderColor='#d1d5db'"></textarea>
-      </div>
-
-      <div style="margin-bottom:1.75rem;">
-        <label for="webpage_hero_image" style="display:block; font-size:0.875rem; font-weight:600; color:#1f2937; margin-bottom:0.4rem;">
-          Hero Image URL (Optional)
-        </label>
-        <input type="url" id="webpage_hero_image" name="hero_image" placeholder="https://images.unsplash.com/..."
-               style="width:100%; padding:0.7rem 0.85rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.92rem; outline:none; transition:border-color 0.2s;"
-               onfocus="this.style.borderColor='#398158'" onblur="this.style.borderColor='#d1d5db'">
-        <small style="display:block; color:#6b7280; font-size:0.76rem; margin-top:0.3rem;">Leave empty to use a curated default header image.</small>
-      </div>
-
-      <div style="display:flex; align-items:center; justify-content:flex-end; gap:0.75rem; padding-top:1rem; border-top:1px solid #f3f4f6;">
-        <button type="button" class="admin-secondary-button" onclick="closeWebpageModal()" style="padding:0.6rem 1.1rem; font-size:0.9rem;">
-          Cancel
-        </button>
-        <button type="submit" class="admin-action-button" style="padding:0.6rem 1.25rem; font-size:0.9rem;">
-          <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right:0.45rem;"></i>Create Webpage
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <script>
-  function openWebpageModal() {
-    const modal = document.getElementById('addWebpageModal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    const titleInput = document.getElementById('webpage_title');
-    if (titleInput) setTimeout(() => titleInput.focus(), 60);
-  }
-
-  function closeWebpageModal() {
-    const modal = document.getElementById('addWebpageModal');
-    if (!modal) return;
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  function updateWebpageSlug(title) {
-    const slugInput = document.getElementById('webpage_slug');
-    if (!slugInput) return;
-    if (!slugInput.dataset.touched) {
-      slugInput.value = title
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-    }
-  }
-
   function toggleAdminDetails(button, rowId) {
     const row = document.getElementById(rowId);
     if (!row) return;
@@ -818,23 +792,6 @@
   document.addEventListener('DOMContentLoaded', () => {
     showAdminTab(new URLSearchParams(window.location.search).get('tab') || 'overview', false);
     initializeAdminActivityChart();
-
-    // Webpage modal listeners
-    const modalBackdrop = document.getElementById('addWebpageModal');
-    if (modalBackdrop) {
-      modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) closeWebpageModal();
-      });
-    }
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeWebpageModal();
-    });
-    const slugInputEl = document.getElementById('webpage_slug');
-    if (slugInputEl) {
-      slugInputEl.addEventListener('input', () => {
-        slugInputEl.dataset.touched = 'true';
-      });
-    }
 
     // Isolate mouse wheel scrolling on the sidebar so it never scrolls the main page
     const sidebarNavEl = document.querySelector('.admin-sidebar-nav');
