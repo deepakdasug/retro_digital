@@ -1,17 +1,39 @@
 /* =========================================================
    RETROTECH DIGITAL — INDUSTRY PAGES
+   Theme: Tech Development Design System (Forest, Mint, Deep Green)
    File: public/css/industry.css
    ========================================================= */
 
 .industry-page {
-    --industry-ink: #10231d;
-    --industry-muted: #68756f;
-    --industry-green: #b8f36b;
-    --industry-paper: #f7f8f4;
-    --industry-line: #e2e7df;
-    color: var(--industry-ink);
-    background: #fff;
-    font-family: inherit;
+    --industry-forest-deep: #13251a;
+    --industry-forest-dark: #1b3524;
+    --industry-forest-mid: #254a33;
+    --industry-green-brand: #2f6f46;
+    --industry-green-bright: #3ea05f;
+    --industry-green-accent: #6ec088;
+    --industry-mint-soft: #eaf4ec;
+    --industry-mint-bg: #f2f8f3;
+    --industry-page-bg: #f8faf8;
+    --industry-white: #ffffff;
+    --industry-ink-primary: #15271d;
+    --industry-ink-secondary: #314436;
+    --industry-ink-muted: #5d7063;
+    --industry-border-light: rgba(47, 111, 70, 0.12);
+    --industry-border-hover: rgba(47, 111, 70, 0.28);
+    --industry-shadow-sm: 0 2px 8px rgba(21, 39, 29, 0.04);
+    --industry-shadow-md: 0 10px 30px -6px rgba(21, 39, 29, 0.08);
+    --industry-shadow-lg: 0 24px 50px -12px rgba(21, 39, 29, 0.12);
+
+    /* Mapped legacy aliases */
+    --industry-ink: var(--industry-ink-primary);
+    --industry-muted: var(--industry-ink-muted);
+    --industry-green: var(--industry-green-bright);
+    --industry-paper: var(--industry-mint-bg);
+    --industry-line: var(--industry-border-light);
+
+    color: var(--industry-ink-primary);
+    background: var(--industry-page-bg);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
 }
 
@@ -31,7 +53,7 @@
     color: inherit;
 }
 
-/* Container with consistent left and right margins across all devices */
+/* Container with balanced left & right margins like Tech-Development */
 .industry-container {
     width: min(1200px, 100%);
     margin-inline: auto;
@@ -40,16 +62,17 @@
 }
 
 .section-space {
-    padding-block: 100px;
+    padding-block: 96px;
     width: 100%;
 }
 
+/* Kickers / Eyebrows */
 .industry-kicker,
 .industry-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 11px;
+    gap: 8px;
+    font-size: 11.5px;
     font-weight: 800;
     letter-spacing: .16em;
     line-height: 1.5;
@@ -59,18 +82,22 @@
 .industry-kicker::before,
 .industry-eyebrow::before {
     content: "";
-    width: 22px;
+    width: 20px;
     height: 2px;
-    background: var(--industry-green);
-    border-radius: 1px;
+    background: var(--industry-green-brand);
+    border-radius: 9999px;
 }
 
 .industry-kicker {
-    color: #47723c;
+    color: var(--industry-green-brand);
 }
 
 .industry-kicker--light {
-    color: var(--industry-green);
+    color: var(--industry-green-accent);
+}
+
+.industry-kicker--light::before {
+    background: var(--industry-green-accent);
 }
 
 .industry-page h1,
@@ -83,25 +110,25 @@
 .industry-page h1,
 .industry-page h2,
 .industry-page h3 {
-    letter-spacing: -.045em;
-    color: var(--industry-ink);
+    letter-spacing: -.035em;
+    color: var(--industry-ink-primary);
 }
 
 .industry-page h2 {
-    margin-bottom: 22px;
-    font-size: clamp(32px, 4vw, 52px);
+    margin-bottom: 20px;
+    font-size: clamp(30px, 3.8vw, 48px);
     font-weight: 750;
-    line-height: 1.08;
+    line-height: 1.15;
 }
 
 .industry-page p {
-    color: var(--industry-muted);
-    font-size: 15px;
-    line-height: 1.85;
+    color: var(--industry-ink-muted);
+    font-size: 15.5px;
+    line-height: 1.8;
 }
 
 /* =========================================================
-   01. HERO SECTION
+   01. HERO SECTION (TECH-DEVELOPMENT FOREST OVERLAY)
    ========================================================= */
 
 .industry-hero {
@@ -109,10 +136,11 @@
     display: flex;
     min-height: 640px;
     align-items: center;
-    background-color: #0d2118;
-    color: #fff;
+    background-color: var(--industry-forest-deep);
+    color: var(--industry-white);
     overflow: hidden;
     width: 100%;
+    border-bottom: 1px solid var(--industry-border-light);
 }
 
 .industry-hero__image {
@@ -131,9 +159,9 @@
     inset: 0;
     z-index: 2;
     background:
-        linear-gradient(90deg, rgba(7, 22, 16, .94) 0%,
-        rgba(7, 22, 16, .80) 48%, rgba(7, 22, 16, .35) 100%),
-        linear-gradient(0deg, rgba(7, 22, 16, .55) 0%, transparent 45%);
+        linear-gradient(90deg, rgba(19, 37, 26, 0.95) 0%,
+        rgba(27, 53, 36, 0.85) 48%, rgba(27, 53, 36, 0.40) 100%),
+        linear-gradient(0deg, rgba(19, 37, 26, 0.65) 0%, transparent 45%);
 }
 
 .industry-hero__content {
@@ -145,26 +173,26 @@
 }
 
 .industry-eyebrow {
-    color: #e3f6d4;
-    margin-bottom: 26px;
+    color: #bce9cb;
+    margin-bottom: 24px;
     animation: industry-rise .8s .05s both;
 }
 
 .industry-hero h1 {
-    max-width: 860px;
-    margin-bottom: 24px;
-    color: #fff;
-    font-size: clamp(40px, 6vw, 76px);
+    max-width: 880px;
+    margin-bottom: 22px;
+    color: var(--industry-white);
+    font-size: clamp(38px, 5.8vw, 72px);
     font-weight: 760;
-    line-height: 1.05;
+    line-height: 1.08;
     animation: industry-rise .8s .15s both;
 }
 
 .industry-hero__content > p {
     max-width: 660px;
     margin-bottom: 32px;
-    color: rgba(255, 255, 255, .88);
-    font-size: clamp(16px, 1.4vw, 19px);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(16px, 1.35vw, 19px);
     line-height: 1.8;
     animation: industry-rise .8s .25s both;
 }
@@ -173,7 +201,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 22px;
+    gap: 20px;
     animation: industry-rise .8s .35s both;
 }
 
@@ -182,10 +210,10 @@
     min-height: 52px;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    padding: 0 26px;
+    gap: 14px;
+    padding: 0 28px;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 9999px;
     font-size: 13.5px;
     font-weight: 750;
     cursor: pointer;
@@ -193,18 +221,19 @@
 }
 
 .industry-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
 .industry-btn--light {
-    background: var(--industry-green);
-    color: #142419;
+    background: linear-gradient(135deg, var(--industry-green-bright) 0%, var(--industry-green-brand) 100%);
+    color: var(--industry-white);
+    box-shadow: 0 8px 24px -4px rgba(47, 111, 70, 0.4);
 }
 
 .industry-btn--light:hover {
-    background: #d0ffa0;
-    color: #142419;
-    box-shadow: 0 10px 25px rgba(184, 243, 107, .3);
+    background: linear-gradient(135deg, #48b56f 0%, #347c4f 100%);
+    color: var(--industry-white);
+    box-shadow: 0 12px 28px -4px rgba(47, 111, 70, 0.55);
 }
 
 .industry-btn__arrow {
@@ -220,15 +249,15 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #fff;
+    color: var(--industry-white);
     font-size: 14px;
     font-weight: 650;
-    padding: 8px 4px;
+    padding: 8px 6px;
     transition: color .2s ease;
 }
 
 .industry-text-link:hover {
-    color: var(--industry-green);
+    color: var(--industry-green-accent);
 }
 
 .industry-hero__index {
@@ -237,21 +266,22 @@
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    margin-top: 76px;
+    margin-top: 72px;
     padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, .22);
-    color: rgba(255, 255, 255, .68);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: .13em;
+    letter-spacing: .14em;
 }
 
 /* =========================================================
-   02. INTRODUCTION / OVERVIEW
+   02. INTRODUCTION / OVERVIEW (WHITE BACKGROUND)
    ========================================================= */
 
 .industry-intro {
-    background: #fff;
+    background: var(--industry-white);
+    border-bottom: 1px solid var(--industry-border-light);
 }
 
 .industry-intro__grid {
@@ -263,12 +293,13 @@
 
 .industry-intro__copy h2 {
     max-width: 560px;
-    margin-top: 20px;
+    margin-top: 18px;
+    margin-bottom: 20px;
 }
 
 .industry-rich-text {
     margin-bottom: 28px;
-    color: var(--industry-muted);
+    color: var(--industry-ink-muted);
     font-size: 15.5px;
     line-height: 1.85;
 }
@@ -284,18 +315,18 @@
 .industry-inline-link {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding-bottom: 6px;
-    border-bottom: 2px solid #8ba17f;
-    color: var(--industry-ink);
+    border-bottom: 2px solid var(--industry-green-brand);
+    color: var(--industry-green-brand);
     font-size: 13.5px;
     font-weight: 750;
     transition: color .2s ease, border-color .2s ease;
 }
 
 .industry-inline-link:hover {
-    color: #2b6131;
-    border-color: #2b6131;
+    color: var(--industry-green-bright);
+    border-color: var(--industry-green-bright);
 }
 
 .industry-intro__visual {
@@ -309,10 +340,10 @@
     top: -16px;
     right: -16px;
     z-index: 0;
-    width: 100px;
-    height: 100px;
-    border-top: 3px solid #b9ef87;
-    border-right: 3px solid #b9ef87;
+    width: 90px;
+    height: 90px;
+    border-top: 3px solid rgba(62, 160, 95, 0.4);
+    border-right: 3px solid rgba(62, 160, 95, 0.4);
     content: "";
 }
 
@@ -322,9 +353,10 @@
     width: 100%;
     height: 440px;
     object-fit: cover;
-    border-radius: 4px;
-    background: var(--industry-paper);
-    box-shadow: 0 12px 35px rgba(16, 35, 29, .08);
+    border-radius: 12px;
+    background: var(--industry-mint-bg);
+    box-shadow: var(--industry-shadow-md);
+    border: 1px solid var(--industry-border-light);
 }
 
 .industry-image-placeholder {
@@ -335,35 +367,37 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 32px;
-    background: #e9f1e4;
-    border-radius: 4px;
+    background: var(--industry-mint-soft);
+    border-radius: 12px;
+    border: 1px solid var(--industry-border-light);
 }
 
 .industry-image-placeholder span {
-    color: var(--industry-muted);
+    color: var(--industry-ink-muted);
     font-size: 13px;
     font-weight: 600;
 }
 
 .industry-image-placeholder strong {
     font-size: 32px;
-    color: var(--industry-ink);
+    color: var(--industry-ink-primary);
 }
 
 .industry-intro__note {
     position: absolute;
-    right: -12px;
+    right: -10px;
     bottom: 0;
     z-index: 2;
     display: flex;
     align-items: center;
     gap: 14px;
-    max-width: 310px;
-    padding: 18px 22px;
-    background: var(--industry-green);
-    border-radius: 4px;
-    color: #142419;
-    box-shadow: 0 14px 35px rgba(16, 35, 29, .15);
+    max-width: 320px;
+    padding: 16px 20px;
+    background: var(--industry-white);
+    border: 1px solid var(--industry-border-light);
+    border-radius: 12px;
+    color: var(--industry-ink-primary);
+    box-shadow: var(--industry-shadow-md);
 }
 
 .industry-intro__note-icon {
@@ -372,9 +406,11 @@
     height: 38px;
     flex: 0 0 38px;
     place-items: center;
-    border: 1px solid rgba(16, 35, 29, .25);
+    background: var(--industry-mint-soft);
+    color: var(--industry-green-brand);
+    border: 1px solid rgba(47, 111, 70, 0.2);
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
 }
 
@@ -384,26 +420,26 @@
 }
 
 .industry-intro__note strong {
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-size: 13.5px;
     font-weight: 750;
-    color: #0b1a12;
+    color: var(--industry-ink-primary);
 }
 
 .industry-intro__note span:last-child {
     font-size: 11.5px;
     line-height: 1.45;
-    color: #213c2b;
+    color: var(--industry-ink-muted);
 }
 
 /* =========================================================
-   03. FEATURE CARDS
+   03. FEATURE CARDS (MINT BACKGROUND LIKE TECH-DEV)
    ========================================================= */
 
 .industry-features {
-    background: var(--industry-paper);
-    border-top: 1px solid var(--industry-line);
-    border-bottom: 1px solid var(--industry-line);
+    background: var(--industry-mint-bg);
+    border-top: 1px solid var(--industry-border-light);
+    border-bottom: 1px solid var(--industry-border-light);
 }
 
 .industry-section-heading {
@@ -419,7 +455,7 @@
 }
 
 .industry-section-heading h2 {
-    margin-top: 18px;
+    margin-top: 16px;
     margin-bottom: 0;
 }
 
@@ -427,6 +463,7 @@
     max-width: 380px;
     margin-bottom: 5px;
     font-size: 15px;
+    color: var(--industry-ink-muted);
 }
 
 .industry-feature-grid {
@@ -438,33 +475,34 @@
 .industry-feature-card {
     position: relative;
     display: flex;
-    min-height: 290px;
+    min-height: 300px;
     flex-direction: column;
-    padding: 30px 28px;
-    border: 1px solid var(--industry-line);
-    border-radius: 4px;
-    background: #fff;
+    padding: 32px 28px;
+    border: 1px solid var(--industry-border-light);
+    border-radius: 14px;
+    background: var(--industry-white);
+    box-shadow: var(--industry-shadow-sm);
     transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
 }
 
 .industry-feature-card:hover {
-    transform: translateY(-6px);
-    border-color: #b7d3a5;
-    box-shadow: 0 18px 40px rgba(16, 35, 29, .08);
+    transform: translateY(-5px);
+    border-color: var(--industry-border-hover);
+    box-shadow: var(--industry-shadow-md);
 }
 
 .industry-feature-card__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .industry-feature-card__number {
-    color: #87938b;
+    color: var(--industry-green-brand);
     font-size: 12px;
     font-weight: 800;
-    letter-spacing: .12em;
+    letter-spacing: .14em;
 }
 
 .industry-feature-card__icon {
@@ -473,10 +511,10 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: 8px;
-    background: #f1f6ed;
-    border: 1px solid #e1ebdb;
-    color: #2e6930;
+    border-radius: 10px;
+    background: var(--industry-mint-soft);
+    border: 1px solid rgba(47, 111, 70, 0.18);
+    color: var(--industry-green-brand);
     font-size: 20px;
     transition: transform .25s ease, background-color .25s ease, color .25s ease;
 }
@@ -488,13 +526,13 @@ img.industry-feature-card__icon {
 
 .industry-feature-card:hover .industry-feature-card__icon {
     transform: scale(1.06);
-    background: #e8f4e1;
-    color: #1b4b20;
+    background: #e0f0e4;
+    color: var(--industry-forest-dark);
 }
 
 .industry-feature-card__symbol {
-    color: #4e7c40;
-    font-size: 26px;
+    color: var(--industry-green-brand);
+    font-size: 24px;
     font-weight: 700;
 }
 
@@ -502,37 +540,38 @@ img.industry-feature-card__icon {
     margin-bottom: 12px;
     font-size: 21px;
     font-weight: 750;
-    line-height: 1.28;
-    color: var(--industry-ink);
+    line-height: 1.3;
+    color: var(--industry-ink-primary);
 }
 
 .industry-feature-card p {
     margin-bottom: 24px;
     font-size: 14.5px;
     line-height: 1.78;
-    color: var(--industry-muted);
+    color: var(--industry-ink-muted);
 }
 
 .industry-feature-card__line {
-    width: 38px;
+    width: 36px;
     height: 3px;
     margin-top: auto;
-    background: var(--industry-green);
-    border-radius: 2px;
+    background: var(--industry-green-bright);
+    border-radius: 9999px;
     transition: width .3s ease;
 }
 
 .industry-feature-card:hover .industry-feature-card__line {
-    width: 58px;
+    width: 56px;
 }
 
 /* =========================================================
-   04. REASONS (RETROTECH DIFFERENCE)
+   04. REASONS (TECH-DEV DEEP FOREST GRADIENT)
    ========================================================= */
 
 .industry-reasons {
-    background: #10231d;
-    color: #fff;
+    background: linear-gradient(160deg, #102116 0%, #173322 100%);
+    color: var(--industry-white);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .industry-reasons__heading {
@@ -541,20 +580,20 @@ img.industry-feature-card__icon {
 }
 
 .industry-reasons__heading h2 {
-    margin-top: 18px;
-    color: #fff;
+    margin-top: 16px;
+    color: var(--industry-white);
 }
 
 .industry-reasons__heading > p {
     max-width: 580px;
-    color: #b8c4bc;
-    font-size: 15px;
+    color: #b5c7bc;
+    font-size: 15.5px;
 }
 
 .industry-reason-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-top: 1px solid rgba(255, 255, 255, .18);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .industry-reason {
@@ -562,7 +601,7 @@ img.industry-feature-card__icon {
     grid-template-columns: 46px 1fr;
     gap: 20px;
     padding: 30px 26px 30px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, .18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     transition: background-color .2s ease;
 }
 
@@ -572,16 +611,16 @@ img.industry-feature-card__icon {
 
 .industry-reason:nth-child(even) {
     padding-left: 32px;
-    border-left: 1px solid rgba(255, 255, 255, .18);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .industry-reason:hover {
-    background: rgba(255, 255, 255, .02);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .industry-reason__number {
     padding-top: 4px;
-    color: var(--industry-green);
+    color: var(--industry-green-accent);
     font-size: 13px;
     font-weight: 800;
     letter-spacing: .1em;
@@ -589,7 +628,7 @@ img.industry-feature-card__icon {
 
 .industry-reason h3 {
     margin-bottom: 10px;
-    color: #fff;
+    color: var(--industry-white);
     font-size: 20px;
     font-weight: 700;
     line-height: 1.35;
@@ -597,17 +636,18 @@ img.industry-feature-card__icon {
 
 .industry-reason p {
     margin-bottom: 0;
-    color: #b8c4bc;
-    font-size: 14px;
+    color: #a8bcaf;
+    font-size: 14.5px;
     line-height: 1.78;
 }
 
 /* =========================================================
-   05. CERTIFICATION
+   05. CERTIFICATION (WHITE BG WITH TECH-DEV CALLOUT PANEL)
    ========================================================= */
 
 .industry-certification {
-    background: #fff;
+    background: var(--industry-white);
+    border-bottom: 1px solid var(--industry-border-light);
 }
 
 .industry-certification__panel {
@@ -615,21 +655,22 @@ img.industry-feature-card__icon {
     grid-template-columns: 1fr .78fr;
     align-items: center;
     gap: clamp(36px, 5vw, 64px);
-    padding: clamp(32px, 5vw, 64px);
-    border: 1px solid var(--industry-line);
-    border-radius: 6px;
-    background: #fbfcf9;
+    padding: clamp(32px, 5vw, 60px);
+    border: 1px solid rgba(47, 111, 70, 0.16);
+    border-radius: 16px;
+    background: linear-gradient(145deg, #f7fbf8 0%, #edf6ef 100%);
+    box-shadow: var(--industry-shadow-sm);
 }
 
 .industry-certification__copy h2 {
-    margin-top: 18px;
+    margin-top: 16px;
     margin-bottom: 16px;
 }
 
 .industry-certification__copy p {
     max-width: 540px;
     margin-bottom: 0;
-    font-size: 15px;
+    font-size: 15.5px;
     line-height: 1.8;
 }
 
@@ -639,25 +680,27 @@ img.industry-feature-card__icon {
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: #fff;
-    border: 1px solid var(--industry-line);
-    border-radius: 4px;
+    background: var(--industry-white);
+    border: 1px solid var(--industry-border-light);
+    border-radius: 12px;
+    box-shadow: var(--industry-shadow-sm);
 }
 
 .industry-certification__image img {
     width: auto;
     max-width: 100%;
-    max-height: 260px;
+    max-height: 250px;
     object-fit: contain;
 }
 
 /* =========================================================
-   06. FAQ SECTION
+   06. FAQ SECTION (MINT BACKGROUND LIKE TECH-DEV)
    ========================================================= */
 
 .industry-faq {
-    background: var(--industry-paper);
-    border-top: 1px solid var(--industry-line);
+    background: var(--industry-mint-bg);
+    border-top: 1px solid var(--industry-border-light);
+    border-bottom: 1px solid var(--industry-border-light);
 }
 
 .industry-faq__grid {
@@ -673,12 +716,13 @@ img.industry-feature-card__icon {
 }
 
 .industry-faq__heading h2 {
-    margin-top: 18px;
+    margin-top: 16px;
 }
 
 .industry-faq__heading p {
     max-width: 340px;
     font-size: 15px;
+    color: var(--industry-ink-muted);
 }
 
 .industry-faq__list {
@@ -687,11 +731,11 @@ img.industry-feature-card__icon {
 }
 
 .industry-faq__item {
-    border-bottom: 1px solid #dce3d9;
+    border-bottom: 1px solid rgba(47, 111, 70, 0.14);
 }
 
 .industry-faq__item:first-child {
-    border-top: 1px solid #dce3d9;
+    border-top: 1px solid rgba(47, 111, 70, 0.14);
 }
 
 .industry-faq__item summary {
@@ -699,13 +743,13 @@ img.industry-feature-card__icon {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 23px 0;
+    padding: 24px 0;
     cursor: pointer;
     list-style: none;
     font-size: 16.5px;
     font-weight: 700;
-    line-height: 1.5;
-    color: var(--industry-ink);
+    line-height: 1.45;
+    color: var(--industry-ink-primary);
     user-select: none;
     transition: color .2s ease;
 }
@@ -715,7 +759,7 @@ img.industry-feature-card__icon {
 }
 
 .industry-faq__item summary:hover {
-    color: #2b6131;
+    color: var(--industry-green-brand);
 }
 
 .industry-faq__toggle {
@@ -723,8 +767,9 @@ img.industry-feature-card__icon {
     width: 28px;
     height: 28px;
     flex: 0 0 28px;
-    border: 1px solid #cbd5c8;
+    border: 1px solid rgba(47, 111, 70, 0.25);
     border-radius: 50%;
+    background: var(--industry-white);
     transition: background-color .25s ease, border-color .25s ease, transform .25s ease;
 }
 
@@ -735,7 +780,7 @@ img.industry-feature-card__icon {
     left: 50%;
     width: 10px;
     height: 1.5px;
-    background: var(--industry-ink);
+    background: var(--industry-ink-primary);
     content: "";
     transform: translate(-50%, -50%);
     transition: transform .25s ease, opacity .25s ease;
@@ -746,13 +791,17 @@ img.industry-feature-card__icon {
 }
 
 .industry-faq__item[open] summary {
-    color: #1a4921;
+    color: var(--industry-green-brand);
 }
 
 .industry-faq__item[open] .industry-faq__toggle {
-    background: var(--industry-green);
-    border-color: var(--industry-green);
+    background: var(--industry-green-brand);
+    border-color: var(--industry-green-brand);
     transform: rotate(90deg);
+}
+
+.industry-faq__item[open] .industry-faq__toggle::before {
+    background: var(--industry-white);
 }
 
 .industry-faq__item[open] .industry-faq__toggle::after {
@@ -761,24 +810,25 @@ img.industry-feature-card__icon {
 }
 
 .industry-faq__answer {
-    padding: 0 40px 22px 0;
+    padding: 0 40px 24px 0;
 }
 
 .industry-faq__answer p {
     margin-bottom: 0;
     font-size: 14.5px;
     line-height: 1.8;
+    color: var(--industry-ink-muted);
 }
 
 /* =========================================================
-   07. FINAL CALL TO ACTION
+   07. FINAL CALL TO ACTION (TECH-DEV CTA PANEL GRADIENT)
    ========================================================= */
 
 .industry-cta {
-    padding-block: 70px;
-    background: #173826;
-    color: #fff;
-    border-top: 1px solid rgba(255, 255, 255, .1);
+    padding-block: 76px;
+    background: linear-gradient(145deg, #163622 0%, #0d2114 100%);
+    color: var(--industry-white);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .industry-cta__inner {
@@ -790,17 +840,17 @@ img.industry-feature-card__icon {
 
 .industry-cta h2 {
     max-width: 700px;
-    margin-top: 16px;
+    margin-top: 14px;
     margin-bottom: 14px;
-    color: #fff;
+    color: var(--industry-white);
     font-size: clamp(28px, 3.2vw, 42px);
 }
 
 .industry-cta p {
     max-width: 650px;
     margin-bottom: 0;
-    color: #d3dfd5;
-    font-size: 15px;
+    color: #c5dbcd;
+    font-size: 15.5px;
 }
 
 .industry-cta__actions {
@@ -812,14 +862,15 @@ img.industry-feature-card__icon {
 
 .industry-btn--dark {
     flex-shrink: 0;
-    background: var(--industry-green);
-    color: #142419;
+    background: linear-gradient(135deg, var(--industry-green-bright) 0%, var(--industry-green-brand) 100%);
+    color: var(--industry-white);
+    box-shadow: 0 8px 24px -4px rgba(47, 111, 70, 0.45);
 }
 
 .industry-btn--dark:hover {
-    background: #d0ffa0;
-    color: #142419;
-    box-shadow: 0 10px 25px rgba(184, 243, 107, .3);
+    background: linear-gradient(135deg, #48b56f 0%, #347c4f 100%);
+    color: var(--industry-white);
+    box-shadow: 0 12px 28px -4px rgba(47, 111, 70, 0.6);
 }
 
 .industry-btn--whatsapp {
@@ -831,7 +882,7 @@ img.industry-feature-card__icon {
 .industry-btn--whatsapp:hover {
     background: #20ba5a;
     color: #fff;
-    box-shadow: 0 10px 25px rgba(37, 211, 102, .3);
+    box-shadow: 0 8px 24px -4px rgba(37, 211, 102, 0.4);
 }
 
 /* =========================================================
@@ -841,7 +892,7 @@ img.industry-feature-card__icon {
 @keyframes industry-rise {
     from {
         opacity: 0;
-        transform: translateY(22px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -852,7 +903,7 @@ img.industry-feature-card__icon {
 @keyframes industry-hero-reveal {
     from {
         opacity: .5;
-        transform: scale(1.07);
+        transform: scale(1.06);
     }
     to {
         opacity: 1;
@@ -928,8 +979,8 @@ img.industry-feature-card__icon {
     .industry-hero__overlay {
         background: linear-gradient(
             90deg,
-            rgba(7, 22, 16, .96) 0%,
-            rgba(7, 22, 16, .84) 100%
+            rgba(19, 37, 26, 0.97) 0%,
+            rgba(27, 53, 36, 0.88) 100%
         );
     }
 
@@ -939,7 +990,7 @@ img.industry-feature-card__icon {
     }
 
     .industry-hero h1 {
-        font-size: clamp(34px, 9.5vw, 54px);
+        font-size: clamp(34px, 9.5vw, 52px);
     }
 
     .industry-hero__content > p {
@@ -998,7 +1049,7 @@ img.industry-feature-card__icon {
     }
 
     .industry-certification__panel {
-        gap: 26px;
+        gap: 24px;
         padding: 26px 20px;
     }
 
