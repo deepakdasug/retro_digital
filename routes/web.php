@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TechDevelopmentController;
 use App\Models\BlogPost;
@@ -123,6 +124,12 @@ Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'
 Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
 
+Route::get('/industries', [IndustryController::class, 'index'])
+    ->name('industries.index');
+
+Route::get('/industries/{slug}', [IndustryController::class, 'show'])
+    ->name('industries.show');
+
 /*
 |--------------------------------------------------------------------------
 | 5. DYNAMIC CATALOG CATCH-ALL (Industries + legacy service redirects)
@@ -134,16 +141,16 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
 
     // Legacy tech-development service slugs → redirect to the tech-development controller
     $techSlugs = [
-        'web-development'              => 'web-development',
-        'mobile-app-development'       => 'mobile-app-development',
-        'custom-application'           => 'custom-application',
-        'salesforce-erpnext-services'  => 'crm-development',
-        'crm-development'              => 'crm-development',
-        'saas-application'             => 'saas-application',
-        'api-development'              => 'api-development',
-        'software-development'         => 'software-development',
-        'whatsapp-integration'         => 'whatsapp-integration',
-        'tech-development'             => 'web-development',
+        'web-development' => 'web-development',
+        'mobile-app-development' => 'mobile-app-development',
+        'custom-application' => 'custom-application',
+        'salesforce-erpnext-services' => 'crm-development',
+        'crm-development' => 'crm-development',
+        'saas-application' => 'saas-application',
+        'api-development' => 'api-development',
+        'software-development' => 'software-development',
+        'whatsapp-integration' => 'whatsapp-integration',
+        'tech-development' => 'web-development',
     ];
 
     if ($section === 'services' && isset($techSlugs[$slug])) {
