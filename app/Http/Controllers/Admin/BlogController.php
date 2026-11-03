@@ -21,10 +21,15 @@ class BlogController extends Controller
     {
         $this->authorizeAdmin();
         $data = $this->validatedPostData($request);
-        $slug = $this->uniqueSlug($data['title']);
+        $slug = $this->uniqueSlug($request->input('slug') ?: $data['title']);
         $imagePath = $request->file('image')?->store('blog_images', 'public');
         $content = $this->processContent($request);
         $published = $request->boolean('is_published');
+        $postStatus = $published ? 'published' : 'draft';
+
+        $authorName = $this->resolveAuthorName($request);
+        $authorDesignation = $this->resolveAuthorDesignation($request);
+        $readingTime = $this->calculateReadingTime($content);
 
         BlogPost::create([
             'title' => $data['title'],
@@ -32,10 +37,21 @@ class BlogController extends Controller
             'excerpt' => $data['excerpt'],
             'image_path' => $imagePath,
             'content_blocks' => $content,
-            'author_name' => $data['author_name'],
-            'author_designation' => $data['author_designation'] ?? null,
+            'author_name' => $authorName,
+            'author_designation' => $authorDesignation,
+            'category' => $data['category'] ?? null,
+            'tags' => $this->normalizeTags($data['tags'] ?? null),
+            'meta_title' => $data['meta_title'] ?? null,
+            'meta_description' => $data['meta_description'] ?? null,
+            'focus_keyword' => $data['focus_keyword'] ?? null,
+            'canonical_url' => $data['canonical_url'] ?? null,
+            'robots_meta' => $data['robots_meta'] ?? 'index, follow',
+            'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
             'is_published' => $published,
+            'post_status' => $postStatus,
             'published_at' => $published ? now() : null,
+            'comment_status' => $request->boolean('comment_status', true),
+            'reading_time' => $readingTime,
         ]);
 
         return redirect()->route('admin.dashboard', ['tab' => 'blogs'])->with('success', 'Blog post created successfully.');
@@ -60,19 +76,35 @@ class BlogController extends Controller
             ->filter(fn (string $path) => str_contains($content[0]['content'], Storage::url($path)))
             ->all();
         $published = $request->boolean('is_published');
+        $postStatus = $published ? 'published' : 'draft';
+
+        $authorName = $this->resolveAuthorName($request, $post);
+        $authorDesignation = $this->resolveAuthorDesignation($request, $post);
+        $readingTime = $this->calculateReadingTime($content);
 
         $post->update([
             'title' => $data['title'],
-            'slug' => $this->uniqueSlug($data['title'], $post),
+            'slug' => $request->filled('slug') ? $this->uniqueSlug($request->input('slug'), $post) : $this->uniqueSlug($data['title'], $post),
             'excerpt' => $data['excerpt'],
             'image_path' => $newImagePath,
             'content_blocks' => $content,
-            'author_name' => $data['author_name'],
-            'author_designation' => $data['author_designation'] ?? null,
+            'author_name' => $authorName,
+            'author_designation' => $authorDesignation,
+            'category' => $data['category'] ?? null,
+            'tags' => $this->normalizeTags($data['tags'] ?? null),
+            'meta_title' => $data['meta_title'] ?? null,
+            'meta_description' => $data['meta_description'] ?? null,
+            'focus_keyword' => $data['focus_keyword'] ?? null,
+            'canonical_url' => $data['canonical_url'] ?? null,
+            'robots_meta' => $data['robots_meta'] ?? 'index, follow',
+            'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
             'is_published' => $published,
+            'post_status' => $postStatus,
             'published_at' => $published
                 ? ($post->is_published && $post->published_at ? $post->published_at : now())
                 : null,
+            'comment_status' => $request->boolean('comment_status', $post->comment_status ?? true),
+            'reading_time' => $readingTime,
         ]);
 
         if ($oldImagePath && $oldImagePath !== $newImagePath) {
@@ -141,20 +173,34 @@ class BlogController extends Controller
     {
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['required', 'string', 'max:1000'],
-            'content' => ['required', 'string', 'max:5000000'],
-            'author_name' => ['required', 'string', 'max:255'],
-            'author_designation' => ['nullable', 'string', 'max:255'],
+            'content' => ['nullable', 'string', 'max:5000000'],
+            'content_blocks' => ['nullable', 'string', 'max:5000000'],
+            'category' => ['nullable', 'string', 'max:255'],
+            'tags' => ['nullable', 'string', 'max:500'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:500'],
+            'focus_keyword' => ['nullable', 'string', 'max:150'],
+            'canonical_url' => ['nullable', 'url', 'max:255'],
+            'robots_meta' => ['nullable', 'string', 'max:50'],
+            'schema_markup' => ['nullable', 'string', 'max:5000'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'is_published' => ['sometimes', 'boolean'],
+            'comment_status' => ['sometimes', 'boolean'],
         ]);
     }
 
     private function processContent(Request $request): array
     {
+        $rawContent = $request->input('content_blocks') ?? $request->input('content') ?? '';
+        $content = is_array($rawContent)
+            ? json_encode($rawContent)
+            : trim((string) $rawContent);
+
         return [[
             'type' => 'html',
-            'content' => $this->sanitizeEditorHtml($request->string('content')->toString()),
+            'content' => $this->sanitizeEditorHtml($content),
         ]];
     }
 
@@ -171,6 +217,57 @@ class BlogController extends Controller
         }
 
         return $paths->unique()->values()->all();
+    }
+
+    private function normalizeTags(?string $tags): ?array
+    {
+        if (blank($tags)) {
+            return null;
+        }
+
+        return collect(explode(',', $tags))
+            ->map(fn ($tag) => trim($tag))
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    private function resolveAuthorName(Request $request, ?BlogPost $post = null): string
+    {
+        $user = $request->user();
+
+        return $user?->name ?? $post?->author_name ?? 'Admin';
+    }
+
+    private function resolveAuthorDesignation(Request $request, ?BlogPost $post = null): ?string
+    {
+        $user = $request->user();
+
+        return $user?->designation ?? $post?->author_designation ?? null;
+    }
+
+    private function calculateReadingTime(array $content): int
+    {
+        $text = collect($content)
+            ->pluck('content')
+            ->filter()
+            ->implode(' ');
+
+        $plainText = trim(strip_tags($text));
+        $wordCount = count(preg_split('/\s+/u', $plainText, -1, PREG_SPLIT_NO_EMPTY) ?: []);
+
+        return max(1, (int) ceil($wordCount / 200));
+    }
+
+    private function normalizeJsonField(?string $value): ?array
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        $decoded = json_decode($value, true);
+
+        return is_array($decoded) ? $decoded : null;
     }
 
     private function sanitizeEditorHtml(string $html): string

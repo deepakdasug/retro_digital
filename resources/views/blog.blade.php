@@ -33,7 +33,7 @@
               <span class="blog-article-number">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
               
               <div class="blog-article-copy">
-                <span class="blog-article-topic">RETROTECH INSIGHTS</span>
+                <span class="blog-article-topic">{{ $post->category ?: 'RETROTECH INSIGHTS' }}</span>
                 
                 <h3>
                     <a href="{{ route('blog.show', $post->slug) }}" style="text-decoration: none; color: inherit;">

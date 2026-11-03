@@ -65,13 +65,31 @@ class DashboardController extends Controller
             ]);
         }
 
+        $dynamicWebPages = \App\Models\WebPage::all();
+        foreach ($dynamicWebPages as $dwp) {
+            $webpages->push((object) [
+                'id'          => $dwp->id,
+                'title'       => $dwp->title,
+                'slug'        => $dwp->slug,
+                'category'    => ucfirst($dwp->category ?: 'Dynamic Page'),
+                'url'         => route('web-pages.show', $dwp->slug),
+                'description' => $dwp->short_description ?: $dwp->meta_description,
+                'hero_image'  => $dwp->hero_image,
+                'icon'        => 'globe',
+                'created_at'  => $dwp->created_at ?: now(),
+                'updated_at'  => $dwp->updated_at ?: now(),
+                'status'      => $dwp->is_published ? 'Published' : 'Draft',
+                'model_type'  => 'web-page',
+            ]);
+        }
+
         $webpages = $webpages->sortByDesc('updated_at')->values();
         $webpagesCount = $webpages->count();
 
         $contactsThisMonth = Contact::where('created_at', '>=', now()->startOfMonth())->count();
         $contactsThisWeek = Contact::where('created_at', '>=', now()->startOfWeek())->count();
         $publishedBlogs = $blogs->where('is_published', true)->count();
-        $draftBlogs = $blogs->where('is_published', false)->count();
+        $draftBlogs = $blogs->count() - $publishedBlogs;
         $contactServices = $contacts->groupBy(fn ($contact) => $contact->service ?: 'General enquiry')
             ->map->count()->sortDesc();
         $contactSources = $contacts->groupBy(fn ($contact) => $contact->referral_source ?: 'Not specified')

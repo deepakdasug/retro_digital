@@ -27,4 +27,23 @@ class Service extends Model
     {
         return 'slug';
     }
+
+    /**
+     * Resolve route binding for both numeric ID and string slug.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        if (is_numeric($value)) {
+            $service = $this->where('id', $value)->first();
+            if ($service) {
+                return $service;
+            }
+        }
+
+        return $this->where('slug', $value)->firstOrFail();
+    }
 }

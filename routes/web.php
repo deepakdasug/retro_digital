@@ -109,6 +109,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/web-pages/{webPage}/edit', [AdminWebPageController::class, 'edit'])->name('admin.web-pages.edit');
     Route::put('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'update'])->name('admin.web-pages.update');
     Route::delete('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'destroy'])->name('admin.web-pages.destroy');
+
+    // Services & Tech Developments management
+    Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit');
+    Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update');
+    Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy');
+    Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy');
 });
 
 

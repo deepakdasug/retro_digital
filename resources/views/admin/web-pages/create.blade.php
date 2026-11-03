@@ -1,11 +1,173 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('content')
+@section('title', 'Create Web Page - Admin')
+
+@push('styles')
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          retro: {
+            charcoal: '#1e3326',
+            dark: '#16281e',
+            darkCard: '#1f382a',
+            mid: '#334b39',
+            muted: '#637568',
+            green: '#397b4e',
+            greenHover: '#285d3a',
+            emerald: '#25d366',
+            mint: '#eaf4eb',
+            tint: '#f0f7f0',
+            bg: '#f7fbf7',
+            border: '#d7e5d9'
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* In-Card Mini Visual Previews */
+  .template-card {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.875rem;
+    background: #ffffff;
+    overflow: hidden;
+    text-align: left;
+  }
+  .template-card:hover {
+    border-color: #4f46e5;
+    box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.15), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
+    transform: translateY(-2px);
+  }
+  .mini-preview-box {
+    width: 100%;
+    height: 120px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    user-select: none;
+  }
+
+  /* Preview Modal Styles */
+  .preview-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .preview-modal-backdrop.is-open {
+    display: flex;
+    opacity: 1;
+  }
+  .preview-modal-dialog {
+    background: #ffffff;
+    width: 100%;
+    max-width: 1080px;
+    max-height: 90vh;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes modalSlideUp {
+    from { transform: translateY(20px) scale(0.97); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .preview-viewport-wrap {
+    flex: 1;
+    overflow-y: auto;
+    background: #f1f5f9;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  .preview-viewport-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: max-width 0.3s ease;
+  }
+  .preview-viewport-content.view-tablet { max-width: 768px; }
+  .preview-viewport-content.view-mobile { max-width: 390px; }
+  
+  /* Wizard Stepper Tabs */
+  .step-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    padding: 0.5rem 0.85rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+  }
+  .step-tab:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+  .step-tab.is-active {
+    background: #eef2ff;
+    color: #4f46e5;
+  }
+  .step-tab.is-active span:first-child {
+    background: #4f46e5 !important;
+    color: #fff !important;
+  }
+
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+</style>
+@endpush
+
+@section('admin-content')
+
+<!-- FLOATING VALIDATION NOTICE -->
+<div id="validationToast" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; max-width: 450px; background: #fee2e2; border: 1px solid #f87171; color: #991b1b; padding: 1rem 1.25rem; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 999999; animation: slideInRight 0.3s ease;">
+    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+        <i class="fa-solid fa-circle-exclamation" style="color: #ef4444; font-size: 1.2rem; margin-top: 2px;"></i>
+        <div style="flex: 1;">
+            <strong style="display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">Cannot Save Page Yet</strong>
+            <span id="validationToastMsg" style="font-size: 0.85rem; line-height: 1.4;"></span>
+        </div>
+        <button type="button" onclick="document.getElementById('validationToast').style.display='none'" style="background: none; border: none; color: #991b1b; cursor: pointer; font-size: 1rem; padding: 0 0.25rem;">✕</button>
+    </div>
+</div>
 
 @if ($errors->any())
-    <div style="background: #fee2e2; color: #991b1b; padding: 1rem; margin: 1rem auto; max-width: 900px; border-radius: 0.5rem; border: 1px solid #f87171;">
-        <strong style="display: block; margin-bottom: 0.5rem;">⚠ Validation Errors:</strong>
-        <ul style="margin: 0; padding-left: 1.2rem;">
+    <div style="background: #fee2e2; color: #991b1b; padding: 1rem 1.25rem; margin: 1.5rem auto 0; max-width: 1050px; border-radius: 0.5rem; border: 1px solid #f87171;">
+        <strong style="display: block; margin-bottom: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Please correct the following errors:</strong>
+        <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.875rem;">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -14,193 +176,677 @@
 @endif
 
 @if (session('error'))
-    <div style="background: #fee2e2; color: #991b1b; padding: 1rem; margin: 1rem auto; max-width: 900px; border-radius: 0.5rem; border: 1px solid #f87171;">
+    <div style="background: #fee2e2; color: #991b1b; padding: 1rem 1.25rem; margin: 1.5rem auto 0; max-width: 1050px; border-radius: 0.5rem; border: 1px solid #f87171; font-size: 0.875rem;">
         <strong>Error:</strong> {{ session('error') }}
     </div>
 @endif
 
 <div style="min-height: 100vh; background: #f3f4f6; padding: 2rem 1rem;">
-    <div style="max-width: 900px; margin: 0 auto;">
+    <div style="max-width: 1050px; margin: 0 auto;">
         
-        <!-- Header -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+        <!-- Top Navigation & Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
-                <h1 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0;">Create Web Page</h1>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0.25rem 0 0 0;">Build a dynamic page step-by-step.</p>
+                <a href="{{ route('admin.web-pages.index') }}" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 500; color: #6b7280; text-decoration: none; margin-bottom: 0.35rem;">
+                    ← Back to Web Pages
+                </a>
+                <h1 style="font-size: 1.75rem; font-weight: 800; color: #111827; margin: 0; letter-spacing: -0.02em;">Add Web Page</h1>
+                <p style="font-size: 0.875rem; color: #6b7280; margin: 0.25rem 0 0 0;">Build and customize a responsive page with interactive section templates.</p>
             </div>
-            <a href="{{ route('admin.web-pages.index') }}" style="font-size: 0.875rem; font-weight: 500; color: #6b7280; text-decoration: none;">Cancel</a>
+            <a href="{{ route('admin.web-pages.index') }}" style="font-size: 0.875rem; font-weight: 600; color: #6b7280; background: #fff; padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; text-decoration: none;">Cancel</a>
         </div>
 
-        <form action="{{ route('admin.web-pages.store') }}" method="POST" id="wizardForm" enctype="multipart/form-data">
+        <!-- Wizard Step Indicators (CLICKABLE NAVIGATION) -->
+        <div style="background: #fff; border-radius: 0.75rem; border: 1px solid #e5e7eb; padding: 0.75rem 1.25rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <div class="step-tab is-active" id="tab-step-1" onclick="goToStep(1)">
+                    <span style="width: 22px; height: 22px; border-radius: 50%; background: #4f46e5; color: #fff; font-size: 0.75rem; display: inline-flex; align-items: center; justify-content: center; font-weight: 700;">1</span>
+                    <span>1. Basic Details</span>
+                </div>
+                <div class="step-tab" id="tab-step-2" onclick="goToStep(2)">
+                    <span style="width: 22px; height: 22px; border-radius: 50%; background: #e5e7eb; color: #4b5563; font-size: 0.75rem; display: inline-flex; align-items: center; justify-content: center; font-weight: 700;">2</span>
+                    <span>2. Choose Templates</span>
+                </div>
+                <div class="step-tab" id="tab-step-3" onclick="goToStep(3)">
+                    <span style="width: 22px; height: 22px; border-radius: 50%; background: #e5e7eb; color: #4b5563; font-size: 0.75rem; display: inline-flex; align-items: center; justify-content: center; font-weight: 700;">3</span>
+                    <span>3. Configure Sections (<span id="section-badge-count">0</span>)</span>
+                </div>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #6366f1;" id="step-helper-text">Step 1 of 3</span>
+        </div>
+
+        <form action="{{ route('admin.web-pages.store') }}" method="POST" id="wizardForm" enctype="multipart/form-data" novalidate>
             @csrf
             
-            <!-- STEP 1 -->
-            <div id="step-1" style="background: #fff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 2rem; margin-bottom: 2rem;">
-                <h2 style="font-size: 1.125rem; font-weight: 700; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-top: 0; margin-bottom: 1.5rem;">1. Basic Details</h2>
+            <!-- STEP 1: BASIC DETAILS -->
+            <div id="step-1" style="background: #fff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; padding: 2rem; margin-bottom: 2rem;">
+                <h2 style="font-size: 1.15rem; font-weight: 700; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.75rem; margin-top: 0; margin-bottom: 1.5rem;">
+                    1. Basic Page Information
+                </h2>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Page Title <span style="color: red;">*</span></label>
-                        <input type="text" name="title" required style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box;">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Page Title <span style="color: #ef4444;">*</span></label>
+                        <input type="text" name="title" data-label="Page Title" data-required="1" value="{{ old('title') }}" placeholder="e.g. Conversion Rate Optimization" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">URL Slug (auto if empty)</label>
-                        <input type="text" name="slug" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box;">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">URL Slug <span style="font-size: 0.75rem; color: #6b7280; font-weight: 400;">(Auto-generated from title if blank)</span></label>
+                        <input type="text" name="slug" value="{{ old('slug') }}" placeholder="conversion-rate-optimization" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem;">
                     </div>
                 </div>
 
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Short Description</label>
-                    <textarea name="short_description" rows="2" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-family: inherit;"></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Category</label>
+                        <select name="category" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem; background: #fff;">
+                            <option value="marketing" {{ old('category') == 'marketing' ? 'selected' : '' }}>Marketing Service</option>
+                            <option value="tech" {{ old('category') == 'tech' ? 'selected' : '' }}>Technology & Development</option>
+                            <option value="consulting" {{ old('category') == 'consulting' ? 'selected' : '' }}>Consulting & Strategy</option>
+                            <option value="landing" {{ old('category') == 'landing' ? 'selected' : '' }}>Campaign Landing Page</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Short Description</label>
+                        <textarea name="short_description" rows="2" placeholder="Brief summary of this page for teasers and cards" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem; font-family: inherit;">{{ old('short_description') }}</textarea>
+                    </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Meta Title (SEO)</label>
-                        <input type="text" name="meta_title" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box;">
+                        <input type="text" name="meta_title" value="{{ old('meta_title') }}" placeholder="SEO title for search engines" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem;">
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Meta Description (SEO)</label>
-                        <input type="text" name="meta_description" style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box;">
+                        <input type="text" name="meta_description" value="{{ old('meta_description') }}" placeholder="150-160 characters search snippet" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.9rem;">
                     </div>
                 </div>
 
-                <div style="margin-bottom: 1.5rem; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 0.5rem; background: #f9fafb;">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 0.5rem;">Hero Image</label>
-                    <p style="font-size: 0.8rem; color: #6b7280; margin: 0 0 0.75rem 0;">Provide a URL or upload an image from your computer.</p>
-                    
-                    <div style="margin-bottom: 0.75rem;">
-                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #4b5563; margin-bottom: 0.25rem;">Option 1: Image URL</label>
-                        <input type="text" name="hero_image" placeholder="https://images.unsplash.com/..." style="width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #4b5563; margin-bottom: 0.25rem;">Option 2: Upload File (jpg, png, webp)</label>
-                        <input type="file" name="hero_image_file" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; background: #fff;">
+                <!-- Step 1 Hero Header Image with Upload from Computer + URL -->
+                <div class="image-field-wrap" style="margin-bottom: 1.5rem; border: 1px solid #e5e7eb; padding: 1.25rem; border-radius: 0.5rem; background: #f9fafb;">
+                    <label style="display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem;">
+                        Hero Header Image (Top of page showcase)
+                    </label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div class="img-thumb-preview" style="width: 70px; height: 70px; border-radius: 8px; border: 1px dashed #cbd5e1; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <img src="{{ old('hero_image') }}" style="{{ old('hero_image') ? 'display:block;' : 'display:none;' }} width: 100%; height: 100%; object-fit: cover;" alt="Hero Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span class="placeholder-icon" style="{{ old('hero_image') ? 'display:none;' : 'display:flex;' }} color: #94a3b8; font-size: 1.5rem;">
+                                <i class="fa-regular fa-image"></i>
+                            </span>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-link"></i>
+                                </span>
+                                <input type="text" name="hero_image" value="{{ old('hero_image') }}" placeholder="Paste Image URL (https://...)" oninput="handleImageUrlInput(this)" style="width: 100%; padding: 0.55rem 0.6rem 0.55rem 2.2rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.85rem;">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <label style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; background: #fff; color: #374151; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
+                                    <i class="fa-solid fa-upload"></i> Upload from Computer
+                                    <input type="file" name="hero_image_file" accept="image/*" onchange="handleImageFileInput(this)" style="display: none;">
+                                </label>
+                                <span class="file-name-label" style="font-size: 0.75rem; color: #6b7280;">No file chosen</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; cursor: pointer;">
-                    <input type="checkbox" name="is_published" value="1" checked> Publish immediately
+                <label style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; cursor: pointer;">
+                    <input type="checkbox" name="is_published" value="1" checked style="width: 16px; height: 16px; accent-color: #16a34a;"> Publish immediately (visible publicly at /web/{slug})
                 </label>
             </div>
 
-            <!-- STEP 2: SECTIONS SELECTOR -->
-            <div id="step-2" style="display: none; background: #fff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 2rem; margin-bottom: 2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <!-- STEP 2: SECTIONS SELECTOR & VISUAL PREVIEWS -->
+            <div id="step-2" style="display: none; background: #fff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; padding: 2rem; margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <h2 style="font-size: 1.125rem; font-weight: 700; color: #111827; margin: 0;">2. Add Sections (Optional)</h2>
-                        <p style="font-size: 0.8rem; color: #6b7280; margin: 0.25rem 0 0 0;">You can skip this step if you only want the basic page.</p>
+                        <h2 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin: 0;">
+                            2. Choose Section Templates
+                        </h2>
+                        <p style="font-size: 0.85rem; color: #6b7280; margin: 0.25rem 0 0 0;">
+                            Browse visual template previews below. Click <strong style="color: #4f46e5;">"Live Preview"</strong> to view the live mockup, or <strong style="color: #16a34a;">"+ Add Section"</strong> to append it.
+                        </p>
                     </div>
-                    <button type="button" onclick="skipSections()" style="font-size: 0.875rem; color: #4f46e5; background: none; border: none; cursor: pointer; font-weight: 600;">Skip & Save Page →</button>
+                    <button type="button" onclick="goToStep(3)" style="font-size: 0.875rem; color: #4f46e5; background: none; border: none; cursor: pointer; font-weight: 600; padding: 0.25rem 0.5rem;">
+                        Go to Sections Form →
+                    </button>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                <!-- Section Cards Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
                     @foreach($sectionTypes as $key => $type)
-                    <button type="button" onclick="addSection('{{ $key }}', '{{ $type['label'] }}', {{ json_encode($type['fields'] ?? []) }}, {{ json_encode($type['repeater']['fields'] ?? []) }})" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; border: 2px solid #e5e7eb; border-radius: 0.75rem; background: #fff; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#4f46e5'; this.style.background='#eef2ff';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#fff';">
-                        <div style="width: 3rem; height: 3rem; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; color: #4f46e5;">
-                            <i class="{{ $type['icon'] }}" style="font-size: 1.25rem;"></i>
+                    <div class="template-card">
+                        
+                        {{-- Visual Miniature Preview Mockup --}}
+                        <div class="mini-preview-box" onclick="openPreviewModal('{{ $key }}')" title="Click to view full preview" style="cursor: pointer;">
+                            
+                            @if($key === 'hero')
+                                <div style="width: 90%; background: #ffffff; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); display: flex; gap: 8px; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <div style="display: inline-flex; align-items: center; gap: 3px; background: #eaf4eb; border-radius: 99px; padding: 1px 5px; margin-bottom: 3px;">
+                                            <span style="width: 4px; height: 4px; border-radius: 50%; background: #25d366;"></span>
+                                            <span style="font-size: 7px; font-weight: 700; color: #285d3a;">AWARD WINNING</span>
+                                        </div>
+                                        <div style="height: 6px; width: 85%; background: #1e3326; border-radius: 2px; margin-bottom: 3px;"></div>
+                                        <div style="height: 4px; width: 60%; background: #9ca3af; border-radius: 2px; margin-bottom: 5px;"></div>
+                                        <div style="display: flex; gap: 4px;">
+                                            <span style="display: inline-block; width: 32px; height: 9px; background: #397b4e; border-radius: 99px;"></span>
+                                            <span style="display: inline-block; width: 26px; height: 9px; background: #e5e7eb; border-radius: 99px;"></span>
+                                        </div>
+                                    </div>
+                                    <div style="width: 42px; height: 38px; background: #eaf4eb; border-radius: 4px; border: 1px dashed #397b4e; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #397b4e; font-weight: 700;">
+                                        Hero
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'topics')
+                                <div style="width: 96%; background: #397b4e; border-radius: 6px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden;">
+                                    <span style="font-size: 8px; font-weight: 800; color: #ffffff; text-transform: uppercase; white-space: nowrap; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px;">SEO Audit</span>
+                                    <span style="color: #25d366; font-size: 7px;">✦</span>
+                                    <span style="font-size: 8px; font-weight: 800; color: #ffffff; text-transform: uppercase; white-space: nowrap; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px;">Web Dev</span>
+                                    <span style="color: #25d366; font-size: 7px;">✦</span>
+                                    <span style="font-size: 8px; font-weight: 800; color: #ffffff; text-transform: uppercase; white-space: nowrap; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px;">Analytics</span>
+                                </div>
+
+                            @elseif($key === 'about')
+                                <div style="width: 92%; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: center;">
+                                    <div>
+                                        <div style="height: 4px; width: 35%; background: #397b4e; border-radius: 2px; margin-bottom: 3px;"></div>
+                                        <div style="height: 6px; width: 90%; background: #1e3326; border-radius: 2px; margin-bottom: 4px;"></div>
+                                        <div style="height: 4px; width: 80%; background: #cbd5e1; border-radius: 2px;"></div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px;">
+                                        <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px; font-size: 6px; font-weight: 700; color: #397b4e; text-align: center;">⚡ Fast</div>
+                                        <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px; font-size: 6px; font-weight: 700; color: #397b4e; text-align: center;">📊 ROI</div>
+                                        <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px; font-size: 6px; font-weight: 700; color: #397b4e; text-align: center;">🛡 Safe</div>
+                                        <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px; font-size: 6px; font-weight: 700; color: #397b4e; text-align: center;">🎯 Scale</div>
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'rows')
+                                <div style="width: 92%; display: flex; flex-direction: column; gap: 5px;">
+                                    <div style="display: flex; gap: 6px; align-items: center;">
+                                        <div style="width: 28px; height: 22px; background: #cbd5e1; border-radius: 4px;"></div>
+                                        <div style="flex: 1; background: #f0f7f0; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px 5px;">
+                                            <div style="height: 4px; width: 70%; background: #1e3326; border-radius: 2px;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 6px; align-items: center;">
+                                        <div style="flex: 1; background: #f0f7f0; border: 1px solid #d7e5d9; border-radius: 4px; padding: 3px 5px;">
+                                            <div style="height: 4px; width: 70%; background: #1e3326; border-radius: 2px;"></div>
+                                        </div>
+                                        <div style="width: 28px; height: 22px; background: #cbd5e1; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'projects')
+                                <div style="width: 92%; display: flex; gap: 8px; align-items: center;">
+                                    <div style="width: 48px; height: 42px; background: #cbd5e1; border-radius: 5px; border: 1px solid #fff;"></div>
+                                    <div style="flex: 1;">
+                                        <div style="height: 5px; width: 75%; background: #1e3326; border-radius: 2px; margin-bottom: 4px;"></div>
+                                        <div style="display: inline-flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                            <span style="font-size: 6px; color: #6b7280;">Before</span>
+                                            <span style="width: 14px; height: 7px; background: #397b4e; border-radius: 99px; display: inline-block;"></span>
+                                            <span style="font-size: 6px; font-weight: 700; color: #1e3326;">After</span>
+                                        </div>
+                                        <div style="display: flex; gap: 3px;">
+                                            <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 3px; padding: 1px 3px; font-size: 6px; font-weight: 800; color: #25d366;">+488%</div>
+                                            <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 3px; padding: 1px 3px; font-size: 6px; font-weight: 800; color: #25d366;">+210%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'workflow')
+                                <div style="width: 92%; display: flex; align-items: center; justify-content: space-between; position: relative;">
+                                    <div style="position: absolute; top: 50%; left: 10px; right: 10px; height: 2px; background: #d7e5d9; transform: translateY(-50%); z-index: 1;"></div>
+                                    <div style="z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                                        <span style="width: 16px; height: 16px; border-radius: 50%; background: #397b4e; color: #fff; font-size: 7px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 1px solid #fff;">01</span>
+                                        <span style="font-size: 6px; font-weight: 600; color: #1e3326;">Audit</span>
+                                    </div>
+                                    <div style="z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                                        <span style="width: 16px; height: 16px; border-radius: 50%; background: #397b4e; color: #fff; font-size: 7px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 1px solid #fff;">02</span>
+                                        <span style="font-size: 6px; font-weight: 600; color: #1e3326;">Build</span>
+                                    </div>
+                                    <div style="z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                                        <span style="width: 16px; height: 16px; border-radius: 50%; background: #397b4e; color: #fff; font-size: 7px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 1px solid #fff;">03</span>
+                                        <span style="font-size: 6px; font-weight: 600; color: #1e3326;">Launch</span>
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'faqs')
+                                <div style="width: 90%; display: flex; flex-direction: column; gap: 4px;">
+                                    <div style="background: #ffffff; border: 1px solid #397b4e; border-radius: 4px; padding: 3px 6px; display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="height: 4px; width: 75%; background: #1e3326; border-radius: 2px;"></div>
+                                        <span style="font-size: 7px; color: #397b4e; font-weight: 800;">−</span>
+                                    </div>
+                                    <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 4px; padding: 3px 6px; display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="height: 4px; width: 65%; background: #9ca3af; border-radius: 2px;"></div>
+                                        <span style="font-size: 7px; color: #9ca3af; font-weight: 800;">+</span>
+                                    </div>
+                                </div>
+
+                            @elseif($key === 'cta')
+                                <div style="width: 92%; background: linear-gradient(135deg, #1e3326 0%, #397b4e 100%); border-radius: 6px; padding: 8px 10px; color: #fff; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <div style="height: 5px; width: 70%; background: #fff; border-radius: 2px; margin: 0 auto 4px auto;"></div>
+                                    <div style="height: 3px; width: 50%; background: rgba(255,255,255,0.7); border-radius: 2px; margin: 0 auto 6px auto;"></div>
+                                    <span style="display: inline-block; background: #25d366; color: #1e3326; font-size: 7px; font-weight: 800; padding: 2px 8px; border-radius: 99px;">Get Started ↗</span>
+                                </div>
+
+                            @elseif($key === 'related')
+                                <div style="width: 92%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
+                                    <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 4px 3px; text-align: center;">
+                                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #397b4e; margin: 0 auto 2px auto;"></div>
+                                        <div style="height: 3px; width: 80%; background: #1e3326; border-radius: 1px; margin: 0 auto;"></div>
+                                    </div>
+                                    <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 4px 3px; text-align: center;">
+                                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #397b4e; margin: 0 auto 2px auto;"></div>
+                                        <div style="height: 3px; width: 80%; background: #1e3326; border-radius: 1px; margin: 0 auto;"></div>
+                                    </div>
+                                    <div style="background: #ffffff; border: 1px solid #d7e5d9; border-radius: 4px; padding: 4px 3px; text-align: center;">
+                                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #397b4e; margin: 0 auto 2px auto;"></div>
+                                        <div style="height: 3px; width: 80%; background: #1e3326; border-radius: 1px; margin: 0 auto;"></div>
+                                    </div>
+                                </div>
+
+                            @else
+                                <i class="{{ $type['icon'] }}" style="font-size: 2rem; color: #9ca3af;"></i>
+                            @endif
+
+                            <div style="position: absolute; bottom: 4px; right: 6px; background: rgba(0,0,0,0.6); color: #fff; font-size: 9px; padding: 1px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
+                                <i class="fa-regular fa-eye"></i> Preview
+                            </div>
                         </div>
-                        <span style="font-weight: 600; color: #374151; font-size: 0.9rem;">{{ $type['label'] }}</span>
-                    </button>
+
+                        <!-- Card Body -->
+                        <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                <div style="color: #4f46e5; font-size: 1rem;"><i class="{{ $type['icon'] }}"></i></div>
+                                <span style="font-weight: 700; color: #111827; font-size: 0.95rem;">{{ $type['label'] }}</span>
+                            </div>
+                            <p style="font-size: 0.78rem; color: #6b7280; margin: 0 0 1rem 0; line-height: 1.4; flex: 1;">
+                                {{ $type['description'] ?? 'Add this section to your page.' }}
+                            </p>
+
+                            <!-- Card Action Buttons -->
+                            <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: auto;">
+                                <button type="button" onclick="openPreviewModal('{{ $key }}')" style="flex: 1; padding: 0.45rem 0.5rem; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;" onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">
+                                    <i class="fa-regular fa-eye"></i> Live Preview
+                                </button>
+                                <button type="button" onclick='addSection(@json($key), @json($type))' style="flex: 1; padding: 0.45rem 0.5rem; background: #4f46e5; color: #ffffff; border: 1px solid #4338ca; border-radius: 0.375rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;" onmouseover="this.style.background='#4338ca'" onmouseout="this.style.background='#4f46e5'">
+                                    <i class="fa-solid fa-plus"></i> Add Section
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                     @endforeach
                 </div>
             </div>
 
-            <!-- STEP 3: ADDED SECTIONS FORM -->
+            <!-- STEP 3: CONFIGURE ADDED SECTIONS FORM -->
             <div id="step-3" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; background: #fff; padding: 1.25rem 1.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+                    <div>
+                        <h2 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin: 0;">3. Configure Page Sections</h2>
+                        <p style="font-size: 0.85rem; color: #6b7280; margin: 0.25rem 0 0 0;">Fill in text, upload images, and manage repeater items below.</p>
+                    </div>
+                    <button type="button" onclick="goToStep(2)" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1rem; background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+                        <i class="fa-solid fa-plus"></i> Add Another Section
+                    </button>
+                </div>
+
+                <!-- QUICK NAVIGATION BAR TO SECTIONS IN STEP 3 -->
+                <div id="quick-section-nav" style="display: none; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; padding: 0.75rem 1rem; background: #ffffff; border-radius: 0.5rem; border: 1px solid #e5e7eb; align-items: center;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.25rem;">
+                        <i class="fa-solid fa-arrow-down-short-wide"></i> Jump to:
+                    </span>
+                    <div id="quick-nav-pills" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+                </div>
+
                 <div id="sections-container" style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;"></div>
-                <div id="no-sections-msg" style="text-align: center; padding: 3rem; background: #fff; border-radius: 0.75rem; border: 1px dashed #d1d5db; color: #6b7280;">
-                    No sections added. You can save the page as is, or go back to add sections.
+                
+                <div id="no-sections-msg" style="text-align: center; padding: 3.5rem 2rem; background: #fff; border-radius: 0.75rem; border: 2px dashed #d1d5db; color: #6b7280;">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background: #f3f4f6; color: #9ca3af; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 0.5rem 0;">No Sections Added Yet</h3>
+                    <p style="font-size: 0.875rem; color: #6b7280; max-width: 420px; margin: 0 auto 1.25rem auto;">You can save the page with just the Hero Header, or click below to choose sections from the template catalog.</p>
+                    <button type="button" onclick="goToStep(2)" style="padding: 0.6rem 1.25rem; background: #4f46e5; color: #fff; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
+                        Browse Section Templates
+                    </button>
                 </div>
             </div>
 
-            <!-- Navigation Buttons -->
-            <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
-                <button type="button" id="btn-prev" onclick="prevStep()" style="display: none; padding: 0.6rem 1.2rem; background: #fff; border: 1px solid #d1d5db; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">← Back</button>
+            <!-- Bottom Wizard Navigation Buttons -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; background: #fff; padding: 1.25rem 1.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+                <button type="button" id="btn-prev" onclick="prevStep()" style="display: none; padding: 0.65rem 1.25rem; background: #fff; border: 1px solid #d1d5db; border-radius: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
+                    ← Back
+                </button>
                 <div style="margin-left: auto; display: flex; gap: 1rem;">
-                    <button type="button" id="btn-next" onclick="nextStep()" style="padding: 0.6rem 1.5rem; background: #4f46e5; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Next Step →</button>
-                    <button type="submit" id="btn-submit" style="display: none; padding: 0.6rem 1.5rem; background: #16a34a; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Save Page</button>
+                    <button type="button" id="btn-next" onclick="nextStep()" style="padding: 0.65rem 1.75rem; background: #4f46e5; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);">
+                        Next Step →
+                    </button>
+                    <button type="submit" id="btn-submit" style="display: none; padding: 0.65rem 1.75rem; background: #16a34a; color: #fff; border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
+                        <i class="fa-solid fa-check"></i> Save & Publish Web Page
+                    </button>
                 </div>
             </div>
         </form>
+
+    </div>
+</div>
+
+<!-- LIVE PREVIEW MODAL -->
+<div id="previewModal" class="preview-modal-backdrop" onclick="closePreviewModal(event)">
+    <div class="preview-modal-dialog" onclick="event.stopPropagation()">
+        
+        <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div id="modalIcon" style="width: 36px; height: 36px; border-radius: 8px; background: #eef2ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div>
+                    <h3 id="modalTitle" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a;">Hero Banner</h3>
+                    <p id="modalDesc" style="margin: 0; font-size: 0.78rem; color: #64748b;">Live visual representation on the frontend</p>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; background: #e2e8f0; padding: 3px; border-radius: 8px;">
+                <button type="button" onclick="setPreviewViewport('desktop')" id="vp-btn-desktop" style="padding: 4px 10px; border-radius: 6px; border: none; background: #fff; color: #1e293b; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-desktop"></i> Desktop
+                </button>
+                <button type="button" onclick="setPreviewViewport('tablet')" id="vp-btn-tablet" style="padding: 4px 10px; border-radius: 6px; border: none; background: transparent; color: #64748b; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-tablet-screen-button"></i> Tablet
+                </button>
+                <button type="button" onclick="setPreviewViewport('mobile')" id="vp-btn-mobile" style="padding: 4px 10px; border-radius: 6px; border: none; background: transparent; color: #64748b; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Mobile
+                </button>
+            </div>
+
+            <button type="button" onclick="closePreviewModal()" style="border: none; background: none; font-size: 1.25rem; color: #94a3b8; cursor: pointer; padding: 0.25rem 0.5rem;">✕</button>
+        </div>
+
+        <div class="preview-viewport-wrap">
+            <div id="previewViewport" class="preview-viewport-content">
+                <div id="previewRenderBody" style="padding: 0;"></div>
+            </div>
+        </div>
+
+        <div style="padding: 1rem 1.5rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+            <span style="font-size: 0.8rem; color: #64748b;">✦ Styled with Retro Digital live theme</span>
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="button" onclick="closePreviewModal()" style="padding: 0.55rem 1rem; border-radius: 0.5rem; border: 1px solid #cbd5e1; background: #fff; color: #475569; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                    Close Preview
+                </button>
+                <button type="button" id="modalAddBtn" style="padding: 0.55rem 1.25rem; border-radius: 0.5rem; border: none; background: #16a34a; color: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <i class="fa-solid fa-plus"></i> Add This Section to Page
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
     let currentStep = 1;
     let sectionCount = 0;
+    let nextSectionId = 0;
+    const allSectionTypes = @json($sectionTypes);
+    const oldSections = @json(old('sections', [])) || [];
 
     function updateButtons() {
         document.getElementById('step-1').style.display = currentStep === 1 ? 'block' : 'none';
         document.getElementById('step-2').style.display = currentStep === 2 ? 'block' : 'none';
         document.getElementById('step-3').style.display = currentStep === 3 ? 'block' : 'none';
         
+        document.querySelectorAll('.step-tab').forEach(tab => tab.classList.remove('is-active'));
+        document.getElementById(`tab-step-${currentStep}`).classList.add('is-active');
+
         document.getElementById('btn-prev').style.display = currentStep > 1 ? 'block' : 'none';
         document.getElementById('btn-next').style.display = currentStep < 3 ? 'block' : 'none';
         document.getElementById('btn-submit').style.display = currentStep === 3 ? 'block' : 'none';
+
+        document.getElementById('step-helper-text').innerText = `Step ${currentStep} of 3`;
+        refreshSectionNumbers();
+
+        updateQuickNav();
+    }
+
+    function refreshSectionNumbers() {
+        const blocks = document.querySelectorAll('#sections-container .section-block');
+        sectionCount = blocks.length;
+        blocks.forEach((block, index) => {
+            const number = block.querySelector('.section-number');
+            if (number) number.innerText = `#${index + 1}`;
+            block.querySelectorAll('[name]').forEach(field => {
+                field.name = field.name.replace(/^sections\[\d+\]/, `sections[${index}]`);
+            });
+        });
+        document.getElementById('section-badge-count').innerText = sectionCount;
+    }
+
+    function goToStep(step) {
+        currentStep = step;
+        updateButtons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function nextStep() {
-        if (currentStep === 1) {
-            const title = document.querySelector('input[name="title"]').value;
-            if (!title) { alert('Please enter a Page Title before proceeding.'); return; }
+        if (currentStep < 3) { 
+            currentStep++; 
+            updateButtons(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
         }
-        if (currentStep < 3) { currentStep++; updateButtons(); window.scrollTo(0,0); }
     }
 
     function prevStep() {
-        if (currentStep > 1) { currentStep--; updateButtons(); window.scrollTo(0,0); }
+        if (currentStep > 1) { 
+            currentStep--; 
+            updateButtons(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        }
     }
 
-    function skipSections() {
-        currentStep = 3;
-        updateButtons();
-        window.scrollTo(0,0);
+    // =========================================================================
+    // IMAGE FIELD HANDLERS (URL input & File Upload with Instant Preview)
+    // =========================================================================
+    function handleImageUrlInput(input) {
+        const wrap = input.closest('.image-field-wrap');
+        if (!wrap) return;
+        const img = wrap.querySelector('.img-thumb-preview img');
+        const icon = wrap.querySelector('.img-thumb-preview .placeholder-icon');
+        const val = input.value.trim();
+        if (val) {
+            img.src = val;
+            img.style.display = 'block';
+            if (icon) icon.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            if (icon) icon.style.display = 'flex';
+        }
+        input.style.borderColor = '#d1d5db';
+        input.style.boxShadow = 'none';
     }
 
-    function addSection(type, label, fields, repeaterFields) {
-        sectionCount++;
+    function handleImageFileInput(input) {
+        const wrap = input.closest('.image-field-wrap');
+        if (!wrap) return;
+        const img = wrap.querySelector('.img-thumb-preview img');
+        const icon = wrap.querySelector('.img-thumb-preview .placeholder-icon');
+        const nameLabel = wrap.querySelector('.file-name-label');
+        const urlInput = wrap.querySelector('input[type="text"]');
+        
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            nameLabel.innerText = file.name;
+            nameLabel.title = file.name;
+            nameLabel.style.color = '#16a34a';
+            nameLabel.style.fontWeight = '700';
+            
+            const previewUrl = URL.createObjectURL(file);
+            img.src = previewUrl;
+            img.style.display = 'block';
+            if (icon) icon.style.display = 'none';
+            
+            if (urlInput) {
+                urlInput.style.borderColor = '#d1d5db';
+                urlInput.style.boxShadow = 'none';
+            }
+        } else {
+            nameLabel.innerText = 'No file chosen';
+            nameLabel.style.color = '#6b7280';
+            nameLabel.style.fontWeight = 'normal';
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[character]);
+    }
+
+    // =========================================================================
+    // FIELD RENDERER (Supports Text, Textarea & Image with URL + File Upload)
+    // =========================================================================
+    function renderFieldHtml(sectionId, f, isRepeater = false, itemIndex = null, prefillVal = '') {
+        const isTextarea = f.type === 'textarea';
+        const isImage = f.type === 'image';
+        const inputName = isRepeater 
+            ? `sections[${sectionId}][items][${itemIndex}][${f.name}]`
+            : `sections[${sectionId}][fields][${f.name}]`;
+        const fileInputName = isRepeater 
+            ? `sections[${sectionId}][item_files][${itemIndex}][${f.name}]`
+            : `sections[${sectionId}][files][${f.name}]`;
+        const label = escapeHtml(f.label || '');
+        const placeholder = escapeHtml(f.placeholder || '');
+        const rawValue = Array.isArray(prefillVal) ? prefillVal.join(', ') : (prefillVal || '');
+        const val = escapeHtml(rawValue);
+
+        if (isImage) {
+            return `
+            <div class="image-field-wrap" style="border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.85rem; background: #fff;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #374151; margin-bottom: 0.5rem;">
+                    ${label} ${f.required ? '<span style="color:#ef4444;">*</span>' : ''}
+                </label>
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                    <div class="img-thumb-preview" style="width: 56px; height: 56px; border-radius: 6px; border: 1px dashed #cbd5e1; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; position: relative;">
+                        <img src="${val}" style="${val ? 'display:block;' : 'display:none;'} width: 100%; height: 100%; object-fit: cover;" alt="Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <span class="placeholder-icon" style="${val ? 'display:none;' : 'display:flex;'} color: #94a3b8; font-size: 1.25rem;">
+                            <i class="fa-regular fa-image"></i>
+                        </span>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 0.4rem;">
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.75rem;">
+                                <i class="fa-solid fa-link"></i>
+                            </span>
+                            <input type="text" name="${inputName}" value="${val}" data-label="${label}" placeholder="Paste Image URL (https://...)" oninput="handleImageUrlInput(this)" style="width: 100%; padding: 0.45rem 0.5rem 0.45rem 1.85rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-sizing: border-box; font-size: 0.8rem;" ${f.required ? 'data-required="1" data-is-image="1"' : ''}>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.65rem; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                                <i class="fa-solid fa-upload"></i> Upload from Computer
+                                <input type="file" name="${fileInputName}" accept="image/*" onchange="handleImageFileInput(this)" style="display: none;">
+                            </label>
+                            <span class="file-name-label" style="font-size: 0.72rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;">
+                                No file chosen
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (isTextarea) {
+            return `
+            <div>
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#374151; margin-bottom:0.25rem;">
+                    ${label} ${f.required ? '<span style="color:#ef4444;">*</span>' : ''}
+                </label>
+                <textarea name="${inputName}" data-label="${label}" rows="2" placeholder="${placeholder}" style="width:100%; padding:0.55rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box; font-family:inherit; font-size:0.85rem;" ${f.required ? 'data-required="1"' : ''}>${val}</textarea>
+            </div>`;
+        }
+
+        return `
+        <div>
+            <label style="display:block; font-size:0.8rem; font-weight:700; color:#374151; margin-bottom:0.25rem;">
+                ${label} ${f.required ? '<span style="color:#ef4444;">*</span>' : ''}
+            </label>
+            <input type="text" name="${inputName}" data-label="${label}" value="${val}" placeholder="${placeholder}" style="width:100%; padding:0.55rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box; font-size:0.85rem;" ${f.required ? 'data-required="1"' : ''}>
+        </div>`;
+    }
+
+    // =========================================================================
+    // SECTION BUILDER & MANAGEMENT
+    // =========================================================================
+    function addSection(type, config, prefill = null) {
+        const sectionId = nextSectionId++;
         const container = document.getElementById('sections-container');
         document.getElementById('no-sections-msg').style.display = 'none';
 
+        const label = config.label || type;
+        const icon = config.icon || 'fa-solid fa-cube';
+        const fields = config.fields || [];
+        const repeater = config.repeater || null;
+        const repeaterFields = repeater ? (repeater.fields || []) : [];
+        const prefillFields = prefill ? (prefill.fields || prefill.content || {}) : {};
+
         let fieldsHtml = '';
-        fields.forEach(f => {
-            const inputType = f.type === 'textarea' ? 'textarea' : 'input';
-            // FIXED: Added [fields] to the name attribute
-            const input = inputType === 'textarea' 
-                ? `<textarea name="sections[${sectionCount}][fields][${f.name}]" rows="2" style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box; font-family:inherit;" ${f.required ? 'required' : ''}></textarea>`
-                : `<input type="text" name="sections[${sectionCount}][fields][${f.name}]" style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box;" ${f.required ? 'required' : ''}>`;
-            
-            fieldsHtml += `<div style="margin-bottom: 1rem;">
-                <label style="display:block; font-size:0.85rem; font-weight:600; color:#374151; margin-bottom:0.25rem;">${f.label} ${f.required ? '<span style="color:red;">*</span>' : ''}</label>
-                ${input}
-            </div>`;
-        });
+        if (fields.length > 0) {
+            fieldsHtml = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem;">`;
+            fields.forEach(f => {
+                const val = prefillFields[f.name] !== undefined ? prefillFields[f.name] : (f.default || '');
+                fieldsHtml += renderFieldHtml(sectionId, f, false, null, val);
+            });
+            fieldsHtml += `</div>`;
+        }
 
         let repeaterHtml = '';
         if (repeaterFields.length > 0) {
             repeaterHtml = `
-            <div style="margin-top: 1.5rem; border-top: 1px solid #e5e7eb; padding-top: 1rem;">
+            <div style="margin-top: 1.25rem; border-top: 1px solid #e5e7eb; padding-top: 1.25rem;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                    <h4 style="font-weight:700; font-size:0.9rem; color:#374151;">Repeater Items</h4>
-                    <button type="button" onclick="addRepeaterItem(this, ${JSON.stringify(repeaterFields).replace(/"/g, '&quot;')})" style="font-size:0.75rem; font-weight:600; background:#eef2ff; color:#4f46e5; border:none; padding:0.4rem 0.8rem; border-radius:0.375rem; cursor:pointer;">+ Add Row</button>
+                    <div>
+                        <h4 style="font-weight:700; font-size:0.9rem; color:#111827; margin:0;">${repeater.label || 'Items'}</h4>
+                        <span style="font-size:0.75rem; color:#6b7280;">Add individual items or rows for this section</span>
+                    </div>
+                    <button type="button" onclick="addRepeaterItem(this, ${JSON.stringify(repeaterFields).replace(/"/g, '&quot;')})" style="font-size:0.8rem; font-weight:700; background:#eef2ff; color:#4f46e5; border:1px solid #c7d2fe; padding:0.45rem 0.9rem; border-radius:0.375rem; cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <i class="fa-solid fa-plus"></i> Add Item
+                    </button>
                 </div>
-                <div class="repeater-container" style="display:flex; flex-direction:column; gap:1rem;"></div>
+                <div class="repeater-container" style="display:flex; flex-direction:column; gap:0.875rem;"></div>
             </div>`;
         }
 
         const sectionHtml = `
-        <div class="section-block" id="section-${sectionCount}" style="background:#fff; border-radius:0.75rem; box-shadow:0 1px 3px rgba(0,0,0,0.1); overflow:hidden; border:1px solid #e5e7eb;">
-            <div style="background:#f9fafb; padding:0.75rem 1rem; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
+        <div class="section-block" id="section-${sectionId}" data-label="${label}" style="background:#fff; border-radius:0.75rem; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e5e7eb; transition: all 0.2s;">
+            <div style="background:#f9fafb; padding:0.85rem 1.25rem; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:0.75rem;">
-                    <span style="font-size:0.75rem; font-weight:700; color:#9ca3af;">#${sectionCount}</span>
-                    <h3 style="font-weight:700; color:#111827; margin:0; font-size:0.95rem;">${label}</h3>
+                    <span class="section-number" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:#e0e7ff; color:#4338ca; font-size:0.75rem; font-weight:700;">#0</span>
+                    <i class="${icon}" style="color:#4f46e5; font-size:1rem;"></i>
+                    <h3 style="font-weight:700; color:#111827; margin:0; font-size:0.98rem;">${label}</h3>
                 </div>
-                <button type="button" onclick="removeSection('section-${sectionCount}')" style="color:#ef4444; background:none; border:none; cursor:pointer; font-size:0.85rem;">✕ Remove</button>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <button type="button" onclick="openPreviewModal('${type}')" style="padding:0.35rem 0.65rem; font-size:0.75rem; font-weight:600; color:#4b5563; background:#fff; border:1px solid #d1d5db; border-radius:0.375rem; cursor:pointer;">
+                        <i class="fa-regular fa-eye"></i> Preview
+                    </button>
+                    <button type="button" onclick="moveSectionUp('section-${sectionId}')" title="Move Up" style="padding:0.35rem 0.6rem; font-size:0.75rem; color:#4b5563; background:#fff; border:1px solid #d1d5db; border-radius:0.375rem; cursor:pointer;">
+                        ↑
+                    </button>
+                    <button type="button" onclick="moveSectionDown('section-${sectionId}')" title="Move Down" style="padding:0.35rem 0.6rem; font-size:0.75rem; color:#4b5563; background:#fff; border:1px solid #d1d5db; border-radius:0.375rem; cursor:pointer;">
+                        ↓
+                    </button>
+                    <button type="button" onclick="removeSection('section-${sectionId}')" style="padding:0.35rem 0.65rem; font-size:0.75rem; font-weight:600; color:#ef4444; background:#fef2f2; border:1px solid #fecaca; border-radius:0.375rem; cursor:pointer;">
+                        ✕ Remove
+                    </button>
+                </div>
             </div>
             <div style="padding:1.5rem;">
-                <input type="hidden" name="sections[${sectionCount}][type]" value="${type}">
+                <input type="hidden" name="sections[${sectionId}][type]" value="${type}">
                 ${fieldsHtml}
                 ${repeaterHtml}
             </div>
@@ -208,45 +854,459 @@
         
         container.insertAdjacentHTML('beforeend', sectionHtml);
 
-        // Automatically jump to Step 3
+        if (repeaterFields.length > 0) {
+            const newBlock = document.getElementById(`section-${sectionId}`);
+            const addBtn = newBlock.querySelector('button[onclick*="addRepeaterItem"]');
+            if (addBtn) {
+                const sampleRows = prefill && Array.isArray(prefill.items)
+                    ? prefill.items
+                    : (config.preview && config.preview.items ? config.preview.items.slice(0, 2) : [{}, {}]);
+                sampleRows.forEach(itemData => {
+                    addRepeaterItem(addBtn, repeaterFields, itemData);
+                });
+            }
+        }
+
+        refreshSectionNumbers();
         currentStep = 3; 
         updateButtons();
-        window.scrollTo(0,0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function removeSection(id) {
-        document.getElementById(id).remove();
-        sectionCount--;
-        if (sectionCount === 0) {
-            document.getElementById('no-sections-msg').style.display = 'block';
+        if (!confirm('Are you sure you want to remove this section?')) return;
+        const block = document.getElementById(id);
+        if (block) {
+            block.remove();
+            if (document.querySelectorAll('#sections-container .section-block').length === 0) {
+                document.getElementById('no-sections-msg').style.display = 'block';
+            }
+            updateButtons();
         }
     }
 
-    function addRepeaterItem(btn, repeaterFields) {
-        const container = btn.closest('.repeater-container');
-        const itemIndex = container.children.length;
+    function moveSectionUp(id) {
+        const el = document.getElementById(id);
+        if (el && el.previousElementSibling && el.previousElementSibling.classList.contains('section-block')) {
+            el.parentNode.insertBefore(el, el.previousElementSibling);
+            updateButtons();
+        }
+    }
+
+    function moveSectionDown(id) {
+        const el = document.getElementById(id);
+        if (el && el.nextElementSibling && el.nextElementSibling.classList.contains('section-block')) {
+            el.parentNode.insertBefore(el.nextElementSibling, el);
+            updateButtons();
+        }
+    }
+
+    function addRepeaterItem(btn, repeaterFields, prefill = null) {
         const sectionBlock = btn.closest('.section-block');
+        if (!sectionBlock) return;
+        const container = sectionBlock.querySelector('.repeater-container');
+        if (!container) return;
+
+        const itemIndex = container.children.length;
         const sectionId = sectionBlock.id.replace('section-', '');
         
-        let html = `<div style="position:relative; padding:1rem; border:1px solid #e5e7eb; border-radius:0.5rem; background:#f9fafb;">
-            <button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:0.5rem; right:0.5rem; color:#ef4444; background:none; border:none; cursor:pointer; font-size:0.75rem;">Remove</button>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">`;
+        let html = `<div style="position:relative; padding:1.25rem; border:1px solid #e5e7eb; border-radius:0.5rem; background:#f9fafb;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #e5e7eb; padding-bottom:0.4rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#4f46e5;">Item #${itemIndex + 1}</span>
+                <button type="button" onclick="removeRepeaterItem(this)" style="color:#ef4444; background:none; border:none; cursor:pointer; font-size:0.75rem; font-weight:600;">
+                    <i class="fa-solid fa-trash"></i> Remove Item
+                </button>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1rem;">`;
             
         repeaterFields.forEach(f => {
-            const inputType = f.type === 'textarea' ? 'textarea' : 'input';
-            // FIXED: Nested under items correctly
-            const input = inputType === 'textarea' 
-                ? `<textarea name="sections[${sectionId}][items][${itemIndex}][${f.name}]" rows="2" style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box; font-family:inherit;" ${f.required ? 'required' : ''}></textarea>`
-                : `<input type="text" name="sections[${sectionId}][items][${itemIndex}][${f.name}]" style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem; box-sizing:border-box;" ${f.required ? 'required' : ''}>`;
-                
-            html += `<div>
-                <label style="display:block; font-size:0.75rem; font-weight:600; color:#4b5563; margin-bottom:0.25rem;">${f.label} ${f.required ? '<span style="color:red;">*</span>' : ''}</label>
-                ${input}
-            </div>`;
+            const val = prefill && prefill[f.name] !== undefined ? prefill[f.name] : '';
+            html += renderFieldHtml(sectionId, f, true, itemIndex, val);
         });
         
         html += `</div></div>`;
         container.insertAdjacentHTML('beforeend', html);
+        refreshRepeaterItems(container);
+        refreshSectionNumbers();
+    }
+
+    function removeRepeaterItem(button) {
+        const item = button.closest('.repeater-container > div');
+        if (!item) return;
+
+        const container = item.parentElement;
+        item.remove();
+        refreshRepeaterItems(container);
+        refreshSectionNumbers();
+    }
+
+    function refreshRepeaterItems(container) {
+        Array.from(container.children).forEach((item, index) => {
+            const label = item.querySelector('span');
+            if (label) label.innerText = `Item #${index + 1}`;
+
+            item.querySelectorAll('[name]').forEach(field => {
+                field.name = field.name.replace(/\[(items|item_files)\]\[\d+\]/, `[$1][${index}]`);
+            });
+        });
+    }
+
+    // =========================================================================
+    // QUICK SECTION NAVIGATION (Jump to section pills in Step 3)
+    // =========================================================================
+    function updateQuickNav() {
+        const navWrap = document.getElementById('quick-section-nav');
+        const pillsWrap = document.getElementById('quick-nav-pills');
+        const blocks = document.querySelectorAll('.section-block');
+
+        if (blocks.length === 0 || currentStep !== 3) {
+            navWrap.style.display = 'none';
+            return;
+        }
+
+        navWrap.style.display = 'flex';
+        pillsWrap.innerHTML = '';
+
+        blocks.forEach((block, idx) => {
+            const label = block.dataset.label || `Section ${idx + 1}`;
+            const pill = document.createElement('button');
+            pill.type = 'button';
+            pill.style.cssText = 'padding: 0.3rem 0.75rem; border-radius: 99px; background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;';
+            pill.innerText = `#${idx + 1} ${label}`;
+            pill.onclick = () => scrollToSection(block.id);
+            pillsWrap.appendChild(pill);
+        });
+    }
+
+    function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            el.style.boxShadow = '0 0 0 4px rgba(99, 102, 241, 0.35)';
+            setTimeout(() => {
+                el.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06)';
+            }, 1500);
+        }
+    }
+
+    // =========================================================================
+    // FORM VALIDATION ON SAVE (Save only happens after filling required inputs)
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('wizardForm');
+
+        form.addEventListener('submit', function(e) {
+            const requiredFields = form.querySelectorAll('[data-required="1"]');
+            let firstMissing = null;
+            let missingStep = 1;
+            let missingLabel = '';
+
+            for (let field of requiredFields) {
+                // If it's an image field, valid if either text URL is filled OR file input has file
+                if (field.dataset.isImage === '1') {
+                    const wrap = field.closest('.image-field-wrap');
+                    const fileInput = wrap ? wrap.querySelector('input[type="file"]') : null;
+                    const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+                    const hasUrl = field.value.trim().length > 0;
+                    if (!hasFile && !hasUrl) {
+                        firstMissing = field;
+                        missingLabel = field.dataset.label || 'Image';
+                        break;
+                    }
+                } else {
+                    if (!field.value.trim()) {
+                        firstMissing = field;
+                        missingLabel = field.dataset.label || field.placeholder || 'Required field';
+                        break;
+                    }
+                }
+            }
+
+            if (firstMissing) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Locate which step this field belongs to
+                const stepParent = firstMissing.closest('#step-1, #step-2, #step-3');
+                if (stepParent) {
+                    missingStep = parseInt(stepParent.id.replace('step-', ''));
+                }
+
+                // Navigate to that step automatically!
+                if (currentStep !== missingStep) {
+                    goToStep(missingStep);
+                }
+
+                // Highlight the invalid field
+                firstMissing.style.borderColor = '#ef4444';
+                firstMissing.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.25)';
+                firstMissing.focus();
+                firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Show floating validation notification
+                const toast = document.getElementById('validationToast');
+                const toastMsg = document.getElementById('validationToastMsg');
+                toastMsg.innerHTML = `Please fill in the required field: <strong style="color: #b91c1c;">"${missingLabel}"</strong> before saving.`;
+                toast.style.display = 'block';
+
+                setTimeout(() => {
+                    if (toast) toast.style.display = 'none';
+                }, 6000);
+
+                return false;
+            }
+        });
+
+        Object.values(oldSections).forEach(section => {
+            const type = section.type;
+            if (allSectionTypes[type]) {
+                addSection(type, allSectionTypes[type], section);
+            }
+        });
+        updateButtons();
+    });
+
+    // =========================================================================
+    // LIVE PREVIEW MODAL RENDERING
+    // =========================================================================
+    function setPreviewViewport(mode) {
+        const vp = document.getElementById('previewViewport');
+        vp.classList.remove('view-tablet', 'view-mobile');
+        
+        document.getElementById('vp-btn-desktop').style.background = mode === 'desktop' ? '#fff' : 'transparent';
+        document.getElementById('vp-btn-desktop').style.color = mode === 'desktop' ? '#1e293b' : '#64748b';
+        document.getElementById('vp-btn-tablet').style.background = mode === 'tablet' ? '#fff' : 'transparent';
+        document.getElementById('vp-btn-tablet').style.color = mode === 'tablet' ? '#1e293b' : '#64748b';
+        document.getElementById('vp-btn-mobile').style.background = mode === 'mobile' ? '#fff' : 'transparent';
+        document.getElementById('vp-btn-mobile').style.color = mode === 'mobile' ? '#1e293b' : '#64748b';
+
+        if (mode === 'tablet') vp.classList.add('view-tablet');
+        if (mode === 'mobile') vp.classList.add('view-mobile');
+    }
+
+    function openPreviewModal(typeKey) {
+        const config = allSectionTypes[typeKey];
+        if (!config) return;
+
+        document.getElementById('modalTitle').innerText = config.label;
+        document.getElementById('modalDesc').innerText = config.description || 'Frontend preview with live sample data';
+        document.getElementById('modalIcon').innerHTML = `<i class="${config.icon}"></i>`;
+        
+        const addBtn = document.getElementById('modalAddBtn');
+        addBtn.onclick = function() {
+            addSection(typeKey, config);
+            closePreviewModal();
+        };
+
+        const body = document.getElementById('previewRenderBody');
+        body.innerHTML = getSectionSampleHtml(typeKey, config);
+
+        const modal = document.getElementById('previewModal');
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePreviewModal(e) {
+        if (e && e.target && e.target.id !== 'previewModal' && !e.target.closest('button[onclick*="closePreviewModal"]')) {
+            return;
+        }
+        const modal = document.getElementById('previewModal');
+        modal.classList.remove('is-open');
+        document.body.style.overflow = 'auto';
+    }
+
+    function getSectionSampleHtml(typeKey, config) {
+        const sample = config.preview || {};
+
+        if (typeKey === 'hero') {
+            return `
+            <div style="background: #f7fbf7; padding: 4rem 2rem; border-bottom: 1px solid #d7e5d9; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: center;">
+                    <div>
+                        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: #eaf4eb; border: 1px solid #c8dfcc; color: #285d3a; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.35rem 0.75rem; border-radius: 99px; margin-bottom: 1rem;">
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background: #25d366; display: inline-block;"></span>
+                            ${sample.badge || 'Award-Winning Agency'}
+                        </div>
+                        <h2 style="font-size: 2.25rem; font-weight: 800; color: #1e3326; line-height: 1.15; margin: 0 0 1rem 0; letter-spacing: -0.02em;">
+                            ${sample.heading || 'Grow Your Business With Precision Strategy'}
+                        </h2>
+                        <p style="font-size: 1rem; color: #637568; line-height: 1.6; margin: 0 0 1.5rem 0;">
+                            ${sample.subtitle || 'We combine strategy, technical precision, and creative innovation.'}
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <a href="#" style="background: #397b4e; color: #fff; font-weight: 700; font-size: 0.9rem; padding: 0.8rem 1.5rem; border-radius: 99px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                ${sample.cta_text || 'Connect With Our Experts'} →
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="border-radius: 1.25rem; overflow: hidden; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(30,51,38,0.12);">
+                            <img src="${sample.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" style="width: 100%; height: auto; display: block;" alt="Showcase">
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'topics') {
+            const list = sample.topics || ['Technical SEO', 'Web Dev', 'CRO', 'Content Strategy'];
+            return `
+            <div style="background: #397b4e; padding: 1.25rem 1rem; overflow: hidden; font-family: Inter, system-ui, sans-serif;">
+                <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    ${list.map(t => `<span style="color: #fff; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 0.5rem;"><span style="color: #25d366;">✦</span> ${t}</span>`).join('')}
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'about') {
+            const items = sample.items || [];
+            return `
+            <div style="background: #f7fbf7; padding: 4rem 2rem; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
+                    <div>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #397b4e; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.5rem;">${sample.kicker || 'About The Service'}</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0 0 1rem 0; line-height: 1.2;">${sample.heading || 'Targeted, conversion-focused solutions.'}</h2>
+                        <p style="font-size: 0.95rem; color: #637568; line-height: 1.6; margin: 0 0 2rem 0;">${sample.paragraph || 'We build specialized programs designed to engage audiences and generate conversions.'}</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        ${items.map(it => `
+                            <div style="background: #fff; border: 1px solid #d7e5d9; border-radius: 1rem; padding: 1.25rem; box-shadow: 0 2px 8px rgba(30,51,38,0.04);">
+                                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3326; margin: 0 0 0.4rem 0;">${it.title}</h4>
+                                <p style="font-size: 0.8rem; color: #637568; line-height: 1.5; margin: 0;">${it.description}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'rows') {
+            const items = sample.items || [];
+            return `
+            <div style="background: #fff; padding: 4rem 2rem; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 3rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #397b4e; text-transform: uppercase;">What's Included</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0.5rem 0;">${sample.heading || "What's included in our service"}</h2>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 2rem;">
+                        ${items.map((row, i) => `
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: center;">
+                                <div style="${i % 2 === 1 ? 'order: 2;' : ''} border-radius: 1rem; overflow: hidden; border: 3px solid #fff; box-shadow: 0 8px 24px rgba(30,51,38,0.08);">
+                                    <img src="${row.image || 'https://picsum.photos/seed/row1/700/520'}" style="width: 100%; height: 180px; object-fit: cover; display: block;" alt="Row">
+                                </div>
+                                <div style="${i % 2 === 1 ? 'order: 1;' : ''} background: #f0f7f0; border: 1px solid #d7e5d9; border-radius: 1rem; padding: 1.75rem;">
+                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e3326; margin: 0 0 0.5rem 0;">${row.title}</h3>
+                                    <p style="font-size: 0.875rem; color: #637568; line-height: 1.6; margin: 0;">${row.description}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'projects') {
+            const items = sample.items || [];
+            return `
+            <div style="background: #f7fbf7; padding: 4rem 2rem; border-top: 1px solid #d7e5d9; border-bottom: 1px solid #d7e5d9; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 2.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #397b4e; text-transform: uppercase;">Featured Case Studies</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0.5rem 0;">${sample.heading || 'Real numbers from real clients.'}</h2>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center; background: #fff; border: 1px solid #d7e5d9; border-radius: 1.25rem; padding: 2rem;">
+                        <div>
+                            <img src="${(items[0] && items[0].image) || 'https://picsum.photos/seed/p1/900/700'}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 0.875rem;" alt="Project">
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e3326; margin: 0 0 0.5rem 0;">${(items[0] && items[0].name) || 'Retail & E-commerce Platform'}</h3>
+                            <p style="font-size: 0.875rem; color: #637568; line-height: 1.6; margin: 0 0 1.25rem 0;">${(items[0] && items[0].description) || 'Ranked for 400+ product keywords, tripling organic revenue.'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'workflow') {
+            const items = sample.items || [];
+            return `
+            <div style="background: #fff; padding: 4rem 2rem; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 3rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #397b4e; text-transform: uppercase;">Full Process</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0.5rem 0;">${sample.heading || 'How our projects run, end to end.'}</h2>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        ${items.map((step, i) => `
+                            <div style="background: #f7fbf7; border: 1px solid #d7e5d9; border-radius: 1rem; padding: 1.5rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #397b4e; color: #fff; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                    0${i + 1}
+                                </div>
+                                <h4 style="font-size: 1rem; font-weight: 700; color: #1e3326; margin: 0 0 0.5rem 0;">${step.title}</h4>
+                                <p style="font-size: 0.8rem; color: #637568; line-height: 1.5; margin: 0;">${step.description}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'faqs') {
+            const items = sample.items || [];
+            return `
+            <div style="background: #f7fbf7; padding: 4rem 2rem; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 760px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 2.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #397b4e; text-transform: uppercase;">Knowledge Base</span>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0.5rem 0;">${sample.heading || 'Frequently Asked Questions'}</h2>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${items.map((faq, i) => `
+                            <div style="background: #fff; border: 1px solid #d7e5d9; border-radius: 0.75rem; padding: 1rem 1.25rem;">
+                                <div style="font-weight: 700; font-size: 0.95rem; color: #1e3326; margin-bottom: 0.5rem;">${faq.question}</div>
+                                <div style="font-size: 0.875rem; color: #637568; line-height: 1.6;">${faq.answer}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'cta') {
+            return `
+            <div style="background: #eaf4eb; padding: 4rem 2rem; border-top: 1px solid #c8dfcc; border-bottom: 1px solid #c8dfcc; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 800px; margin: 0 auto; text-align: center; background: linear-gradient(135deg, #1e3326 0%, #285d3a 100%); border-radius: 1.5rem; padding: 3rem 2rem; color: #fff;">
+                    <h2 style="font-size: 2.25rem; font-weight: 800; color: #fff; margin: 0 0 1rem 0;">${sample.heading || 'Ready to accelerate your digital growth?'}</h2>
+                    <p style="font-size: 1rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem auto;">${sample.description || 'Schedule a free strategy consultation with our specialists.'}</p>
+                    <a href="#" style="background: #25d366; color: #1e3326; font-size: 0.95rem; font-weight: 800; padding: 0.85rem 2rem; border-radius: 99px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        ${sample.button_text || 'Discuss Your Project ↗'}
+                    </a>
+                </div>
+            </div>`;
+        }
+
+        if (typeKey === 'related') {
+            const slugs = sample.slugs || ['SEO Optimization', 'Performance Marketing', 'Website Dev'];
+            return `
+            <div style="background: #f7fbf7; padding: 4rem 2rem; font-family: Inter, system-ui, sans-serif;">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 2.5rem;">
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #1e3326; margin: 0.5rem 0;">${sample.heading || 'Explore Related Services'}</h2>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                        ${slugs.map(s => `
+                            <div style="background: #fff; border: 1px solid #d7e5d9; border-radius: 1rem; padding: 1.5rem;">
+                                <h4 style="font-size: 1.05rem; font-weight: 700; color: #1e3326; margin: 0 0 0.5rem 0; text-transform: capitalize;">${s.replace(/-/g, ' ')}</h4>
+                                <span style="font-size: 0.8rem; font-weight: 700; color: #397b4e;">Learn More ↗</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        return `<div style="padding: 2rem; text-align: center; color: #6b7280;">Preview is currently unavailable for this section.</div>`;
     }
 </script>
 @endsection

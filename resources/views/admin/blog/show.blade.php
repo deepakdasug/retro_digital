@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('content')
+@section('page_heading', 'Blog preview')
+
+@section('admin-content')
 <article class="max-w-4xl mx-auto py-12 px-4 bg-white my-8 rounded shadow-sm">
     
     <!-- Admin Controls (Only visible to Admin) -->

@@ -17,6 +17,25 @@ class WebPage extends Model
         return 'slug';
     }
 
+    /**
+     * Resolve route binding for both numeric ID and string slug.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        if (is_numeric($value)) {
+            $page = $this->where('id', $value)->first();
+            if ($page) {
+                return $page;
+            }
+        }
+
+        return $this->where('slug', $value)->firstOrFail();
+    }
+
     // Defines the relationship to the sections
     public function sections()
     {

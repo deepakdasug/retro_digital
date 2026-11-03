@@ -32,4 +32,23 @@ class TechDevelopment extends Model
         return $this->hasMany(TechDevelopmentSection::class)
             ->orderBy('sort_order');
     }
+
+    /**
+     * Resolve route binding for both numeric ID and string slug.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        if (is_numeric($value)) {
+            $item = $this->where('id', $value)->first();
+            if ($item) {
+                return $item;
+            }
+        }
+
+        return $this->where('slug', $value)->firstOrFail();
+    }
 }

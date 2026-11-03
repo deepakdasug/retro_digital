@@ -1,59 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard - Retrotech')
+@section('page_heading', 'Admin workspace')
 
-@section('content')
-<main class="admin-dashboard-page">
-  <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation" data-lenis-prevent>
-    <a class="admin-brand" href="{{ route('home') }}" aria-label="Retrotech website home">
-      <img class="admin-brand-full" src="{{ asset('assets/images/logo.png') }}" alt="Retrotech Digital">
-      <img class="admin-brand-mark" src="{{ asset('assets/images/retrotech-mark.png') }}" alt="">
-    </a>
-    <span class="admin-sidebar-caption">WORKSPACE</span>
-    <nav class="admin-sidebar-nav" data-lenis-prevent>
-      <button class="admin-sidebar-link is-active" type="button" data-admin-tab="overview" aria-label="Overview" title="Overview" onclick="showAdminTab('overview')"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Overview</span></button>
-      <button class="admin-sidebar-link" type="button" data-admin-tab="contacts" aria-label="Contacts ({{ $contacts->count() }})" title="Contacts ({{ $contacts->count() }})" onclick="showAdminTab('contacts')"><i class="fa-regular fa-address-book" aria-hidden="true"></i><span>Contacts</span><b>{{ $contacts->count() }}</b></button>
-      <button class="admin-sidebar-link" type="button" data-admin-tab="blogs" aria-label="Blog articles ({{ $blogs->count() }})" title="Blog articles ({{ $blogs->count() }})" onclick="showAdminTab('blogs')"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Blog articles</span><b>{{ $blogs->count() }}</b></button>
-      <button class="admin-sidebar-link" type="button" data-admin-tab="webpage" aria-label="Webpages ({{ $webpagesCount }})" title="Webpages ({{ $webpagesCount }})" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span><b>{{ $webpagesCount }}</b></button>
-      <button class="admin-sidebar-link" type="button" data-admin-tab="testimonials" aria-label="Testimonials ({{ $testimonialsCount }})" title="Testimonials ({{ $testimonialsCount }})" onclick="showAdminTab('testimonials')"><i class="fa-regular fa-star" aria-hidden="true"></i><span>Testimonials</span><b>{{ $testimonialsCount }}</b></button>
-    </nav>
-    <div class="admin-sidebar-bottom">
-      <a href="{{ route('home') }}" target="_blank" rel="noopener" class="icon-label-control" aria-label="View website" title="View website"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>View website</span></a>
-      <div class="admin-sidebar-user"><span class="admin-user-avatar">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span><span><strong>{{ auth()->user()->name }}</strong><small>Administrator</small></span></div>
-      <form method="POST" action="{{ route('logout') }}" style="width:100%">
-        @csrf
-        <!-- <button type="submit" class="icon-label-control" style="width:100%;background:none;border:none;cursor:pointer;color:inherit;" aria-label="Sign out" title="Sign out">
-          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span>
-        </button> -->
-      </form>
-      <button type="button" class="admin-sidebar-collapse-btn" id="sidebarToggle" aria-label="Collapse sidebar" aria-controls="adminSidebar" aria-expanded="true" title="Collapse sidebar">
-        <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
-        <span>Collapse</span>
-      </button>
-    </div>
-  </aside>
-
-  <div class="admin-dashboard-main" id="dashboard">
-    <header class="admin-topbar">
-      <div class="admin-topbar-heading">
-        <div class="admin-topbar-title"><span class="admin-dashboard-kicker">RETROTECH DIGITAL</span><h1>Admin workspace</h1></div>
-      </div>
-      <div class="admin-topbar-actions">
-        <span class="admin-dashboard-date"><i class="fa-regular fa-calendar"></i> {{ now()->format('l, F j, Y') }}</span>
-        <span class="admin-topbar-avatar" aria-label="{{ auth()->user()->name }}">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
-        <form action="{{ route('logout') }}" method="POST">
-          @csrf
-          <button type="submit" class="admin-dashboard-logout icon-label-control" aria-label="Log out" title="Log out">
-            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Log out</span>
-          </button>
-        </form>
-      </div>
-    </header>
-
-    @if(session('success'))
-      <div class="admin-dashboard-success" role="status"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
-    @endif
-
+@section('admin-content')
     <section id="section-overview" class="admin-overview-section" role="tabpanel" aria-label="Dashboard overview">
     <section class="admin-dashboard-metrics" aria-label="Website overview">
       <article class="admin-metric-card"><div class="admin-metric-icon is-green"><i class="fa-regular fa-address-card"></i></div><div><span class="admin-metric-label">Total enquiries</span><strong>{{ $contacts->count() }}</strong><small>{{ $contactsThisWeek }} received this week</small></div></article>
@@ -103,7 +53,7 @@
 
       <article class="admin-insight-panel">
         <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">CONTENT ANALYSIS</span><h2>Blog publishing overview</h2><p>Current publishing mix and recent activity.</p></div><span class="admin-insight-icon is-violet"><i class="fa-regular fa-newspaper"></i></span></div>
-        <div class="admin-publishing-summary"><div><span>Published</span><strong>{{ $publishedBlogs }}</strong></div><div><span>Drafts</span><strong>{{ $draftBlogs }}</strong></div><div><span>Created this month</span><strong>{{ $blogsThisMonth }}</strong></div></div>
+        <div class="admin-publishing-summary"><div><span>Published</span><strong>{{ $publishedBlogs }}</strong></div><div><span>Drafts</span><strong>{{ $draftBlogs }}</strong></div></div>
         <div class="admin-insight-latest"><span>Latest article</span>@if($latestBlog)<strong>{{ $latestBlog->title }}</strong><small>{{ $latestBlog->updated_at?->format('M d, Y') }} · {{ $latestBlog->is_published ? 'Published' : 'Draft' }}</small>@else<strong>No articles yet</strong><small>Create an article to begin your content library.</small>@endif</div>
         <div class="admin-insight-foot"><span><i class="fa-regular fa-user"></i> {{ $blogAuthors->count() }} {{ \Illuminate\Support\Str::plural('author', $blogAuthors->count()) }}</span><span><i class="fa-solid fa-file-lines"></i> {{ $blogContentCount }} articles with formatted content</span></div>
       </article>
@@ -224,7 +174,7 @@
         <div class="admin-publishing-summary">
           <div><span>With content</span><strong>{{ $blogContentCount }}</strong></div>
           <div><span>Missing image</span><strong>{{ $blogsWithoutImage }}</strong></div>
-          <div><span>Avg words</span><strong>{{ $averageArticleWords }}</strong></div>
+          <div><span>Drafts</span><strong>{{ $draftBlogs }}</strong></div>
         </div>
         <div class="admin-breakdown-list">
           @php($publicationRate)
@@ -324,15 +274,15 @@
             <div>
               <span class="admin-metric-label">Publishing rate</span>
               <strong>{{ $publicationRate }}%</strong>
-              <small>{{ $publishedBlogs }} of {{ $blogs->count() }} published</small>
+              <small>{{ $publishedBlogs }} published</small>
             </div>
           </article>
           <article class="admin-metric-card">
             <div class="admin-metric-icon is-blue"><i class="fa-solid fa-calendar-check"></i></div>
             <div>
-              <span class="admin-metric-label">Created this month</span>
-              <strong>{{ $blogsThisMonth }}</strong>
-              <small>New articles this month</small>
+              <span class="admin-metric-label">Draft articles</span>
+              <strong>{{ $draftBlogs }}</strong>
+              <small>Not published</small>
             </div>
           </article>
           <article class="admin-metric-card">
@@ -357,14 +307,15 @@
           <thead><tr><th>Article</th><th>Author</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead>
           <tbody>
             @forelse($blogs as $blog)
+              @php($blogStatusLabel = $blog->is_published ? 'Published' : 'Draft')
               <tr>
                 <td><div class="admin-article-cell">@if($blog->image_path)<img src="{{ Storage::url($blog->image_path) }}" alt="" loading="lazy">@else<span class="admin-article-placeholder"><i class="fa-regular fa-image"></i></span>@endif<div class="admin-article-title-wrap"><strong>{{ $blog->title }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $blog->title }}" title="Toggle article details" aria-expanded="false" aria-controls="blog-detail-{{ $blog->id }}" onclick="toggleAdminDetails(this, 'blog-detail-{{ $blog->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
                 <td><strong>{{ $blog->author_name }}</strong></td>
-                <td><span class="admin-status-badge {{ $blog->is_published ? '' : 'is-draft' }}"><span></span>{{ $blog->is_published ? 'Published' : 'Draft' }}</span></td>
+                <td><span class="admin-status-badge {{ $blog->is_published ? '' : 'is-draft' }}"><span></span>{{ $blogStatusLabel }}</span></td>
                 <td><strong class="admin-date-primary">{{ $blog->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $blog->updated_at?->diffForHumans() }}</span></td>
                 <td><div class="admin-row-actions">@if($blog->is_published)<a href="{{ route('blog.show', $blog->slug) }}" class="admin-secondary-button" aria-label="View {{ $blog->title }}" title="View article"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a>@endif<a href="{{ route('admin.blog.edit', $blog) }}" class="admin-secondary-button" aria-label="Edit {{ $blog->title }}" title="Edit article"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a><form action="{{ route('admin.blog.destroy', $blog) }}" method="POST" onsubmit="return confirm('Delete this post and its uploaded images? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $blog->title }}" title="Delete article"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form></div></td>
               </tr>
-              <tr id="blog-detail-{{ $blog->id }}" class="admin-detail-row" hidden><td colspan="5"><div class="admin-blog-detail">@if($blog->excerpt)<p class="admin-blog-detail-excerpt">{{ $blog->excerpt }}</p>@endif<div class="admin-blog-detail-meta"><span>Slug: {{ $blog->slug }}</span><span>Published: {{ $blog->published_at?->format('M d, Y') ?? 'Not published' }}</span>@if($blog->author_designation)<span>Author role: {{ $blog->author_designation }}</span>@endif</div>@if(filled($blog->content_html))<div class="admin-blog-detail-content">{!! $blog->content_html !!}</div>@endif</div></td></tr>
+              <tr id="blog-detail-{{ $blog->id }}" class="admin-detail-row" hidden><td colspan="5"><div class="admin-blog-detail">@if($blog->excerpt)<p class="admin-blog-detail-excerpt">{{ $blog->excerpt }}</p>@endif<div class="admin-blog-detail-meta"><span>Slug: {{ $blog->slug }}</span><span>Status: {{ $blogStatusLabel }}</span>@if($blog->category)<span>Category: {{ $blog->category }}</span>@endif @if($blog->tags)<span>Tags: {{ implode(', ', $blog->tags) }}</span>@endif<span>Published: {{ $blog->published_at?->format('M d, Y') ?? 'Not published' }}</span>@if($blog->author_designation)<span>Author role: {{ $blog->author_designation }}</span>@endif @if($blog->reading_time)<span>Read time: {{ $blog->reading_time }} min</span>@endif<span>Comments: {{ $blog->comment_status ? 'Enabled' : 'Disabled' }}</span></div>@if(filled($blog->content_html))<div class="admin-blog-detail-content">{!! $blog->content_html !!}</div>@endif</div></td></tr>
             @empty
               <tr><td colspan="5" class="admin-table-empty">No blog posts have been created yet.</td></tr>
             @endforelse
@@ -452,13 +403,13 @@
                     @endif
                     <div class="admin-article-title-wrap">
                       <strong>{{ $page->title }}</strong>
-                      <span style="font-size: 0.78rem; color: #6b7280; font-family: monospace;">/{{ $page->model_type === 'service' ? 'services' : 'tech-development' }}/{{ $page->slug }}</span>
+                      <span style="font-size: 0.78rem; color: #6b7280; font-family: monospace;">/{{ $page->model_type === 'service' ? 'services' : ($page->model_type === 'tech-development' ? 'tech-development' : 'web') }}/{{ $page->slug }}</span>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <span class="admin-service-tag" style="{{ $page->model_type === 'tech-development' ? 'background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;' : '' }}">
-                    <i class="fa-solid {{ $page->model_type === 'tech-development' ? 'fa-code' : 'fa-bullhorn' }}" style="font-size: 0.7rem; margin-right: 0.35rem;"></i>{{ $page->category }}
+                  <span class="admin-service-tag" style="{{ $page->model_type === 'tech-development' ? 'background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;' : ($page->model_type === 'web-page' ? 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;' : '') }}">
+                    <i class="fa-solid {{ $page->model_type === 'tech-development' ? 'fa-code' : ($page->model_type === 'web-page' ? 'fa-file-lines' : 'fa-bullhorn') }}" style="font-size: 0.7rem; margin-right: 0.35rem;"></i>{{ $page->category }}
                   </span>
                 </td>
                 <td>
@@ -475,23 +426,42 @@
                     <a href="{{ $page->url }}" target="_blank" rel="noopener" class="admin-secondary-button" aria-label="View {{ $page->title }}" title="View live page">
                       <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>View
                     </a>
-                    <button class="admin-secondary-button" type="button" aria-label="Toggle details for {{ $page->title }}" title="Toggle details" aria-expanded="false" aria-controls="webpage-detail-{{ $loop->index }}" onclick="toggleAdminDetails(this, 'webpage-detail-{{ $loop->index }}')">
-                      <i class="fa-regular fa-eye" aria-hidden="true"></i>Details
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr id="webpage-detail-{{ $loop->index }}" class="admin-detail-row" hidden>
-                <td colspan="5">
-                  <div class="admin-detail-grid">
-                    <div><span>Page Slug</span><strong>{{ $page->slug }}</strong></div>
-                    <div><span>Live URL</span><a href="{{ $page->url }}" target="_blank" rel="noopener">{{ $page->url }}</a></div>
-                    <div><span>Category</span><strong>{{ $page->category }}</strong></div>
-                    <div><span>Date Added</span><strong>{{ \Carbon\Carbon::parse($page->created_at)->format('M d, Y · g:i A') }}</strong></div>
-                    <div class="admin-detail-message" style="grid-column: 1 / -1;">
-                      <span>Description / Summary</span>
-                      <p>{{ $page->description ?: 'No description provided.' }}</p>
-                    </div>
+
+                    @if($page->model_type === 'web-page')
+                      <a href="{{ route('admin.web-pages.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit web page">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
+                      </a>
+                    @elseif($page->model_type === 'service')
+                      <a href="{{ route('admin.services.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit service">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
+                      </a>
+                    @endif
+
+                    @if($page->model_type === 'web-page')
+                      <form action="{{ route('admin.web-pages.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this web page? This cannot be undone.');" style="display:inline-block; margin:0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete web page">
+                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
+                        </button>
+                      </form>
+                    @elseif($page->model_type === 'service')
+                      <form action="{{ route('admin.services.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this service page? This cannot be undone.');" style="display:inline-block; margin:0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete service">
+                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
+                        </button>
+                      </form>
+                    @elseif($page->model_type === 'tech-development')
+                      <form action="{{ route('admin.tech-developments.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this tech page? This cannot be undone.');" style="display:inline-block; margin:0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete tech page">
+                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
+                        </button>
+                      </form>
+                    @endif
                   </div>
                 </td>
               </tr>
@@ -649,44 +619,7 @@
       </div>
     </section>
     
-  </div>
-</main>
-
 <script>
-  function toggleAdminDetails(button, rowId) {
-    const row = document.getElementById(rowId);
-    if (!row) return;
-    const isOpening = row.hidden;
-    row.hidden = !isOpening;
-    button.setAttribute('aria-expanded', String(isOpening));
-  }
-
-  function showAdminTab(tabName, updateAddress = true) {
-    const allowedTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials'];
-    if (!allowedTabs.includes(tabName)) tabName = 'overview';
-
-    allowedTabs.forEach((name) => {
-      const section = document.getElementById(`section-${name}`);
-      if (!section) return;
-      const selected = name === tabName;
-      section.hidden = !selected;
-    });
-
-    document.querySelectorAll('.admin-sidebar-link').forEach((link) => {
-      const isActive = link.dataset.adminTab === tabName;
-      link.classList.toggle('is-active', isActive);
-      link.setAttribute('aria-current', isActive ? 'page' : 'false');
-    });
-    const sidebarTarget = document.querySelector(`.admin-sidebar-link[data-admin-tab="${tabName}"]`);
-    if (sidebarTarget) sidebarTarget.classList.add('is-active');
-
-    if (updateAddress) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('tab', tabName);
-      window.history.replaceState({}, '', url);
-    }
-  }
-
   function initializeAdminActivityChart() {
     const svg = document.getElementById('adminActivityChart');
     const dataElement = document.getElementById('adminChartData');
@@ -789,74 +722,6 @@
     render();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    showAdminTab(new URLSearchParams(window.location.search).get('tab') || 'overview', false);
-    initializeAdminActivityChart();
-
-    // Isolate mouse wheel scrolling on the sidebar so it never scrolls the main page
-    const sidebarNavEl = document.querySelector('.admin-sidebar-nav');
-    const adminSidebarEl = document.getElementById('adminSidebar');
-
-    if (sidebarNavEl) {
-      sidebarNavEl.addEventListener('wheel', (e) => {
-        const { scrollTop, scrollHeight, clientHeight } = sidebarNavEl;
-        const canScroll = scrollHeight > clientHeight;
-        if (!canScroll) {
-          e.preventDefault();
-          return;
-        }
-        const delta = e.deltaY;
-        const isDown = delta > 0;
-        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-        const atTop = scrollTop <= 0;
-
-        if ((isDown && atBottom) || (!isDown && atTop)) {
-          e.preventDefault();
-        }
-      }, { passive: false });
-    }
-
-    if (adminSidebarEl) {
-      adminSidebarEl.addEventListener('wheel', (e) => {
-        // If wheeling over non-nav parts of sidebar (brand, caption, bottom), prevent main page from scrolling
-        if (!e.target.closest('.admin-sidebar-nav')) {
-          e.preventDefault();
-        }
-      }, { passive: false });
-    }
-
-    // Sidebar toggle functionality
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.querySelector('.admin-sidebar');
-    const dashboardPage = document.querySelector('.admin-dashboard-page');
-
-    if (sidebarToggle && sidebar && dashboardPage) {
-      sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('sidebar-collapsed');
-        dashboardPage.classList.toggle('sidebar-collapsed');
-
-        const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
-        sidebarToggle.setAttribute('aria-expanded', String(!isCollapsed));
-        const actionLabel = isCollapsed ? 'Expand sidebar' : 'Collapse sidebar';
-        sidebarToggle.title = actionLabel;
-        sidebarToggle.setAttribute('aria-label', actionLabel);
-        // Update visible label span inside the button
-        const labelSpan = sidebarToggle.querySelector('span');
-        if (labelSpan) labelSpan.textContent = isCollapsed ? 'Expand' : 'Collapse';
-        localStorage.setItem('adminSidebarCollapsed', isCollapsed);
-      });
-
-      const savedState = localStorage.getItem('adminSidebarCollapsed');
-      if (savedState === 'true') {
-        sidebar.classList.add('sidebar-collapsed');
-        dashboardPage.classList.add('sidebar-collapsed');
-        sidebarToggle.setAttribute('aria-expanded', 'false');
-        sidebarToggle.title = 'Expand sidebar';
-        sidebarToggle.setAttribute('aria-label', 'Expand sidebar');
-        const labelSpan = sidebarToggle.querySelector('span');
-        if (labelSpan) labelSpan.textContent = 'Expand';
-      }
-    }
-  });
+  document.addEventListener('DOMContentLoaded', initializeAdminActivityChart);
 </script>
 @endsection

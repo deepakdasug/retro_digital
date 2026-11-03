@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Testimonial - Retrotech')
+@section('page_heading', 'Edit testimonial')
 
-@section('content')
-<main class="admin-dashboard-page" style="display: block; padding: 2rem;">
-    <div class="admin-dashboard-main" style="max-width: 800px; margin: 0 auto;">
+@section('admin-content')
+    <div style="max-width: 800px; margin: 0 auto;">
         
         <!-- Header Section -->
         <div class="admin-section-heading" style="margin-bottom: 2rem;">
@@ -103,5 +103,4 @@
             </form>
         </article>
     </div>
-</main>
 @endsection

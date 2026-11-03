@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Manage Testimonials - Retrotech')
+@section('page_heading', 'Testimonials')
 
-@section('content')
-<main class="admin-dashboard-page" style="display: block; padding: 2rem;">
-    <div class="admin-dashboard-main" style="max-width: 1100px; margin: 0 auto;">
+@section('admin-content')
+    <div style="max-width: 1100px; margin: 0 auto;">
         
         <!-- Header Section -->
         <div class="admin-section-heading admin-blog-section-heading" style="margin-bottom: 2rem;">
@@ -17,13 +17,6 @@
                 <i class="fa-solid fa-plus" aria-hidden="true"></i> Add New Testimonial
             </a>
         </div>
-
-        <!-- Success Alert -->
-        @if(session('success'))
-            <div class="admin-dashboard-success" role="status" style="margin-bottom: 1.5rem;">
-                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
-            </div>
-        @endif
 
         <!-- Data Table Panel -->
         <div class="admin-table-scroll">
@@ -107,5 +100,4 @@
         </div>
 
     </div>
-</main>
 @endsection

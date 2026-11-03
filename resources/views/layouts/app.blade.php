@@ -8,6 +8,7 @@
 
   <meta name="description"
     content="@yield('description', 'Business Made Easy with Retrotech. Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through WhatsApp marketing tools.')">
+  @stack('head')
   <meta name="keywords"
     content="Retrotech, WhatsApp marketing, business automation, customer engagement, WhatsApp API, marketing tools">
   <meta name="author" content="Retrotech">

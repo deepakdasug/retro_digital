@@ -11,22 +11,47 @@ class BlogPost extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 
-        'slug', 
-        'image_path', 
-        'excerpt', 
-        'content_blocks', 
-        'author_name', 
-        'author_designation',
-        'is_published', 
-        'published_at'
+    // Basic Content & Media
+    'title', 
+    'slug', 
+    'excerpt', 
+    'content_blocks', 
+    'image_path', // Featured Image
+    
+    // Author Details (E-E-A-T)
+    'author_name', 
+    'author_designation',
+    
+    // Taxonomy & Organization
+    'category',
+    'tags',
+    
+    // On-Page & Technical SEO Fields
+    'meta_title', 
+    'meta_description', 
+    'focus_keyword', 
+    'canonical_url', 
+    'robots_meta', 
+    'schema_markup',
+    
+    // Publishing & Workflow
+    'is_published', 
+    'post_status', // draft or published; kept for dashboard compatibility
+    'published_at',
+    
+    // Engagement & UX
+    'comment_status', 
+    'reading_time'
     ];
 
     // This is CRUCIAL: It tells Laravel to automatically convert the JSON 
     // from the database into a PHP Array when you use it in your views.
     protected $casts = [
-        'content_blocks' => 'array', 
+        'content_blocks' => 'array',
+        'tags' => 'array',
+        'schema_markup' => 'array',
         'is_published' => 'boolean',
+        'comment_status' => 'boolean',
         'published_at' => 'datetime',
     ];
 
