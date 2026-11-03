@@ -2,21 +2,18 @@
 
 @section('content')
 @php
-  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials'];
+  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs'];
   $requestedTab = request()->query('tab');
   $routeTab = match (true) {
     request()->routeIs('admin.blog.*') => 'blogs',
     request()->routeIs('admin.testimonials.*') => 'testimonials',
     request()->routeIs('admin.web-pages.*') => 'webpage',
+    request()->routeIs('admin.faqs.*') => 'faqs',
     default => null,
   };
   $currentTab = in_array($requestedTab, $adminTabs, true)
     ? $requestedTab
     : $routeTab;
-  $contactsCount = isset($contacts) ? $contacts->count() : 0;
-  $blogsCount = isset($blogs) ? $blogs->count() : 0;
-  $webpagesCount = $webpagesCount ?? 0;
-  $testimonialsCount = $testimonialsCount ?? 0;
 @endphp
 <main class="admin-dashboard-page">
 
@@ -32,13 +29,15 @@
     <nav class="admin-sidebar-nav" data-lenis-prevent>
       <button class="admin-sidebar-link {{ $currentTab == 'overview' ? 'is-active' : '' }}" type="button" data-admin-tab="overview" aria-label="Overview" title="Overview" onclick="showAdminTab('overview')"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Overview</span></button>
       
-      <button class="admin-sidebar-link {{ $currentTab == 'contacts' ? 'is-active' : '' }}" type="button" data-admin-tab="contacts" aria-label="Contacts ({{ $contactsCount }})" title="Contacts ({{ $contactsCount }})" onclick="showAdminTab('contacts')"><i class="fa-regular fa-address-book" aria-hidden="true"></i><span>Contacts</span><b>{{ $contactsCount }}</b></button>
+      <button class="admin-sidebar-link {{ $currentTab == 'contacts' ? 'is-active' : '' }}" type="button" data-admin-tab="contacts" aria-label="Contacts" title="Contacts" onclick="showAdminTab('contacts')"><i class="fa-regular fa-address-book" aria-hidden="true"></i><span>Contacts</span></button>
       
-      <button class="admin-sidebar-link {{ $currentTab == 'blogs' ? 'is-active' : '' }}" type="button" data-admin-tab="blogs" aria-label="Blog articles ({{ $blogsCount }})" title="Blog articles ({{ $blogsCount }})" onclick="showAdminTab('blogs')"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Blog articles</span><b>{{ $blogsCount }}</b></button>
+      <button class="admin-sidebar-link {{ $currentTab == 'blogs' ? 'is-active' : '' }}" type="button" data-admin-tab="blogs" aria-label="Blog articles" title="Blog articles" onclick="showAdminTab('blogs')"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Blog articles</span></button>
       
-      <button class="admin-sidebar-link {{ $currentTab == 'webpage' ? 'is-active' : '' }}" type="button" data-admin-tab="webpage" aria-label="Webpages ({{ $webpagesCount ?? 0 }})" title="Webpages ({{ $webpagesCount ?? 0 }})" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span><b>{{ $webpagesCount ?? 0 }}</b></button>
+      <button class="admin-sidebar-link {{ $currentTab == 'webpage' ? 'is-active' : '' }}" type="button" data-admin-tab="webpage" aria-label="Webpages" title="Webpages" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span></button>
       
-      <button class="admin-sidebar-link {{ $currentTab == 'testimonials' ? 'is-active' : '' }}" type="button" data-admin-tab="testimonials" aria-label="Testimonials ({{ $testimonialsCount ?? 0 }})" title="Testimonials ({{ $testimonialsCount ?? 0 }})" onclick="showAdminTab('testimonials')"><i class="fa-regular fa-star" aria-hidden="true"></i><span>Testimonials</span><b>{{ $testimonialsCount ?? 0 }}</b></button>
+      <button class="admin-sidebar-link {{ $currentTab == 'testimonials' ? 'is-active' : '' }}" type="button" data-admin-tab="testimonials" aria-label="Testimonials" title="Testimonials" onclick="showAdminTab('testimonials')"><i class="fa-regular fa-star" aria-hidden="true"></i><span>Testimonials</span></button>
+
+      <button class="admin-sidebar-link {{ $currentTab == 'faqs' ? 'is-active' : '' }}" type="button" data-admin-tab="faqs" aria-label="FAQs" title="FAQs" onclick="showAdminTab('faqs')"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span>FAQs</span></button>
     </nav>
     
     <div class="admin-sidebar-bottom">
@@ -89,7 +88,7 @@
 @push('scripts')
 <script>
   // --- 1. TAB SWITCHING LOGIC ---
-  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials'];
+  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs'];
 
   function showAdminTab(tabName, updateAddress = true) {
     if (!adminSidebarTabs.includes(tabName)) tabName = 'overview';

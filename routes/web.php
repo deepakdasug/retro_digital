@@ -11,6 +11,7 @@ use App\Http\Controllers\TechDevelopmentController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
+use App\Http\Controllers\Admin\FaqController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
     Route::put('/admin/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
     Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
+
+    // FAQs
+    Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index');
+    Route::get('/admin/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create');
+    Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store');
+    Route::get('/admin/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('admin.faqs.edit');
+    Route::put('/admin/faqs/{faq}', [FaqController::class, 'update'])->name('admin.faqs.update');
+    Route::delete('/admin/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy');
 
     // --- WEB PAGES (New Admin Wizard) ---
     Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index');

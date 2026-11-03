@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
 use App\Models\BlogPost;
+use App\Models\Contact;
+use App\Models\Faq;
 use App\Models\Service;
 use App\Models\TechDevelopment;
 use App\Models\Testimonial;
@@ -22,6 +23,8 @@ class DashboardController extends Controller
         $services = Service::latest()->get();
         $techDevelopments = TechDevelopment::latest()->get();
         $testimonials = Testimonial::latest()->get();
+        $faqs = Faq::ordered()->get();
+        $faqsCount = $faqs->count();
         $testimonialsCount = $testimonials->count();
         $averageRating = $testimonialsCount ? number_format((float) $testimonials->avg('rating'), 1) : '0.0';
         $fiveStarCount = $testimonials->filter(fn ($t) => (float) $t->rating >= 5.0)->count();
@@ -180,6 +183,8 @@ class DashboardController extends Controller
             'testimonialsCount',
             'averageRating',
             'fiveStarCount',
+            'faqs',
+            'faqsCount',
         ));
     }
 
