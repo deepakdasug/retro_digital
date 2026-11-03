@@ -134,6 +134,7 @@ Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'
 | All 7 marketing service pages route through ServiceController.
 | The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'.
 */
+Route::get('/services/digital-marketing', [ServiceController::class, 'digitalMarketing'])->name('services.digital-marketing');
 Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
 

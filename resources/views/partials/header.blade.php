@@ -21,7 +21,7 @@
             <div class="dropdown-arrow-indicator"></div>
             <div class="services-mega-columns">
               <section class="services-mega-group" aria-labelledby="marketing-services-heading">
-                <h2 id="marketing-services-heading"><a href="#">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="marketing-services-heading"><a href="{{ route('services.show', 'digital-marketing') }}">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Explore technology services for secure operations and responsible asset lifecycle management.</p>
                 <ul class="services-mega-links">
                   <li><a href="{{ route('services.show', 'search-engine-optimization') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
@@ -67,7 +67,7 @@
             <div class="services-mega-cards">
               <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Support</strong><small>Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
               <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Services</strong><small>End-to-end IT solutions including infrastructure management, cloud services, cybersecurity, system integration, and ongoing maintenance.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
-              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="{{ route('services.show', 'digital-marketing') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
             </div>
           </div>
         </li>
