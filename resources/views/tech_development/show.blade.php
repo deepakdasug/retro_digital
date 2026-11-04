@@ -4,7 +4,7 @@
 @section('description', $techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'))
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tech-development.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tech-development.css') }}?v={{ file_exists(public_path('css/tech-development.css')) ? filemtime(public_path('css/tech-development.css')) : '1.0' }}">
 @endpush
 
 @section('content')
