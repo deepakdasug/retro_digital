@@ -2179,8 +2179,10 @@ body.inner-page .site-header .hamburger-bar {
 .site-footer {
   position: relative;
   z-index: 30;
-  background: var(--color-offwhite);
+  background: #fbfdfb;
   color: var(--color-charcoal-mid);
+  border-top: 1px solid #cde0d2;
+  box-shadow: 0 -4px 16px rgba(21, 39, 29, 0.03);
 }
 
 .footer-main {
@@ -2315,31 +2317,68 @@ body.inner-page .site-header .hamburger-bar {
 .footer-socials {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--theme-border-light, #e2e8f0);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }
 
 .footer-social-icon {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   align-items: center;
   justify-content: center;
   border: 1.5px solid var(--theme-border-light, #e2e8f0);
   border-radius: 50%;
   color: var(--theme-ink-secondary, #314436);
   background: #ffffff;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  text-decoration: none;
   transition: all var(--transition-fast);
 }
 
 .footer-social-icon:hover {
   color: #ffffff;
-  background: var(--theme-green-brand, #2f6f46);
-  border-color: var(--theme-green-brand, #2f6f46);
   transform: translateY(-2px);
+}
+
+.footer-social-icon.is-pinterest:hover,
+.footer-social-icon[aria-label="Pinterest"]:hover {
+  background: #e60023;
+  border-color: #e60023;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(230, 0, 35, 0.35);
+}
+
+.footer-social-icon.is-facebook:hover,
+.footer-social-icon[aria-label="Facebook"]:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.35);
+}
+
+.footer-social-icon.is-linkedin:hover,
+.footer-social-icon[aria-label="LinkedIn"]:hover {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.35);
+}
+
+.footer-social-icon.is-instagram:hover,
+.footer-social-icon[aria-label="Instagram"]:hover {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  border-color: #d6249f;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(214, 36, 159, 0.35);
+}
+
+.footer-social-icon.is-youtube:hover,
+.footer-social-icon[aria-label="YouTube"]:hover {
+  background: #ff0000;
+  border-color: #ff0000;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.35);
 }
 
 .footer-bottom {

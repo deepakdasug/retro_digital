@@ -72,16 +72,16 @@
             <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil &amp; Gas</a></li>
             <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
           </ul>
+
+          <div class="footer-socials" aria-label="Social media">
+            <a href="#" class="footer-social-icon is-pinterest" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-instagram" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-youtube" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+          </div>
         </section>
 
-      </div>
-
-      <div class="footer-socials" aria-label="Social media">
-        <span class="footer-social-icon" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p" aria-hidden="true"></i></span>
-        <span class="footer-social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
-        <span class="footer-social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span>
-        <span class="footer-social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
-        <span class="footer-social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></span>
       </div>
     </div>
   </div>
