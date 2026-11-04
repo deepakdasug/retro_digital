@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
 use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\RolePermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,50 +87,43 @@ Route::get('/terms-and-conditions', fn () => view('legal', [
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
-    // Blog CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create')->middleware('permission:blogs.create');
-    Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store')->middleware('permission:blogs.create');
-    Route::post('/admin/blog/upload-media', [BlogController::class, 'uploadMedia'])->name('admin.blog.upload_media')->middleware('permission:blogs.create');
-    Route::get('/admin/blog/{post}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit')->middleware('permission:blogs.edit');
-    Route::put('/admin/blog/{post}', [BlogController::class, 'update'])->name('admin.blog.update')->middleware('permission:blogs.edit');
-    Route::delete('/admin/blog/{post}', [BlogController::class, 'destroy'])->name('admin.blog.destroy')->middleware('permission:blogs.delete');
+    // Blog
+    Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store');
+    Route::post('/admin/blog/upload-media', [BlogController::class, 'uploadMedia'])->name('admin.blog.upload_media');
+    Route::get('/admin/blog/{post}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/admin/blog/{post}', [BlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/admin/blog/{post}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
 
-    // Testimonials CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.index')->middleware('permission:testimonials.view');
-    Route::get('/admin/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create')->middleware('permission:testimonials.create');
-    Route::post('/admin/testimonials', [TestimonialController::class, 'store'])->name('admin.testimonials.store')->middleware('permission:testimonials.create');
-    Route::get('/admin/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit')->middleware('permission:testimonials.edit');
-    Route::put('/admin/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update')->middleware('permission:testimonials.edit');
-    Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy')->middleware('permission:testimonials.delete');
+    // Testimonials
+    Route::get('/admin/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.index');
+    Route::get('/admin/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create');
+    Route::post('/admin/testimonials', [TestimonialController::class, 'store'])->name('admin.testimonials.store');
+    Route::get('/admin/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit');
+    Route::put('/admin/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update');
+    Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
 
-    // FAQs CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index')->middleware('permission:faqs.view');
-    Route::get('/admin/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create')->middleware('permission:faqs.create');
-    Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store')->middleware('permission:faqs.create');
-    Route::get('/admin/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('admin.faqs.edit')->middleware('permission:faqs.edit');
-    Route::put('/admin/faqs/{faq}', [FaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.edit');
-    Route::delete('/admin/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
+    // FAQs
+    Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index');
+    Route::get('/admin/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create');
+    Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store');
+    Route::get('/admin/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('admin.faqs.edit');
+    Route::put('/admin/faqs/{faq}', [FaqController::class, 'update'])->name('admin.faqs.update');
+    Route::delete('/admin/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy');
 
-    // Web Pages CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index')->middleware('permission:webpages.view');
-    Route::get('/admin/web-pages/create', [AdminWebPageController::class, 'create'])->name('admin.web-pages.create')->middleware('permission:webpages.create');
-    Route::post('/admin/web-pages', [AdminWebPageController::class, 'store'])->name('admin.web-pages.store')->middleware('permission:webpages.create');
-    Route::get('/admin/web-pages/{webPage}/edit', [AdminWebPageController::class, 'edit'])->name('admin.web-pages.edit')->middleware('permission:webpages.edit');
-    Route::put('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'update'])->name('admin.web-pages.update')->middleware('permission:webpages.edit');
-    Route::delete('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'destroy'])->name('admin.web-pages.destroy')->middleware('permission:webpages.delete');
+    // --- WEB PAGES (New Admin Wizard) ---
+    Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index');
+    Route::get('/admin/web-pages/create', [AdminWebPageController::class, 'create'])->name('admin.web-pages.create');
+    Route::post('/admin/web-pages', [AdminWebPageController::class, 'store'])->name('admin.web-pages.store');
+    Route::get('/admin/web-pages/{webPage}/edit', [AdminWebPageController::class, 'edit'])->name('admin.web-pages.edit');
+    Route::put('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'update'])->name('admin.web-pages.update');
+    Route::delete('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'destroy'])->name('admin.web-pages.destroy');
 
     // Services & Tech Developments management
-    Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit')->middleware('permission:services.edit');
-    Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update')->middleware('permission:services.edit');
-    Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy')->middleware('permission:services.delete');
-    Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy')->middleware('permission:tech_developments.delete');
-
-    // Roles & Permissions Management CRUD
-    Route::get('/admin/roles', [RolePermissionController::class, 'index'])->name('admin.roles.index')->middleware('permission:roles.view');
-    Route::post('/admin/roles', [RolePermissionController::class, 'storeRole'])->name('admin.roles.store')->middleware('permission:roles.create');
-    Route::put('/admin/roles/{role}', [RolePermissionController::class, 'updateRole'])->name('admin.roles.update')->middleware('permission:roles.edit');
-    Route::delete('/admin/roles/{role}', [RolePermissionController::class, 'destroyRole'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
-    Route::post('/admin/roles/assign-user', [RolePermissionController::class, 'assignUserRole'])->name('admin.roles.assign-user')->middleware('permission:users.manage');
+    Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit');
+    Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update');
+    Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy');
+    Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy');
 });
 
 

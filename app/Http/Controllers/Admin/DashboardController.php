@@ -12,8 +12,6 @@ use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -31,14 +29,6 @@ class DashboardController extends Controller
         $testimonialsCount = $testimonials->count();
         $averageRating = $testimonialsCount ? number_format((float) $testimonials->avg('rating'), 1) : '0.0';
         $fiveStarCount = $testimonials->filter(fn ($t) => (float) $t->rating >= 5.0)->count();
-
-        // Spatie Roles, Permissions and Users
-        $roles = Role::with('permissions', 'users')->get();
-        $permissionsGrouped = Permission::all()->groupBy(function ($perm) {
-            $parts = explode('.', $perm->name);
-            return $parts[0] ?? 'general';
-        });
-        $allUsers = User::with('roles')->get();
 
         // Build unified collection of recently added web pages
         $webpages = collect();
@@ -196,9 +186,6 @@ class DashboardController extends Controller
             'fiveStarCount',
             'faqs',
             'faqsCount',
-            'roles',
-            'permissionsGrouped',
-            'allUsers',
         ));
     }
 
