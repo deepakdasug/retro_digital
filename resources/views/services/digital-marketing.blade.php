@@ -4,7 +4,7 @@
 @section('description', 'Grow your brand with data-driven digital marketing, advanced SEO, and AI-enabled dashboards by Retrotech Digital.')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/digital-marketing.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/digital-marketing.css') }}?v={{ filemtime(public_path('css/digital-marketing.css')) }}">
 @endpush
 
 @section('content')
@@ -30,13 +30,13 @@
         ],
         [
             'title' => 'Enterprise SEO',
-            'desc'  => 'Ecommerce SEO is an optimization practice used by our SEO company for online businesses to increase their visibility and ranking on search engine pages for product related queries. It helps businesses drive organic traffic directly to product category pages to maximize the lead conversion rate. Ecommerce SEO services company involves optimization of category page, product description and overall technical performance of the website for a seamless user experience.',
+            'desc'  => 'Enterprise SEO is an optimization practice designed for large-scale websites with complex architectures and thousands of pages. It helps large organizations maintain search authority, optimize complex website structures, protect against algorithm changes, and dominate high-value enterprise search queries across global markets.',
             'img'   => 'https://www.retrotechdigital.com/frontend/img/enterprise-seo-retrotech.webp',
             'tag'   => 'Enterprise Scale'
         ],
         [
             'title' => 'Mobile SEO',
-            'desc'  => 'It is a type of optimization practice used by our SEO company,where we optimise the website for users on mobile devices such as smartphones and tablets. It helps make the website mobile responsive, increases its speed and makes the navigation easy while ensuring the website is still crawlable. It includes practices like responsive design, page speed optimization, User Experience, mobile first indexing and local SEO.',
+            'desc'  => 'It is a specialized optimization practice used by our SEO company, where we optimize websites for mobile users across smartphones and tablets. It helps make websites responsive, accelerates page speed, and streamlines navigation for mobile-first indexing and high local intent conversions.',
             'img'   => 'https://www.retrotechdigital.com/frontend/img/mobile-retrotech.webp',
             'tag'   => 'Mobile-First'
         ],
@@ -286,7 +286,23 @@
         <div class="dm-container">
             <div class="dm-ai-grid">
 
-                {{-- Left: Editorial Narrative & Features (Matching Hero Quality) --}}
+                {{-- Left: Full-Visibility Media Frame --}}
+                <div class="dm-ai-media-col">
+                    <div class="dm-ai-media-frame">
+                        <div class="dm-frame-img-wrap">
+                            <img src="https://www.retrotechdigital.com/frontend/img/ai-chat.png" alt="Retrotech AI Dashboard Demo" loading="lazy">
+                        </div>
+                        <div class="dm-ai-caption">
+                            <span>Retrotech AI Analytics &amp; Search Console</span>
+                            <span class="dm-live-badge">
+                                <span class="dm-pulse-dot"></span>
+                                Live Platform Demo
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Right: Editorial Narrative & Features (Matching Hero Quality) --}}
                 <div class="dm-ai-content">
                     <span class="dm-kicker">Next-Gen Platforms</span>
 
@@ -338,23 +354,6 @@
                         </a>
                     </div>
                 </div>
-
-                {{-- Right: Full-Visibility Media Frame --}}
-                <div class="dm-ai-media-col">
-                    <div class="dm-ai-media-frame">
-                        <div class="dm-frame-img-wrap">
-                            <img src="https://www.retrotechdigital.com/frontend/img/ai-chat.png" alt="Retrotech AI Dashboard Demo" loading="lazy">
-                        </div>
-                        <div class="dm-ai-caption">
-                            <span>Retrotech AI Analytics &amp; Search Console</span>
-                            <span class="dm-live-badge">
-                                <span class="dm-pulse-dot"></span>
-                                Live Platform Demo
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
@@ -444,33 +443,37 @@
 
                 {{-- Left: Project Showcase Image --}}
                 <div>
-                    <div class="dm-case-visual">
+                    <div class="dm-case-visual" id="dmCaseVisual">
                         @foreach ($projectsData as $i => $proj)
-                        <img data-case-img="{{ $i }}" src="{{ $proj['img'] }}" alt="{{ $proj['name'] }}" style="{{ $i === 0 ? 'opacity: 1;' : 'opacity: 0; pointer-events: none;' }}" loading="lazy">
+                        <div class="dm-case-slide" data-case-slide="{{ $i }}" style="{{ $i === 0 ? 'opacity: 1; visibility: visible; pointer-events: auto;' : 'opacity: 0; visibility: hidden; pointer-events: none;' }}">
+                            <img src="{{ $proj['img'] }}" alt="{{ $proj['name'] }}" loading="lazy">
+                            <span class="dm-case-tag">{{ $proj['name'] }}</span>
+                            <span class="dm-case-idx-badge">{{ str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) }} / {{ str_pad((string)count($projectsData), 2, '0', STR_PAD_LEFT) }}</span>
+                        </div>
                         @endforeach
+
+                        {{-- Arrow Buttons for Image Navigation --}}
+                        <button type="button" class="dm-case-arrow dm-case-arrow-prev" id="dmCasePrev" aria-label="Previous Project Image">
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="dm-case-arrow dm-case-arrow-next" id="dmCaseNext" aria-label="Next Project Image">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
 
-                {{-- Right: Content, Industry Switcher, Stats & Toggle --}}
+                {{-- Right: Content, Dynamic Details, Stats & Toggle --}}
                 <div>
                     <span class="dm-kicker">Our Projects</span>
 
-                    <h2 class="dm-title-lg" style="margin-bottom: 0.5rem;">
-                        Expect Great Things from Your Agency
+                    <h2 class="dm-title-lg dm-cases-h2" style="margin-bottom: 0.5rem;">
+                        <span class="dm-cases-h2-main">Expect Great Things</span>
+                        <span class="dm-cases-h2-sub">from Your Agency</span>
                     </h2>
 
                     <p class="dm-subtitle" style="margin-bottom: 1.5rem;">
                         Believe it because you've seen it. Here are real numbers from just one successful Victorious partner.
                     </p>
-
-                    {{-- Industry Tabs --}}
-                    <div class="dm-case-tabs-row" role="tablist">
-                        @foreach ($projectsData as $i => $proj)
-                        <button type="button" class="dm-case-tab-btn {{ $i === 0 ? 'active' : '' }}" data-case-tab="{{ $i }}">
-                            {{ $proj['name'] }}
-                        </button>
-                        @endforeach
-                    </div>
 
                     {{-- Dynamic Project Details --}}
                     @foreach ($projectsData as $i => $proj)
@@ -499,7 +502,7 @@
                     </div>
                     @endforeach
 
-                    {{-- Actions Row: Toggle Switch & Audit Button in a Single Line --}}
+                    {{-- Actions Row: Toggle Switch, Audit Button & Navigation Arrows --}}
                     <div class="dm-case-actions-row">
                         <div class="dm-toggle-wrap">
                             <span style="font-size: 0.8rem; font-weight: 700; color: var(--dm-ink-muted);">Before SEO</span>
@@ -510,7 +513,8 @@
                         </div>
 
                         <a href="#dm-consult" class="dm-btn-primary">
-                            Get Free SEO Audit <span aria-hidden="true">→</span>
+                            <span>Get Free SEO Audit</span>
+                            <span aria-hidden="true">→</span>
                         </a>
                     </div>
                 </div>
@@ -587,10 +591,10 @@
          ========================================================================= --}}
     <section class="dm-reasons-section dm-section-space">
         <div class="dm-container">
-            <div style="text-align: center; max-width: 44rem; margin: 0 auto;">
+            <div style="text-align: center; max-width: 58rem; margin: 0 auto;">
                 <span class="dm-kicker">Why Choose Us</span>
-                <h2 class="dm-title-lg">Top Six Reasons to Trust Our IT Expertise</h2>
-                <p class="dm-subtitle" style="margin-inline: auto;">
+                <h2 class="dm-title-lg dm-reasons-h2">Top Six Reasons to Trust Our IT Expertise</h2>
+                <p class="dm-subtitle" style="margin-inline: auto; max-width: 42rem;">
                     Empower your business with reliable, secure, and scalable IT solutions tailored to your unique goals and requirements.
                 </p>
             </div>
@@ -615,7 +619,10 @@
             <div class="dm-reviews-header">
                 <div>
                     <span class="dm-kicker">Client Feedback</span>
-                    <h2 class="dm-title-lg">Customer Experiences That Speak for Themselves</h2>
+                    <h2 class="dm-title-lg dm-reviews-h2">
+                        <span class="dm-reviews-h2-main">Customer Experiences</span>
+                        <span class="dm-reviews-h2-sub">That Speak for Themselves</span>
+                    </h2>
                     <p class="dm-subtitle" style="margin-top: 0.5rem; margin-bottom: 0;">
                         Real results and verified testimonials from fast-growing businesses worldwide.
                     </p>
@@ -773,40 +780,68 @@
             }
         });
 
-        // Case Studies Tab Switcher + Before/After Toggle
-        const caseTabs = document.querySelectorAll('#dm-page [data-case-tab]');
-        const caseImgs = document.querySelectorAll('#dm-page [data-case-img]');
-        const caseTxts = document.querySelectorAll('#dm-page [data-case-txt]');
-        let currentTab = 0;
+        // Case Studies Arrow-Driven Switcher + Before/After Toggle
+        const caseSlides = document.querySelectorAll('#dm-page [data-case-slide]');
+        const caseTxts   = document.querySelectorAll('#dm-page [data-case-txt]');
+        const totalCases = caseSlides.length;
+        let currentCaseIdx = 0;
         let isAfter = true;
 
-        const updateTab = (idx) => {
-            currentTab = idx;
-            caseTabs.forEach(t => t.classList.toggle('active', parseInt(t.dataset.caseTab) === idx));
-            caseImgs.forEach(img => {
-                const match = parseInt(img.dataset.caseImg) === idx;
-                img.style.opacity = match ? '1' : '0';
-                img.style.pointerEvents = match ? 'auto' : 'none';
+        const goToCase = (idx) => {
+            if (totalCases === 0) return;
+            let nextIdx = idx;
+            if (nextIdx >= totalCases) nextIdx = 0;
+            if (nextIdx < 0) nextIdx = totalCases - 1;
+            currentCaseIdx = nextIdx;
+
+            caseSlides.forEach((slide, i) => {
+                const match = i === currentCaseIdx;
+                slide.style.opacity = match ? '1' : '0';
+                slide.style.visibility = match ? 'visible' : 'hidden';
+                slide.style.pointerEvents = match ? 'auto' : 'none';
             });
-            caseTxts.forEach(txt => {
-                txt.style.display = parseInt(txt.dataset.caseTxt) === idx ? 'block' : 'none';
+
+            caseTxts.forEach((txt, i) => {
+                txt.style.display = i === currentCaseIdx ? 'block' : 'none';
             });
+
             renderStats();
         };
 
         const renderStats = () => {
-            const activeTxt = document.querySelector(`#dm-page [data-case-txt="${currentTab}"]`);
+            const activeTxt = document.querySelector(`#dm-page [data-case-txt="${currentCaseIdx}"]`);
             if (!activeTxt) return;
             activeTxt.querySelectorAll('[data-stat]').forEach(stat => {
                 stat.textContent = isAfter ? stat.dataset.after : stat.dataset.before;
             });
         };
 
-        caseTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                updateTab(parseInt(tab.dataset.caseTab));
-            });
+        // Wire image overlay arrows
+        document.getElementById('dmCasePrev')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            goToCase(currentCaseIdx - 1);
         });
+        document.getElementById('dmCaseNext')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            goToCase(currentCaseIdx + 1);
+        });
+
+        // Touch swipe on case visual
+        const caseVisual = document.getElementById('dmCaseVisual');
+        if (caseVisual) {
+            let touchStartX = 0;
+            caseVisual.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            caseVisual.addEventListener('touchend', (e) => {
+                const diffX = e.changedTouches[0].screenX - touchStartX;
+                if (diffX < -40) {
+                    goToCase(currentCaseIdx + 1);
+                } else if (diffX > 40) {
+                    goToCase(currentCaseIdx - 1);
+                }
+            }, { passive: true });
+        }
 
         const toggleSwitch = document.getElementById('dmSwitch');
         toggleSwitch?.addEventListener('click', () => {
