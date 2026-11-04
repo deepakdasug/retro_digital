@@ -2685,6 +2685,23 @@ body.home-page .contact-included-section {
   min-height: auto !important;
 }
 
+/* Dedicated /contact and /contact-us page clearance below fixed navigation */
+body.inner-page .contact-included-section.contact-page-dedicated {
+  padding-top: 7.5rem !important;
+  padding-bottom: 5rem !important;
+  min-height: calc(100vh - 180px);
+  display: flex !important;
+  align-items: center;
+}
+
+@media (max-width: 991px) {
+  body.inner-page .contact-included-section.contact-page-dedicated {
+    padding-top: 6.25rem !important;
+    padding-bottom: 3.5rem !important;
+    min-height: auto;
+  }
+}
+
 .contact-inc-container {
   max-width: 1220px;
   width: 100%;
