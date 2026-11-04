@@ -95,64 +95,250 @@
 <main class="sp-theme-page selection:bg-[#d8eadb] selection:text-[#1e3326]">
 
     {{-- 1. HERO --}}
-    <section class="relative bg-[#f7fbf7] overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-28 border-b border-[#d7e5d9]/60">
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <div class="absolute -top-32 -right-32 w-[550px] h-[550px] bg-[#397b4e]/10 rounded-full blur-3xl opacity-70"></div>
-            <div class="absolute bottom-0 left-10 w-[420px] h-[420px] bg-[#25d366]/8 rounded-full blur-3xl opacity-60"></div>
-        </div>
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                <div class="max-w-2xl">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#eaf4eb] text-[#285d3a] border border-[#c8dfcc] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-sm">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#25d366] animate-pulse shadow-[0_0_8px_#25d366]"></span>
-                        {{ $hero['badge'] ?? ('Award-Winning ' . $t . ' Agency') }}
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1e3326] leading-[1.12] tracking-tight mb-6">
-                        Grow Your Business with <br class="hidden lg:block">
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#1e3326] via-[#285d3a] to-[#397b4e]">{{ $t }}</span>
-                    </h1>
-                    <p class="text-lg sm:text-xl text-[#637568] mb-8 leading-relaxed font-normal">{{ $hero['subtitle'] ?? ('Professional ' . $t . ' services by Retrotech.') }}</p>
-                    <div class="flex flex-col sm:flex-row gap-4 mb-10">
-                        <a href="#contact" class="inline-flex justify-center items-center px-8 py-4 text-base font-bold text-white transition-all bg-[#397b4e] hover:bg-[#285d3a] rounded-full shadow-[0_4px_18px_rgba(57,123,78,0.28)] hover:shadow-[0_8px_25px_rgba(57,123,78,0.38)] hover:-translate-y-0.5">
-                            {{ $hero['cta'] ?? 'Connect With Our Experts' }} {!! $svg($I['arrow'], 'w-5 h-5 ml-2') !!}
-                        </a>
-                        <a href="#process" class="inline-flex justify-center items-center px-8 py-4 text-base font-bold text-[#1e3326] transition-all bg-white border border-[#d7e5d9] hover:border-[#397b4e] hover:bg-[#f0f7f0] rounded-full shadow-sm hover:shadow-md">See How It Works</a>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-6 pt-6 border-t border-[#d7e5d9]">
-                        <div class="flex items-center gap-6">
-                            <div class="flex -space-x-3">
-                                <img class="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://i.pravatar.cc/100?img=1" alt="Client">
-                                <img class="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://i.pravatar.cc/100?img=2" alt="Client">
-                                <img class="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src="https://i.pravatar.cc/100?img=3" alt="Client">
-                                <div class="flex items-center justify-center w-10 h-10 text-xs font-bold text-[#285d3a] bg-[#eaf4eb] border-2 border-white rounded-full shadow-sm">500+</div>
-                            </div>
-                            <div class="text-sm font-medium text-[#637568]">Trusted by <span class="text-[#1e3326] font-bold">500+</span> brands</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative lg:ml-auto w-full max-w-lg">
-                    <div class="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(30,51,38,0.12)] border-4 border-white sp-animate-float">
-                        <img src="{{ $service->hero_image ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="{{ $t }} Dashboard" class="w-full h-auto object-cover block">
-                        <div class="absolute inset-0 bg-[#1e3326]/25 flex items-center justify-center group cursor-pointer hover:bg-[#1e3326]/35 transition-all">
-                            <div class="w-20 h-20 bg-white/95 rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                                <svg class="w-8 h-8 text-[#397b4e] ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-[0_12px_30px_rgba(30,51,38,0.12)] border border-[#d7e5d9] sp-animate-float-alt">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-[#eaf4eb] flex items-center justify-center border border-[#c8dfcc] text-[#397b4e]">{!! $svg('M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', 'w-6 h-6') !!}</div>
-                            <div>
-                                <p class="text-xs uppercase tracking-wider text-[#637568] font-bold">Avg. ROI</p>
-                                <p class="text-2xl font-black text-[#1e3326]">+245%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section class="relative isolate bg-[#f5fbf6] overflow-hidden pt-[88px] pb-16 lg:pt-[90px] lg:pb-20 border-b border-[#d7e9db]/60">
 
+    <!-- ================= BACKGROUND ================= -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+
+        <div class="absolute -top-40 right-[12%] w-[650px] h-[650px] rounded-full bg-[#d2f3db]/65 blur-[100px]"></div>
+
+        <div class="absolute top-[15%] right-[35%] w-[350px] h-[350px] rounded-full bg-[#e2f8e8]/70 blur-[90px]"></div>
+
+        <div class="absolute bottom-[-350px] left-[-10%] w-[120%] h-[550px] rounded-[50%] bg-gradient-to-r from-[#cdf0d5]/60 via-white/30 to-[#d5f3dd]/60"></div>
+
+        <div class="absolute top-[10%] right-[36%] w-48 h-40 opacity-40" style="background-image:radial-gradient(#73c98a 1.7px,transparent 1.7px);background-size:20px 20px;"></div>
+
+        <div class="absolute bottom-[8%] right-[5%] w-36 h-28 opacity-30" style="background-image:radial-gradient(#73c98a 1.7px,transparent 1.7px);background-size:20px 20px;"></div>
+
+    </div>
+
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <div class="relative z-10 w-[92%] max-w-[1720px] mx-auto" style="margin-top: -27px;">
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] gap-10 xl:gap-[54px] items-center">
+
+
+            <!-- ================= LEFT CONTENT ================= -->
+            <div class="relative z-20 w-full max-w-[820px]">
+
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#e9f7ec] text-[#245d39] border border-[#c9e8d0] text-xs sm:text-sm font-bold uppercase tracking-wider mb-5 shadow-[0_4px_12px_rgba(30,100,50,0.05)]">
+
+                    <span class="relative flex w-2.5 h-2.5 shrink-0">
+                        <span class="absolute inset-0 rounded-full bg-[#28bd5b] animate-ping opacity-40"></span>
+                        <span class="relative w-2.5 h-2.5 rounded-full bg-[#28bd5b] shadow-[0_0_8px_#28bd5b]"></span>
+                    </span>
+
+                    {{ $hero['badge'] ?? ('Award-Winning ' . $t . ' Agency') }}
+
+                </div>
+
+
+                <!-- Main Heading -->
+                <h1 class="text-[clamp(34px,3.6vw,58px)] font-black text-[#102f20] leading-[1.05] tracking-[-0.04em] mb-0">
+
+                    <span class="block">
+                        Grow Your Business With
+                    </span>
+
+                    <span class="block mt-1">
+                        <span style="letter-spacing: 0px; color: green; font-size: 35px;">
+                            {{ $t }}
+                        </span>
+                    </span>
+
+                </h1>
+
+
+                <!-- Green Underline -->
+                <div class="w-[240px] sm:w-[280px] max-w-[75%] h-[5px] rounded-full bg-gradient-to-r from-[#4bd96b] via-[#8ee5a0] to-transparent mt-3.5 mb-4" style="transform:rotate(-2deg);transform-origin:left center;"></div>
+
+
+                <!-- Description -->
+                <p class="text-base sm:text-lg text-[#536b5b] leading-[1.5] font-normal max-w-[680px] mb-7">
+                    {{ $hero['subtitle'] ?? ('Professional ' . $t . ' services by Retrotech.') }}
+                </p>
+
+
+                <!-- ================= CTA BUTTONS ================= -->
+                <!-- ================= CTA BUTTONS ================= -->
+<div class="flex flex-col sm:flex-row gap-3 mb-8">
+
+    <!-- Primary -->
+    <a href="#contact"
+       class="inline-flex justify-center items-center px-5 py-2.5 text-sm font-bold text-white bg-[#397b4e] hover:bg-[#285d3a] rounded-full shadow-[0_3px_12px_rgba(57,123,78,0.28)] hover:shadow-[0_6px_18px_rgba(57,123,78,0.38)] hover:-translate-y-0.5 transition-all duration-200">
+        {{ $hero['cta'] ?? 'Connect With Our Experts' }}
+        {!! $svg($I['arrow'], 'w-4 h-4 ml-2') !!}
+    </a>
+
+    <!-- Secondary -->
+    <a href="#process"
+       class="inline-flex justify-center items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-[#1e3326] bg-white border border-[#d7e5d9] hover:border-[#397b4e] hover:bg-[#f0f7f0] rounded-full shadow-sm hover:shadow-md transition-all duration-200">
+        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#e9f7ec] border border-[#c9e8d0] shrink-0">
+            <svg class="w-2 h-2 text-[#008000] ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 3.5v13l12-6.5z"></path>
+            </svg>
+        </span>
+        See How It Works
+    </a>
+
+</div>
+
+
+                <!-- ================= BENEFITS ROW ================= -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-0 pt-4 border-t border-[#d3e6d8]">
+
+                    <div class="flex items-center gap-2.5 sm:pr-4 sm:border-r border-[#c9dfd0]">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 text-[#128548]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 17l6-6 4 4 8-9"></path>
+                            <path d="M15 6h6v6"></path>
+                            <path d="M3 21v-4M7 21v-6M11 21v-3M15 21v-5M19 21v-9"></path>
+                        </svg>
+                        <p class="text-xs sm:text-sm font-semibold text-[#405d4b] leading-snug">
+                            Drive More
+                            <span class="block">Organic Traffic</span>
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 sm:px-4 sm:border-r border-[#c9dfd0]">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 text-[#128548]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="8" r="3.5"></circle>
+                            <path d="M2 20c0-3.4 3.1-5.5 7-5.5s7 2.1 7 5.5"></path>
+                            <path d="M16 5a3.5 3.5 0 0 1 0 7M18 15c2.3.8 4 2.4 4 5"></path>
+                        </svg>
+                        <p class="text-xs sm:text-sm font-semibold text-[#405d4b] leading-snug">
+                            Attract Quality
+                            <span class="block">Customers</span>
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 sm:pl-4">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 text-[#128548]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3l2.5 2H20v13h-5l-3 3-3-3H4V5h5z"></path>
+                            <path d="M8 11l3 3 5-6"></path>
+                        </svg>
+                        <p class="text-xs sm:text-sm font-semibold text-[#405d4b] leading-snug">
+                            Grow Your
+                            <span class="block">Business Online</span>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= RIGHT VISUAL ================= -->
+            <div class="relative w-full max-w-[720px] mx-auto lg:ml-auto lg:mr-0 mt-6 lg:mt-0 pt-4 sm:pt-6 lg:pt-2 pb-8">
+
+                <div class="absolute top-[8%] right-[-1%] w-[98%] h-[88%] rounded-[36px] bg-gradient-to-br from-[#c7efd1] via-[#b3eac1] to-[#d8f5df] rotate-[-2deg]"></div>
+
+                <div class="absolute top-[0%] left-[8%] w-[85%] aspect-square rounded-full bg-[#c7efd5]/60 blur-[70px]"></div>
+
+
+                <div class="absolute top-[0%] right-[22%] z-10 text-[#65ce85] hidden sm:block pointer-events-none">
+                    <svg class="w-32 h-20" viewBox="0 0 180 100" fill="none">
+                        <path d="M5 85 C55 85 85 75 115 45 C130 30 143 18 160 8" stroke="currentColor" stroke-width="6" stroke-linecap="round"></path>
+                        <path d="M137 9 L161 7 L154 31" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+
+
+                <!-- VISIBILITY FLOATING CARD -->
+                <div class="absolute top-[-10px] right-[-5px] sm:top-[-14px] sm:right-[10px] z-30 flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-white/95 backdrop-blur-md rounded-[18px] shadow-[0_10px_25px_rgba(25,90,48,0.12)] border border-[#e1f0e4] rotate-[-2deg]">
+
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#e4f8e9] flex items-center justify-center text-[#17a04f] shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path d="M13 2L4 14h7l-1 8 10-13h-7z"></path>
+                        </svg>
+                    </div>
+
+                    <p class="text-xs sm:text-sm font-extrabold text-[#193a29] leading-tight">
+                        Boost Your
+                        <span class="block">Online Visibility</span>
+                    </p>
+
+                </div>
+
+
+
+                <!-- MAIN IMAGE CARD -->
+                <div class="relative z-20 mt-4 sm:mt-5 lg:mt-3 w-full rounded-[28px] sm:rounded-[34px] overflow-hidden border-[5px] sm:border-[6px] border-white bg-[#14271d] shadow-[0_20px_50px_rgba(25,83,45,0.18)] rotate-[0.5deg] hover:rotate-0 transition-transform duration-500">
+
+                    <img
+                        src="{{ $service->hero_image ?? 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=900&q=80' }}"
+                        alt="{{ $t }} Dashboard"
+                        class="w-full aspect-[1.48/1] object-cover block"
+                        loading="eager"
+                    >
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#081b10]/35 via-transparent to-[#081b10]/10"></div>
+
+
+                    <!-- Play Button -->
+                    <div class="absolute inset-0 flex items-center justify-center group cursor-pointer">
+
+                        <div class="absolute w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] rounded-full border border-white/30 bg-white/10 backdrop-blur-[2px] transition-transform duration-500 group-hover:scale-110"></div>
+
+                        <div class="relative w-[70px] h-[70px] sm:w-[82px] sm:h-[82px] rounded-full bg-white flex items-center justify-center shadow-[0_8px_25px_rgba(0,0,0,0.20)] group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-7 h-7 sm:w-8 sm:h-8 text-[#16894c] ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 3.5v13l12-6.5z"></path>
+                            </svg>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ROI FLOATING CARD -->
+                <div class="absolute z-30 left-[-20px] sm:left-[-35px] bottom-[-10px] sm:bottom-[-15px] w-[310px] sm:w-[330px] max-w-[calc(100vw-40px)] bg-white/95 backdrop-blur-xl px-4 py-3 sm:px-5 sm:py-4 rounded-[20px] sm:rounded-[22px] shadow-[0_14px_35px_rgba(25,83,45,0.14)] border border-[#e0eee3]">
+
+                    <div class="flex items-center gap-3 sm:gap-3.5">
+
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#e7f8eb] flex items-center justify-center border border-[#d3eed9] text-[#178549] shrink-0">
+                            <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 17l6-6 4 4 8-9"></path>
+                                <path d="M15 6h6v6"></path>
+                            </svg>
+                        </div>
+
+
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-extrabold uppercase tracking-wider text-[#718477] mb-0.5">
+                                Avg. ROI
+                            </p>
+                            <p class="text-[26px] sm:text-[30px] font-black text-[#173b27] tracking-tight leading-none">
+                                +245%
+                            </p>
+                        </div>
+
+
+                        <div class="hidden sm:flex items-end gap-1 h-10 shrink-0">
+                            <span class="w-2 h-4 rounded-full bg-[#b8ebc5]"></span>
+                            <span class="w-2 h-6 rounded-full bg-[#9ce3ae]"></span>
+                            <span class="w-2 h-7 rounded-full bg-[#82da98]"></span>
+                            <span class="w-2 h-9 rounded-full bg-[#63ce81]"></span>
+                            <span class="w-2 h-10 rounded-full bg-[#35b961]"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="absolute bottom-[2%] right-[-3%] w-5 h-5 rounded-full bg-[#55c779] shadow-[0_0_20px_rgba(86,202,121,0.5)] hidden sm:block"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
     {{-- 2. TRUST MARQUEE --}}
     <div class="border-b border-[#d7e5d9] bg-white py-7 overflow-hidden relative">
         <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
