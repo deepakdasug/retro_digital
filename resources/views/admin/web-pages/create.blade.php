@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Create Web Page - Admin')
+@section('page_heading', 'Create Web Page')
 
 @push('styles')
 <script src="https://cdn.tailwindcss.com"></script>

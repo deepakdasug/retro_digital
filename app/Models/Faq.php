@@ -13,14 +13,25 @@ class Faq extends Model
     protected $table = 'faqs';
 
     protected $fillable = [
-        'question', 'answer',
-        'category', 'subcategory',
-        'sort_order', 'is_published', 'is_featured',
-        'meta_title', 'meta_description',
-        'created_by', 'updated_by',
+        'model_type',
+        'model_id',
+        'question',
+        'answer',
+        'order',
+        'category',
+        'subcategory',
+        'sort_order',
+        'is_published',
+        'is_featured',
+        'meta_title',
+        'meta_description',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
+        'model_id'     => 'integer',
+        'order'        => 'integer',
         'is_published' => 'boolean',
         'is_featured'  => 'boolean',
         'sort_order'   => 'integer',
@@ -33,7 +44,17 @@ class Faq extends Model
 
     public function scopeOrdered($q)
     {
-        return $q->orderBy('sort_order')->orderBy('id');
+        return $q->orderBy('order')->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function scopeForModel($q, string $modelType, int|string $modelId)
+    {
+        return $q->where('model_type', $modelType)->where('model_id', $modelId);
+    }
+
+    public function model()
+    {
+        return $this->morphTo(__FUNCTION__, 'model_type', 'model_id');
     }
 
     public function scopeInCategory($q, string $category)

@@ -14,10 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
         $middleware->redirectUsersTo(function (Request $request): string {
-            return $request->user()?->is_admin
+            $user = $request->user();
+            return ($user?->is_admin || ($user && method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super-admin', 'admin'])))
                 ? route('admin.dashboard')
                 : route('home');
         });

@@ -94,20 +94,19 @@
 
 <style>
     .custom-testimonial-section {
-        /* Map these to your site's actual colors (from style.css :root) */
-        --t-primary: var(--primary-color, #398158);
-        --t-heading: var(--heading-color, #111827);
-        --t-text: var(--text-color, #4b5563);
-        --t-bg: var(--section-alt-bg, #f8fafc);
+        /* Mapped to Unified Forest & Mint Theme */
+        --t-primary: var(--theme-green-brand, #2f6f46);
+        --t-heading: var(--theme-ink-primary, #15271d);
+        --t-text: var(--theme-ink-secondary, #314436);
+        --t-bg: var(--theme-page-bg, #f8faf8);
         --t-card: #ffffff;
-        --t-border: #e5e7eb;
-        --t-star: #f59e0b;
+        --t-border: var(--theme-border-light, rgba(47, 111, 70, 0.12));
+        --t-star: #eab308;
 
-        padding: 4rem 0;
+        padding: 4.5rem 0;
         background: transparent;
-        /* background-color: var(--t-bg); */
         overflow: hidden;
-        font-family: inherit; /* Inter, from the site */
+        font-family: var(--font-family);
     }
     .custom-testimonial-container {
         max-width: 1200px;
@@ -166,18 +165,19 @@
         border: 1px solid var(--t-border);
         border-top: 3px solid var(--t-primary);
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+        box-shadow: 0 4px 20px rgba(21, 39, 29, 0.05);
         padding: 1.75rem;
         height: 100%;
         display: flex;
         flex-direction: column;
         text-align: left;
         font-family: inherit;
-        transition: transform .25s ease, box-shadow .25s ease;
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
     }
     .testimonial-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 16px 36px rgba(17, 24, 39, 0.10);
+        border-color: var(--theme-border-hover, rgba(47, 111, 70, 0.28));
+        box-shadow: 0 12px 28px rgba(21, 39, 29, 0.10);
     }
 
     .testimonial-header {

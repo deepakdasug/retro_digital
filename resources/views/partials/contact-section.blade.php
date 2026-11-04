@@ -118,12 +118,47 @@
 </section>
 
 <style>
-/* Contact form: single-column layout with centered submit button */
-.contact-form-card .contact-form { display: flex; flex-direction: column; gap: 18px; }
+/* Contact form: cohesive modern layout */
+.contact-form-card .contact-form { display: flex; flex-direction: column; gap: 16px; }
 .contact-form-card .contact-form > .contact-form-group { width: 100%; min-width: 0; margin: 0; }
 .contact-form-card .contact-form > .contact-form-group input,
 .contact-form-card .contact-form > .contact-form-group select,
-.contact-form-card .contact-form > .contact-form-group textarea { width: 100%; box-sizing: border-box; }
-.contact-form-card .contact-form-submit-wrap { display: flex; justify-content: center; width: 100%; }
-.contact-form-card .contact-form-submit { margin-left: auto; margin-right: auto; }
+.contact-form-card .contact-form > .contact-form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--theme-border-light, #e2e8f0);
+    background: var(--theme-page-bg, #f8faf8);
+    color: var(--theme-ink-primary, #15271d);
+    transition: all 0.2s ease;
+}
+.contact-form-card .contact-form > .contact-form-group input:focus,
+.contact-form-card .contact-form > .contact-form-group select:focus,
+.contact-form-card .contact-form > .contact-form-group textarea:focus {
+    border-color: var(--theme-green-brand, #2f6f46);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(47, 111, 70, 0.15);
+}
+.contact-form-card .contact-form-submit-wrap { display: flex; justify-content: center; width: 100%; margin-top: 0.5rem; }
+.contact-form-card .contact-form-submit {
+    margin-left: auto;
+    margin-right: auto;
+    background: var(--theme-green-brand, #2f6f46);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(47, 111, 70, 0.25);
+    transition: all 0.25s ease;
+}
+.contact-form-card .contact-form-submit:hover {
+    background: var(--theme-green-hover, #235837);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(47, 111, 70, 0.35);
+}
 </style>
