@@ -319,13 +319,14 @@
 
 @section('content')
 @php
-  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs'];
+  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs', 'roles'];
   $requestedTab = request()->query('tab');
   $routeTab = match (true) {
     request()->routeIs('admin.blog.*') => 'blogs',
     request()->routeIs('admin.testimonials.*') => 'testimonials',
     request()->routeIs('admin.web-pages.*') => 'webpage',
     request()->routeIs('admin.faqs.*') => 'faqs',
+    request()->routeIs('admin.roles.*') => 'roles',
     default => null,
   };
   $currentTab = in_array($requestedTab, $adminTabs, true)
@@ -375,6 +376,9 @@
       <button class="admin-sidebar-link {{ $currentTab == 'faqs' ? 'is-active' : '' }}" type="button" data-admin-tab="faqs" aria-label="FAQs" title="FAQs" onclick="showAdminTab('faqs')"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span>FAQs</span></button>
       @endcan
 
+      @can('roles.view')
+      <button class="admin-sidebar-link {{ $currentTab == 'roles' ? 'is-active' : '' }}" type="button" data-admin-tab="roles" aria-label="Roles & Permissions" title="Roles & Permissions" onclick="showAdminTab('roles')"><i class="fa-solid fa-user-shield" aria-hidden="true"></i><span>Roles &amp; Permissions</span></button>
+      @endcan
     </nav>
     
     <div class="admin-sidebar-bottom">
@@ -383,7 +387,7 @@
         <span class="admin-user-avatar">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
         <span>
           <strong>{{ auth()->user()->name }}</strong>
-          <small>{{ auth()->user()->is_admin ? 'Super Admin' : 'Staff' }}</small>
+          <small>{{ auth()->user()->roles->pluck('name')->first() ? ucwords(str_replace('-', ' ', auth()->user()->roles->pluck('name')->first())) : (auth()->user()->is_admin ? 'Super Admin' : 'Staff') }}</small>
         </span>
       </div>
       <button type="button" class="admin-sidebar-collapse-btn" id="sidebarToggle" aria-label="Collapse sidebar" aria-controls="adminSidebar" aria-expanded="true" title="Collapse sidebar">
@@ -426,7 +430,7 @@
           </span>
           <div class="admin-topbar-user-info">
             <strong class="admin-topbar-user-name">{{ auth()->user()->name }}</strong>
-            <small class="admin-topbar-user-role">{{ auth()->user()->is_admin ? 'Super Admin' : 'Staff' }}</small>
+            <small class="admin-topbar-user-role">{{ auth()->user()->roles->pluck('name')->first() ? ucwords(str_replace('-', ' ', auth()->user()->roles->pluck('name')->first())) : (auth()->user()->is_admin ? 'Super Admin' : 'Staff') }}</small>
           </div>
         </div>
 
@@ -457,7 +461,7 @@
 @push('scripts')
 <script>
   // --- 1. TAB SWITCHING LOGIC ---
-  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs'];
+  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs', 'roles'];
   const adminTabTitles = {
     'overview': 'Dashboard Overview',
     'contacts': 'Contact Submissions',
@@ -465,6 +469,7 @@
     'webpage': 'Webpages & Content',
     'testimonials': 'Client Testimonials',
     'faqs': 'Frequently Asked Questions (FAQs)',
+    'roles': 'Roles & Permissions Management',
   };
 
   function showAdminTab(tabName, updateAddress = true) {
