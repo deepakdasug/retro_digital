@@ -23,7 +23,7 @@
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
   @unless (request()->routeIs('admin.*'))
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
   @endunless

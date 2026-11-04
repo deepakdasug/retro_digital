@@ -4,28 +4,29 @@
        ========================================================================== */
 
     #td-page {
-        --td-forest-deep: #13251a;
-        --td-forest-dark: #1b3524;
-        --td-forest-mid: #254a33;
-        --td-green-brand: #2f6f46;
-        --td-green-bright: #3ea05f;
-        --td-green-accent: #6ec088;
-        --td-mint-soft: #eaf4ec;
-        --td-mint-bg: #f2f8f3;
-        --td-page-bg: #f8faf8;
+        --td-forest-deep: var(--theme-forest-deep, #13251a);
+        --td-forest-dark: var(--theme-forest-dark, #1b3524);
+        --td-forest-mid: var(--theme-forest-mid, #254a33);
+        --td-green-brand: var(--theme-green-brand, #2f6f46);
+        --td-green-hover: var(--theme-green-hover, #235837);
+        --td-green-bright: var(--theme-green-bright, #3ea05f);
+        --td-green-accent: var(--theme-green-accent, #6ec088);
+        --td-mint-soft: var(--theme-mint-soft, #eaf4ec);
+        --td-mint-bg: var(--theme-mint-bg, #f2f8f3);
+        --td-page-bg: var(--theme-page-bg, #f8faf8);
         --td-white: #ffffff;
-        --td-ink-primary: #15271d;
-        --td-ink-secondary: #314436;
-        --td-ink-muted: #5d7063;
-        --td-border-light: rgba(47, 111, 70, 0.12);
-        --td-border-hover: rgba(47, 111, 70, 0.28);
-        --td-shadow-sm: 0 2px 8px rgba(21, 39, 29, 0.04);
-        --td-shadow-md: 0 10px 30px -6px rgba(21, 39, 29, 0.08);
-        --td-shadow-lg: 0 24px 50px -12px rgba(21, 39, 29, 0.12);
+        --td-ink-primary: var(--theme-ink-primary, #15271d);
+        --td-ink-secondary: var(--theme-ink-secondary, #314436);
+        --td-ink-muted: var(--theme-ink-muted, #5d7063);
+        --td-border-light: var(--theme-border-light, rgba(47, 111, 70, 0.12));
+        --td-border-hover: var(--theme-border-hover, rgba(47, 111, 70, 0.28));
+        --td-shadow-sm: var(--theme-shadow-sm, 0 2px 8px rgba(21, 39, 29, 0.04));
+        --td-shadow-md: var(--theme-shadow-md, 0 10px 30px -6px rgba(21, 39, 29, 0.08));
+        --td-shadow-lg: var(--theme-shadow-lg, 0 24px 50px -12px rgba(21, 39, 29, 0.12));
         --td-radius-sm: 10px;
         --td-radius-md: 16px;
-        --td-radius-lg: 24px;
-        --td-radius-xl: 32px;
+        --td-radius-lg: 20px;
+        --td-radius-xl: 28px;
 
         width: 100%;
         max-width: 100%;
@@ -33,7 +34,7 @@
         padding: 0;
         background: var(--td-page-bg);
         color: var(--td-ink-primary);
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: var(--font-family, 'Inter', system-ui, -apple-system, sans-serif);
         line-height: 1.6;
         overflow-x: clip;
         isolation: isolate;
@@ -540,10 +541,10 @@
     }
     #td-page .td-diff-card {
         position: relative;
-        background: linear-gradient(145deg, #f7fbf8 0%, #edf6ef 100%);
-        border: 1px solid rgba(47, 111, 70, 0.16);
+        background: #ffffff;
+        border: 1px solid var(--td-border-light);
         border-left: 4px solid var(--td-green-brand);
-        border-radius: 0 var(--td-radius-lg) var(--td-radius-lg) 0;
+        border-radius: var(--td-radius-md);
         padding: 2.25rem 2rem;
         box-shadow: var(--td-shadow-sm);
     }
@@ -1054,11 +1055,23 @@
     #td-page .td-faq-list {
         display: flex;
         flex-direction: column;
-        border-top: 1px solid var(--td-border-light);
+        gap: 0.85rem;
     }
     #td-page .td-faq-item {
-        border-bottom: 1px solid var(--td-border-light);
-        transition: background 0.2s ease;
+        background: var(--td-page-bg, #f8faf8);
+        border: 1px solid var(--td-border-light);
+        border-radius: 14px;
+        padding: 0 1.25rem;
+        transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    #td-page .td-faq-item:hover {
+        border-color: var(--td-border-hover);
+        box-shadow: var(--td-shadow-sm);
+    }
+    #td-page .td-faq-item[open] {
+        background: #ffffff;
+        border-color: var(--td-green-brand);
+        box-shadow: 0 4px 18px rgba(47, 111, 70, 0.08);
     }
     #td-page .td-faq-summary {
         list-style: none;
@@ -1066,7 +1079,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 1.25rem;
-        padding: 1.5rem 0.5rem;
+        padding: 1.25rem 0.25rem;
         cursor: pointer;
         user-select: none;
     }

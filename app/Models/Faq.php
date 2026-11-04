@@ -44,7 +44,7 @@ class Faq extends Model
 
     public function scopeOrdered($q)
     {
-        return $q->orderBy('sort_order')->orderBy('id');
+        return $q->orderBy('order')->orderBy('sort_order')->orderBy('id');
     }
 
     public function scopeForModel($q, string $modelType, int|string $modelId)

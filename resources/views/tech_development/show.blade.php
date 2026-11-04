@@ -4,7 +4,7 @@
 @section('description', $techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'))
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tech-development.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tech-development.css') }}?v={{ file_exists(public_path('css/tech-development.css')) ? filemtime(public_path('css/tech-development.css')) : '1.0' }}">
 @endpush
 
 @section('content')
@@ -60,7 +60,7 @@
 
                         {{-- Floating pill top right --}}
                         <div class="td-float-badge td-fb-top">
-                            <i class="fa-solid fa-bolt" style="color: #3ea05f;"></i>
+                            <i class="fa-solid fa-bolt" style="color: var(--td-green-bright);"></i>
                             <span>Built to Scale</span>
                         </div>
 
@@ -154,7 +154,7 @@
 
                         {{-- Floating pill bottom left --}}
                         <div class="td-float-badge td-fb-bottom">
-                            <i class="fa-solid fa-code-commit" style="color: #2f6f46;"></i>
+                            <i class="fa-solid fa-code-commit" style="color: var(--td-green-brand);"></i>
                             <span>Clean Architecture</span>
                         </div>
                     </div>

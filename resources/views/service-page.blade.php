@@ -339,7 +339,6 @@
     </div>
 
 </section>
-
     {{-- 2. TRUST MARQUEE --}}
     <div class="border-b border-[#d7e5d9] bg-white py-7 overflow-hidden relative">
         <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
