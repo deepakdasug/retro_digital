@@ -13,7 +13,6 @@ class ServiceController extends Controller
             $service = Service::where('slug', 'digital-marketing')->first();
             return view('services.digital-marketing', compact('service'));
         }
-
         // Find the service by its URL slug (e.g., /services/search-engine-optimization)
         $service = Service::where('slug', $slug)->firstOrFail();
 
@@ -21,7 +20,6 @@ class ServiceController extends Controller
             'service' => $service
         ]);
     }
-
     public function digitalMarketing()
     {
         return $this->show('digital-marketing');

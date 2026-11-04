@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
 use App\Models\BlogPost;
+use App\Models\Contact;
+use App\Models\Faq;
 use App\Models\Service;
 use App\Models\TechDevelopment;
 use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -22,9 +26,19 @@ class DashboardController extends Controller
         $services = Service::latest()->get();
         $techDevelopments = TechDevelopment::latest()->get();
         $testimonials = Testimonial::latest()->get();
+        $faqs = Faq::ordered()->get();
+        $faqsCount = $faqs->count();
         $testimonialsCount = $testimonials->count();
         $averageRating = $testimonialsCount ? number_format((float) $testimonials->avg('rating'), 1) : '0.0';
         $fiveStarCount = $testimonials->filter(fn ($t) => (float) $t->rating >= 5.0)->count();
+
+        // Spatie Roles, Permissions and Users
+        $roles = Role::with('permissions', 'users')->get();
+        $permissionsGrouped = Permission::all()->groupBy(function ($perm) {
+            $parts = explode('.', $perm->name);
+            return $parts[0] ?? 'general';
+        });
+        $allUsers = User::with('roles')->get();
 
         // Build unified collection of recently added web pages
         $webpages = collect();
@@ -180,6 +194,11 @@ class DashboardController extends Controller
             'testimonialsCount',
             'averageRating',
             'fiveStarCount',
+            'faqs',
+            'faqsCount',
+            'roles',
+            'permissionsGrouped',
+            'allUsers',
         ));
     }
 
@@ -246,6 +265,10 @@ class DashboardController extends Controller
 
     private function authorizeAdmin(): void
     {
-        abort_unless(auth()->check() && auth()->user()->is_admin, 403);
+        $user = auth()->user();
+        abort_unless(
+            $user && ($user->is_admin || (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super-admin', 'admin', 'editor', 'author', 'viewer'])) || $user->can('dashboard.view')),
+            403
+        );
     }
 }

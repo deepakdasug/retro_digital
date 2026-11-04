@@ -537,7 +537,7 @@ class ServiceSeeder extends Seeder
                     'related' => ['search-engine-optimization', 'social-media-marketing', 'paid-marketing'],
                 ],
             ],
-];
+        ];
 
         foreach ($services as $data) {
             Service::updateOrCreate(

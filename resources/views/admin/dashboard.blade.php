@@ -264,7 +264,9 @@
           <div><span class="admin-section-eyebrow">CONTENT LIBRARY</span><h2>Blog articles</h2><p>Keep your audience informed with useful insights and company updates.</p></div>
           <div style="display:flex;align-items:center;gap:0.75rem;">
             <span class="admin-section-total"><i class="fa-regular fa-newspaper"></i> {{ $blogs->count() }} total</span>
+            @can('blogs.create')
             <a href="{{ route('admin.blog.create') }}" class="admin-action-button" aria-label="Create article" title="Create article"><i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Create article</a>
+            @endcan
           </div>
         </div>
 
@@ -313,7 +315,7 @@
                 <td><strong>{{ $blog->author_name }}</strong></td>
                 <td><span class="admin-status-badge {{ $blog->is_published ? '' : 'is-draft' }}"><span></span>{{ $blogStatusLabel }}</span></td>
                 <td><strong class="admin-date-primary">{{ $blog->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $blog->updated_at?->diffForHumans() }}</span></td>
-                <td><div class="admin-row-actions">@if($blog->is_published)<a href="{{ route('blog.show', $blog->slug) }}" class="admin-secondary-button" aria-label="View {{ $blog->title }}" title="View article"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a>@endif<a href="{{ route('admin.blog.edit', $blog) }}" class="admin-secondary-button" aria-label="Edit {{ $blog->title }}" title="Edit article"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a><form action="{{ route('admin.blog.destroy', $blog) }}" method="POST" onsubmit="return confirm('Delete this post and its uploaded images? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $blog->title }}" title="Delete article"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form></div></td>
+                <td><div class="admin-row-actions">@if($blog->is_published)<a href="{{ route('blog.show', $blog->slug) }}" class="admin-secondary-button" aria-label="View {{ $blog->title }}" title="View article"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a>@endif @can('blogs.edit')<a href="{{ route('admin.blog.edit', $blog) }}" class="admin-secondary-button" aria-label="Edit {{ $blog->title }}" title="Edit article"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a>@endcan @can('blogs.delete')<form action="{{ route('admin.blog.destroy', $blog) }}" method="POST" onsubmit="return confirm('Delete this post and its uploaded images? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $blog->title }}" title="Delete article"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form>@endcan</div></td>
               </tr>
               <tr id="blog-detail-{{ $blog->id }}" class="admin-detail-row" hidden><td colspan="5"><div class="admin-blog-detail">@if($blog->excerpt)<p class="admin-blog-detail-excerpt">{{ $blog->excerpt }}</p>@endif<div class="admin-blog-detail-meta"><span>Slug: {{ $blog->slug }}</span><span>Status: {{ $blogStatusLabel }}</span>@if($blog->category)<span>Category: {{ $blog->category }}</span>@endif @if($blog->tags)<span>Tags: {{ implode(', ', $blog->tags) }}</span>@endif<span>Published: {{ $blog->published_at?->format('M d, Y') ?? 'Not published' }}</span>@if($blog->author_designation)<span>Author role: {{ $blog->author_designation }}</span>@endif @if($blog->reading_time)<span>Read time: {{ $blog->reading_time }} min</span>@endif<span>Comments: {{ $blog->comment_status ? 'Enabled' : 'Disabled' }}</span></div>@if(filled($blog->content_html))<div class="admin-blog-detail-content">{!! $blog->content_html !!}</div>@endif</div></td></tr>
             @empty
@@ -339,9 +341,11 @@
         </div>
         <div style="display:flex;align-items:center;gap:0.75rem;">
           <span class="admin-section-total"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ $webpagesCount }} total</span>
+          @can('webpages.create')
           <a href="{{ route('admin.web-pages.create') }}" class="admin-action-button" aria-label="Add a web page" title="Add a web page" style="display: inline-flex; align-items: center; text-decoration: none;">
             <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add a web page
           </a>
+          @endcan
         </div>
       </div>
 
@@ -428,16 +432,21 @@
                     </a>
 
                     @if($page->model_type === 'web-page')
+                      @can('webpages.edit')
                       <a href="{{ route('admin.web-pages.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit web page">
                         <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
                       </a>
+                      @endcan
                     @elseif($page->model_type === 'service')
+                      @can('services.edit')
                       <a href="{{ route('admin.services.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit service">
                         <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
                       </a>
+                      @endcan
                     @endif
 
                     @if($page->model_type === 'web-page')
+                      @can('webpages.delete')
                       <form action="{{ route('admin.web-pages.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this web page? This cannot be undone.');" style="display:inline-block; margin:0;">
                         @csrf
                         @method('DELETE')
@@ -445,7 +454,9 @@
                           <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
                         </button>
                       </form>
+                      @endcan
                     @elseif($page->model_type === 'service')
+                      @can('services.delete')
                       <form action="{{ route('admin.services.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this service page? This cannot be undone.');" style="display:inline-block; margin:0;">
                         @csrf
                         @method('DELETE')
@@ -453,7 +464,9 @@
                           <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
                         </button>
                       </form>
+                      @endcan
                     @elseif($page->model_type === 'tech-development')
+                      @can('tech_developments.delete')
                       <form action="{{ route('admin.tech-developments.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this tech page? This cannot be undone.');" style="display:inline-block; margin:0;">
                         @csrf
                         @method('DELETE')
@@ -461,6 +474,7 @@
                           <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
                         </button>
                       </form>
+                      @endcan
                     @endif
                   </div>
                 </td>
@@ -488,9 +502,11 @@
         </div>
         <div style="display:flex; align-items:center; gap:0.75rem;">
           <span class="admin-section-total"><i class="fa-regular fa-star"></i> {{ $testimonialsCount }} total</span>
+          @can('testimonials.create')
           <a href="{{ route('admin.testimonials.create') }}" class="admin-action-button" aria-label="Add testimonial" title="Add testimonial">
             <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add testimonial
           </a>
+          @endcan
         </div>
       </div>
 
@@ -578,9 +594,12 @@
                     <button class="admin-secondary-button" type="button" aria-label="Toggle details for {{ $testimonial->name }}" title="Toggle full review" aria-expanded="false" aria-controls="testimonial-detail-{{ $testimonial->id }}" onclick="toggleAdminDetails(this, 'testimonial-detail-{{ $testimonial->id }}')">
                       <i class="fa-regular fa-eye" aria-hidden="true"></i>Details
                     </button>
+                    @can('testimonials.edit')
                     <a href="{{ route('admin.testimonials.edit', $testimonial) }}" class="admin-secondary-button" aria-label="Edit {{ $testimonial->name }}" title="Edit testimonial">
                       <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit
                     </a>
+                    @endcan
+                    @can('testimonials.delete')
                     <form action="{{ route('admin.testimonials.destroy', $testimonial) }}" method="POST" onsubmit="return confirm('Delete this testimonial? This cannot be undone.');" style="display:inline-block; margin:0;">
                       @csrf
                       @method('DELETE')
@@ -588,6 +607,7 @@
                         <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
                       </button>
                     </form>
+                    @endcan
                   </div>
                 </td>
               </tr>
@@ -618,6 +638,294 @@
         </table>
       </div>
     </section>
+
+    <section id="section-faqs" class="admin-dashboard-section" role="tabpanel" aria-label="FAQs" hidden>
+      <div class="admin-section-heading admin-blog-section-heading">
+        <div>
+          <span class="admin-section-eyebrow">HELP CENTER CONTENT</span>
+          <h2>Frequently Asked Questions</h2>
+          <p>Manage answers to common questions shown to your website visitors.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span class="admin-section-total"><i class="fa-regular fa-circle-question"></i> {{ $faqsCount }} total</span>
+          @can('faqs.create')
+          <a href="{{ route('admin.faqs.create') }}" class="admin-action-button" aria-label="Add FAQ" title="Add FAQ">
+            <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add FAQ
+          </a>
+          @endcan
+        </div>
+      </div>
+
+      <div class="admin-table-scroll">
+        <table class="admin-data-table">
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($faqs as $faq)
+              <tr>
+                <td><strong>{{ $faq->question }}</strong></td>
+                <td><span class="admin-service-tag">{{ $faq->category ?: 'Uncategorized' }}</span></td>
+                <td>
+                  <span class="admin-status-badge {{ $faq->is_published ? '' : 'is-draft' }}">
+                    <span></span>{{ $faq->is_published ? 'Published' : 'Draft' }}
+                  </span>
+                </td>
+                <td>
+                  <strong class="admin-date-primary">{{ $faq->updated_at?->format('M d, Y') ?? '—' }}</strong>
+                  <span class="admin-date-secondary">{{ $faq->updated_at?->diffForHumans() }}</span>
+                </td>
+                <td>
+                  <div class="admin-row-actions">
+                    @can('faqs.edit')
+                    <a href="{{ route('admin.faqs.edit', $faq) }}" class="admin-secondary-button" aria-label="Edit FAQ: {{ $faq->question }}" title="Edit FAQ">
+                      <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit
+                    </a>
+                    @endcan
+                    @can('faqs.delete')
+                    <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" onsubmit="return confirm('Delete this FAQ? This cannot be undone.');" style="display:inline-block; margin:0;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="admin-delete-button" aria-label="Delete FAQ: {{ $faq->question }}" title="Delete FAQ">
+                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
+                      </button>
+                    </form>
+                    @endcan
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5" class="admin-table-empty">
+                  <span class="admin-empty-icon"><i class="fa-regular fa-circle-question"></i></span>
+                  <strong>No FAQs yet</strong>
+                  <span>Select “Add FAQ” to create your first answer.</span>
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {{-- ================= ROLES & PERMISSIONS SECTION (SPATIE RBAC) ================= --}}
+    @can('roles.view')
+    <section id="section-roles" class="admin-dashboard-section" role="tabpanel" aria-label="Roles & Permissions" hidden>
+      <div class="admin-section-heading admin-blog-section-heading">
+        <div>
+          <span class="admin-section-eyebrow">ACCESS CONTROL &amp; SECURITY</span>
+          <h2>Roles &amp; Permissions (Spatie RBAC)</h2>
+          <p>Manage role hierarchies, assign granular CRUD permissions, and control user access across the admin panel.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span class="admin-section-total"><i class="fa-solid fa-shield-halved"></i> {{ $roles->count() }} roles</span>
+          @can('roles.create')
+          <a href="{{ route('admin.roles.index') }}#createRoleCard" class="admin-action-button" aria-label="Create Role" title="Create Role">
+            <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Create Role
+          </a>
+          @endcan
+        </div>
+      </div>
+
+      <div class="admin-dashboard-metrics admin-insight-metrics" style="margin-bottom: 1.5rem;">
+        <article class="admin-metric-card">
+          <div class="admin-metric-icon is-green"><i class="fa-solid fa-user-shield"></i></div>
+          <div>
+            <span class="admin-metric-label">System Roles</span>
+            <strong>{{ $roles->count() }}</strong>
+            <small>Configured roles</small>
+          </div>
+        </article>
+        <article class="admin-metric-card">
+          <div class="admin-metric-icon is-blue"><i class="fa-solid fa-key"></i></div>
+          <div>
+            <span class="admin-metric-label">CRUD Permissions</span>
+            <strong>{{ \Spatie\Permission\Models\Permission::count() }}</strong>
+            <small>Fine-grained abilities</small>
+          </div>
+        </article>
+        <article class="admin-metric-card">
+          <div class="admin-metric-icon is-violet"><i class="fa-solid fa-users-gear"></i></div>
+          <div>
+            <span class="admin-metric-label">Admin Accounts</span>
+            <strong>{{ $allUsers->count() }}</strong>
+            <small>Configured staff users</small>
+          </div>
+        </article>
+        <article class="admin-metric-card">
+          <div class="admin-metric-icon is-amber"><i class="fa-solid fa-lock"></i></div>
+          <div>
+            <span class="admin-metric-label">RBAC Security Status</span>
+            <strong style="color: #397b4e; font-size: 1.15rem;">Spatie Shield Active</strong>
+            <small>All CRUD routes protected</small>
+          </div>
+        </article>
+      </div>
+
+      {{-- Roles Table --}}
+      <div class="admin-card" style="background:#fff; border-radius:12px; border:1px solid #e2eae2; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+          <h3 style="margin:0; font-size:1.1rem; color:#1a2e20; font-weight:750;">
+            <i class="fa-solid fa-shield-halved" style="color:#398158; margin-right:0.4rem;"></i> Defined Roles &amp; Permissions
+          </h3>
+          <a href="{{ route('admin.roles.index') }}" class="admin-secondary-button" style="text-decoration:none;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Full Roles Manager
+          </a>
+        </div>
+
+        <div class="admin-table-scroll">
+          <table class="admin-data-table">
+            <thead>
+              <tr>
+                <th>Role Name</th>
+                <th>Guard</th>
+                <th>Users</th>
+                <th>Assigned Permissions</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($roles as $role)
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:0.55rem;">
+                      <span style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:{{ in_array($role->name, ['super-admin', 'admin']) ? '#ecfdf5' : '#eff6ff' }}; color:{{ in_array($role->name, ['super-admin', 'admin']) ? '#059669' : '#2563eb' }}; font-size:0.85rem;">
+                        <i class="fa-solid {{ in_array($role->name, ['super-admin', 'admin']) ? 'fa-crown' : 'fa-user-tag' }}"></i>
+                      </span>
+                      <div>
+                        <strong style="font-size:0.92rem; color:#1e293b; text-transform:capitalize;">{{ str_replace('-', ' ', $role->name) }}</strong>
+                        @if(in_array($role->name, ['super-admin', 'admin']))
+                          <small style="display:block; font-size:0.7rem; color:#059669; font-weight:600;">System Protected</small>
+                        @endif
+                      </div>
+                    </div>
+                  </td>
+                  <td><span style="font-family:monospace; font-size:0.8rem; background:#f1f5f9; padding:0.2rem 0.5rem; border-radius:4px; color:#475569;">{{ $role->guard_name }}</span></td>
+                  <td><span style="font-weight:600; color:#334155; font-size:0.88rem;">{{ $role->users->count() }} user(s)</span></td>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; max-width:550px;">
+                      @if($role->name === 'super-admin')
+                        <span style="display:inline-flex; align-items:center; gap:0.3rem; font-size:0.75rem; font-weight:700; background:#dcfce7; color:#15803d; padding:0.25rem 0.6rem; border-radius:9999px;">
+                          <i class="fa-solid fa-asterisk" style="font-size:0.65rem;"></i> All System Permissions (Wildcard)
+                        </span>
+                      @else
+                        <span style="font-weight:700; color:#0f766e; background:#ccfbf1; padding:0.2rem 0.55rem; border-radius:9999px; font-size:0.75rem;">
+                          {{ $role->permissions->count() }} permissions
+                        </span>
+                        @foreach($role->permissions->take(4) as $perm)
+                          <span style="font-size:0.72rem; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; padding:0.15rem 0.45rem; border-radius:4px;">{{ $perm->name }}</span>
+                        @endforeach
+                        @if($role->permissions->count() > 4)
+                          <span style="font-size:0.72rem; color:#64748b; font-weight:600;">+{{ $role->permissions->count() - 4 }} more</span>
+                        @endif
+                      @endif
+                    </div>
+                  </td>
+                  <td style="text-align: right;">
+                    <div class="admin-row-actions" style="justify-content: flex-end;">
+                      @can('roles.edit')
+                      <a href="{{ route('admin.roles.index') }}" class="admin-secondary-button" title="Configure permissions">
+                        <i class="fa-solid fa-sliders"></i> Permissions
+                      </a>
+                      @endcan
+                      @can('roles.delete')
+                      @if(!in_array($role->name, ['super-admin', 'admin']))
+                        <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" onsubmit="return confirm('Delete this role?');" style="display:inline-block; margin:0;">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="admin-delete-button" title="Delete role"><i class="fa-regular fa-trash-can"></i></button>
+                        </form>
+                      @endif
+                      @endcan
+                    </div>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {{-- User Role Assignment --}}
+      <div class="admin-card" style="background:#fff; border-radius:12px; border:1px solid #e2eae2; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+          <div>
+            <h3 style="margin:0; font-size:1.1rem; color:#1a2e20; font-weight:750;">
+              <i class="fa-solid fa-users-gear" style="color:#2563eb; margin-right:0.4rem;"></i> User Role Assignment
+            </h3>
+            <p style="margin:0.25rem 0 0; font-size:0.85rem; color:#64748b;">Grant or update roles for administrator staff users.</p>
+          </div>
+        </div>
+
+        <div class="admin-table-scroll">
+          <table class="admin-data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Current Role</th>
+                <th>Admin Flag</th>
+                <th>Update Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($allUsers as $usr)
+                <tr>
+                  <td>
+                    <div class="admin-person-cell">
+                      <span class="admin-person-avatar" style="background:linear-gradient(135deg, #10b981 0%, #047857 100%); color:#fff; font-weight:750;">
+                        {{ mb_strtoupper(mb_substr($usr->name, 0, 1)) }}
+                      </span>
+                      <div>
+                        <strong style="color:#1e293b;">{{ $usr->name }}</strong>
+                        <a href="mailto:{{ $usr->email }}" style="color:#64748b; font-size:0.8rem; text-decoration:none;">{{ $usr->email }}</a>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    @php($primaryRole = $usr->roles->pluck('name')->first() ?: ($usr->is_admin ? 'super-admin' : 'None'))
+                    <span style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; font-weight:700; padding:0.25rem 0.65rem; border-radius:9999px; background:{{ in_array($primaryRole, ['super-admin', 'admin']) ? '#ecfdf5' : '#eff6ff' }}; color:{{ in_array($primaryRole, ['super-admin', 'admin']) ? '#059669' : '#1d4ed8' }}; border:1px solid {{ in_array($primaryRole, ['super-admin', 'admin']) ? '#a7f3d0' : '#bfdbfe' }};">
+                      <i class="fa-solid fa-shield"></i> {{ ucwords(str_replace('-', ' ', $primaryRole)) }}
+                    </span>
+                  </td>
+                  <td>
+                    <span style="font-size:0.8rem; font-weight:600; color:{{ $usr->is_admin ? '#059669' : '#64748b' }};">
+                      <i class="fa-solid {{ $usr->is_admin ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> {{ $usr->is_admin ? 'Yes (Admin)' : 'No' }}
+                    </span>
+                  </td>
+                  <td>
+                    @can('users.manage')
+                    <form action="{{ route('admin.roles.assign-user') }}" method="POST" style="display:flex; align-items:center; gap:0.5rem; margin:0;">
+                      @csrf
+                      <input type="hidden" name="user_id" value="{{ $usr->id }}">
+                      <select name="role" style="padding:0.4rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem; background:#fff; color:#1e293b; min-width:140px;">
+                        @foreach($roles as $r)
+                          <option value="{{ $r->name }}" {{ $usr->hasRole($r->name) ? 'selected' : '' }}>
+                            {{ ucwords(str_replace('-', ' ', $r->name)) }}
+                          </option>
+                        @endforeach
+                      </select>
+                      <button type="submit" class="admin-secondary-button" style="padding:0.4rem 0.65rem; font-size:0.8rem;">
+                        Save
+                      </button>
+                    </form>
+                    @else
+                    <span style="font-size:0.8rem; color:#94a3b8;">Restricted</span>
+                    @endcan
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    @endcan
     
 <script>
   function initializeAdminActivityChart() {

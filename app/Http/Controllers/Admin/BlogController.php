@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Models\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,7 +16,10 @@ class BlogController extends Controller
     {
         $this->authorizeAdmin();
 
-        return view('admin.blog.create', ['post' => null]);
+        return view('admin.blog.create', [
+            'post' => null,
+            'faqs' => collect(),
+        ]);
     }
 
     public function store(Request $request)
@@ -31,28 +36,32 @@ class BlogController extends Controller
         $authorDesignation = $this->resolveAuthorDesignation($request);
         $readingTime = $this->calculateReadingTime($content);
 
-        BlogPost::create([
-            'title' => $data['title'],
-            'slug' => $slug,
-            'excerpt' => $data['excerpt'],
-            'image_path' => $imagePath,
-            'content_blocks' => $content,
-            'author_name' => $authorName,
-            'author_designation' => $authorDesignation,
-            'category' => $data['category'] ?? null,
-            'tags' => $this->normalizeTags($data['tags'] ?? null),
-            'meta_title' => $data['meta_title'] ?? null,
-            'meta_description' => $data['meta_description'] ?? null,
-            'focus_keyword' => $data['focus_keyword'] ?? null,
-            'canonical_url' => $data['canonical_url'] ?? null,
-            'robots_meta' => $data['robots_meta'] ?? 'index, follow',
-            'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
-            'is_published' => $published,
-            'post_status' => $postStatus,
-            'published_at' => $published ? now() : null,
-            'comment_status' => $request->boolean('comment_status', true),
-            'reading_time' => $readingTime,
-        ]);
+        DB::transaction(function () use ($data, $slug, $imagePath, $content, $authorName, $authorDesignation, $published, $postStatus, $readingTime, $request) {
+            $post = BlogPost::create([
+                'title' => $data['title'],
+                'slug' => $slug,
+                'excerpt' => $data['excerpt'],
+                'image_path' => $imagePath,
+                'content_blocks' => $content,
+                'author_name' => $authorName,
+                'author_designation' => $authorDesignation,
+                'category' => $data['category'] ?? null,
+                'tags' => $this->normalizeTags($data['tags'] ?? null),
+                'meta_title' => $data['meta_title'] ?? null,
+                'meta_description' => $data['meta_description'] ?? null,
+                'focus_keyword' => $data['focus_keyword'] ?? null,
+                'canonical_url' => $data['canonical_url'] ?? null,
+                'robots_meta' => $data['robots_meta'] ?? 'index, follow',
+                'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
+                'is_published' => $published,
+                'post_status' => $postStatus,
+                'published_at' => $published ? now() : null,
+                'comment_status' => $request->boolean('comment_status', true),
+                'reading_time' => $readingTime,
+            ]);
+
+            $this->syncFaqs($post, $request->input('faqs', []));
+        });
 
         return redirect()->route('admin.dashboard', ['tab' => 'blogs'])->with('success', 'Blog post created successfully.');
     }
@@ -60,8 +69,12 @@ class BlogController extends Controller
     public function edit(BlogPost $post)
     {
         $this->authorizeAdmin();
+        $post->load('faqs');
 
-        return view('admin.blog.create', compact('post'));
+        return view('admin.blog.create', [
+            'post' => $post,
+            'faqs' => $post->faqs,
+        ]);
     }
 
     public function update(Request $request, BlogPost $post)
@@ -82,30 +95,34 @@ class BlogController extends Controller
         $authorDesignation = $this->resolveAuthorDesignation($request, $post);
         $readingTime = $this->calculateReadingTime($content);
 
-        $post->update([
-            'title' => $data['title'],
-            'slug' => $request->filled('slug') ? $this->uniqueSlug($request->input('slug'), $post) : $this->uniqueSlug($data['title'], $post),
-            'excerpt' => $data['excerpt'],
-            'image_path' => $newImagePath,
-            'content_blocks' => $content,
-            'author_name' => $authorName,
-            'author_designation' => $authorDesignation,
-            'category' => $data['category'] ?? null,
-            'tags' => $this->normalizeTags($data['tags'] ?? null),
-            'meta_title' => $data['meta_title'] ?? null,
-            'meta_description' => $data['meta_description'] ?? null,
-            'focus_keyword' => $data['focus_keyword'] ?? null,
-            'canonical_url' => $data['canonical_url'] ?? null,
-            'robots_meta' => $data['robots_meta'] ?? 'index, follow',
-            'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
-            'is_published' => $published,
-            'post_status' => $postStatus,
-            'published_at' => $published
-                ? ($post->is_published && $post->published_at ? $post->published_at : now())
-                : null,
-            'comment_status' => $request->boolean('comment_status', $post->comment_status ?? true),
-            'reading_time' => $readingTime,
-        ]);
+        DB::transaction(function () use ($post, $data, $request, $newImagePath, $content, $authorName, $authorDesignation, $published, $postStatus, $readingTime) {
+            $post->update([
+                'title' => $data['title'],
+                'slug' => $request->filled('slug') ? $this->uniqueSlug($request->input('slug'), $post) : $this->uniqueSlug($data['title'], $post),
+                'excerpt' => $data['excerpt'],
+                'image_path' => $newImagePath,
+                'content_blocks' => $content,
+                'author_name' => $authorName,
+                'author_designation' => $authorDesignation,
+                'category' => $data['category'] ?? null,
+                'tags' => $this->normalizeTags($data['tags'] ?? null),
+                'meta_title' => $data['meta_title'] ?? null,
+                'meta_description' => $data['meta_description'] ?? null,
+                'focus_keyword' => $data['focus_keyword'] ?? null,
+                'canonical_url' => $data['canonical_url'] ?? null,
+                'robots_meta' => $data['robots_meta'] ?? 'index, follow',
+                'schema_markup' => $this->normalizeJsonField($data['schema_markup'] ?? null),
+                'is_published' => $published,
+                'post_status' => $postStatus,
+                'published_at' => $published
+                    ? ($post->is_published && $post->published_at ? $post->published_at : now())
+                    : null,
+                'comment_status' => $request->boolean('comment_status', $post->comment_status ?? true),
+                'reading_time' => $readingTime,
+            ]);
+
+            $this->syncFaqs($post, $request->input('faqs', []));
+        });
 
         if ($oldImagePath && $oldImagePath !== $newImagePath) {
             Storage::disk('public')->delete($oldImagePath);
@@ -127,6 +144,7 @@ class BlogController extends Controller
             ->filter()
             ->unique();
 
+        $post->faqs()->delete();
         $post->delete();
 
         foreach ($paths as $path) {
@@ -188,6 +206,11 @@ class BlogController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'is_published' => ['sometimes', 'boolean'],
             'comment_status' => ['sometimes', 'boolean'],
+            'faqs' => ['nullable', 'array'],
+            'faqs.*.id' => ['nullable', 'integer'],
+            'faqs.*.question' => ['nullable', 'string', 'max:5000'],
+            'faqs.*.answer' => ['nullable', 'string', 'max:50000'],
+            'faqs.*.order' => ['nullable', 'integer'],
         ]);
     }
 
@@ -446,8 +469,72 @@ class BlogController extends Controller
         return $slug;
     }
 
+    private function syncFaqs(BlogPost $post, mixed $rawFaqs): void
+    {
+        if (!is_array($rawFaqs)) {
+            $post->faqs()->delete();
+            return;
+        }
+
+        $retainedIds = [];
+        $order = 0;
+
+        foreach ($rawFaqs as $faqItem) {
+            if (!is_array($faqItem)) {
+                continue;
+            }
+
+            $question = trim((string) ($faqItem['question'] ?? ''));
+            $answer = trim((string) ($faqItem['answer'] ?? ''));
+
+            // Safely ignore empty FAQ input blocks
+            if ($question === '') {
+                continue;
+            }
+
+            $order++;
+            $faqId = !empty($faqItem['id']) ? (int) $faqItem['id'] : null;
+
+            if ($faqId) {
+                $existingFaq = $post->faqs()->where('id', $faqId)->first();
+                if ($existingFaq) {
+                    $existingFaq->update([
+                        'question' => $question,
+                        'answer' => $answer,
+                        'order' => $order,
+                        'sort_order' => $order,
+                        'is_published' => true,
+                        'updated_by' => auth()->id(),
+                    ]);
+                    $retainedIds[] = $existingFaq->id;
+                    continue;
+                }
+            }
+
+            $newFaq = $post->faqs()->create([
+                'model_type' => 'blog',
+                'model_id' => $post->id,
+                'question' => $question,
+                'answer' => $answer,
+                'order' => $order,
+                'sort_order' => $order,
+                'is_published' => true,
+                'created_by' => auth()->id(),
+                'updated_by' => auth()->id(),
+            ]);
+
+            $retainedIds[] = $newFaq->id;
+        }
+
+        $post->faqs()->whereNotIn('id', $retainedIds)->delete();
+    }
+
     private function authorizeAdmin(): void
     {
-        abort_unless(auth()->check() && auth()->user()->is_admin, 403);
+        $user = auth()->user();
+        abort_unless(
+            $user && ($user->is_admin || (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super-admin', 'admin', 'editor', 'author'])) || $user->can('blogs.view')),
+            403
+        );
     }
 }

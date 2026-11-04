@@ -10,10 +10,20 @@ class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user()?->is_admin) {
+        $user = $request->user();
+
+        if (! $user) {
             abort(403, 'Access denied.');
         }
 
-        return $next($request);
+        if (
+            $user->is_admin ||
+            (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super-admin', 'admin', 'editor', 'author', 'viewer'])) ||
+            $user->can('dashboard.view')
+        ) {
+            return $next($request);
+        }
+
+        abort(403, 'Access denied.');
     }
 }

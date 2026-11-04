@@ -58,6 +58,12 @@ class BlogPost extends Model
     public function getContentHtmlAttribute(): string
     {
         $blocks = $this->content_blocks ?? [];
+        if (is_string($blocks)) {
+            return $blocks;
+        }
+        if (!is_array($blocks)) {
+            return '';
+        }
         if (count($blocks) === 1 && ($blocks[0]['type'] ?? null) === 'html') {
             return $blocks[0]['content'] ?? '';
         }
@@ -74,5 +80,13 @@ class BlogPost extends Model
                 default => '',
             };
         })->implode("\n");
+    }
+
+    public function faqs()
+    {
+        return $this->hasMany(Faq::class, 'model_id')
+            ->where('model_type', 'blog')
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc');
     }
 }

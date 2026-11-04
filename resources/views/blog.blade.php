@@ -43,6 +43,13 @@
                 
                 <p>{{ $post->excerpt }}</p>
 
+                @if($post->image_path)
+                  <div style="margin-top: 1.1rem;">
+                    <a href="{{ route('blog.show', $post->slug) }}" style="display: inline-block; overflow: hidden; border-radius: 8px;">
+                      <img src="{{ Storage::url($post->image_path) }}" alt="{{ $post->title }}" style="max-width: 360px; width: 100%; height: 190px; object-fit: cover; border-radius: 8px; border: 1px solid #dce5dc; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                    </a>
+                  </div>
+                @endif
               </div>
 
               <!-- Link to read the full post -->

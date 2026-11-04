@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Web Page - ' . $webPage->title)
+@section('page_heading', 'Edit Web Page')
 
 @push('styles')
 <script src="https://cdn.tailwindcss.com"></script>
