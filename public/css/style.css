@@ -156,6 +156,7 @@ body.inner-page section[id] {
   object-fit: cover;
   display: block;
   border-radius: inherit;
+<<<<<<< Updated upstream
   filter: brightness(0.96);
 }
 
@@ -170,6 +171,9 @@ body.inner-page section[id] {
   z-index: 2;
   border-radius: inherit;
   transition: opacity 0.15s ease-out;
+=======
+  filter: brightness(0.4);
+>>>>>>> Stashed changes
 }
 
 /* --- Site Header & Navigation Bar --- */

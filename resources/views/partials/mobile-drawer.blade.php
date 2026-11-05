@@ -31,7 +31,7 @@
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-solutions']) }}">Tech Solutions</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-support']) }}">IT Support</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-services']) }}">IT Services</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'digital-marketing-services']) }}">Digital Marketing Services</a></li>
+          <li><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing Services</a></li>
         </ul>
       </details>
     </li>

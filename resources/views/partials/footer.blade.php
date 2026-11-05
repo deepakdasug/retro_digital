@@ -24,55 +24,53 @@
           </ul>
         </div>
 
-        <section class="footer-column" aria-labelledby="footer-company-heading">
-          <h2 class="footer-heading" id="footer-company-heading">Our Company</h2>
+        <section class="footer-column" aria-labelledby="footer-who-we-are-heading">
+          <h2 class="footer-heading" id="footer-who-we-are-heading">Who We Are</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('about') }}">About Us</a></li>
-            <li><a class="footer-link-button contact-page-link" href="{{ route('contact.page') }}#contact"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Contact</a></li>
-            <li><a href="{{ route('faqs') }}">FAQs</a></li>
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('home') }}#services">Services</a></li>
+            <li><a href="{{ route('industries.index') }}">Industries</a></li>
+            <li><a href="{{ route('faqs') }}">Faqs</a></li>
             <li><a href="{{ route('blog') }}">Blog</a></li>
-            <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
-            <li><a href="{{ route('terms') }}">Terms And Conditions</a></li>
-            <li><a href="{{ route('careers') }}">Career</a></li>
+            <li><a href="{{ route('about') }}">About Us</a></li>
+            <li><a href="{{ route('contact.page') }}#contact">Contact Us</a></li>
           </ul>
         </section>
 
-        <section class="footer-column" aria-labelledby="footer-services-heading">
-          <h2 class="footer-heading" id="footer-services-heading">Services</h2>
+        <section class="footer-column" aria-labelledby="footer-our-services-heading">
+          <h2 class="footer-heading" id="footer-our-services-heading">Our Services</h2>
           <ul class="footer-nav">
-            <li><a href="#">IT Asset Re-Marketing</a></li>
-            <li><a href="#">IT Data Destruction</a></li>
-            <li><a href="#">IT Asset Disposition (ITAD)</a></li>
-            <li><a href="#">IT Asset Management (ITAM)</a></li>
-            <li><a href="#">Data Center Decommissioning</a></li>
-            <li><a href="#">Harddrive Disposal</a></li>
-            <li><a href="#">Hard disk Destruction</a></li>
+            <li><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing</a></li>
+            <li><a href="{{ route('services.show', 'search-engine-optimization') }}">Search Engine Optimization</a></li>
+            <li><a href="{{ route('services.show', 'social-media-marketing') }}">Social Media Marketing</a></li>
+            <li><a href="{{ route('services.show', 'paid-marketing') }}">Paid Marketing</a></li>
+            <li><a href="{{ route('services.show', 'email-marketing') }}">Email Marketing</a></li>
+            <li><a href="{{ route('services.show', 'content-marketing') }}">Content Marketing</a></li>
+            <li><a href="{{ route('services.show', 'orm-services') }}">ORM Services</a></li>
           </ul>
         </section>
 
-        <section class="footer-column" aria-labelledby="footer-industries-heading">
-          <h2 class="footer-heading" id="footer-industries-heading">Industries</h2>
+        <section class="footer-column" aria-labelledby="footer-technology-solutions-heading">
+          <h2 class="footer-heading" id="footer-technology-solutions-heading">Technology Solutions</h2>
           <ul class="footer-nav">
-            <li><a href="#">Small Business</a></li>
-            <li><a href="#">Manufacturers</a></li>
-            <li><a href="#">Education</a></li>
-            <li><a href="#">Banking &amp; Finance</a></li>
-            <li><a href="#">Government &amp; Nonprofit</a></li>
-            <li><a href="#">Healthcare</a></li>
-            <li><a href="#">Insurance</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">App Development</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce Solutions</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">Whatsapp Integration</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">CRM Development</a></li>
           </ul>
         </section>
 
-        <section class="footer-column" aria-labelledby="footer-more-industries-heading">
-          <h2 class="footer-heading" id="footer-more-industries-heading">More Industries</h2>
+        <section class="footer-column" aria-labelledby="footer-our-industries-heading">
+          <h2 class="footer-heading" id="footer-our-industries-heading">Our Industries</h2>
           <ul class="footer-nav">
-            <li><a href="#">Legal &amp; Corporate</a></li>
-            <li><a href="#">Research &amp; Development</a></li>
-            <li><a href="#">Pharmaceutical</a></li>
-            <li><a href="#">Real Estate</a></li>
-            <li><a href="#">Tech &amp; Cloud Providers</a></li>
-            <li><a href="#">Distributors &amp; Resellers</a></li>
-            <li><a href="#">Retail</a></li>
+            <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real State &amp; Construction</a></li>
+            <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufactturing</a></li>
+            <li><a href="{{ route('industries.show', 'personal-beauty-care') }}">Personal Beauty Care</a></li>
+            <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}">Medical &amp; Healthcare</a></li>
+            <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil &amp; Gas</a></li>
+            <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
           </ul>
         </section>
 

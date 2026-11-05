@@ -469,7 +469,75 @@ class ServiceSeeder extends Seeder
                     'related' => ['social-media-marketing', 'paid-marketing', 'content-marketing'],
                 ],
             ],
-];
+
+            // ─────────────────────────────────────────────────────────────
+            // 8. DIGITAL MARKETING
+            // ─────────────────────────────────────────────────────────────
+            [
+                'slug'              => 'digital-marketing',
+                'title'             => 'Digital Marketing',
+                'short_description' => 'Grow Your Brand with Data-Driven Marketing across SEO, PPC, Social and AI Dashboards.',
+                'meta_description'  => 'Grow your brand with data-driven digital marketing, advanced SEO, and AI-enabled dashboards by Retrotech Digital.',
+                'hero_image'        => 'https://www.retrotechdigital.com/frontend/img/digitalmarkging.jpg',
+                'icon_svg'          => 'chart',
+                'content' => [
+                    'hero' => [
+                        'badge'    => 'Data-Driven Marketing Platform',
+                        'subtitle' => 'Grow Your Brand with Data-Driven Marketing — Accelerate revenue growth, boost organic reach, and capture qualified leads across search, social, and modern advertising channels.',
+                        'cta'      => 'Get a Free Consultation',
+                    ],
+                    'topics' => [
+                        'Keyword Research', 'Competitor Analysis', 'On-Page Optimization', 'Mobile Optimization',
+                        'Technical SEO Audit', 'Backlink Creation', 'Review Management', 'Multilingual SEO', 'SEO Reporting & Analytics',
+                    ],
+                    'about' => [
+                        'heading'   => '🚀 Introducing Industry-First, AI-Enabled Dashboards',
+                        'paragraph' => 'An SEO services company provides Search Engine Optimization services to businesses and organizations which help them to increase their online visibility and reach the target audience. An SEO company helps organizations optimize their websites with professional SEO strategies and increase related traffic on their websites enhancing their business globally. It uses multiple modern SEO practices such as keyword research, backlink building, content creation and many more.',
+                        'features'  => [
+                            ['chat', 'Speech to text AI chat agent', 'Convert voice into accurate, real-time text and enable seamless AI-powered conversations.', 'Improve customer support efficiency, reduce response times, and enhance accessibility with natural language communication.'],
+                            ['pen',  'AI Image generator', 'Instantly create high-quality, customized images from simple text prompts.', 'Save design costs, speed up content creation, and deliver visually stunning graphics tailored to your brand.'],
+                        ],
+                    ],
+                    'rows' => [
+                        ['pin',   'Local SEO', 'Local SEO is a practice used by professional SEO companies to rank your website higher for location specific queries such as “SEO services company near me” and “SEO company in Delhi”. It involves optimization of business profiles, managing local citations and generating location-specific content. This helps increase the website\'s online visibility for “services near me” searches, helping you get local leads.', 'https://www.retrotechdigital.com/frontend/img/untitled-design.jpg'],
+                        ['chart', 'Ecommerce SEO', 'Ecommerce SEO is an optimization practice used by our SEO company for online businesses to increase their visibility and ranking on search engine pages for product related queries. It helps businesses drive organic traffic directly to product category pages to maximize the lead conversion rate. Ecommerce SEO services company involves optimization of category page, product description and overall technical performance of the website for a seamless user experience.', 'https://www.retrotechdigital.com/frontend/img/ecommerce-seo-retrotech.webp'],
+                        ['bolt',  'Enterprise SEO', 'Enterprise SEO is an optimization methodology tailored for large organizations, multi-location brands, and expansive websites. It addresses complex site architectures, enterprise-level keyword hierarchies, cross-department workflows, and scalable content strategies to maintain dominant visibility across high-competition search verticals.', 'https://www.retrotechdigital.com/frontend/img/enterprise-seo-retrotech.webp'],
+                        ['phone', 'Mobile SEO', 'It is a type of optimization practice used by our SEO company, where we optimise the website for users on mobile devices such as smartphones and tablets. It helps make the website mobile responsive, increases its speed and makes the navigation easy while ensuring the website is still crawlable. It includes practices like responsive design, page speed optimization, User Experience, mobile first indexing and local SEO.', 'https://www.retrotechdigital.com/frontend/img/mobile-retrotech.webp'],
+                        ['pen',   'Video SEO', 'Video SEO is the process of optimizing video content to increase its visibility and ranking on search engine result pages (SERPs) including google and youtube. The main objective is to increase the views, engagement and traffic, ensuring higher CTR by the right audience. A professional SEO services company delivers video SEO practices such as keyword optimization, meta tags, thumbnail optimization and engagement metrics.', 'https://www.retrotechdigital.com/frontend/img/video-seo-retrotech.webp'],
+                        ['list',  'App Store Optimization', 'App store optimization is a type of optimization provided by a professional SEO services company, which is used to increase the visibility and ranking of a mobile app in app stores such as google play store and Apple app store. Just like SEO for websites, ASO helps optimise apps, make them easily discoverable for users, eventually getting more downloads.', 'https://www.retrotechdigital.com/frontend/img/app_store.jpg'],
+                        ['chart', 'National SEO', 'National SEO is a strategic optimization technique that helps take your business nationwide. Unlike local SEO, it focuses on nationwide search terms rather than region specific. It is ideal for businesses that work across an entire country. It includes broad keyword targeting, content strategy, technical SEO and authority building. It helps your website rank globally and generate traffic within a nation.', 'https://www.retrotechdigital.com/frontend/img/national-seo-retrotech.webp'],
+                        ['shield','International SEO', 'International SEO is an optimization practice that helps rank your website and generate traffic across multiple countries and languages. It is ideal for businesses that work globally. It includes practices like implementing hreflang tags, using country-specific domains, creating culture-wise content, performing local keyword research and setting Geo-targeting. Partnering with a professional SEO services company makes your website easily discoverable to global audiences.', 'https://www.retrotechdigital.com/frontend/img/international-seo-retrotech.webp'],
+                    ],
+                    'projects' => [
+                        ['E-Commerce Workshop', 'Online store ranked for 400+ high-intent product queries, driving exponential non-paid conversions and revenue.', [240, 380, '120%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/e-commerce-workshop-retrotech.webp'],
+                        ['Education Portals', 'Empowering academic institutions with student lead acquisition, admissions search visibility, and course portal engagement.', [310, 420, '140%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/education-retrotech.webp'],
+                        ['Real Estate Apps', 'Building user-friendly platforms with interactive map search, virtual tours, and hyper-local buyer lead funnels.', [280, 490, '150%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/real_estate-retrotech.webp'],
+                        ['Legal Industries', 'High-authority practice area pages ranking for competitive corporate law terms and client enquiry channels.', [190, 310, '110%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/legal-industry-retrotech.webp'],
+                        ['Insurance Industry', 'Accelerating policy comparison and insurance lead volume through compliance-first organic and paid funnels.', [220, 350, '130%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/insurance-industry-retrotech.webp'],
+                        ['Travel & Hospitality', 'Boosting direct property and vacation bookings with high-intent localized search campaigns and digital engagement.', [260, 410, '160%'], [726, 1026, '488%'], 'https://www.retrotechdigital.com/frontend/img/travel-final-retrotech.webp'],
+                    ],
+                    'workflow' => [
+                        ['bolt',  'Strategy Development', 'We define digital goals, target audience, and channels to create a customized marketing roadmap for your brand.'],
+                        ['chart', 'Market Research & Audience Analysis', 'We analyze competitors, industry trends, and audience behavior to discover valuable insights for effective targeting.'],
+                        ['pen',   'Content & Creative Planning', 'Our creative team plans engaging content ideas, visuals, and brand messaging aligned with your digital strategy.'],
+                        ['list',  'SEO & Website Optimization', 'We optimize website structure, content, and keywords to enhance visibility, ranking, and user experience.'],
+                        ['chat',  'Social Media Marketing Planning', 'We develop platform-specific strategies to increase reach, build engagement, and strengthen brand presence online.'],
+                        ['mail',  'Email Marketing Planning', 'Targeted email campaigns are crafted to nurture leads, promote offers, and build long-term customer loyalty.'],
+                        ['bolt',  'Paid Advertising (PPC & Social Ads)', 'We run data-driven ad campaigns on Google and social media to drive targeted traffic and maximize ROI.'],
+                        ['chart', 'Analytics & Performance Tracking', 'Campaign performance is tracked through analytics tools to measure engagement, conversions, and growth.'],
+                        ['arrow', 'Optimization & Continuous Improvement', 'Data insights are used to refine strategies and enhance overall campaign effectiveness continuously.'],
+                        ['shield','Online Reputation & Brand Management', 'We protect and enhance your brand image online through proactive monitoring and positive engagement.'],
+                    ],
+                    'faqs' => [
+                        ['What IT services does your company provide?', 'We provide website development, mobile app development, custom software solutions, UI/UX design, cloud services, digital marketing, SEO, and ongoing IT support.'],
+                        ['Do you provide customized solutions for businesses?', 'Yes, we develop customized IT solutions based on your business requirements, target audience, workflow, budget, and long-term goals.'],
+                        ['How long does it take to complete an IT project?', 'The project timeline depends on its scope, features, and complexity. After reviewing your requirements, our team provides a clear development plan and estimated delivery timeline.'],
+                        ['Do you provide support after the project is completed?', 'Yes, we provide post-launch maintenance, technical support, security updates, performance monitoring, bug fixes, and future enhancements to keep your solution running smoothly.'],
+                    ],
+                    'related' => ['search-engine-optimization', 'social-media-marketing', 'paid-marketing'],
+                ],
+            ],
+        ];
 
         foreach ($services as $data) {
             Service::updateOrCreate(

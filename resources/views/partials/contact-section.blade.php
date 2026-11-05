@@ -1,8 +1,5 @@
-@php
-    $isContactPage = request()->routeIs('contact.page', 'contact.us');
-@endphp
 
-<section class="contact-section contact-included-section {{ $isContactPage ? 'contact-page-dedicated' : '' }}" id="contact">
+<section class="contact-section " id="contact">
     <div class="contact-inc-container">
 
         {{-- Left: Concise Info Card --}}
