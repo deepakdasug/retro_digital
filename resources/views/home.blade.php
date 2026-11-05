@@ -8,7 +8,7 @@
   {{-- =========================================================================
        1. HERO SECTION: Business Made Easy with Retrotech
        ========================================================================= --}}
-  <main class="hero-section" id="home">
+  <main class="hero-section" id="home" >
     {{-- Left Floating High-Tech Telemetry HUD (Desktop Spatial Anchor) --}}
     <div class="hero-floating-hud hero-hud-left" aria-hidden="true">
       <div class="h-hud-glass">
@@ -138,39 +138,11 @@
     </div>
   </main>
 
-  {{-- =========================================================================
-       2. CONTINUOUS SERVICES TICKER MARQUEE
-       ========================================================================= --}}
-  <div class="marquee-ticker-bar" aria-hidden="true">
-    <div class="ticker-track">
-      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      {{-- Duplicate set for seamless loop --}}
-      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-    </div>
-  </div>
-
+  
   {{-- =========================================================================
        2B. ENTERPRISE TECH ECOSYSTEM & CLOUD INFRASTRUCTURE STRIP
        ========================================================================= --}}
-  <div class="tech-ecosystem-bar" aria-label="Enterprise Cloud and Engineering Ecosystem">
+  <!-- <div class="tech-ecosystem-bar" aria-label="Enterprise Cloud and Engineering Ecosystem">
     <div class="te-inner-container">
       <div class="te-heading-wrap">
         <span class="te-ping"><span class="te-ping-dot"></span></span>
@@ -187,7 +159,7 @@
         <div class="te-badge"><i class="fa-brands fa-python"></i><span>Python AI &amp; Automation</span></div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   {{-- =========================================================================
        3. ABOUT US & VIDEO DOCKING SECTION
@@ -234,6 +206,38 @@
           <span class="apr-lbl">Proactive APM Monitoring</span>
         </div>
       </div>
+
+
+{{-- =========================================================================
+       2. CONTINUOUS SERVICES TICKER MARQUEE
+       ========================================================================= --}}
+  <div class="marquee-ticker-bar" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      {{-- Duplicate set for seamless loop --}}
+      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+    </div>
+  </div>
+
+
 
       {{-- 2026 Deeply Considered Split Canvas: Culture Manifesto + 6 Pillars Grid --}}
       <div class="about-split-canvas">
