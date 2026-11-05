@@ -28,7 +28,7 @@
           <h2 class="footer-heading" id="footer-who-we-are-heading">Who We Are</h2>
           <ul class="footer-nav">
             <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('home') }}#services">Services</a></li>
+            <li><a href="{{ route('services.index') }}">Services</a></li>
             <li><a href="{{ route('industries.index') }}">Industries</a></li>
             <li><a href="{{ route('faqs') }}">Faqs</a></li>
             <li><a href="{{ route('blog') }}">Blog</a></li>
