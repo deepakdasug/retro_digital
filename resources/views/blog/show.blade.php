@@ -5,7 +5,7 @@
 
 @php
   $articleUrl = $post->canonical_url ?: route('blog.show', $post->slug);
-  $articleImage = $post->image_path ? url(Storage::url($post->image_path)) : null;
+  $articleImage = $post->image_url;
   $articleSchema = $post->schema_markup ?: array_filter([
     '@context' => 'https://schema.org',
     '@type' => 'BlogPosting',
@@ -77,8 +77,8 @@
       @endif
     </header>
 
-    @if($post->image_path)
-      <img src="{{ Storage::url($post->image_path) }}" alt="{{ $post->title }}" class="blog-post-featured-image">
+    @if($post->image_url)
+      <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="blog-post-featured-image">
     @endif
 
     <div class="blog-post-content ck-content">{!! $post->content_html !!}</div>

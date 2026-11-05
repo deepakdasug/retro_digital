@@ -9,9 +9,13 @@ class IndustryController extends Controller
     // Display all published industries
     public function index()
     {
-        $industries = Industry::where('is_published', true)
-            ->orderBy('sort_order')
-            ->get();
+        try {
+            $industries = Industry::where('is_published', true)
+                ->orderBy('sort_order')
+                ->get();
+        } catch (\Throwable $e) {
+            $industries = collect();
+        }
 
         return view('industries.index', compact('industries'));
     }

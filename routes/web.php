@@ -11,7 +11,9 @@ use App\Http\Controllers\TechDevelopmentController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
-use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\FaqController as PublicFaqController;
+use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Admin\RolePermissionController;
 
 /*
@@ -27,18 +29,11 @@ Route::get('/', function () {
 
 Route::get('/about-us', fn () => view('about'))->name('about');
 Route::get('/careers', fn () => view('careers'))->name('careers');
-Route::get('/faqs', fn () => view('faqs'))->name('faqs');
+Route::get('/faqs', [PublicFaqController::class, 'index'])->name('faqs');
 
 // --- BLOG ROUTES ---
-Route::get('/blog', function () {
-    $posts = BlogPost::where('is_published', true)->latest('published_at')->get();
-    return view('blog', compact('posts')); 
-})->name('blog'); 
-
-Route::get('/blog/{slug}', function ($slug) {
-    $post = BlogPost::with('faqs')->where('slug', $slug)->where('is_published', true)->firstOrFail();
-    return view('blog.show', compact('post')); 
-})->name('blog.show');
+Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog'); 
+Route::get('/blog/{slug}', [PublicBlogController::class, 'show'])->name('blog.show');
 
 // --- CONTACT ROUTES ---
 Route::get('/contact', fn () => view('contact'))->name('contact.page');
@@ -105,12 +100,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy')->middleware('permission:testimonials.delete');
 
     // FAQs CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index')->middleware('permission:faqs.view');
-    Route::get('/admin/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create')->middleware('permission:faqs.create');
-    Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store')->middleware('permission:faqs.create');
-    Route::get('/admin/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('admin.faqs.edit')->middleware('permission:faqs.edit');
-    Route::put('/admin/faqs/{faq}', [FaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.edit');
-    Route::delete('/admin/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
+    Route::get('/admin/faqs', [AdminFaqController::class, 'index'])->name('admin.faqs.index')->middleware('permission:faqs.view');
+    Route::get('/admin/faqs/create', [AdminFaqController::class, 'create'])->name('admin.faqs.create')->middleware('permission:faqs.create');
+    Route::post('/admin/faqs', [AdminFaqController::class, 'store'])->name('admin.faqs.store')->middleware('permission:faqs.create');
+    Route::get('/admin/faqs/{faq}/edit', [AdminFaqController::class, 'edit'])->name('admin.faqs.edit')->middleware('permission:faqs.edit');
+    Route::put('/admin/faqs/{faq}', [AdminFaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.edit');
+    Route::delete('/admin/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
 
     // Web Pages CRUD (Create, Read, Update, Delete)
     Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index')->middleware('permission:webpages.view');
@@ -164,6 +159,9 @@ Route::get('/services/{service}', [ServiceController::class, 'show'])->name('ser
 */
 Route::get('/industries', [IndustryController::class, 'index'])
     ->name('industries.index');
+
+Route::get('/who-we-serve', [IndustryController::class, 'index'])
+    ->name('who-we-serve');
 
 Route::get('/industries/{slug}', [IndustryController::class, 'show'])
     ->name('industries.show');

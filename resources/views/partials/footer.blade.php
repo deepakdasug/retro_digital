@@ -7,11 +7,13 @@
           <a class="footer-logo" href="#home" aria-label="Retrotech home">
             <img src="{{ asset('assets/images/logo.png') }}" alt="Retrotech Business Solutions Pvt Ltd">
           </a>
-          <p class="footer-description">Empowering businesses with cutting-edge digital marketing solutions and proven SEO strategies.</p>
+          <p class="footer-description">Empowering businesses with cutting-edge digital marketing solutions and proven
+            SEO strategies.</p>
           <ul class="footer-contact-list">
             <li>
               <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-              <span>O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India, 122002</span>
+              <span>O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India,
+                122002</span>
             </li>
             <li>
               <i class="fa-solid fa-phone" aria-hidden="true"></i>
@@ -54,10 +56,14 @@
           <h2 class="footer-heading" id="footer-technology-solutions-heading">Technology Solutions</h2>
           <ul class="footer-nav">
             <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">App Development</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce Solutions</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">Whatsapp Integration</a></li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">App Development</a>
+            </li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a>
+            </li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce Solutions</a>
+            </li>
+            <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">Whatsapp
+                Integration</a></li>
             <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">CRM Development</a></li>
           </ul>
         </section>
@@ -65,20 +71,29 @@
         <section class="footer-column" aria-labelledby="footer-our-industries-heading">
           <h2 class="footer-heading" id="footer-our-industries-heading">Our Industries</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real State &amp; Construction</a></li>
-            <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufactturing</a></li>
+            <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}">Ecommerce &amp; Multivendor</a></li>
+            <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real Estate &amp;
+                Construction</a></li>
+            <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufacturing</a></li>
             <li><a href="{{ route('industries.show', 'personal-beauty-care') }}">Personal Beauty Care</a></li>
             <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}">Medical &amp; Healthcare</a></li>
             <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil &amp; Gas</a></li>
             <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
+            <li><a href="{{ route('industries.index') }}" style="color: #25d366; font-weight: 700;">View All Industries
+                &rarr;</a></li>
           </ul>
 
           <div class="footer-socials" aria-label="Social media">
-            <a href="#" class="footer-social-icon is-pinterest" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p" aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-instagram" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-youtube" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-pinterest" aria-label="Pinterest"><i
+                class="fa-brands fa-pinterest-p" aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"
+                aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"
+                aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"
+                aria-hidden="true"></i></a>
+            <a href="#" class="footer-social-icon is-youtube" aria-label="YouTube"><i class="fa-brands fa-youtube"
+                aria-hidden="true"></i></a>
           </div>
         </section>
 
