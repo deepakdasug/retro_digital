@@ -1933,6 +1933,14 @@
   @endphp
 
   @if($recentPosts->isNotEmpty())
+  @php
+      $blogImageFallbacks = [
+          asset('assets/images/it-asset-management.jpg'),
+          asset('assets/images/data-center-decommissioning.jpg'),
+          asset('assets/images/it-data-destruction.jpg'),
+      ];
+      $usedBlogImages = [];
+  @endphp
   <section class="home-blog-section" id="blog">
     <div class="bento-container">
       <div class="bento-header" data-anim="down">
@@ -1953,10 +1961,16 @@
           @php
             $wordCount = str_word_count(strip_tags($post->content ?? ''));
             $readTime = max(3, ceil($wordCount / 200));
+            $blogImageFallback = $blogImageFallbacks[$loop->index % count($blogImageFallbacks)];
+            $blogImage = $post->image_url;
+            if (empty($post->image_path) || in_array($blogImage, $usedBlogImages, true)) {
+                $blogImage = $blogImageFallback;
+            }
+            $usedBlogImages[] = $blogImage;
           @endphp
           <article class="home-blog-card-pro" data-anim="up">
             <div class="hbcp-img-wrap">
-              <img src="{{ $post->image_url }}" alt="{{ $post->title }}" loading="lazy" onerror="this.onerror=null; this.src='{{ asset('assets/images/tech-development/web-development.jpg') }}';">
+              <img src="{{ $blogImage }}" alt="{{ $post->title }}" loading="lazy" onerror="this.onerror=null; this.src='{{ $blogImageFallback }}';">
               <span class="hbcp-read-badge"><i class="fa-regular fa-clock"></i> {{ $readTime }} min read</span>
             </div>
             <div class="hbcp-body">
