@@ -250,35 +250,6 @@ function initRetrotech() {
   });
 
   /* =========================================================================
-     4. WHATSAPP FLOATING BUTTON & AUTO GREETING BUBBLE
-     ========================================================================= */
-  const whatsappBtn = document.getElementById('whatsappBtn');
-  const waBubble = document.getElementById('waBubble');
-  const waCloseBubble = document.getElementById('waCloseBubble');
-
-  if (whatsappBtn && waBubble) {
-    whatsappBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      waBubble.classList.toggle('active');
-    });
-
-    if (waCloseBubble) {
-      waCloseBubble.addEventListener('click', (e) => {
-        e.stopPropagation();
-        waBubble.classList.remove('active');
-      });
-    }
-
-    
-
-    document.addEventListener('click', (e) => {
-      if (!waBubble.contains(e.target) && !whatsappBtn.contains(e.target)) {
-        waBubble.classList.remove('active');
-      }
-    });
-  }
-
-  /* =========================================================================
      5. MOBILE NAVIGATION DRAWER
      ========================================================================= */
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
