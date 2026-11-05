@@ -8,9 +8,10 @@ function initRetrotech() {
   const lenis = window.Lenis
     ? new window.Lenis({
         autoRaf: true,
-        lerp: 0.075,
-        wheelMultiplier: 0.8,
-        syncTouch: true,
+        lerp: 0.1,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        syncTouch: false,
         anchors: false,
         allowNestedScroll: true,
         stopInertiaOnNavigate: true
@@ -106,6 +107,7 @@ function initRetrotech() {
      2. VIDEO SCROLL DOCKING ENGINE
      ========================================================================= */
   const videoContainer = document.getElementById('videoContainer');
+  const videoDarkOverlay = document.getElementById('videoDarkOverlay');
   const videoDockSlot = document.getElementById('videoDockSlot');
   const heroContent = document.querySelector('.hero-content');
   const siteHeader = document.getElementById('siteHeader');
@@ -186,6 +188,22 @@ function initRetrotech() {
       heroContent.style.opacity = heroOpacity;
       heroContent.style.transform = `translateY(${-p * 60}px)`;
       heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
+    }
+
+    if (videoDarkOverlay) {
+      videoDarkOverlay.style.opacity = Math.max(0, 1 - p * 2.2);
+    }
+
+    /* Parallax depth on About Culture card image during scroll */
+    const splitCanvas = document.querySelector('.about-split-canvas');
+    const cultureImg = document.querySelector('.acc-bg-image-wrap img');
+    if (splitCanvas && cultureImg) {
+      const rect = splitCanvas.getBoundingClientRect();
+      if (rect.top < windowH && rect.bottom > 0) {
+        const progress = (windowH - rect.top) / (windowH + rect.height);
+        const shiftY = (progress - 0.5) * 44;
+        cultureImg.style.transform = `translate3d(0, ${shiftY.toFixed(1)}px, 0) scale(1.08)`;
+      }
     }
 
     if (siteHeader) {
@@ -342,10 +360,162 @@ function initRetrotech() {
   });
 
   /* =========================================================================
-     6. SERVICES SECTION SCROLL ANIMATION
+     5.5 ABOUT SECTION (SPLIT CANVAS) ON-SCROLL REVEAL & STAGGER
      ========================================================================= */
-  const serviceCards = document.querySelectorAll('[data-service-card]');
+  const aboutSplitCanvas = document.querySelector('.about-split-canvas');
+  const aboutCultureCard = document.querySelector('.about-culture-card');
+  const aboutPillarTiles = document.querySelectorAll('.pillar-tile-item');
 
+  if (aboutSplitCanvas && 'IntersectionObserver' in window) {
+    const aboutObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (aboutCultureCard) {
+            aboutCultureCard.classList.add('is-revealed');
+          }
+          aboutPillarTiles.forEach((tile, idx) => {
+            setTimeout(() => {
+              tile.classList.add('is-revealed');
+            }, 60 + idx * 85);
+          });
+          aboutObserver.unobserve(entry.target);
+        }
+      });
+    }, { root: null, rootMargin: '0px 0px -40px 0px', threshold: 0.12 });
+
+    aboutObserver.observe(aboutSplitCanvas);
+  } else if (aboutCultureCard) {
+    aboutCultureCard.classList.add('is-revealed');
+    aboutPillarTiles.forEach(tile => tile.classList.add('is-revealed'));
+  }
+
+  /* =========================================================================
+     6. BENTO SERVICES SECTION: 2026+ NEXT-GEN SPATIAL & KINETIC ENGINE
+     ========================================================================= */
+  const bentoSection = document.querySelector('.bento-services-section#services');
+  if (bentoSection) {
+    bentoSection.classList.add('bento-scroll-enabled');
+    const bentoElements = bentoSection.querySelectorAll('[data-bento-scroll]');
+    const bentoCards = bentoSection.querySelectorAll('[data-bento-card]');
+
+    /* 6.1 Native Off-Thread Intersection Observer (Zero-Jank Reveal) */
+    if ('IntersectionObserver' in window) {
+      const bentoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-active');
+            entry.target.classList.remove('is-above', 'is-below');
+            bentoObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.1
+      });
+
+      bentoElements.forEach((el) => bentoObserver.observe(el));
+    } else {
+      bentoElements.forEach((el) => el.classList.add('is-active'));
+    }
+
+    /* 6.2 Dynamic Cursor Spotlight & 3D Spatial Tilt Physics */
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      bentoCards.forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+
+          // Subtle 3D Gyroscopic Perspective Tilt
+          const rotX = (((y / rect.height) - 0.5) * -6).toFixed(2);
+          const rotY = (((x / rect.width) - 0.5) * 6).toFixed(2);
+          card.style.setProperty('--rot-x', `${rotX}deg`);
+          card.style.setProperty('--rot-y', `${rotY}deg`);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.setProperty('--rot-x', '0deg');
+          card.style.setProperty('--rot-y', '0deg');
+        });
+      });
+    }
+
+    /* 6.3 Interactive IDE Code Studio Tab Switcher (Card 1) */
+    const tabButtons = bentoSection.querySelectorAll('.btw-tab');
+    const tabPanes = bentoSection.querySelectorAll('.btw-tab-pane');
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+        tabButtons.forEach(b => b.classList.toggle('active', b === btn));
+        tabPanes.forEach(p => p.classList.toggle('active', p.id === `pane-${targetTab}`));
+      });
+    });
+
+    /* 6.3.1 Live Interactive Latency Benchmark Simulator */
+    const runBenchBtn = bentoSection.querySelector('#btwRunBench');
+    const runBenchOut = bentoSection.querySelector('#btwRunOut');
+    if (runBenchBtn && runBenchOut) {
+      runBenchBtn.addEventListener('click', () => {
+        runBenchBtn.disabled = true;
+        const icon = runBenchBtn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-spinner fa-spin';
+        runBenchOut.textContent = 'Pinging Edge Network...';
+        runBenchOut.style.color = '#38bdf8';
+
+        setTimeout(() => {
+          const latency = Math.floor(Math.random() * 16) + 22; // 22ms - 37ms
+          runBenchOut.innerHTML = `⚡ Benchmark: <strong>${latency}ms</strong> edge TTFB (99.98% SLA Verified)`;
+          runBenchOut.style.color = '#22c55e';
+          if (icon) icon.className = 'fa-solid fa-check';
+          setTimeout(() => {
+            runBenchBtn.disabled = false;
+            if (icon) icon.className = 'fa-solid fa-play';
+          }, 2500);
+        }, 500);
+      });
+    }
+
+    /* 6.4 Real-Time Oscilloscope Wave Synthesizer (Card 3) */
+    const wavePath = bentoSection.querySelector('.bst-wave-path');
+    if (wavePath) {
+      let phase = 0;
+      let waveRafId = null;
+
+      const animateWave = () => {
+        phase += 0.045;
+        const p1 = 24 + Math.sin(phase) * 14;
+        const p2 = 24 + Math.cos(phase * 1.2) * 12;
+        const p3 = 24 + Math.sin(phase * 0.8 + 1) * 14;
+        const d = `M0,24 Q37.5,${p1.toFixed(1)} 75,24 T150,${p2.toFixed(1)} T225,${p3.toFixed(1)} T300,24`;
+        wavePath.setAttribute('d', d);
+        waveRafId = requestAnimationFrame(animateWave);
+      };
+
+      // Only run when section is intersecting
+      if ('IntersectionObserver' in window) {
+        const waveObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (!waveRafId) waveRafId = requestAnimationFrame(animateWave);
+            } else if (waveRafId) {
+              cancelAnimationFrame(waveRafId);
+              waveRafId = null;
+            }
+          });
+        }, { threshold: 0.1 });
+        waveObserver.observe(bentoSection);
+      } else {
+        waveRafId = requestAnimationFrame(animateWave);
+      }
+    }
+  }
+
+  const serviceCards = document.querySelectorAll('[data-service-card]');
   if (serviceCards.length > 0 && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -401,6 +571,325 @@ function initRetrotech() {
     return `${formattedNumber}${suffix}`;
   };
 
+  /* =========================================================================
+     DIRECTIONAL KINETIC ON-SCROLL REVEAL ENGINE (PERFORMANCE-OPTIMIZED)
+     ========================================================================= */
+  const animElements = document.querySelectorAll('[data-anim]');
+  if (animElements.length > 0) {
+    if ('IntersectionObserver' in window) {
+      const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-inview', 'is-animated');
+            entry.target.classList.remove('is-above', 'is-below');
+            animObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08
+      });
+
+      animElements.forEach((el) => {
+        // Elements inside sliders should reveal immediately to prevent transform collisions
+        if (el.closest('.why-slider-track') || el.closest('.ind-slider-track')) {
+          el.classList.add('is-inview', 'is-animated');
+        } else {
+          animObserver.observe(el);
+        }
+      });
+    } else {
+      animElements.forEach(el => el.classList.add('is-inview', 'is-animated'));
+    }
+  }
+
+  /* =========================================================================
+     8.4 BENTO CAPABILITY DISCIPLINE SWITCHER
+     ========================================================================= */
+  const bentoFilterBtns = document.querySelectorAll('.bdn-btn');
+  const bentoCards = document.querySelectorAll('.bento-grid .bento-card');
+
+  if (bentoFilterBtns.length > 0 && bentoCards.length > 0) {
+    bentoFilterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-bento-filter') || 'all';
+        bentoFilterBtns.forEach(b => b.classList.toggle('active', b === btn));
+
+        bentoCards.forEach((card) => {
+          const cat = card.getAttribute('data-bento-cat') || 'all';
+          if (filter === 'all' || cat === filter || cat === 'all') {
+            card.style.display = '';
+            card.style.opacity = '1';
+            card.style.transform = 'none';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  /* =========================================================================
+     8.45 WHY CHOOSE US INTERACTIVE SLIDE CAROUSEL
+     ========================================================================= */
+  const whyViewport = document.getElementById('whySliderViewport');
+  const whyTrack = document.getElementById('whySliderTrack');
+  const whyPrevBtn = document.getElementById('whyPrevBtn');
+  const whyNextBtn = document.getElementById('whyNextBtn');
+  const whyActivePage = document.getElementById('whyActivePage');
+  const whyTotalPages = document.getElementById('whyTotalPages');
+  const whyDots = document.querySelectorAll('#whyNavDots .why-dot');
+  const whyCards = document.querySelectorAll('.why-slider-track .why-matrix-card');
+
+  if (whyViewport && whyTrack && whyCards.length > 0) {
+    let currentWhySlide = 0;
+
+    const getCardsPerView = () => {
+      if (window.innerWidth <= 640) return 1;
+      if (window.innerWidth <= 1024) return 2;
+      return 3;
+    };
+
+    const updateWhyCarousel = () => {
+      const cardsPerView = getCardsPerView();
+      const maxSlide = Math.max(0, Math.ceil(whyCards.length / cardsPerView) - 1);
+      if (currentWhySlide > maxSlide) currentWhySlide = maxSlide;
+
+      const card = whyCards[0];
+      if (!card) return;
+      const cardWidth = card.getBoundingClientRect().width;
+      const gap = 24; // 1.5rem
+      const slideDistance = (cardWidth + gap) * cardsPerView;
+
+      whyTrack.style.transform = `translateX(-${currentWhySlide * slideDistance}px)`;
+
+      if (whyActivePage) whyActivePage.textContent = currentWhySlide + 1;
+      if (whyTotalPages) whyTotalPages.textContent = maxSlide + 1;
+
+      if (whyPrevBtn) whyPrevBtn.disabled = currentWhySlide === 0;
+      if (whyNextBtn) whyNextBtn.disabled = currentWhySlide >= maxSlide;
+
+      if (whyDots.length > 0) {
+        whyDots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === currentWhySlide);
+          dot.style.display = idx <= maxSlide ? '' : 'none';
+        });
+      }
+    };
+
+    if (whyPrevBtn) {
+      whyPrevBtn.addEventListener('click', () => {
+        if (currentWhySlide > 0) {
+          currentWhySlide--;
+          updateWhyCarousel();
+        }
+      });
+    }
+
+    if (whyNextBtn) {
+      whyNextBtn.addEventListener('click', () => {
+        const cardsPerView = getCardsPerView();
+        const maxSlide = Math.max(0, Math.ceil(whyCards.length / cardsPerView) - 1);
+        if (currentWhySlide < maxSlide) {
+          currentWhySlide++;
+          updateWhyCarousel();
+        }
+      });
+    }
+
+    if (whyDots.length > 0) {
+      whyDots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const targetIndex = parseInt(dot.getAttribute('data-index') || '0', 10);
+          currentWhySlide = targetIndex;
+          updateWhyCarousel();
+        });
+      });
+    }
+
+    // Touch Swipe Support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    whyViewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    whyViewport.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0 && whyNextBtn && !whyNextBtn.disabled) {
+          currentWhySlide++;
+          updateWhyCarousel();
+        } else if (diff < 0 && whyPrevBtn && !whyPrevBtn.disabled) {
+          currentWhySlide--;
+          updateWhyCarousel();
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateWhyCarousel);
+    updateWhyCarousel();
+  }
+
+  /* =========================================================================
+     8.5 INDUSTRIES SLIDE CAROUSEL & SEGMENTED FILTER ENGINE
+     ========================================================================= */
+  const indViewport = document.getElementById('indSliderViewport');
+  const indTrack = document.getElementById('indSliderTrack');
+  const indPrevBtn = document.getElementById('indPrevBtn');
+  const indNextBtn = document.getElementById('indNextBtn');
+  const indDots = document.querySelectorAll('#indNavDots .ind-dot');
+  const industryCards = document.querySelectorAll('.industry-card-pro');
+  const industryFilterButtons = document.querySelectorAll('.ifb-btn');
+
+  if (indViewport && indTrack && industryCards.length > 0) {
+    let currentIndSlide = 0;
+    let currentFilter = 'all';
+
+    const getIndCardsPerView = () => {
+      if (window.innerWidth <= 640) return 1;
+      if (window.innerWidth <= 1024) return 2;
+      return 3;
+    };
+
+    const getVisibleCards = () => {
+      return Array.from(industryCards).filter(c => !c.classList.contains('is-hidden'));
+    };
+
+    const updateIndCarousel = () => {
+      const visibleCards = getVisibleCards();
+      const cardsPerView = getIndCardsPerView();
+      const maxSlide = Math.max(0, Math.ceil(visibleCards.length / cardsPerView) - 1);
+      if (currentIndSlide > maxSlide) currentIndSlide = maxSlide;
+
+      const card = visibleCards[0] || industryCards[0];
+      if (!card) return;
+      const cardWidth = card.getBoundingClientRect().width;
+      const gap = 24; // 1.5rem
+      const slideDistance = (cardWidth + gap) * cardsPerView;
+
+      indTrack.style.transform = `translateX(-${currentIndSlide * slideDistance}px)`;
+
+      if (indPrevBtn) indPrevBtn.disabled = currentIndSlide === 0;
+      if (indNextBtn) indNextBtn.disabled = currentIndSlide >= maxSlide;
+
+      if (indDots.length > 0) {
+        indDots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === currentIndSlide);
+          dot.style.display = idx <= maxSlide ? '' : 'none';
+        });
+      }
+    };
+
+    if (indPrevBtn) {
+      indPrevBtn.addEventListener('click', () => {
+        if (currentIndSlide > 0) {
+          currentIndSlide--;
+          updateIndCarousel();
+        }
+      });
+    }
+
+    if (indNextBtn) {
+      indNextBtn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const cardsPerView = getIndCardsPerView();
+        const maxSlide = Math.max(0, Math.ceil(visibleCards.length / cardsPerView) - 1);
+        if (currentIndSlide < maxSlide) {
+          currentIndSlide++;
+          updateIndCarousel();
+        }
+      });
+    }
+
+    if (indDots.length > 0) {
+      indDots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const targetIndex = parseInt(dot.getAttribute('data-index') || '0', 10);
+          currentIndSlide = targetIndex;
+          updateIndCarousel();
+        });
+      });
+    }
+
+    if (industryFilterButtons.length > 0) {
+      industryFilterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentFilter = btn.getAttribute('data-filter') || 'all';
+          industryFilterButtons.forEach(b => b.classList.toggle('active', b === btn));
+
+          industryCards.forEach((card) => {
+            const cat = card.getAttribute('data-industry-cat') || '';
+            if (currentFilter === 'all' || cat === currentFilter) {
+              card.classList.remove('is-hidden');
+              card.classList.add('is-inview', 'is-animated');
+            } else {
+              card.classList.add('is-hidden');
+            }
+          });
+
+          currentIndSlide = 0;
+          updateIndCarousel();
+        });
+      });
+    }
+
+    // Touch Swipe Support for Industries
+    let indTouchStartX = 0;
+    let indTouchEndX = 0;
+
+    indViewport.addEventListener('touchstart', (e) => {
+      indTouchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    indViewport.addEventListener('touchend', (e) => {
+      indTouchEndX = e.changedTouches[0].screenX;
+      const diff = indTouchStartX - indTouchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0 && indNextBtn && !indNextBtn.disabled) {
+          currentIndSlide++;
+          updateIndCarousel();
+        } else if (diff < 0 && indPrevBtn && !indPrevBtn.disabled) {
+          currentIndSlide--;
+          updateIndCarousel();
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateIndCarousel);
+    updateIndCarousel();
+  }
+
+  /* =========================================================================
+     8.6 INTERACTIVE MID-CTA SCOPE & SPRINT ESTIMATOR
+     ========================================================================= */
+  const mccPills = document.querySelectorAll('.mcc-pill');
+  const mccOutType = document.getElementById('mccOutType');
+  const mccOutSprints = document.getElementById('mccOutSprints');
+  const mccOutTeam = document.getElementById('mccOutTeam');
+  const mccWaLink = document.getElementById('mccWaLink');
+
+  if (mccPills.length > 0 && mccOutType && mccOutSprints && mccOutTeam && mccWaLink) {
+    mccPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        mccPills.forEach(p => p.classList.toggle('active', p === pill));
+        const type = pill.getAttribute('data-type') || 'Web Platform';
+        const sprints = pill.getAttribute('data-sprints') || '2–4 Sprints';
+        const team = pill.getAttribute('data-team') || 'Senior Full-Stack Lead + UI/UX';
+
+        mccOutType.textContent = type;
+        mccOutSprints.textContent = sprints;
+        mccOutTeam.textContent = team;
+
+        const waMsg = `Hi Retrotech, I used your Project Estimator for a ${type} project (${sprints}). Dedicated cohort: ${team}. Let's discuss next steps.`;
+        mccWaLink.href = `https://wa.me/919973960072?text=${encodeURIComponent(waMsg)}`;
+      });
+    });
+  }
+
   if ('IntersectionObserver' in window) {
     const statsCounterObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -452,6 +941,119 @@ function initRetrotech() {
       const decimals = Number(numberElement.dataset.decimals || 0);
       const suffix = numberElement.dataset.suffix || '';
       numberElement.textContent = formatStatNumber(target, decimals, suffix);
+    });
+  }
+
+  /* =========================================================================
+     14. VIEWPORT SCROLL PROGRESS NEON BAR (THROTTLED RAF)
+     ========================================================================= */
+  const scrollProgressBar = document.getElementById('scrollProgressBar');
+  if (scrollProgressBar) {
+    let progressRaf = null;
+    let docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    }, { passive: true });
+
+    const updateProgressBar = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const progress = (scrollY / docHeight) * 100;
+      scrollProgressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      progressRaf = null;
+    };
+
+    const handleScrollProgress = () => {
+      if (!progressRaf) {
+        progressRaf = requestAnimationFrame(updateProgressBar);
+      }
+    };
+    window.addEventListener('scroll', handleScrollProgress, { passive: true });
+    updateProgressBar();
+  }
+
+  /* =========================================================================
+     15. REAL-TIME FAQ LIVE SEARCH
+     ========================================================================= */
+  const faqSearchInput = document.getElementById('faqSearchInput');
+  const faqSearchClear = document.getElementById('faqSearchClear');
+  const faqMatchCount = document.getElementById('faqMatchCount');
+  const faqSearchEmpty = document.getElementById('faqSearchEmpty');
+  const faqSearchTerm = document.getElementById('faqSearchTerm');
+  const faqItems = document.querySelectorAll('.faq-accordion-group .faq-acc-item');
+
+  if (faqSearchInput && faqItems.length > 0) {
+    const filterFaqs = () => {
+      const query = faqSearchInput.value.trim().toLowerCase();
+      let matchCount = 0;
+
+      if (faqSearchClear) {
+        faqSearchClear.style.display = query.length > 0 ? 'inline-flex' : 'none';
+      }
+
+      faqItems.forEach((item) => {
+        const text = (item.textContent || '').toLowerCase();
+        const isMatch = query === '' || text.includes(query);
+
+        if (isMatch) {
+          item.style.display = '';
+          matchCount++;
+          if (query.length > 1) {
+            item.setAttribute('open', '');
+          }
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (faqMatchCount) {
+        faqMatchCount.textContent = matchCount;
+      }
+
+      if (faqSearchEmpty) {
+        if (matchCount === 0 && query.length > 0) {
+          faqSearchEmpty.style.display = 'block';
+          if (faqSearchTerm) faqSearchTerm.textContent = faqSearchInput.value;
+        } else {
+          faqSearchEmpty.style.display = 'none';
+        }
+      }
+    };
+
+    faqSearchInput.addEventListener('input', filterFaqs);
+
+    if (faqSearchClear) {
+      faqSearchClear.addEventListener('click', () => {
+        faqSearchInput.value = '';
+        filterFaqs();
+        faqSearchInput.focus();
+      });
+    }
+  }
+
+  /* =========================================================================
+     16. INTERACTIVE CONTACT BUDGET CHIPS
+     ========================================================================= */
+  const budgetChips = document.querySelectorAll('#contactBudgetChips .budget-chip');
+  const contactMsg = document.getElementById('contactMessage');
+
+  if (budgetChips.length > 0 && contactMsg) {
+    budgetChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const isAlreadyActive = chip.classList.contains('active');
+        budgetChips.forEach(c => c.classList.remove('active'));
+
+        let currentVal = contactMsg.value;
+        currentVal = currentVal.replace(/^\[Budget:\s*[^\]]+\]\r?\n?/i, '');
+
+        if (!isAlreadyActive) {
+          chip.classList.add('active');
+          const budget = chip.getAttribute('data-budget') || chip.textContent.trim();
+          contactMsg.value = `[Budget: ${budget}]\n` + currentVal;
+        } else {
+          contactMsg.value = currentVal;
+        }
+      });
     });
   }
 }

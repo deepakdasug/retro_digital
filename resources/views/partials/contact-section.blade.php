@@ -6,7 +6,13 @@
     <div class="contact-inc-container">
 
         {{-- Left: Concise Info Card --}}
-        <div class="contact-inc-info-card">
+        <div class="contact-inc-info-card" data-anim="left">
+            <div class="contact-live-status-pill">
+                <span class="clsp-ping"><span class="clsp-ping-dot"></span></span>
+                <span class="clsp-text">Engineering Desk: <strong>Available for New Sprints</strong></span>
+                <span class="clsp-sla"><i class="fa-solid fa-clock"></i> &lt; 2h Response</span>
+            </div>
+
             <span class="contact-inc-badge">
                 <span class="contact-inc-dot" aria-hidden="true"></span>
                 Get in Touch
@@ -47,7 +53,7 @@
         </div>
 
         {{-- Right: Compact 2-Column Form Card --}}
-        <div class="contact-inc-form-card">
+        <div class="contact-inc-form-card" data-anim="right">
             <div class="contact-inc-form-head">
                 <h2 class="contact-inc-form-title">Let's Do Great Work Together</h2>
                 <p class="contact-inc-form-sub">Fill out the quick details below and our team will get back to you promptly.</p>
@@ -109,6 +115,17 @@
                     <label class="contact-inc-label" for="contactUrl">Website / Company (Optional)</label>
                     <input type="url" name="website_url" id="contactUrl" class="contact-inc-input" placeholder="https://yourcompany.com" value="{{ old('website_url') }}" autocomplete="url">
                     @error('website_url') <span class="contact-inc-error">{{ $message }}</span> @enderror
+                </div>
+
+                {{-- Interactive Project Budget Chips --}}
+                <div class="contact-inc-group contact-inc-col-full">
+                    <label class="contact-inc-label">Estimated Project Budget (Optional)</label>
+                    <div class="contact-budget-chips" id="contactBudgetChips">
+                        <button type="button" class="budget-chip" data-budget="< $5,000">&lt; $5,000 (MVP / Sprint)</button>
+                        <button type="button" class="budget-chip" data-budget="$5,000 - $15,000">$5,000 - $15,000 (Growth)</button>
+                        <button type="button" class="budget-chip" data-budget="$15,000 - $35,000">$15,000 - $35,000 (Custom SaaS)</button>
+                        <button type="button" class="budget-chip" data-budget="$35,000+ Enterprise">$35,000+ (Enterprise Tier)</button>
+                    </div>
                 </div>
 
                 {{-- Row 4: Message (Full Width / 2 Columns) --}}

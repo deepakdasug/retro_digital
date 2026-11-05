@@ -31,6 +31,7 @@
 </head>
 
 <body class="{{ request()->routeIs('home') ? 'home-page' : 'inner-page' }}">
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
 
   @if (request()->routeIs('home'))
     @include('partials.hero-video')
