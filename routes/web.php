@@ -124,6 +124,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit')->middleware('permission:services.edit');
     Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update')->middleware('permission:services.edit');
     Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy')->middleware('permission:services.delete');
+    Route::get('/admin/tech-developments/{techDevelopment}/edit', [AdminWebPageController::class, 'editTechDevelopment'])->name('admin.tech-developments.edit')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
+    Route::put('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'updateTechDevelopment'])->name('admin.tech-developments.update')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
     Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy')->middleware('permission:tech_developments.delete');
 
     // Roles & Permissions Management CRUD

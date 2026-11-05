@@ -39,6 +39,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'services.view',
             'services.edit',
             'services.delete',
+            'tech_developments.view',
+            'tech_developments.create',
+            'tech_developments.edit',
             'tech_developments.delete',
 
             // Testimonials (CRUD)
@@ -90,6 +93,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'webpages.edit',
             'services.view',
             'services.edit',
+            'tech_developments.view',
+            'tech_developments.edit',
             'testimonials.view',
             'testimonials.create',
             'testimonials.edit',

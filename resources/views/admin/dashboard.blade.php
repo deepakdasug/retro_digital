@@ -443,6 +443,12 @@
                         <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
                       </a>
                       @endcan
+                    @elseif($page->model_type === 'tech-development')
+                      @if(auth()->user()->can('tech_developments.edit') || auth()->user()->can('services.edit') || auth()->user()->can('webpages.edit') || auth()->user()->is_admin)
+                      <a href="{{ route('admin.tech-developments.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit tech development">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
+                      </a>
+                      @endif
                     @endif
 
                     @if($page->model_type === 'web-page')
