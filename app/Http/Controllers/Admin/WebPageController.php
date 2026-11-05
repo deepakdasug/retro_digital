@@ -187,6 +187,122 @@ class WebPageController extends Controller
         return redirect()->route('admin.dashboard', ['tab' => 'webpage'])->with('success', "Tech development '{$title}' deleted successfully.");
     }
 
+    public function editTechDevelopment($techDevelopment)
+    {
+        $techModel = is_numeric($techDevelopment)
+            ? \App\Models\TechDevelopment::with('sections')->findOrFail($techDevelopment)
+            : ($techDevelopment instanceof \App\Models\TechDevelopment
+                ? $techDevelopment->load('sections')
+                : \App\Models\TechDevelopment::with('sections')->where('slug', $techDevelopment)->firstOrFail());
+
+        return view('admin.tech-developments.edit', ['techDevelopment' => $techModel]);
+    }
+
+    public function updateTechDevelopment(Request $request, $techDevelopment)
+    {
+        $techModel = is_numeric($techDevelopment)
+            ? \App\Models\TechDevelopment::findOrFail($techDevelopment)
+            : ($techDevelopment instanceof \App\Models\TechDevelopment
+                ? $techDevelopment
+                : \App\Models\TechDevelopment::where('slug', $techDevelopment)->firstOrFail());
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:tech_developments,slug,' . $techModel->id,
+            'hero_title' => 'nullable|string|max:255',
+            'hero_description' => 'nullable|string|max:2000',
+            'short_description' => 'nullable|string|max:2000',
+            'description' => 'nullable|string',
+            'hero_image' => 'nullable|string|max:1000',
+            'hero_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg,gif|max:10240',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:2000',
+            'is_published' => 'nullable',
+            'sections' => 'nullable|array',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $slug = $request->filled('slug') ? Str::slug($request->slug) : Str::slug($request->name);
+            $originalSlug = $slug;
+            $count = 1;
+            while (\App\Models\TechDevelopment::where('slug', $slug)->where('id', '!=', $techModel->id)->exists()) {
+                $slug = $originalSlug . '-' . $count;
+                $count++;
+            }
+
+            $heroImagePath = $request->hero_image ?: $techModel->hero_image;
+            if ($request->hasFile('hero_image_file')) {
+                $path = $request->file('hero_image_file')->store('tech-development/hero', 'public');
+                $heroImagePath = 'storage/' . $path;
+            }
+
+            $techModel->update([
+                'name' => $request->name,
+                'slug' => $slug,
+                'hero_title' => $request->hero_title ?: $request->name,
+                'hero_description' => $request->hero_description ?: $request->short_description,
+                'short_description' => $request->short_description,
+                'description' => $request->description ?: $request->short_description,
+                'hero_image' => $heroImagePath,
+                'meta_title' => $request->meta_title ?: ($request->name . ' - Retrotech Digital'),
+                'meta_description' => $request->meta_description ?: $request->short_description,
+                'is_published' => $request->has('is_published') ? (bool) $request->is_published : true,
+            ]);
+
+            // Update Sections
+            if ($request->has('sections') && is_array($request->sections)) {
+                foreach ($request->sections as $secKey => $secData) {
+                    $sec = null;
+                    if (is_numeric($secKey)) {
+                        $sec = \App\Models\TechDevelopmentSection::where('tech_development_id', $techModel->id)->where('id', $secKey)->first();
+                    }
+                    if (!$sec && !empty($secData['section_type'])) {
+                        $sec = \App\Models\TechDevelopmentSection::where('tech_development_id', $techModel->id)->where('section_type', $secData['section_type'])->first();
+                    }
+
+                    if ($sec) {
+                        if (isset($secData['title'])) {
+                            $sec->title = $secData['title'];
+                        }
+                        if (isset($secData['description'])) {
+                            $sec->description = $secData['description'];
+                        }
+                        if (isset($secData['is_visible'])) {
+                            $sec->is_visible = (bool) $secData['is_visible'];
+                        }
+
+                        $content = $sec->content ?: [];
+                        if (isset($secData['content']) && is_array($secData['content'])) {
+                            $incomingContent = $secData['content'];
+
+                            // Filter empty items from repeaters if present
+                            if (isset($incomingContent['items']) && is_array($incomingContent['items'])) {
+                                $incomingContent['items'] = array_values(array_filter($incomingContent['items'], function ($item) {
+                                    if (!is_array($item)) return false;
+                                    return !empty(trim($item['title'] ?? '')) || !empty(trim($item['question'] ?? '')) || !empty(trim($item['value'] ?? ''));
+                                }));
+                            }
+
+                            $content = array_merge($content, $incomingContent);
+                        }
+
+                        $sec->content = $content;
+                        $sec->save();
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.dashboard', ['tab' => 'webpage'])->with('success', "Tech development '{$techModel->name}' updated successfully.");
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Error updating tech development: ' . $e->getMessage());
+        }
+    }
+
     public function editService($service)
     {
         $serviceModel = is_numeric($service) ? \App\Models\Service::findOrFail($service) : ($service instanceof \App\Models\Service ? $service : \App\Models\Service::where('slug', $service)->firstOrFail());
