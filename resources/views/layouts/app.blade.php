@@ -15,7 +15,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -23,34 +25,36 @@
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
+  <link rel="stylesheet"
+    href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
   @unless (request()->routeIs('admin.*'))
-    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
   @endunless
   @stack('styles')
 </head>
 
 <body class="{{ request()->routeIs('home') ? 'home-page' : 'inner-page' }}">
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
 
   @if (request()->routeIs('home'))
-    @include('partials.hero-video')
+  @include('partials.hero-video')
   @endif
   @unless (request()->routeIs('admin.*'))
-    @include('partials.header')
-    @include('partials.mobile-drawer')
+  @include('partials.header')
+  @include('partials.mobile-drawer')
   @endunless
 
   @yield('content')
 
   @unless (request()->routeIs('admin.*'))
-    @include('partials.contact-section')
-    @include('partials.footer')
-    @include('partials.whatsapp-widget')
+  @include('partials.contact-section')
+  @include('partials.footer')
+  @include('partials.whatsapp-widget')
   @endunless
 
   @unless (request()->routeIs('admin.*'))
-    <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+  <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
+  <script src="{{ asset('js/main.js') }}"></script>
 
   @endunless
 

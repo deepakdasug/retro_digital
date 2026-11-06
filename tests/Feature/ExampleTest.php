@@ -16,5 +16,10 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('Business Made Easy');
+        $response->assertSee('with Retrotech');
+        $response->assertSee('360° IT and Digital Solutions Company');
+        $response->assertSee('Top Six Reasons to Trust Our IT Expertise');
+        $response->assertSee('O-126, O-145, O-146 The Shopping Mall');
     }
 }

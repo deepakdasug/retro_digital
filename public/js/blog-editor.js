@@ -251,7 +251,7 @@
                 }
             },
             toolbar: {
-                shouldNotGroupWhenFull: true,
+                shouldNotGroupWhenFull: false,
                 items: [
                     'undo',
                     'redo',
@@ -273,7 +273,6 @@
                     'pageBreak',
                     'horizontalLine',
                     'specialCharacters',
-                    '-',
                     'heading',
                     'style',
                     '|',

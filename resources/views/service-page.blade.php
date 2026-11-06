@@ -21,6 +21,226 @@
 
   <style>
     .sp-theme-page { font-family: var(--font-family, 'Inter', system-ui, sans-serif); color: #334b39; background-color: #f7fbf7; }
+    .sp-theme-page .sp-glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(226, 242, 229, 0.58)) !important;
+      border: 1px solid rgba(255, 255, 255, 0.96) !important;
+      box-shadow: 0 18px 42px rgba(30, 70, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.98), inset 0 -1px 0 rgba(57, 123, 78, 0.12);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+      backdrop-filter: blur(22px) saturate(165%);
+    }
+    .sp-theme-page .sp-glass-card-dark {
+      background: rgba(22, 48, 31, 0.78) !important;
+      border-color: rgba(255, 255, 255, 0.34) !important;
+      box-shadow: 0 20px 46px rgba(15, 40, 24, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      -webkit-backdrop-filter: blur(22px) saturate(155%);
+      backdrop-filter: blur(22px) saturate(155%);
+    }
+    .sp-theme-page .sp-projects-aurora {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: #eff8f1;
+    }
+    .sp-theme-page .sp-projects-aurora::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: -18%;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 12% 22%, rgba(66, 214, 139, 0.38), transparent 34%),
+        radial-gradient(ellipse at 83% 18%, rgba(90, 196, 205, 0.32), transparent 31%),
+        radial-gradient(ellipse at 72% 82%, rgba(139, 133, 220, 0.24), transparent 36%),
+        radial-gradient(ellipse at 24% 88%, rgba(172, 231, 160, 0.36), transparent 34%);
+      filter: blur(28px);
+    }
+    .sp-theme-page .sp-projects-aurora::after {
+      content: '';
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.3;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    .sp-theme-page .sp-projects-aurora > .container {
+      position: relative;
+      z-index: 1;
+    }
+    .sp-theme-page .sp-project-visual {
+      padding: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 1.65rem;
+      background: linear-gradient(135deg, #5bdc9a, #70cbd0 48%, #9a8bdf);
+      box-shadow: 0 22px 48px rgba(36, 91, 63, 0.24), 0 0 32px rgba(87, 205, 160, 0.24);
+    }
+    .sp-theme-page .sp-project-visual img {
+      border-radius: 1.35rem;
+    }
+    .sp-theme-page .sp-project-panel {
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border-radius: 1.75rem;
+    }
+    .sp-theme-page .sp-hero-visual {
+      perspective: 1100px;
+    }
+    .sp-theme-page .sp-hero-tilt {
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      position: relative;
+      transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 280ms cubic-bezier(0.2, 0.75, 0.25, 1), box-shadow 280ms ease;
+    }
+    .sp-theme-page .sp-hero-tilt.is-tilting {
+      transition-duration: 70ms;
+      box-shadow: 0 30px 65px rgba(25, 83, 45, 0.27);
+    }
+    .sp-theme-page .sp-hero-image {
+      transform: translateZ(18px) scale(1.035);
+      transition: transform 280ms ease;
+    }
+    .sp-theme-page .sp-hero-shade {
+      transform: translateZ(24px);
+    }
+    .sp-theme-page .sp-hero-play {
+      transform: translateZ(54px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sp-theme-page .sp-hero-tilt,
+      .sp-theme-page .sp-hero-image {
+        transition: none;
+      }
+    }
+    .sp-theme-page .sp-neo-section {
+      background: #eaf4eb;
+      border-block: 2px solid #1e3326;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-image {
+      border: 3px solid #1e3326;
+      border-radius: 1rem;
+      box-shadow: 9px 9px 0 #1e3326;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-card {
+      background: #d8eadb;
+      border: 2px solid #1e3326;
+      border-radius: 1rem;
+      box-shadow: 6px 6px 0 #1e3326;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-card:nth-child(2n) {
+      background: #f7fbf7;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-card:nth-child(3n) {
+      background: #c8dfcc;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 #1e3326;
+    }
+    .sp-theme-page .sp-neo-section .sp-neo-number {
+      color: #fff;
+      background: #397b4e;
+      border: 2px solid #1e3326;
+      border-radius: 0.65rem;
+      box-shadow: 3px 3px 0 #1e3326;
+    }
+    .sp-theme-page .sp-clay-section {
+      background: linear-gradient(180deg, #f3f9f3, #eaf4eb);
+    }
+    .sp-theme-page .sp-clay-section .sp-clay-rating {
+      background: linear-gradient(145deg, #ffffff, #e4efe5);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 1.25rem;
+      box-shadow: 10px 10px 24px rgba(41, 79, 49, 0.16), -8px -8px 20px #ffffff, inset 0 2px 3px rgba(255, 255, 255, 0.9);
+    }
+    .sp-theme-page .sp-clay-section .sp-clay-testimonial {
+      background: linear-gradient(145deg, #ffffff, #e4efe5);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 1.75rem;
+      box-shadow: 12px 12px 28px rgba(41, 79, 49, 0.17), -9px -9px 22px #ffffff, inset 0 2px 4px rgba(255, 255, 255, 0.95);
+    }
+    .sp-theme-page .sp-clay-section .sp-clay-testimonial-dark {
+      background: linear-gradient(145deg, #315c3f, #1e3326);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 12px 12px 28px rgba(22, 51, 31, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.16);
+    }
+    .sp-theme-page .sp-knowledge-section {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 12% 18%, rgba(166, 230, 181, 0.62), transparent 34%),
+        radial-gradient(ellipse at 88% 72%, rgba(163, 223, 202, 0.58), transparent 36%),
+        #edf7ee;
+    }
+    .sp-theme-section-content {
+      position: relative;
+      z-index: 1;
+    }
+    .sp-theme-page .sp-knowledge-goo {
+      position: absolute;
+      z-index: 0;
+      inset: -8rem;
+      overflow: hidden;
+      pointer-events: none;
+      filter: url(#sp-knowledge-goo);
+      opacity: 0.95;
+    }
+    .sp-theme-page .sp-knowledge-blob {
+      position: absolute;
+      display: block;
+      border-radius: 50%;
+      background: #9cddb0;
+      animation: knowledgeGooFloat 10s ease-in-out infinite alternate;
+    }
+    .sp-theme-page .sp-knowledge-blob:nth-child(2) {
+      width: 24rem;
+      height: 24rem;
+      top: 2%;
+      left: 2%;
+      animation-delay: -2s;
+    }
+    .sp-theme-page .sp-knowledge-blob:nth-child(3) {
+      width: 21rem;
+      height: 21rem;
+      top: 30%;
+      right: 0;
+      background: #8dd5bd;
+      animation-duration: 13s;
+      animation-delay: -5s;
+    }
+    .sp-theme-page .sp-knowledge-blob:nth-child(4) {
+      width: 19rem;
+      height: 19rem;
+      bottom: -2%;
+      left: 36%;
+      background: #b9df8d;
+      animation-duration: 12s;
+      animation-delay: -4s;
+    }
+    @keyframes knowledgeGooFloat {
+      0% { transform: translate3d(-28px, -18px, 0) scale(0.88); }
+      50% { transform: translate3d(36px, 24px, 0) scale(1.12); }
+      100% { transform: translate3d(-12px, 46px, 0) scale(1); }
+    }
+    .sp-theme-page .sp-knowledge-section .faq-item {
+      border-radius: 1.5rem 1rem 1.75rem 1rem;
+      transition: border-radius 350ms ease, transform 350ms ease, background 350ms ease, box-shadow 350ms ease;
+    }
+    .sp-theme-page .sp-knowledge-section .faq-active {
+      border-radius: 1rem 1.75rem 1rem 1.75rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(225, 243, 229, 0.9)) !important;
+      box-shadow: 0 22px 48px rgba(39, 101, 57, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transform: scale(1.02);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sp-theme-page .sp-knowledge-blob {
+        animation: none;
+      }
+    }
     @keyframes floatSlow { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
     @keyframes floatAlt { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
     @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -123,7 +343,7 @@
             <div class="relative z-20 w-full max-w-[820px]">
 
                 <!-- Badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#e9f7ec] text-[#245d39] border border-[#c9e8d0] text-xs sm:text-sm font-bold uppercase tracking-wider mb-5 shadow-[0_4px_12px_rgba(30,100,50,0.05)]">
+                <div class="sp-glass-card inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#e9f7ec] text-[#245d39] border border-[#c9e8d0] text-xs sm:text-sm font-bold uppercase tracking-wider mb-5 shadow-[0_4px_12px_rgba(30,100,50,0.05)]">
 
                     <span class="relative flex w-2.5 h-2.5 shrink-0">
                         <span class="absolute inset-0 rounded-full bg-[#28bd5b] animate-ping opacity-40"></span>
@@ -142,8 +362,9 @@
                         Grow Your Business With
                     </span>
 
-                    <span class="block mt-1">
-                        <span style="letter-spacing: 0px; color: green; font-size: 35px;">
+                    <!-- Changed mt-1 to mt-0, and matched font size to inherit the clamp() -->
+                    <span class="block mt-0 whitespace-nowrap">
+                        <span style="letter-spacing: 0px; color: green;">
                             {{ $t }}
                         </span>
                     </span>
@@ -231,7 +452,7 @@
 
 
             <!-- ================= RIGHT VISUAL ================= -->
-            <div class="relative w-full max-w-[720px] mx-auto lg:ml-auto lg:mr-0 mt-6 lg:mt-0 pt-4 sm:pt-6 lg:pt-2 pb-8">
+            <div class="sp-hero-visual relative w-full max-w-[720px] mx-auto lg:ml-auto lg:mr-0 mt-6 lg:mt-0 pt-4 sm:pt-6 lg:pt-2 pb-8">
 
                 <div class="absolute top-[8%] right-[-1%] w-[98%] h-[88%] rounded-[36px] bg-gradient-to-br from-[#c7efd1] via-[#b3eac1] to-[#d8f5df] rotate-[-2deg]"></div>
 
@@ -247,7 +468,7 @@
 
 
                 <!-- VISIBILITY FLOATING CARD -->
-                <div class="absolute top-[-10px] right-[-5px] sm:top-[-14px] sm:right-[10px] z-30 flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-white/95 backdrop-blur-md rounded-[18px] shadow-[0_10px_25px_rgba(25,90,48,0.12)] border border-[#e1f0e4] rotate-[-2deg]">
+                <div class="sp-glass-card absolute top-[-10px] right-[-5px] sm:top-[-14px] sm:right-[10px] z-30 flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-white/95 backdrop-blur-md rounded-[18px] shadow-[0_10px_25px_rgba(25,90,48,0.12)] border border-[#e1f0e4] rotate-[-2deg]">
 
                     <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#e4f8e9] flex items-center justify-center text-[#17a04f] shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -265,20 +486,20 @@
 
 
                 <!-- MAIN IMAGE CARD -->
-                <div class="relative z-20 mt-4 sm:mt-5 lg:mt-3 w-full rounded-[28px] sm:rounded-[34px] overflow-hidden border-[5px] sm:border-[6px] border-white bg-[#14271d] shadow-[0_20px_50px_rgba(25,83,45,0.18)] rotate-[0.5deg] hover:rotate-0 transition-transform duration-500">
+                <div class="sp-hero-tilt relative z-20 mt-4 sm:mt-5 lg:mt-3 w-full rounded-[28px] sm:rounded-[34px] overflow-hidden border-[5px] sm:border-[6px] border-white bg-[#14271d] shadow-[0_20px_50px_rgba(25,83,45,0.18)]" data-tilt-card>
 
                     <img
                         src="{{ $service->hero_image ?? 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=900&q=80' }}"
                         alt="{{ $t }} Dashboard"
-                        class="w-full aspect-[1.48/1] object-cover block"
+                        class="sp-hero-image w-full aspect-[1.48/1] object-cover block"
                         loading="eager"
                     >
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#081b10]/35 via-transparent to-[#081b10]/10"></div>
+                    <div class="sp-hero-shade absolute inset-0 bg-gradient-to-t from-[#081b10]/35 via-transparent to-[#081b10]/10"></div>
 
 
                     <!-- Play Button -->
-                    <div class="absolute inset-0 flex items-center justify-center group cursor-pointer">
+                    <div class="sp-hero-play absolute inset-0 flex items-center justify-center group cursor-pointer">
 
                         <div class="absolute w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] rounded-full border border-white/30 bg-white/10 backdrop-blur-[2px] transition-transform duration-500 group-hover:scale-110"></div>
 
@@ -295,7 +516,7 @@
 
 
                 <!-- ROI FLOATING CARD -->
-                <div class="absolute z-30 left-[-20px] sm:left-[-35px] bottom-[-10px] sm:bottom-[-15px] w-[310px] sm:w-[330px] max-w-[calc(100vw-40px)] bg-white/95 backdrop-blur-xl px-4 py-3 sm:px-5 sm:py-4 rounded-[20px] sm:rounded-[22px] shadow-[0_14px_35px_rgba(25,83,45,0.14)] border border-[#e0eee3]">
+                <div class="sp-glass-card absolute z-30 left-[-20px] sm:left-[-35px] bottom-[-10px] sm:bottom-[-15px] w-[310px] sm:w-[330px] max-w-[calc(100vw-40px)] bg-white/95 backdrop-blur-xl px-4 py-3 sm:px-5 sm:py-4 rounded-[20px] sm:rounded-[22px] shadow-[0_14px_35px_rgba(25,83,45,0.14)] border border-[#e0eee3]">
 
                     <div class="flex items-center gap-3 sm:gap-3.5">
 
@@ -339,6 +560,7 @@
     </div>
 
 </section>
+
     {{-- 2. TRUST MARQUEE --}}
     <div class="border-b border-[#d7e5d9] bg-white py-7 overflow-hidden relative">
         <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
@@ -377,7 +599,7 @@
                     <p class="text-lg text-[#637568] leading-relaxed mb-8">{{ $about['paragraph'] ?? 'Retrotech helps businesses engage audiences, nurture leads and drive conversions.' }}</p>
                     <div class="grid sm:grid-cols-2 gap-5">
                         @foreach (($about['features'] ?? []) as $f)
-                        <div class="bg-white p-6 rounded-3xl border border-[#d7e5d9] shadow-[0_4px_20px_rgba(30,51,38,0.06)] hover:border-[#397b4e] transition-colors">
+                        <div class="sp-glass-card bg-white p-6 rounded-3xl border border-[#d7e5d9] shadow-[0_4px_20px_rgba(30,51,38,0.06)] hover:border-[#397b4e] transition-colors">
                             <div class="w-12 h-12 rounded-2xl bg-[#eaf4eb] border border-[#c8dfcc] text-[#397b4e] flex items-center justify-center mb-4">{!! $svg($I[$f[0]] ?? 'check', 'w-6 h-6') !!}</div>
                             <h3 class="font-bold text-[#1e3326] mb-1.5">{{ $f[1] }}</h3>
                             <p class="text-sm text-[#637568] leading-relaxed mb-3">{{ $f[2] }}</p>
@@ -444,7 +666,7 @@
     </section>
 
     {{-- 7c. PROJECTS SLIDER + BEFORE/AFTER --}}
-    <section class="py-24 bg-[#f7fbf7] border-y border-[#d7e5d9]" id="projects">
+    <section class="sp-projects-aurora py-24 border-y border-[#d7e5d9]" id="projects">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
             <div class="text-center mb-14">
                 <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Our Projects</span>
@@ -452,19 +674,19 @@
                 <p class="text-lg text-[#637568]">Flip the switch to compare results before and after.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-10 items-center" id="projectSlider">
-                <div class="relative rounded-3xl overflow-hidden border-4 border-white shadow-[0_20px_50px_rgba(30,51,38,0.12)]">
+                <div class="sp-project-visual relative overflow-hidden">
                     @foreach ($projects as $i => $p)
                     <img data-pslide src="https://picsum.photos/seed/{{ $p[4] }}/900/700" alt="{{ $p[0] }} project" class="w-full h-72 md:h-[26rem] object-cover {{ $i ? 'hidden' : '' }}" loading="lazy">
                     @endforeach
                 </div>
                 <div>
                     @foreach ($projects as $i => $p)
-                    <div data-pslide class="{{ $i ? 'hidden' : '' }}">
+                    <div data-pslide class="sp-glass-card sp-project-panel {{ $i ? 'hidden' : '' }}">
                         <h3 class="text-3xl font-extrabold text-[#1e3326] tracking-tight mb-3">Expect great things from <span class="text-[#397b4e]">{{ $p[0] }}</span></h3>
                         <p class="text-[#637568] mb-6 leading-relaxed">{{ $p[1] }}</p>
                         <div class="grid grid-cols-3 gap-3">
                             @foreach ([['Organic Traffic', 0], ['Ranking Keywords', 1], ['ROI Growth', 2]] as [$label, $k])
-                            <div class="bg-white rounded-2xl border border-[#d7e5d9] p-4 text-center">
+                            <div class="sp-glass-card bg-white rounded-2xl border border-[#d7e5d9] p-4 text-center">
                                 <p class="text-2xl font-black text-[#1e3326]" data-stat data-before="{{ $p[2][$k] }}" data-after="{{ $p[3][$k] }}">{{ $p[3][$k] }}</p>
                                 <p class="text-xs text-[#637568] mt-1">{{ $label }}</p>
                             </div>
@@ -508,7 +730,7 @@
                     @endphp
                     <li class="relative pl-16">
                         <span class="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#397b4e] text-white font-extrabold text-sm flex items-center justify-center border-4 border-white shadow-md">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                        <div class="bg-[#f7fbf7] p-6 rounded-3xl border border-[#d7e5d9] hover:border-[#397b4e] transition-colors">
+                        <div class="sp-glass-card bg-[#f7fbf7] p-6 rounded-3xl border border-[#d7e5d9] hover:border-[#397b4e] transition-colors">
                             <span class="text-[#397b4e] block mb-2">{!! $svg($I[$ic] ?? 'check', 'w-6 h-6') !!}</span>
                             <h3 class="font-bold text-[#1e3326] mb-1">{{ $title }}</h3>
                             <p class="text-sm text-[#637568] leading-relaxed">{{ $desc }}</p>
@@ -521,22 +743,22 @@
     </section>
 
     {{-- 8. WHY CHOOSE US --}}
-    <section class="py-24 bg-[#f7fbf7]">
+    <section class="sp-neo-section py-24">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-5">
                     <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Why choose us</span>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-4 tracking-tight">Six reasons teams trust Retrotech.</h2>
                     <p class="text-lg text-[#637568] leading-relaxed mb-8">Reliable, secure and scalable solutions built around your goals.</p>
-                    <div class="rounded-3xl overflow-hidden border-4 border-white shadow-[0_16px_40px_rgba(30,51,38,0.12)]">
+                    <div class="sp-neo-image overflow-hidden">
                         <img src="https://picsum.photos/seed/rt-why/800/600" alt="Our team at work" class="w-full h-auto block" loading="lazy">
                     </div>
                 </div>
                 <div class="lg:col-span-7 grid sm:grid-cols-2 gap-5">
                     @foreach ($reasons as $i => $reason)
                     @php $title = $reason[0]; $desc = $reason[1]; @endphp
-                    <div class="bg-white p-6 rounded-3xl border border-[#d7e5d9] hover:border-[#397b4e] hover:-translate-y-1 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-full bg-[#397b4e] text-white font-extrabold flex items-center justify-center mb-4">{{ $i + 1 }}</div>
+                    <div class="sp-neo-card p-6">
+                        <div class="sp-neo-number w-10 h-10 font-extrabold flex items-center justify-center mb-4">{{ $i + 1 }}</div>
                         <h3 class="font-bold text-[#1e3326] mb-1.5">{{ $title }}</h3>
                         <p class="text-sm text-[#637568] leading-relaxed">{{ $desc }}</p>
                     </div>
@@ -559,7 +781,7 @@
     </section>
 
     {{-- 9. PREMIUM TESTIMONIALS --}}
-    <section class="py-28 bg-white relative overflow-hidden">
+    <section class="sp-clay-section py-28 relative overflow-hidden">
         <div class="absolute top-1/2 left-0 w-full h-[600px] bg-gradient-to-b from-[#f0f7f0] to-transparent transform -skew-y-6 -translate-y-1/2 z-0 pointer-events-none"></div>
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-16">
@@ -570,7 +792,7 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold text-[#1e3326] mb-6 leading-tight tracking-tight">Don't just take our word for it.</h2>
                     <p class="text-lg text-[#637568] mb-8 leading-relaxed">See how we've transformed businesses just like yours into market leaders.</p>
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="bg-white p-4 rounded-2xl shadow-md border border-[#d7e5d9] flex items-center gap-3">
+                        <div class="sp-clay-rating p-4 flex items-center gap-3">
                             <div class="flex text-amber-400">★★★★★</div>
                             <div class="font-bold text-[#1e3326]">4.9/5 <span class="text-sm text-[#637568] font-normal">on Clutch</span></div>
                         </div>
@@ -597,7 +819,7 @@
                             $dark = $c === 1 && $j === 0; 
                             $name = $test[0]; $role = $test[1]; $img = $test[2]; $quote = $test[3];
                         @endphp
-                        <div @if($rep) aria-hidden="true" @endif class="{{ $dark ? 'bg-[#1e3326] text-white border-t-4 border-t-[#25d366] shadow-[0_12px_36px_rgba(30,51,38,0.25)]' : 'bg-white border border-[#d7e5d9] border-t-4 border-t-[#397b4e] shadow-[0_8px_30px_rgba(30,51,38,0.06)]' }} p-8 rounded-3xl flex-shrink-0 transform transition-transform hover:scale-105">
+                        <div @if($rep) aria-hidden="true" @endif class="sp-clay-testimonial {{ $dark ? 'sp-clay-testimonial-dark text-white border-t-4 border-t-[#25d366]' : 'border-t-4 border-t-[#397b4e]' }} p-8 flex-shrink-0 transform transition-transform hover:scale-105">
                             <div class="flex text-amber-400 mb-4">★★★★★</div>
                             <p class="{{ $dark ? 'text-emerald-50' : 'text-[#334b39]' }} mb-6 text-base font-normal leading-relaxed">{{ $quote }}</p>
                             <div class="flex items-center gap-3">
@@ -635,8 +857,20 @@
     </section>
 
     {{-- 14. PREMIUM FAQ ACCORDION --}}
-    <section class="py-24 bg-[#f7fbf7] border-b border-[#d7e5d9]">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+    <section class="sp-knowledge-section py-24 border-b border-[#d7e5d9]">
+        <div class="sp-knowledge-goo" aria-hidden="true">
+            <svg class="absolute w-0 h-0" aria-hidden="true" focusable="false">
+                <filter id="sp-knowledge-goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                </filter>
+            </svg>
+            <span class="sp-knowledge-blob"></span>
+            <span class="sp-knowledge-blob"></span>
+            <span class="sp-knowledge-blob"></span>
+        </div>
+        <div class="sp-theme-section-content container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
             <div class="text-center mb-16">
                 <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Knowledge Base</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">Frequently Asked Questions</h2>
@@ -645,7 +879,7 @@
             <div class="space-y-4">
                 @foreach ($faqs as $faq)
                 @php $q = $faq[0]; $a = $faq[1]; @endphp
-                <div class="bg-white rounded-2xl shadow-sm border border-[#d7e5d9] overflow-hidden faq-item transition-all hover:border-[#397b4e]">
+                <div class="sp-glass-card bg-white rounded-2xl shadow-sm border border-[#d7e5d9] overflow-hidden faq-item transition-all hover:border-[#397b4e]">
                     <button type="button" class="faq-btn w-full px-8 py-6 text-left font-bold text-lg text-[#1e3326] flex justify-between items-center focus:outline-none focus-visible:ring-4 focus-visible:ring-[#397b4e]/20">
                         {{ $q }}
                         <div class="w-8 h-8 rounded-full bg-[#f0f7f0] border border-[#d7e5d9] flex items-center justify-center flex-shrink-0 transition-all duration-300 faq-icon text-[#397b4e] ml-4">{!! $svg('M19 9l-7 7-7-7') !!}</div>
@@ -674,10 +908,10 @@
                 <div class="lg:col-span-8 min-w-0">
                     <div id="blogTrack" class="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
                         @foreach ($blogs as $blog)
-                        @php 
+                        @php
                             $day = $blog[0]; $mon = $blog[1]; $cat = $blog[2]; $title = $blog[3]; $seed = $blog[4]; $href = $blog[5];
                         @endphp
-                        <article class="snap-start shrink-0 w-[85%] sm:w-[calc(50%-0.75rem)] bg-[#f7fbf7] rounded-3xl border border-[#d7e5d9] overflow-hidden hover:border-[#397b4e] hover:shadow-[0_16px_36px_rgba(30,51,38,0.12)] transition-all">
+                        <article class="sp-glass-card snap-start shrink-0 w-[85%] sm:w-[calc(50%-0.75rem)] bg-[#f7fbf7] rounded-3xl border border-[#d7e5d9] overflow-hidden hover:border-[#397b4e] hover:shadow-[0_16px_36px_rgba(30,51,38,0.12)] transition-all">
                             <div class="relative">
                                 <img src="https://picsum.photos/seed/{{ $seed }}/700/420" alt="{{ $title }}" class="w-full h-48 object-cover block" loading="lazy">
                                 <div class="absolute top-4 left-4 bg-white rounded-xl px-3 py-2 text-center shadow-md leading-none"><span class="block text-lg font-black text-[#1e3326]">{{ $day }}</span><span class="block text-[10px] font-bold text-[#397b4e] mt-1">{{ $mon }}</span></div>
@@ -701,6 +935,28 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const tiltCard = document.querySelector('[data-tilt-card]');
+            if (tiltCard && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                tiltCard.addEventListener('pointermove', (event) => {
+                    if (event.pointerType === 'touch') return;
+
+                    const rect = tiltCard.getBoundingClientRect();
+                    const x = (event.clientX - rect.left) / rect.width;
+                    const y = (event.clientY - rect.top) / rect.height;
+                    const maxTilt = 8;
+
+                    tiltCard.style.setProperty('--tilt-x', `${(0.5 - y) * maxTilt}deg`);
+                    tiltCard.style.setProperty('--tilt-y', `${(x - 0.5) * maxTilt}deg`);
+                    tiltCard.classList.add('is-tilting');
+                }, { passive: true });
+
+                tiltCard.addEventListener('pointerleave', () => {
+                    tiltCard.style.setProperty('--tilt-x', '0deg');
+                    tiltCard.style.setProperty('--tilt-y', '0deg');
+                    tiltCard.classList.remove('is-tilting');
+                });
+            }
+
             // FAQ Accordion
             const faqItems = document.querySelectorAll('.faq-item');
             faqItems.forEach(item => {
@@ -747,13 +1003,14 @@
                 renderStats();
             }
 
-            // Blog slider arrows
-            const track = document.getElementById('blogTrack');
-            if (track) {
-                const step = () => track.querySelector('article')?.getBoundingClientRect().width + 24 || 320;
-                document.getElementById('blogPrev')?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-                document.getElementById('blogNext')?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+            // Blog carousel arrows
+            const blogTrack = document.getElementById('blogTrack');
+            if (blogTrack) {
+                const step = () => blogTrack.querySelector('article')?.getBoundingClientRect().width + 24 || 320;
+                document.getElementById('blogPrev')?.addEventListener('click', () => blogTrack.scrollBy({ left: -step(), behavior: 'smooth' }));
+                document.getElementById('blogNext')?.addEventListener('click', () => blogTrack.scrollBy({ left: step(), behavior: 'smooth' }));
             }
+
         });
     </script>
 @endpush

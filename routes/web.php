@@ -2,15 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Admin\BlogController; 
-use App\Http\Controllers\Admin\DashboardController; 
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TechDevelopmentController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
-use App\Models\BlogPost; 
+use App\Models\BlogPost;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\FaqController as PublicFaqController;
 use App\Http\Controllers\BlogController as PublicBlogController;
@@ -27,21 +27,21 @@ Route::get('/', function () {
     return view('home', compact('testimonials'));
 })->name('home');
 
-Route::get('/about-us', fn () => view('about'))->name('about');
-Route::get('/careers', fn () => view('careers'))->name('careers');
+Route::get('/about-us', fn() => view('about'))->name('about');
+Route::get('/careers', fn() => view('careers'))->name('careers');
 Route::get('/faqs', [PublicFaqController::class, 'index'])->name('faqs');
 
 // --- BLOG ROUTES ---
-Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog'); 
+Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog');
 Route::get('/blog/{slug}', [PublicBlogController::class, 'show'])->name('blog.show');
 
 // --- CONTACT ROUTES ---
-Route::get('/contact', fn () => view('contact'))->name('contact.page');
-Route::get('/contact-us', fn () => view('contact'))->name('contact.us');
+Route::get('/contact', fn() => view('contact'))->name('contact.page');
+Route::get('/contact-us', fn() => view('contact'))->name('contact.us');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
 // --- LEGAL ROUTES ---
-Route::get('/privacy-policy', fn () => view('legal', [
+Route::get('/privacy-policy', fn() => view('legal', [
     'title' => 'Privacy Policy',
     'summary' => 'How information shared through a project enquiry may be used while discussing IT asset and data lifecycle services.',
     'notice' => 'Sample website copy for layout purposes. Retrotech should review and adapt this draft to its actual privacy practices before publishing.',
@@ -57,7 +57,7 @@ Route::get('/privacy-policy', fn () => view('legal', [
     ],
 ]))->name('privacy-policy');
 
-Route::get('/terms-and-conditions', fn () => view('legal', [
+Route::get('/terms-and-conditions', fn() => view('legal', [
     'title' => 'Terms and Conditions',
     'summary' => 'General information about using this website and enquiring about Retrotech IT asset lifecycle services.',
     'notice' => 'Sample website copy for layout purposes. Retrotech should review this draft and have it checked for its business and applicable locations before publishing.',
@@ -82,7 +82,7 @@ Route::get('/terms-and-conditions', fn () => view('legal', [
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+
     // Blog CRUD (Create, Read, Update, Delete)
     Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create')->middleware('permission:blogs.create');
     Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store')->middleware('permission:blogs.create');
@@ -119,6 +119,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit')->middleware('permission:services.edit');
     Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update')->middleware('permission:services.edit');
     Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy')->middleware('permission:services.delete');
+    Route::get('/admin/tech-developments/{techDevelopment}/edit', [AdminWebPageController::class, 'editTechDevelopment'])->name('admin.tech-developments.edit')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
+    Route::put('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'updateTechDevelopment'])->name('admin.tech-developments.update')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
     Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy')->middleware('permission:tech_developments.delete');
 
     // Roles & Permissions Management CRUD

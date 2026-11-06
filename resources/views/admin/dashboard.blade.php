@@ -311,7 +311,7 @@
             @forelse($blogs as $blog)
               @php($blogStatusLabel = $blog->is_published ? 'Published' : 'Draft')
               <tr>
-                <td><div class="admin-article-cell">@if($blog->image_path)<img src="{{ Storage::url($blog->image_path) }}" alt="" loading="lazy">@else<span class="admin-article-placeholder"><i class="fa-regular fa-image"></i></span>@endif<div class="admin-article-title-wrap"><strong>{{ $blog->title }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $blog->title }}" title="Toggle article details" aria-expanded="false" aria-controls="blog-detail-{{ $blog->id }}" onclick="toggleAdminDetails(this, 'blog-detail-{{ $blog->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
+                <td><div class="admin-article-cell">@if($blog->image_path)<img src="{{ $blog->image_url }}" alt="" loading="lazy">@else<span class="admin-article-placeholder"><i class="fa-regular fa-image"></i></span>@endif<div class="admin-article-title-wrap"><strong>{{ $blog->title }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $blog->title }}" title="Toggle article details" aria-expanded="false" aria-controls="blog-detail-{{ $blog->id }}" onclick="toggleAdminDetails(this, 'blog-detail-{{ $blog->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
                 <td><strong>{{ $blog->author_name }}</strong></td>
                 <td><span class="admin-status-badge {{ $blog->is_published ? '' : 'is-draft' }}"><span></span>{{ $blogStatusLabel }}</span></td>
                 <td><strong class="admin-date-primary">{{ $blog->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $blog->updated_at?->diffForHumans() }}</span></td>
@@ -443,6 +443,12 @@
                         <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
                       </a>
                       @endcan
+                    @elseif($page->model_type === 'tech-development')
+                      @if(auth()->user()->can('tech_developments.edit') || auth()->user()->can('services.edit') || auth()->user()->can('webpages.edit') || auth()->user()->is_admin)
+                      <a href="{{ route('admin.tech-developments.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit tech development">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
+                      </a>
+                      @endif
                     @endif
 
                     @if($page->model_type === 'web-page')
