@@ -23,8 +23,22 @@ use App\Http\Controllers\Admin\RolePermissionController;
 */
 
 Route::get('/', function () {
-    $testimonials = \App\Models\Testimonial::latest()->get();
-    return view('home', compact('testimonials'));
+    try {
+        $testimonials = \App\Models\Testimonial::latest()->get();
+    } catch (\Throwable $e) {
+        $testimonials = collect();
+    }
+
+    try {
+        $recentPosts = \App\Models\BlogPost::where('is_published', true)
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+    } catch (\Throwable $e) {
+        $recentPosts = collect();
+    }
+
+    return view('home', compact('testimonials', 'recentPosts'));
 })->name('home');
 
 Route::get('/about-us', fn() => view('about'))->name('about');

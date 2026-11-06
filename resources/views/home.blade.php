@@ -57,11 +57,11 @@
     </div>
 
     <div class="hero-content hero-content-new">
-      <!-- <div class="hero-announcement-pill">
-        <!-- <span class="hap-dot"></span>
+      <div class="hero-announcement-pill">
+        <span class="hap-dot"></span>
         <span class="hap-text">New: WhatsApp Marketing &amp; AI Automation Suite 2026</span>
-        <i class="fa-solid fa-arrow-right hap-arrow" aria-hidden="true"></i> -->
-      <!-- </div> --> -->
+        <i class="fa-solid fa-arrow-right hap-arrow" aria-hidden="true"></i> 
+      </div>
 
       <h1 class="hero-title-main">
         Business Made Easy<br><span class="hero-title-gradient">with Retrotech</span>
@@ -1925,10 +1925,12 @@
        10. FROM THE BLOG: Check Out Latest News Updates & Articles
        ========================================================================= --}}
   @php
-      try {
-          $recentPosts = \App\Models\BlogPost::where('is_published', true)->latest('published_at')->take(3)->get();
-      } catch (\Throwable $e) {
-          $recentPosts = collect();
+      if (!isset($recentPosts)) {
+          try {
+              $recentPosts = \App\Models\BlogPost::where('is_published', true)->latest('published_at')->take(3)->get();
+          } catch (\Throwable $e) {
+              $recentPosts = collect();
+          }
       }
   @endphp
 
