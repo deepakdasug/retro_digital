@@ -1173,26 +1173,28 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', filterCards);
   }
 
-  // 2. Client Experience Carousel
+  // 2. Client Experience Carousel with Swipe & Touch Gestures
   const reviewSlides = document.querySelectorAll('.review-slide-box');
   const counterText = document.getElementById('slideCounterDisplay');
   const prevBtn = document.getElementById('prevReviewBtn');
   const nextBtn = document.getElementById('nextReviewBtn');
+  const carouselBox = document.getElementById('experienceCarousel');
 
   if (reviewSlides.length > 0) {
     let currentSlide = 0;
     const slideCount = reviewSlides.length;
+    let reviewTimer = null;
 
-    function renderReview(index) {
+    function renderReview(index, direction = 'next') {
       if (index < 0) index = slideCount - 1;
       if (index >= slideCount) index = 0;
       currentSlide = index;
 
       reviewSlides.forEach((slide, i) => {
+        slide.classList.remove('active', 'slide-from-right', 'slide-from-left');
         if (i === currentSlide) {
           slide.classList.add('active');
-        } else {
-          slide.classList.remove('active');
+          slide.classList.add(direction === 'next' ? 'slide-from-right' : 'slide-from-left');
         }
       });
 
@@ -1201,24 +1203,70 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
+    function restartTimer() {
+      if (reviewTimer) clearInterval(reviewTimer);
+      reviewTimer = setInterval(() => {
+        renderReview(currentSlide + 1, 'next');
+      }, 6000);
+    }
+
     if (prevBtn) {
-      prevBtn.addEventListener('click', () => renderReview(currentSlide - 1));
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => renderReview(currentSlide + 1));
-    }
-
-    let reviewTimer = setInterval(() => {
-      renderReview(currentSlide + 1);
-    }, 6000);
-
-    const carouselBox = document.getElementById('experienceCarousel');
-    if (carouselBox) {
-      carouselBox.addEventListener('mouseenter', () => clearInterval(reviewTimer));
-      carouselBox.addEventListener('mouseleave', () => {
-        reviewTimer = setInterval(() => renderReview(currentSlide + 1), 6000);
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        renderReview(currentSlide - 1, 'prev');
+        restartTimer();
       });
     }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        renderReview(currentSlide + 1, 'next');
+        restartTimer();
+      });
+    }
+
+    // Touch Swipe Gesture Support
+    if (carouselBox) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+
+      carouselBox.addEventListener('touchstart', (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          touchStartX = e.changedTouches[0].screenX;
+          touchStartY = e.changedTouches[0].screenY;
+        }
+      }, { passive: true });
+
+      carouselBox.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          touchEndX = e.changedTouches[0].screenX;
+          touchEndY = e.changedTouches[0].screenY;
+          handleSwipe();
+        }
+      }, { passive: true });
+
+      function handleSwipe() {
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+          if (diffX < 0) {
+            renderReview(currentSlide + 1, 'next');
+          } else {
+            renderReview(currentSlide - 1, 'prev');
+          }
+          restartTimer();
+        }
+      }
+
+      carouselBox.addEventListener('mouseenter', () => {
+        if (reviewTimer) clearInterval(reviewTimer);
+      });
+      carouselBox.addEventListener('mouseleave', restartTimer);
+    }
+
+    restartTimer();
   }
 });
 </script>
