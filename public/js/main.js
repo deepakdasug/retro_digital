@@ -8,8 +8,8 @@ function initRetrotech() {
   const lenis = window.Lenis
     ? new window.Lenis({
         autoRaf: true,
-        lerp: 0.1,
-        wheelMultiplier: 1.0,
+        lerp: 0.075,
+        wheelMultiplier: 0.8,
         touchMultiplier: 1.0,
         syncTouch: false,
         anchors: false,

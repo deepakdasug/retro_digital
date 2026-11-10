@@ -70,6 +70,24 @@ class BlogPost extends Model
             $cleanPath = substr($cleanPath, 8);
         }
 
+        $base = basename($this->image_path);
+
+        if (file_exists(public_path('assets/images/' . $base))) {
+            return asset('assets/images/' . $base);
+        }
+
+        if (file_exists(public_path('assets/images/tech-development/' . $base))) {
+            return asset('assets/images/tech-development/' . $base);
+        }
+
+        if (file_exists(public_path($this->image_path))) {
+            return asset($this->image_path);
+        }
+
+        if (Storage::disk('public')->exists($this->image_path)) {
+            return Storage::url($this->image_path);
+        }
+
         return asset('storage/' . $cleanPath);
     }
 
@@ -98,37 +116,6 @@ class BlogPost extends Model
                 default => '',
             };
         })->implode("\n");
-    }
-
-    public function getImageUrlAttribute(): ?string
-    {
-        if (empty($this->image_path)) {
-            return asset('assets/images/it-asset-management.jpg');
-        }
-
-        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
-            return $this->image_path;
-        }
-
-        $base = basename($this->image_path);
-
-        if (file_exists(public_path('assets/images/' . $base))) {
-            return asset('assets/images/' . $base);
-        }
-
-        if (file_exists(public_path('assets/images/tech-development/' . $base))) {
-            return asset('assets/images/tech-development/' . $base);
-        }
-
-        if (file_exists(public_path($this->image_path))) {
-            return asset($this->image_path);
-        }
-
-        if (Storage::disk('public')->exists($this->image_path)) {
-            return Storage::url($this->image_path);
-        }
-
-        return asset('assets/images/it-asset-management.jpg');
     }
 
     public function faqs()
