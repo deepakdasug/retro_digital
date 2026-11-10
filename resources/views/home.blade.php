@@ -33,29 +33,6 @@
     </div>
   </main>
 
-  
-  {{-- =========================================================================
-       2B. ENTERPRISE TECH ECOSYSTEM & CLOUD INFRASTRUCTURE STRIP
-       ========================================================================= --}}
-  <!-- <div class="tech-ecosystem-bar" aria-label="Enterprise Cloud and Engineering Ecosystem">
-    <div class="te-inner-container">
-      <div class="te-heading-wrap">
-        <span class="te-ping"><span class="te-ping-dot"></span></span>
-        <span class="te-label">ENTERPRISE STACK &amp; CLOUD ARCHITECTURE</span>
-      </div>
-      <div class="te-badges-track">
-        <div class="te-badge"><i class="fa-brands fa-laravel"></i><span>Laravel 11 Microservices</span></div>
-        <div class="te-badge"><i class="fa-brands fa-react"></i><span>React 19 &amp; Next.js</span></div>
-        <div class="te-badge"><i class="fa-brands fa-aws"></i><span>AWS Cloud Architecture</span></div>
-        <div class="te-badge"><i class="fa-brands fa-cloudflare"></i><span>Cloudflare Edge &amp; DDoS</span></div>
-        <div class="te-badge"><i class="fa-brands fa-docker"></i><span>Docker CI/CD Pipelines</span></div>
-        <div class="te-badge"><i class="fa-brands fa-stripe"></i><span>Stripe Global Payments</span></div>
-        <div class="te-badge"><i class="fa-brands fa-google"></i><span>Google Cloud Certified</span></div>
-        <div class="te-badge"><i class="fa-brands fa-python"></i><span>Python AI &amp; Automation</span></div>
-      </div>
-    </div>
-  </div> -->
-
   {{-- =========================================================================
        3. ABOUT US & VIDEO DOCKING SECTION
        ========================================================================= --}}

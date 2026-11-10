@@ -186,25 +186,13 @@ class TechDevelopmentSeeder extends Seeder
                     ])
                 );
 
-                // This seeder is the source of truth for these page sections.
+                // Cleaned sections matching the original website (Header, Landing/Hero, Overview, Process, Reasons, FAQ, Contact Us, Footer)
                 $page->sections()->delete();
                 $sections = [
                     ['section_type'=>'differentiator','title'=>'How This Service Differentiates','description'=>$differentiator,'content'=>['text'=>$differentiator]],
-                    ['section_type'=>'capabilities','title'=>'Key Capabilities & Value Pillars','description'=>'Capabilities selected for this service and the business value they support.','content'=>['items'=>$capabilities]],
                     ['section_type'=>'process','title'=>'Our Proven 7-Step Delivery Process','description'=>'A structured, transparent engineering process to deliver solutions against agreed scope and milestones.','content'=>['items'=>$process]],
                     ['section_type'=>'reasons','title'=>'Top Six Reasons to Trust Our IT Expertise','description'=>'Reliable, secure, and scalable technology solutions tailored to business goals.','content'=>['items'=>$reasons]],
-                    ['section_type'=>'metrics','title'=>'Real Metrics from Successful Engagements','description'=>'The extracted source lists these headline figures; validate them internally before publishing as verified claims.','content'=>['items'=>[
-                        ['value'=>'726+','label'=>'Digital Projects Shipped'],
-                        ['value'=>'1,026+','label'=>'Optimized Workflows'],
-                        ['value'=>'488%','label'=>'Average Client ROI Growth'],
-                    ]]],
                     ['section_type'=>'faq','title'=>'Frequently Asked Questions','description'=>'Answers to common questions about planning a technology project.','content'=>['items'=>$faqs]],
-                    ['section_type'=>'cta','title'=>'Ready to Build Your '.$page->name.' Solution?','description'=>'Connect with Retrotech Digital’s team to discuss your technical requirements and request a scoping consultation.','content'=>[
-                        'phone'=>'+91 99108 36538',
-                        'email'=>'info@retrotechdigital.com',
-                        'website_label'=>'Official Website',
-                        'office'=>'O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India, 122002',
-                    ]],
                 ];
 
                 foreach ($sections as $index => $section) {

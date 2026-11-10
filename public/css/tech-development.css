@@ -90,12 +90,12 @@
         box-shadow: 0 0 0 3px rgba(47, 111, 70, 0.18);
     }
     #td-page .td-section-title {
-        font-size: clamp(2rem, 3.5vw, 3rem);
+        font-size: clamp(1.45rem, 2.3vw, 1.95rem);
         font-weight: 800;
-        line-height: 1.15;
-        letter-spacing: -0.035em;
+        line-height: 1.25;
+        letter-spacing: -0.025em;
         color: var(--td-ink-primary);
-        margin: 0.75rem 0 0;
+        margin: 0.65rem 0 0;
     }
     #td-page .td-section-desc {
         font-size: clamp(1rem, 1.2vw, 1.125rem);
@@ -208,26 +208,29 @@
         box-shadow: 0 2px 10px rgba(47, 111, 70, 0.06);
     }
     #td-page .td-hero-category {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--td-green-bright);
-        margin: 1.25rem 0 0.5rem;
+        color: var(--td-green-brand);
+        margin: 0 0 0.65rem;
     }
     #td-page .td-hero-title {
-        font-size: clamp(2.35rem, 5vw, 4.25rem);
+        font-family: var(--font-family);
+        font-size: clamp(1.85rem, 3.2vw, 2.65rem);
         font-weight: 800;
-        line-height: 1.08;
-        letter-spacing: -0.04em;
+        line-height: 1.18;
+        letter-spacing: -0.03em;
         color: var(--td-ink-primary);
-        margin: 0;
+        margin: 0 0 1.25rem;
+        max-width: 44rem;
     }
     #td-page .td-hero-desc {
-        font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+        font-family: var(--font-family);
+        font-size: clamp(1.025rem, 1.25vw, 1.15rem);
         color: var(--td-ink-muted);
-        line-height: 1.7;
-        margin: 1.5rem 0 0;
+        line-height: 1.68;
+        margin: 0 0 2rem;
         max-width: 38rem;
     }
     #td-page .td-hero-actions {
@@ -268,34 +271,38 @@
     }
     #td-page .td-cockpit-glow {
         position: absolute;
-        inset: -1.5rem;
-        background: radial-gradient(circle, rgba(62, 160, 95, 0.22) 0%, transparent 70%);
-        border-radius: var(--td-radius-xl);
-        filter: blur(28px);
+        inset: -1rem;
+        background: radial-gradient(circle, rgba(62, 160, 95, 0.18) 0%, transparent 70%);
+        border-radius: 20px;
+        filter: blur(22px);
         z-index: 0;
     }
     #td-page .td-cockpit-card {
         position: relative;
         z-index: 1;
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-radius: var(--td-radius-xl);
-        box-shadow: 0 25px 60px -15px rgba(27, 53, 36, 0.16), 0 0 0 1px rgba(47, 111, 70, 0.08);
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(47, 111, 70, 0.12);
+        border-radius: 16px;
+        box-shadow: 0 16px 36px -8px rgba(27, 53, 36, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        padding: 1.75rem;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        padding: 0.875rem 1.125rem 1.125rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     #td-page .td-cockpit-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 32px 70px -15px rgba(27, 53, 36, 0.22);
+        transform: translateY(-3px);
+        box-shadow: 0 22px 45px -8px rgba(27, 53, 36, 0.16), 0 2px 6px rgba(0, 0, 0, 0.04);
     }
     #td-page .td-cockpit-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 1rem;
+        padding-bottom: 0.65rem;
         border-bottom: 1px solid var(--td-border-light);
+        flex-shrink: 0;
     }
     #td-page .td-cockpit-dots {
         display: flex;
@@ -340,11 +347,12 @@
     /* Real-World Hero Image Media Presentation */
     #td-page .td-cockpit-media {
         position: relative;
+        flex: 1;
+        min-height: 0;
         overflow: hidden;
-        aspect-ratio: 16 / 10;
         background: #13251a;
-        border-radius: var(--td-radius-md);
-        margin: 1.25rem 0;
+        border-radius: 10px;
+        margin: 0.75rem 0 0;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     }
     #td-page .td-cockpit-img {
@@ -524,19 +532,26 @@
        ------------------------------------------------------------------------- */
     #td-page .td-diff-section {
         background: var(--td-white);
-        padding: 5.5rem 0;
+        padding: 4.75rem 0;
         border-bottom: 1px solid var(--td-border-light);
     }
     #td-page .td-diff-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 2.5rem;
-        align-items: center;
+        gap: 1.75rem;
+        align-items: start;
     }
     @media (min-width: 1024px) {
         #td-page .td-diff-grid {
-            grid-template-columns: 0.8fr 1.2fr;
-            gap: 4.5rem;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 2.25rem;
+            align-items: start;
+        }
+        #td-page .td-diff-info {
+            padding-top: 0.35rem;
+        }
+        #td-page .td-diff-card {
+            margin-left: 50px;
         }
     }
     #td-page .td-diff-card {
@@ -545,30 +560,31 @@
         border: 1px solid var(--td-border-light);
         border-left: 4px solid var(--td-green-brand);
         border-radius: var(--td-radius-md);
-        padding: 2.25rem 2rem;
+        padding: 1.6rem 1.5rem;
         box-shadow: var(--td-shadow-sm);
+        max-width: 36rem;
     }
     @media (min-width: 640px) {
         #td-page .td-diff-card {
-            padding: 2.75rem 2.5rem;
+            padding: 1.85rem 1.85rem;
         }
     }
     #td-page .td-diff-icon {
-        width: 3rem;
-        height: 3rem;
+        width: 2.35rem;
+        height: 2.35rem;
         border-radius: 50%;
         background: var(--td-white);
         color: var(--td-green-brand);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
+        font-size: 1rem;
         box-shadow: 0 4px 12px rgba(47, 111, 70, 0.12);
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
     }
     #td-page .td-diff-text {
-        font-size: clamp(1.1rem, 1.4vw, 1.25rem);
-        line-height: 1.8;
+        font-size: clamp(0.975rem, 1.1vw, 1.05rem);
+        line-height: 1.65;
         font-weight: 500;
         color: var(--td-ink-secondary);
         margin: 0;
@@ -576,13 +592,13 @@
     #td-page .td-diff-footer {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        margin-top: 1.75rem;
-        padding-top: 1.25rem;
+        gap: 0.65rem;
+        margin-top: 1.25rem;
+        padding-top: 1rem;
         border-top: 1px solid rgba(47, 111, 70, 0.12);
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 800;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--td-green-brand);
     }
@@ -652,11 +668,12 @@
         opacity: 1;
     }
     #td-page .td-cap-title {
-        font-size: 1.35rem;
+        font-size: 1.18rem;
         font-weight: 700;
         color: var(--td-ink-primary);
-        letter-spacing: -0.02em;
-        margin: 0 0 0.75rem;
+        letter-spacing: -0.015em;
+        line-height: 1.35;
+        margin: 0 0 0.65rem;
     }
     #td-page .td-cap-desc {
         font-size: 0.95rem;
@@ -688,34 +705,41 @@
     }
 
     /* -------------------------------------------------------------------------
-       SECTION 03: PROCESS (DARK ROADMAP)
+       SECTION 03: PROCESS (LIGHT ROADMAP - APPLICATION THEME)
        ------------------------------------------------------------------------- */
     #td-page .td-process-section {
         position: relative;
-        background: linear-gradient(160deg, #102116 0%, #173322 100%);
-        color: var(--td-white);
+        background: var(--td-page-bg);
+        color: var(--td-ink-primary);
         padding: 6rem 0;
+        border-bottom: 1px solid var(--td-border-light);
+    }
+    #td-page .td-process-glows {
+        position: absolute;
+        inset: 0;
         overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
     }
     #td-page .td-process-glow-1 {
         position: absolute;
-        top: -10rem;
-        right: -10rem;
+        top: -8rem;
+        right: -8rem;
         width: 32rem;
         height: 32rem;
         border-radius: 9999px;
-        background: radial-gradient(circle, rgba(110, 192, 136, 0.15) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(110, 192, 136, 0.12) 0%, transparent 70%);
         pointer-events: none;
         filter: blur(50px);
     }
     #td-page .td-process-glow-2 {
         position: absolute;
-        bottom: -10rem;
-        left: -10rem;
+        bottom: -8rem;
+        left: -8rem;
         width: 30rem;
         height: 30rem;
         border-radius: 9999px;
-        background: radial-gradient(circle, rgba(47, 111, 70, 0.2) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(47, 111, 70, 0.08) 0%, transparent 70%);
         pointer-events: none;
         filter: blur(50px);
     }
@@ -725,11 +749,13 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 3rem;
+        align-items: start;
     }
     @media (min-width: 1024px) {
         #td-page .td-process-grid {
-            grid-template-columns: 0.85fr 1.15fr;
+            grid-template-columns: 0.8fr 1.2fr;
             gap: 4.5rem;
+            align-items: start;
         }
     }
     #td-page .td-sticky-col {
@@ -737,9 +763,11 @@
     }
     @media (min-width: 1024px) {
         #td-page .td-sticky-col {
+            position: -webkit-sticky;
             position: sticky;
-            top: 7rem;
+            top: 6.5rem;
             align-self: start;
+            height: fit-content;
         }
     }
     #td-page .td-process-badge {
@@ -750,18 +778,19 @@
         font-weight: 800;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--td-green-accent);
+        color: var(--td-green-brand);
     }
     #td-page .td-process-badge .td-kicker-dot {
-        background: var(--td-green-accent);
-        box-shadow: 0 0 0 3px rgba(110, 192, 136, 0.25);
+        background: var(--td-green-brand);
+        box-shadow: 0 0 0 3px rgba(47, 111, 70, 0.18);
     }
     #td-page .td-process-title {
-        color: var(--td-white);
+        color: var(--td-ink-primary);
         margin: 0.75rem 0 0;
     }
     #td-page .td-process-desc {
-        color: rgba(255, 255, 255, 0.72);
+        font-size: clamp(1rem, 1.2vw, 1.125rem);
+        color: var(--td-ink-muted);
         line-height: 1.7;
         margin: 1.25rem 0 0;
     }
@@ -769,97 +798,139 @@
         margin-top: 2rem;
         padding: 1.25rem 1.5rem;
         border-radius: var(--td-radius-md);
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(8px);
+        background: var(--td-white);
+        border: 1px solid var(--td-border-light);
+        box-shadow: var(--td-shadow-sm);
         font-size: 0.825rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--td-ink-secondary);
         display: flex;
         align-items: center;
         gap: 0.75rem;
+        line-height: 1.5;
     }
     #td-page .td-process-card-info i {
-        color: var(--td-green-accent);
+        color: var(--td-green-brand);
         font-size: 1.1rem;
     }
 
-    /* Process Timeline */
-    #td-page .td-timeline {
+    /* =========================================================================
+       PROCESS TIMELINE - ATTACHED TIMELINE & CARD ARCHITECTURE
+       ========================================================================= */
+    #td-page .td-timeline-stream {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    #td-page .td-step-block {
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: 1.25rem;
     }
-    #td-page .td-timeline::before {
-        content: '';
-        position: absolute;
-        top: 2rem;
-        bottom: 2rem;
-        left: 1.85rem;
-        width: 2px;
-        background: linear-gradient(180deg, rgba(110, 192, 136, 0.6) 0%, rgba(110, 192, 136, 0.15) 100%);
-    }
-    #td-page .td-step-item {
-        position: relative;
+    #td-page .td-step-card {
+        background: #ffffff;
+        border: 1px solid var(--td-border-light);
+        border-radius: var(--td-radius-md);
+        padding: 1.1rem 1.35rem;
         display: grid;
-        grid-template-columns: 3.75rem 1fr;
+        grid-template-columns: 2.65rem 1fr;
         gap: 1.25rem;
         align-items: flex-start;
-        padding: 1.25rem;
-        border-radius: var(--td-radius-md);
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        box-shadow: 0 2px 8px rgba(21, 39, 29, 0.04);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    #td-page .td-step-item:hover {
-        background: rgba(255, 255, 255, 0.07);
-        border-color: rgba(110, 192, 136, 0.35);
+    #td-page .td-step-card:hover {
         transform: translateX(4px);
+        border-color: rgba(47, 111, 70, 0.35);
+        box-shadow: 0 10px 25px -4px rgba(21, 39, 29, 0.08);
     }
-    #td-page .td-step-bubble {
-        position: relative;
-        z-index: 2;
-        width: 3.75rem;
-        height: 3.75rem;
+
+    /* Left Attached Timeline Node */
+    #td-page .td-step-rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+    }
+    #td-page .td-step-node {
+        width: 2.65rem;
+        height: 2.65rem;
         border-radius: 50%;
-        background: #193824;
-        border: 2px solid var(--td-green-accent);
-        box-shadow: 0 0 15px rgba(110, 192, 136, 0.35);
+        background: var(--td-mint-soft);
+        border: 2px solid rgba(47, 111, 70, 0.22);
+        color: var(--td-green-brand);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 800;
-        color: var(--td-white);
-        transition: transform 0.25s ease, background 0.25s ease;
+        box-shadow: 0 2px 6px rgba(47, 111, 70, 0.08);
+        transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    #td-page .td-step-item:hover .td-step-bubble {
-        transform: scale(1.08);
+    #td-page .td-step-card:hover .td-step-node {
+        transform: scale(1.06);
+        background: var(--td-green-brand);
+        border-color: var(--td-green-brand);
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(47, 111, 70, 0.25);
+    }
+
+    /* Attached Connector between cards */
+    #td-page .td-step-connector {
+        width: 2px;
+        height: 0.85rem;
+        background: linear-gradient(180deg, rgba(47, 111, 70, 0.45) 0%, rgba(47, 111, 70, 0.2) 100%);
+        margin-left: calc(1.35rem + 1.325rem - 1px);
+        transition: background 0.25s ease;
+    }
+    #td-page .td-step-block:hover .td-step-connector {
         background: var(--td-green-brand);
     }
-    #td-page .td-step-content {
-        padding-top: 0.35rem;
+
+    /* Content inside card */
+    #td-page .td-step-body-wrap {
+        padding-top: 0.15rem;
     }
-    #td-page .td-step-meta {
-        font-size: 0.7rem;
+    #td-page .td-step-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.35rem;
+    }
+    #td-page .td-step-badge {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.725rem;
         font-weight: 800;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--td-green-accent);
-        margin-bottom: 0.25rem;
+        color: var(--td-green-brand);
+        background: var(--td-mint-soft);
+        padding: 0.25rem 0.65rem;
+        border-radius: 9999px;
     }
-    #td-page .td-step-heading {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: var(--td-white);
-        margin: 0 0 0.5rem;
+    #td-page .td-step-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 9999px;
+        background: var(--td-green-brand);
+        opacity: 0.6;
+        box-shadow: 0 0 0 3px rgba(47, 111, 70, 0.15);
     }
-    #td-page .td-step-body {
-        font-size: 0.9rem;
-        line-height: 1.65;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 0;
+    #td-page .td-step-title,
+    #td-page .td-reason-title {
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+        color: var(--td-ink-primary) !important;
+        margin: 0 0 0.4rem !important;
+    }
+    #td-page .td-step-desc,
+    #td-page .td-reason-desc {
+        font-size: 0.925rem !important;
+        line-height: 1.65 !important;
+        color: var(--td-ink-muted) !important;
+        margin: 0 !important;
     }
 
     /* -------------------------------------------------------------------------
@@ -874,11 +945,13 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 3rem;
+        align-items: start;
     }
     @media (min-width: 1024px) {
         #td-page .td-reasons-grid {
             grid-template-columns: 0.8fr 1.2fr;
             gap: 4.5rem;
+            align-items: start;
         }
     }
     #td-page .td-reasons-partner {
@@ -1188,12 +1261,12 @@
         color: var(--td-green-accent);
     }
     #td-page .td-cta-heading {
-        font-size: clamp(2rem, 3.8vw, 3rem);
+        font-size: clamp(1.55rem, 2.6vw, 2.15rem);
         font-weight: 800;
-        line-height: 1.15;
-        letter-spacing: -0.035em;
+        line-height: 1.22;
+        letter-spacing: -0.025em;
         color: var(--td-white);
-        margin: 1rem 0 0;
+        margin: 0.75rem 0 0;
         max-width: 36rem;
     }
     #td-page .td-cta-desc {
