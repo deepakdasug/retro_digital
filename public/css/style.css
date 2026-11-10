@@ -3744,6 +3744,167 @@ body.inner-page .site-header .hamburger-bar {
   }
 }
 
+/* ---- About Section: Certificate Card ---- */
+
+.about-credential-stack {
+  width: 100%;
+}
+
+.acred-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1.5px solid rgba(47, 111, 70, 0.14);
+  box-shadow: 0 6px 28px rgba(18, 37, 25, 0.07);
+  padding: 1.75rem;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(28px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Verified Expertise — neutral presentation for the certificate artwork */
+body.home-page .acred-card--expertise {
+  background: #fbfaf7;
+  border-color: rgba(176, 132, 59, 0.3);
+}
+
+/* Keep the certificate card typography legible against its light surface. */
+body.home-page .acred-card--expertise .acred-title {
+  color: #152b49;
+}
+
+body.home-page .acred-card--expertise .acred-subtitle {
+  color: #657080;
+}
+
+body.home-page .acred-certificate-frame {
+  padding: 0.55rem;
+  border: 1px solid rgba(176, 132, 59, 0.45);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(21, 39, 29, 0.1);
+  line-height: 0;
+}
+
+body.home-page .acred-certificate-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(68vh, 560px);
+  object-fit: contain;
+  object-position: center;
+  border-radius: 9px;
+}
+
+body.home-page .acred-card--expertise:hover {
+  border-color: rgba(176, 132, 59, 0.55);
+  box-shadow: 0 12px 32px rgba(21, 39, 29, 0.14);
+}
+
+.acred-card.is-inview {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.acred-card:hover {
+  box-shadow: 0 12px 40px rgba(18, 37, 25, 0.12);
+  border-color: rgba(47, 111, 70, 0.3);
+  transform: translateY(-3px);
+}
+
+.acred-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.acred-icon-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b4332 0%, #2f6f46 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.acred-header > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.acred-title {
+  font-family: var(--font-family);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--theme-forest-deep, #13251a);
+  margin: 0 0 0.2rem;
+}
+
+.acred-subtitle {
+  font-size: 0.8rem;
+  color: #6b7c72;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.acred-live-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #d1fae5;
+  background: rgba(52, 211, 153, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  border-radius: 20px;
+  padding: 0.3rem 0.7rem;
+  white-space: nowrap;
+}
+
+.acred-pulse {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  animation: acredPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes acredPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(1.5); }
+}
+
+@media (max-width: 1100px) {
+  .acred-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .acred-card {
+    padding: 1.1rem;
+  }
+  .acred-header {
+    gap: 0.75rem;
+  }
+  .acred-live-badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
 .acc-bg-image-wrap {
   position: absolute;
   inset: -25px;
@@ -7004,6 +7165,177 @@ body.inner-page .contact-included-section.contact-page-dedicated {
   filter: brightness(1.05);
 }
 
+/* ---- Country Code Picker ---- */
+.phone-field-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1.5px solid var(--theme-border-light, rgba(47, 111, 70, 0.22));
+  border-radius: 10px;
+  overflow: visible;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.phone-field-wrap:focus-within {
+  border-color: var(--theme-green-brand, #2f6f46);
+  box-shadow: 0 0 0 3px rgba(47, 111, 70, 0.1);
+}
+
+.cc-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.65rem;
+  cursor: pointer;
+  border-right: 1.5px solid rgba(47, 111, 70, 0.15);
+  background: #f7faf7;
+  border-radius: 8px 0 0 8px;
+  min-width: 90px;
+  flex-shrink: 0;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.cc-picker:hover {
+  background: #edf5ef;
+}
+
+.cc-flag {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.cc-code {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--theme-forest-deep, #13251a);
+  min-width: 32px;
+}
+
+.cc-chevron {
+  font-size: 0.6rem;
+  color: #6b7c72;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+}
+
+.cc-picker[aria-expanded="true"] .cc-chevron {
+  transform: rotate(180deg);
+}
+
+/* Phone text input - no independent border since parent wraps it */
+.cc-phone-input {
+  flex: 1;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding-left: 0.75rem !important;
+  background: transparent !important;
+}
+
+.cc-phone-input:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Dropdown panel */
+.cc-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 280px;
+  background: #fff;
+  border: 1.5px solid rgba(47, 111, 70, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(18, 37, 25, 0.14);
+  z-index: 999;
+  overflow: hidden;
+}
+
+.cc-picker[aria-expanded="true"] .cc-dropdown {
+  display: block;
+}
+
+/* Search bar inside dropdown */
+.cc-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(47, 111, 70, 0.1);
+  background: #f7faf7;
+}
+
+.cc-search-icon {
+  color: #6b7c72;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.cc-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.85rem;
+  color: #13251a;
+  width: 100%;
+}
+
+.cc-search-input::placeholder {
+  color: #9aad9e;
+}
+
+/* Country list */
+.cc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c0d4c5 transparent;
+}
+
+.cc-list::-webkit-scrollbar { width: 4px; }
+.cc-list::-webkit-scrollbar-thumb { background: #c0d4c5; border-radius: 4px; }
+
+.cc-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.84rem;
+  color: #1e3028;
+  transition: background 0.15s ease;
+}
+
+.cc-list li:hover,
+.cc-list li[aria-selected="true"] {
+  background: #edf5ef;
+}
+
+.cc-list li[aria-selected="true"] {
+  font-weight: 600;
+  color: #2f6f46;
+}
+
+.cc-list .cc-item-flag { font-size: 1.1rem; }
+.cc-list .cc-item-name { flex: 1; }
+.cc-list .cc-item-dial { color: #6b7c72; font-size: 0.8rem; font-weight: 600; }
+
+.cc-no-results {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.82rem;
+  color: #9aad9e;
+  margin: 0;
+}
+
 .contact-inc-success {
   grid-column: 1 / -1;
   background: var(--theme-mint-soft, #eaf4ec);
@@ -9867,6 +10199,159 @@ body.contact-page-leaving::after {
   position: relative;
 }
 
+/* ==========================================================================
+   HOME PAGE — SECTION BOUNDARY BLENDS
+   Each section gets a ::before (top fade-in) and ::after (bottom fade-out)
+   that blend its edge into the neighbouring section's background colour.
+   Height 80px keeps it subtle; pointer-events:none ensures no interaction.
+   ========================================================================== */
+
+/* Shared setup for every blend overlay */
+.hero-section::after,
+.topic-section#about::after,
+.why-choose-section#why-choose-us::before,
+.why-choose-section#why-choose-us::after,
+.industries-section::before,
+.industries-section::after,
+.mid-cta-section::before,
+.mid-cta-section::after,
+.faq-section-home#faqs::before,
+.faq-section-home#faqs::after,
+.home-blog-section::before,
+.home-blog-section::after,
+.contact-section::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── 1. Hero → Marquee (#13251a)
+   Hero bottom: fade to dark forest ── */
+.hero-section {
+  position: relative;
+}
+.hero-section::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #13251a 100%);
+}
+
+/* ── 2. Marquee — no blend overlays, ticker must stay fully visible ── */
+
+/* ── 3. About (#f7faf7)
+   Bottom: fades to Services (#fbfdfc) ── */
+.topic-section#about::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #fbfdfc 100%);
+}
+
+/* ── 4. Services (#fbfdfc) — overflow:hidden clips ::before/::after,
+   blends are handled by About::after (bottom) and Why::before (top) ── */
+
+/* ── 5. Why Choose Us (#f7faf7)
+   Top: fades in from Services (#fbfdfc)
+   Bottom: fades out to Industries (#f2f8f3) ── */
+.why-choose-section#why-choose-us::before {
+  top: 0;
+  background: linear-gradient(to bottom, #fbfdfc 0%, transparent 100%);
+}
+.why-choose-section#why-choose-us::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #f2f8f3 100%);
+}
+
+/* ── 6. Industries (#f2f8f3)
+   Top: fades in from Why (#f7faf7)
+   Bottom: fades out to Mid-CTA (#ffffff) ── */
+.industries-section::before {
+  top: 0;
+  background: linear-gradient(to bottom, #f7faf7 0%, transparent 100%);
+}
+.industries-section::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #ffffff 100%);
+}
+
+/* ── 7. Mid-CTA (#ffffff wrapper)
+   Top: fades in from Industries (#f2f8f3)
+   Bottom: fades out to Testimonials (#ffffff) — same colour, very subtle ── */
+.mid-cta-section::before {
+  top: 0;
+  background: linear-gradient(to bottom, #f2f8f3 0%, transparent 100%);
+}
+.mid-cta-section::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #ffffff 100%);
+}
+
+/* ── 8. Testimonials (#ffffff) — overflow:hidden clips ::before/::after,
+   blends are handled by Mid-CTA::after (bottom) and FAQ::before (top) ── */
+
+/* ── 9. FAQ (#f7faf7)
+   Top: fades in from Testimonials (#ffffff)
+   Bottom: fades out to Blog (#ffffff) ── */
+.faq-section-home#faqs::before {
+  top: 0;
+  background: linear-gradient(to bottom, #ffffff 0%, transparent 100%);
+}
+.faq-section-home#faqs::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #ffffff 100%);
+}
+
+/* ── 10. Blog (#ffffff)
+   Top: fades in from FAQ (#f7faf7)
+   Bottom: fades out to Contact (#f0f7f0) ── */
+.home-blog-section::before {
+  top: 0;
+  background: linear-gradient(to bottom, #f7faf7 0%, transparent 100%);
+}
+.home-blog-section::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #f0f7f0 100%);
+}
+
+/* ── 11. Contact (#f0f7f0)
+   Top: fades in from Blog (#ffffff) ── */
+.contact-section::before {
+  top: 0;
+  background: linear-gradient(to bottom, #ffffff 0%, transparent 100%);
+}
+
+/* Sections that need position:relative for blend pseudo-elements
+   (most already have it in their own rules; this is a safety net) */
+.hero-section,
+.marquee-ticker-bar,
+.contact-section {
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   HOME PAGE — SECTION EDGE LINES: SOFT BLENDED HINT
+   The divider borders are kept, but painted with a horizontal gradient that
+   fades to nothing at both ends. Combined with the section blends above, the
+   boundary still shows a faint, soft divider instead of a hard, clear line.
+   -------------------------------------------------------------------------- */
+body.home-page .bento-services-section,
+body.home-page .why-choose-section,
+body.home-page .testi-showcase-section,
+body.home-page .home-blog-section {
+  border-image: linear-gradient(90deg,
+      rgba(47, 111, 70, 0) 0%,
+      rgba(47, 111, 70, 0.28) 50%,
+      rgba(47, 111, 70, 0) 100%) 1;
+}
+
+body.home-page .marquee-ticker-bar {
+  border-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0) 100%) 1;
+}
+
 /* 2. Shimmer Skeleton & CLS Protection */
 .wmc-img-wrap,
 .icp-img-wrap,
@@ -10883,20 +11368,17 @@ body.contact-page-leaving::after {
 .industries-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1.25rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-}
-
-.industries-toolbar .industries-filter-bar {
-  margin: 0;
 }
 
 .ind-carousel-ctrls {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  margin-inline: auto;
   background: #ffffff;
   padding: 0.4rem 0.75rem;
   border-radius: 9999px;
@@ -12001,3 +12483,8 @@ body.contact-page-leaving::after {
   }
 }
 
+@media (min-width: 992px) {
+  body.home-page .about-pinned-showcase .about-split-canvas {
+    grid-template-columns: 1.15fr 1.25fr;
+  }
+}
