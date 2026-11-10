@@ -131,7 +131,7 @@ function initRetrotech() {
     if (slotRect.width === 0 || slotRect.height === 0) return;
 
     const scrollY = getScrollY();
-    const windowW = window.innerWidth;
+    const windowW = document.documentElement.clientWidth || window.innerWidth;
     const windowH = window.innerHeight;
 
     const transitionDistance = windowH * 0.85;
@@ -209,6 +209,21 @@ function initRetrotech() {
     if (siteHeader) {
       siteHeader.classList.toggle('scrolled', scrollY > 40);
     }
+  };
+
+  /* =========================================================================
+     2B. ABOUT SPLIT-CANVAS PINNED SLIDE ENGINE
+     Left card stays pinned/stationary in view.
+     Right 6-pillars mosaic smoothly slides up through the window as user scrolls.
+     When slide completes, page scrolling continues forward.
+     ========================================================================= */
+  const aboutShowcase = document.getElementById('aboutShowcase');
+  const aboutMosaic = document.getElementById('aboutPillarsMosaic');
+  const aboutMosaicWindow = document.getElementById('aboutPillarsMosaicWindow');
+
+  // Scroll-driven slide removed — mosaic renders as a static grid
+  const handleAboutShowcaseScroll = () => {
+    if (aboutMosaic) aboutMosaic.style.transform = 'none';
   };
 
   const onScroll = () => {

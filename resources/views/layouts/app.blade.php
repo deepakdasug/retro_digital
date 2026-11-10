@@ -51,7 +51,7 @@
 
   @unless (request()->routeIs('admin.*'))
     <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}?v={{ file_exists(public_path('js/main.js')) ? filemtime(public_path('js/main.js')) : '1.0' }}"></script>
 
   @endunless
 

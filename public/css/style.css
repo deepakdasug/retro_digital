@@ -85,6 +85,11 @@ html {
   scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 html.lenis,
@@ -114,7 +119,8 @@ body {
   background-color: var(--theme-page-bg, #f8faf8);
   color: var(--color-charcoal-mid);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
   position: relative;
   line-height: var(--lh-relaxed);
   letter-spacing: var(--tracking-neutral);
@@ -135,7 +141,7 @@ body.inner-page section[id] {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   transform: translate3d(0, 0, 0);
   z-index: 200;
@@ -927,7 +933,7 @@ body.inner-page .site-header .hamburger-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: rgba(4, 7, 12, 0.75);
   backdrop-filter: blur(16px);
@@ -1210,7 +1216,7 @@ body.inner-page .site-header .hamburger-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.6);
   z-index: 1400;
@@ -1236,7 +1242,8 @@ body.inner-page .site-header .hamburger-bar {
 }
 
 .topic-container {
-  max-width: 1200px;
+  max-width: 1360px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -3606,6 +3613,9 @@ body.inner-page .site-header .hamburger-bar {
   color: rgba(255, 255, 255, 0.85);
   padding: 0.9rem 0;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -3614,6 +3624,8 @@ body.inner-page .site-header .hamburger-bar {
   display: flex;
   gap: 2.5rem;
   white-space: nowrap;
+  width: max-content;
+  will-change: transform;
   animation: tickerSlide 35s linear infinite;
   font-family: var(--font-family);
   font-size: 0.825rem;
@@ -6302,25 +6314,28 @@ body.inner-page .site-header .hamburger-bar {
 
 .footer-socials {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.55rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--theme-border-light, #e2e8f0);
 }
 
 .footer-social-icon {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
   align-items: center;
   justify-content: center;
   border: 1.5px solid var(--theme-border-light, #e2e8f0);
   border-radius: 50%;
   color: var(--theme-ink-secondary, #314436);
   background: #ffffff;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .footer-social-icon:hover {
@@ -6328,6 +6343,7 @@ body.inner-page .site-header .hamburger-bar {
   background: var(--theme-green-brand, #2f6f46);
   border-color: var(--theme-green-brand, #2f6f46);
   transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(47, 111, 70, 0.25);
 }
 
 .footer-bottom {
@@ -8842,7 +8858,7 @@ body.contact-page-leaving::after {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   padding-right: 0.2rem;
@@ -9894,43 +9910,61 @@ body.contact-page-leaving::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  margin: 2.25rem auto 3rem;
-  padding: 0.45rem;
-  max-width: 720px;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  margin: 2rem auto 2.5rem;
+  padding: 0.35rem;
+  max-width: 780px;
   background: rgba(47, 111, 70, 0.08);
   border: 1px solid rgba(47, 111, 70, 0.16);
-  border-radius: 999px;
+  border-radius: 9999px;
   backdrop-filter: blur(12px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.industries-filter-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .ifb-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  border-radius: 999px;
+  gap: 0.45rem;
+  padding: 0.52rem 1.05rem;
+  border-radius: 9999px;
   font-family: var(--font-family);
-  font-size: 0.86rem;
-  font-weight: 700;
+  font-size: 0.825rem;
+  font-weight: 750;
   color: #1e472d;
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ifb-btn i {
+  font-size: 0.85rem;
+  color: var(--theme-green-brand, #2f6f46);
 }
 
 .ifb-btn:hover {
   color: #0f2417;
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .ifb-btn.active {
   background: #ffffff;
   color: #15271d;
   border-color: rgba(47, 111, 70, 0.25);
-  box-shadow: 0 4px 16px rgba(21, 39, 29, 0.08);
+  box-shadow: 0 4px 14px rgba(21, 39, 29, 0.08);
+}
+
+.ifb-btn.active i {
+  color: #10b981;
 }
 
 .industry-card-pro.is-hidden {
@@ -10649,46 +10683,69 @@ body.contact-page-leaving::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  margin: 2rem auto 2.5rem;
-  max-width: 850px;
+  flex-wrap: nowrap;
+  gap: 0.45rem;
+  margin: 2.25rem auto 2.75rem;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.35rem 0.45rem;
+  background: rgba(47, 111, 70, 0.05);
+  border: 1.5px solid rgba(47, 111, 70, 0.14);
+  border-radius: 9999px;
+  box-shadow: 0 4px 18px rgba(21, 39, 29, 0.04);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bento-discipline-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .bdn-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.15rem;
+  gap: 0.45rem;
+  padding: 0.52rem 1.15rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
+  background: #ffffff;
+  border: 1.5px solid rgba(47, 111, 70, 0.2);
+  color: #15271d;
   font-family: var(--font-family);
-  font-size: 0.84rem;
-  font-weight: 650;
+  font-size: 0.835rem;
+  font-weight: 750;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(21, 39, 29, 0.05);
 }
 
 .bdn-btn i {
-  color: #34d399;
-  font-size: 0.85rem;
+  color: var(--theme-green-brand, #2f6f46);
+  font-size: 0.95rem;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 .bdn-btn:hover {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(52, 211, 153, 0.4);
-  color: #ffffff;
+  background: #f0f7f2;
+  border-color: rgba(47, 111, 70, 0.45);
+  color: #0b1a11;
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(21, 39, 29, 0.08);
+}
+
+.bdn-btn:hover i {
+  color: #10b981;
+  transform: scale(1.1);
 }
 
 .bdn-btn.active {
-  background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
-  border-color: #34d399;
+  background: linear-gradient(135deg, #184226 0%, #10b981 100%);
+  border-color: #10b981;
   color: #ffffff;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.32);
+  transform: translateY(-1px);
 }
 
 .bdn-btn.active i {
@@ -11107,16 +11164,121 @@ body.contact-page-leaving::after {
   background: #fbfdfb;
 }
 
+/* ==========================================================================
+   2026 PINNED SCROLL SHOWCASE (Apple/Stripe Style Split Sticky)
+   Left: Culture manifesto stays pinned in viewport.
+   Right: 6 Pillars mosaic slides up smoothly on scroll through the window.
+   Once slide finishes, the section releases and page scroll continues.
+   ========================================================================== */
+.about-pinned-showcase {
+  width: 100%;
+  max-width: 1320px;
+  margin: 3.5rem auto 0;
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .about-pinned-showcase {
+    height: auto;
+  }
+
+  .about-pinned-showcase .about-split-canvas {
+    position: static;
+    height: auto;
+    max-height: none;
+    min-height: unset;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 2.25rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  .about-pinned-showcase .about-culture-card {
+    height: auto;
+    min-height: 560px;
+    position: relative;
+    border-radius: 26px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transform: none !important;
+    border: 1.5px solid rgba(47, 111, 70, 0.2);
+    box-shadow: 0 16px 40px rgba(18, 37, 25, 0.14);
+    background: #122519;
+  }
+
+  .about-pillars-mosaic-window {
+    height: auto;
+    position: static;
+    overflow: visible;
+    border-radius: 24px;
+    padding: 0;
+  }
+
+  .about-pillars-mosaic-window::before,
+  .about-pillars-mosaic-window::after {
+    display: none;
+  }
+
+  .about-pillars-mosaic-window .about-pillars-mosaic {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .about-pinned-showcase {
+    height: auto;
+    margin-top: 2.5rem;
+  }
+
+  .about-pinned-showcase .about-split-canvas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    position: static;
+    height: auto;
+  }
+
+  .about-pinned-showcase .about-culture-card {
+    min-height: 440px;
+    transform: none !important;
+  }
+
+  .about-pillars-mosaic-window {
+    height: auto;
+    overflow: visible;
+  }
+
+  .about-pillars-mosaic-window::before,
+  .about-pillars-mosaic-window::after {
+    display: none;
+  }
+
+  .about-pillars-mosaic-window .about-pillars-mosaic {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    transform: none !important;
+  }
+}
+
 .about-split-canvas {
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
+  grid-template-columns: 1fr 1.35fr;
   gap: 2.25rem;
   max-width: 1320px;
   margin: 0 auto;
-  align-items: stretch;
+  align-items: start;
+  position: relative;
 }
 
-/* Culture Card Left */
+/* Culture Card Left - Sticky Pinning */
 .about-culture-card {
   position: relative;
   border-radius: 26px;
@@ -11129,14 +11291,14 @@ body.contact-page-leaving::after {
   box-shadow: 0 16px 40px rgba(18, 37, 25, 0.14);
   background: #122519;
   opacity: 1 !important;
-  transform: translateY(0) scale(1) !important;
+  transform: none !important;
 }
 
 .about-culture-card.is-revealed,
 .about-culture-card.is-inview,
 .about-culture-card.is-animated {
   opacity: 1 !important;
-  transform: translateY(0) scale(1) !important;
+  transform: none !important;
 }
 
 .acc-bg-image-wrap {
