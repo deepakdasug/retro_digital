@@ -6194,8 +6194,25 @@ body.inner-page .site-header .hamburger-bar {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(230px, 1.45fr) repeat(4, minmax(0, 1fr));
-  gap: 2rem;
+  grid-template-columns: minmax(280px, 330px) 1fr;
+  gap: clamp(2.5rem, 3.5vw, 3.75rem);
+  align-items: start;
+}
+
+.footer-brand {
+  position: relative;
+}
+
+.footer-nav-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.footer-nav-grid .footer-column {
+  flex: 0 0 auto;
 }
 
 .footer-logo {
@@ -6250,6 +6267,34 @@ body.inner-page .site-header .hamburger-bar {
   color: var(--color-charcoal-dark);
 }
 
+.footer-contact-list li.footer-contact-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.footer-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--color-charcoal-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+.footer-contact-item i {
+  color: var(--accent-cyan);
+  padding-top: 0;
+}
+
+.footer-contact-item:hover {
+  color: var(--theme-green-brand, #2f6f46);
+}
+
 .footer-heading {
   position: relative;
   margin-bottom: 1.15rem;
@@ -6290,6 +6335,7 @@ body.inner-page .site-header .hamburger-bar {
 .footer-link-button {
   text-decoration: none;
   transition: color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .footer-nav a:hover,
@@ -6317,9 +6363,9 @@ body.inner-page .site-header .hamburger-bar {
   align-items: center;
   flex-wrap: nowrap;
   gap: 0.55rem;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--theme-border-light, #e2e8f0);
+  margin-top: 1.25rem;
+  padding-top: 0;
+  border-top: none;
 }
 
 .footer-social-icon {
@@ -6347,7 +6393,7 @@ body.inner-page .site-header .hamburger-bar {
 }
 
 .footer-bottom {
-  padding: 1.25rem 2rem;
+  padding: 0.6rem 2rem;
   background: var(--theme-forest-deep, #13251a);
   color: rgba(255, 255, 255, 0.75);
 }
@@ -6355,12 +6401,14 @@ body.inner-page .site-header .hamburger-bar {
 .footer-bottom-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  text-align: center;
 }
 
 .footer-bottom p {
-  font-size: 0.85rem;
+  font-size: 0.825rem;
+  line-height: 1.4;
+  margin: 0;
   color: rgba(255, 255, 255, 0.75);
 }
 
@@ -6390,13 +6438,26 @@ body.inner-page .site-header .hamburger-bar {
   color: #397b4e;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 
   .footer-brand {
-    grid-column: 1 / -1;
+    border: none;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+
+  .footer-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+
+  .footer-nav-grid .footer-column {
+    flex: auto;
   }
 }
 
@@ -6406,11 +6467,19 @@ body.inner-page .site-header .hamburger-bar {
   }
 
   .footer-grid {
-    gap: 2rem 1.25rem;
+    gap: 2rem;
   }
 
   .footer-brand {
-    grid-column: 1 / -1;
+    padding-bottom: 2rem;
+  }
+
+  .footer-nav-grid {
+    gap: 2rem 1.25rem;
+  }
+
+  .footer-nav a {
+    white-space: normal;
   }
 
   .footer-logo img {
@@ -6418,7 +6487,7 @@ body.inner-page .site-header .hamburger-bar {
   }
 
   .footer-bottom {
-    padding: 1rem 1.5rem;
+    padding: 0.55rem 1.5rem;
   }
 
   .footer-bottom p {
@@ -6426,17 +6495,14 @@ body.inner-page .site-header .hamburger-bar {
   }
 }
 
-@media (max-width: 420px) {
-  .footer-grid {
+@media (max-width: 480px) {
+  .footer-nav-grid {
     grid-template-columns: 1fr;
   }
 
-  .footer-brand {
-    grid-column: auto;
-  }
-
   .footer-bottom-inner {
-    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -8315,7 +8381,6 @@ body.contact-page-leaving::after {
 .admin-dashboard-heading h1 {
   margin: 0.6rem 0 0.35rem;
   color: #1c2b3b;
-}
   font-size: clamp(1.8rem, 3vw, 2.35rem);
   font-weight: 700;
   letter-spacing: -0.045em;

@@ -15,18 +15,21 @@
               <span>O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India,
                 122002</span>
             </li>
-            <li>
-              <i class="fa-solid fa-phone" aria-hidden="true"></i>
-              <a href="tel:+919910836538">+91 99108 36538</a>
-            </li>
-            <li>
-              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-              <a href="mailto:info@retrotech.in">info@retrotech.in</a>
+            <li class="footer-contact-inline">
+              <a href="tel:+919910836538" class="footer-contact-item">
+                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                <span>+91 99108 36538</span>
+              </a>
+              <a href="mailto:info@retrotech.in" class="footer-contact-item">
+                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                <span>info@retrotech.in</span>
+              </a>
             </li>
           </ul>
         </div>
 
-        <section class="footer-column" aria-labelledby="footer-who-we-are-heading">
+        <div class="footer-nav-grid">
+          <section class="footer-column" aria-labelledby="footer-who-we-are-heading">
           <h2 class="footer-heading" id="footer-who-we-are-heading">Who We Are</h2>
           <ul class="footer-nav">
             <li><a href="{{ route('home') }}">Home</a></li>
@@ -79,8 +82,6 @@
             <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}">Medical &amp; Healthcare</a></li>
             <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil &amp; Gas</a></li>
             <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
-            <li><a href="{{ route('industries.index') }}" style="color: #25d366; font-weight: 700;">View All Industries
-                &rarr;</a></li>
           </ul>
 
           <div class="footer-socials" aria-label="Social media">
@@ -96,6 +97,7 @@
                 aria-hidden="true"></i></a>
           </div>
         </section>
+        </div>
 
       </div>
     </div>
@@ -104,9 +106,6 @@
   <div class="footer-bottom">
     <div class="footer-inner footer-bottom-inner">
       <p>&copy; {{ date('Y') }} Retrotech Business Solution PVT LTD | All Rights Reserved</p>
-      <a href="#home" class="footer-back-to-top" aria-label="Back to top" title="Back to top">
-        <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
-      </a>
     </div>
   </div>
 </footer>
