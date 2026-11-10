@@ -85,6 +85,11 @@ html {
   scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 html.lenis,
@@ -3608,6 +3613,9 @@ body.inner-page .site-header .hamburger-bar {
   color: rgba(255, 255, 255, 0.85);
   padding: 0.9rem 0;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -3616,6 +3624,8 @@ body.inner-page .site-header .hamburger-bar {
   display: flex;
   gap: 2.5rem;
   white-space: nowrap;
+  width: max-content;
+  will-change: transform;
   animation: tickerSlide 35s linear infinite;
   font-family: var(--font-family);
   font-size: 0.825rem;
@@ -11169,28 +11179,25 @@ body.contact-page-leaving::after {
 
 @media (min-width: 992px) {
   .about-pinned-showcase {
-    height: 230vh;
+    height: auto;
   }
 
   .about-pinned-showcase .about-split-canvas {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 96px;
-    height: calc(100vh - 120px);
-    max-height: 720px;
-    min-height: 560px;
+    position: static;
+    height: auto;
+    max-height: none;
+    min-height: unset;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1.35fr;
     gap: 2.25rem;
-    align-items: stretch;
+    align-items: start;
     width: 100%;
-    z-index: 25;
   }
 
   .about-pinned-showcase .about-culture-card {
-    height: 100%;
-    min-height: unset;
+    height: auto;
+    min-height: 560px;
     position: relative;
     border-radius: 26px;
     overflow: hidden;
@@ -11204,43 +11211,23 @@ body.contact-page-leaving::after {
   }
 
   .about-pillars-mosaic-window {
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+    height: auto;
+    position: static;
+    overflow: visible;
     border-radius: 24px;
-    padding: 0.25rem 0.25rem 1rem;
+    padding: 0;
   }
 
-  .about-pillars-mosaic-window::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 24px;
-    background: linear-gradient(180deg, rgba(247, 250, 247, 0.95) 0%, transparent 100%);
-    z-index: 8;
-    pointer-events: none;
-  }
-
+  .about-pillars-mosaic-window::before,
   .about-pillars-mosaic-window::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 36px;
-    background: linear-gradient(0deg, rgba(247, 250, 247, 0.95) 0%, transparent 100%);
-    z-index: 8;
-    pointer-events: none;
+    display: none;
   }
 
   .about-pillars-mosaic-window .about-pillars-mosaic {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
-    will-change: transform;
-    transition: transform 0.08s linear;
+    transform: none !important;
   }
 }
 
