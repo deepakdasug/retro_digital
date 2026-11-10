@@ -78,7 +78,7 @@
     </header>
 
     @if($post->image_url)
-      <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="blog-post-featured-image" onerror="this.onerror=null; this.src='{{ asset('assets/images/tech-development/web-development.jpg') }}';">
+      <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="blog-post-featured-image">
     @endif
 
     <div class="blog-post-content ck-content">{!! $post->content_html !!}</div>

@@ -91,4 +91,32 @@ class FaqAdminTest extends TestCase
         $response->assertSee('Add FAQ');
         $response->assertSee('Where can I get support?');
     }
+
+    public function test_public_faqs_page_renders_dynamic_database_content(): void
+    {
+        $published = Faq::create([
+            'question' => 'What is the dynamic database question?',
+            'answer' => 'This answer comes straight from the MySQL database.',
+            'category' => 'Database Testing',
+            'sort_order' => 1,
+            'is_published' => true,
+        ]);
+
+        $draft = Faq::create([
+            'question' => 'Hidden draft question?',
+            'answer' => 'This should not appear publicly.',
+            'category' => 'Database Testing',
+            'sort_order' => 2,
+            'is_published' => false,
+        ]);
+
+        $response = $this->get(route('faqs'));
+
+        $response->assertOk();
+        $response->assertSee('What is the dynamic database question?');
+        $response->assertSee('This answer comes straight from the MySQL database.');
+        $response->assertSee('Database Testing');
+        $response->assertDontSee('Hidden draft question?');
+        $response->assertDontSee('This should not appear publicly.');
+    }
 }
