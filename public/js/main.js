@@ -6,10 +6,13 @@
 
 function initRetrotech() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lenisEasing = (time) => 1 - Math.pow(1 - time, 3);
   const lenis = window.Lenis && !prefersReducedMotion
     ? new window.Lenis({
         autoRaf: true,
         lerp: 0.1,
+        duration: 2,
+        easing: lenisEasing,
         wheelMultiplier: 1.05,
         touchMultiplier: 1.0,
         smoothWheel: true,
@@ -44,7 +47,7 @@ function initRetrotech() {
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
     if (lenis) {
-      lenis.scrollTo(offsetPosition, { lerp: 0.075 });
+      lenis.scrollTo(offsetPosition, { duration: 2, easing: lenisEasing });
     } else {
       window.scrollTo({
         top: offsetPosition,

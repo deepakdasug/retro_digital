@@ -92,7 +92,7 @@
                                     <i class="fa-solid fa-magnifying-glass cc-search-icon" aria-hidden="true"></i>
                                     <input type="text" class="cc-search-input" id="ccSearch" placeholder="Search country..." autocomplete="off" aria-label="Search country code">
                                 </div>
-                                <ul class="cc-list" id="ccList"></ul>
+                                <ul class="cc-list" id="ccList" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true"></ul>
                                 <p class="cc-no-results" id="ccNoResults" style="display:none">No results found</p>
                             </div>
                         </div>

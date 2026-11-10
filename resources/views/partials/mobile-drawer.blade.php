@@ -8,7 +8,7 @@
     <li class="mobile-services-item">
       <details>
         <summary class="mobile-nav-link">Services</summary>
-        <ul class="mobile-services-links">
+        <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'marketing-platform']) }}">Marketing Platform</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'search-engine-optimization']) }}">Search Engine Optimization</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
@@ -38,7 +38,7 @@
     <li class="mobile-services-item">
       <details>
         <summary class="mobile-nav-link">Industries</summary>
-        <ul class="mobile-services-links">
+        <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
           <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}">Ecommerce &amp; Multivendor</a></li>
           <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real Estate &amp; Construction</a></li>
           <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufacturing</a></li>
@@ -60,7 +60,7 @@
     <li class="mobile-services-item">
       <details>
         <summary class="mobile-nav-link">Insights</summary>
-        <ul class="mobile-services-links">
+        <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
           <li><a href="{{ route('about') }}">About Us</a></li>
           <li><a href="{{ route('blog') }}">Blogs</a></li>
           <li><a href="{{ route('careers') }}">Careers</a></li>
