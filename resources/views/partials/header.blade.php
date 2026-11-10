@@ -133,7 +133,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link-cta contact-page-link icon-label-control" href="{{ route('contact.page') }}#contact"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>Contact Us</span></a>
+          <a class="nav-link" href="{{ route('contact.page') }}#contact">Contact Us</a>
         </li>
 
       </ul>

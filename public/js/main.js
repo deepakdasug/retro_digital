@@ -5,12 +5,17 @@
  */
 
 function initRetrotech() {
-  const lenis = window.Lenis
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lenisEasing = (time) => 1 - Math.pow(1 - time, 3);
+  const lenis = window.Lenis && !prefersReducedMotion
     ? new window.Lenis({
         autoRaf: true,
-        lerp: 0.075,
-        wheelMultiplier: 0.8,
+        lerp: 0.1,
+        duration: 2,
+        easing: lenisEasing,
+        wheelMultiplier: 1.05,
         touchMultiplier: 1.0,
+        smoothWheel: true,
         syncTouch: false,
         anchors: false,
         allowNestedScroll: true,
@@ -42,9 +47,12 @@ function initRetrotech() {
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
     if (lenis) {
-      lenis.scrollTo(offsetPosition, { lerp: 0.075 });
+      lenis.scrollTo(offsetPosition, { duration: 2, easing: lenisEasing });
     } else {
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
     }
   });
 
@@ -729,11 +737,9 @@ function initRetrotech() {
   const indNextBtn = document.getElementById('indNextBtn');
   const indDots = document.querySelectorAll('#indNavDots .ind-dot');
   const industryCards = document.querySelectorAll('.industry-card-pro');
-  const industryFilterButtons = document.querySelectorAll('.ifb-btn');
 
   if (indViewport && indTrack && industryCards.length > 0) {
     let currentIndSlide = 0;
-    let currentFilter = 'all';
 
     const getIndCardsPerView = () => {
       if (window.innerWidth <= 640) return 1;
@@ -741,17 +747,12 @@ function initRetrotech() {
       return 3;
     };
 
-    const getVisibleCards = () => {
-      return Array.from(industryCards).filter(c => !c.classList.contains('is-hidden'));
-    };
-
     const updateIndCarousel = () => {
-      const visibleCards = getVisibleCards();
       const cardsPerView = getIndCardsPerView();
-      const maxSlide = Math.max(0, Math.ceil(visibleCards.length / cardsPerView) - 1);
+      const maxSlide = Math.max(0, Math.ceil(industryCards.length / cardsPerView) - 1);
       if (currentIndSlide > maxSlide) currentIndSlide = maxSlide;
 
-      const card = visibleCards[0] || industryCards[0];
+      const card = industryCards[0];
       if (!card) return;
       const cardWidth = card.getBoundingClientRect().width;
       const gap = 24; // 1.5rem
@@ -781,9 +782,8 @@ function initRetrotech() {
 
     if (indNextBtn) {
       indNextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
         const cardsPerView = getIndCardsPerView();
-        const maxSlide = Math.max(0, Math.ceil(visibleCards.length / cardsPerView) - 1);
+        const maxSlide = Math.max(0, Math.ceil(industryCards.length / cardsPerView) - 1);
         if (currentIndSlide < maxSlide) {
           currentIndSlide++;
           updateIndCarousel();
@@ -796,28 +796,6 @@ function initRetrotech() {
         dot.addEventListener('click', () => {
           const targetIndex = parseInt(dot.getAttribute('data-index') || '0', 10);
           currentIndSlide = targetIndex;
-          updateIndCarousel();
-        });
-      });
-    }
-
-    if (industryFilterButtons.length > 0) {
-      industryFilterButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          currentFilter = btn.getAttribute('data-filter') || 'all';
-          industryFilterButtons.forEach(b => b.classList.toggle('active', b === btn));
-
-          industryCards.forEach((card) => {
-            const cat = card.getAttribute('data-industry-cat') || '';
-            if (currentFilter === 'all' || cat === currentFilter) {
-              card.classList.remove('is-hidden');
-              card.classList.add('is-inview', 'is-animated');
-            } else {
-              card.classList.add('is-hidden');
-            }
-          });
-
-          currentIndSlide = 0;
           updateIndCarousel();
         });
       });

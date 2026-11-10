@@ -22,18 +22,18 @@
   <style>
     .sp-theme-page { font-family: var(--font-family, 'Inter', system-ui, sans-serif); color: #334b39; background-color: #f7fbf7; }
     .sp-theme-page .sp-glass-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(226, 242, 229, 0.58)) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
       border: 1px solid rgba(255, 255, 255, 0.96) !important;
-      box-shadow: 0 18px 42px rgba(30, 70, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.98), inset 0 -1px 0 rgba(57, 123, 78, 0.12);
-      -webkit-backdrop-filter: blur(22px) saturate(165%);
-      backdrop-filter: blur(22px) saturate(165%);
+      box-shadow: 0 10px 28px rgba(30, 70, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.98);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
     }
     .sp-theme-page .sp-glass-card-dark {
-      background: rgba(22, 48, 31, 0.78) !important;
-      border-color: rgba(255, 255, 255, 0.34) !important;
-      box-shadow: 0 20px 46px rgba(15, 40, 24, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      -webkit-backdrop-filter: blur(22px) saturate(155%);
-      backdrop-filter: blur(22px) saturate(155%);
+      background: rgba(22, 48, 31, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      box-shadow: 0 12px 32px rgba(15, 40, 24, 0.2);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
     }
     .sp-theme-page .sp-projects-aurora {
       position: relative;
@@ -45,14 +45,13 @@
       content: '';
       position: absolute;
       z-index: -1;
-      inset: -18%;
+      inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(ellipse at 12% 22%, rgba(66, 214, 139, 0.38), transparent 34%),
-        radial-gradient(ellipse at 83% 18%, rgba(90, 196, 205, 0.32), transparent 31%),
-        radial-gradient(ellipse at 72% 82%, rgba(139, 133, 220, 0.24), transparent 36%),
-        radial-gradient(ellipse at 24% 88%, rgba(172, 231, 160, 0.36), transparent 34%);
-      filter: blur(28px);
+        radial-gradient(ellipse at 12% 22%, rgba(66, 214, 139, 0.24), transparent 48%),
+        radial-gradient(ellipse at 83% 18%, rgba(90, 196, 205, 0.20), transparent 42%),
+        radial-gradient(ellipse at 72% 82%, rgba(139, 133, 220, 0.16), transparent 45%),
+        radial-gradient(ellipse at 24% 88%, rgba(172, 231, 160, 0.22), transparent 45%);
     }
     .sp-theme-page .sp-projects-aurora::after {
       content: '';
@@ -60,9 +59,7 @@
       z-index: 0;
       inset: 0;
       pointer-events: none;
-      opacity: 0.3;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-      mix-blend-mode: multiply;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.45), transparent 75%);
     }
     .sp-theme-page .sp-projects-aurora > .container {
       position: relative;
@@ -91,10 +88,10 @@
       position: relative;
       transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
       transform-style: preserve-3d;
-      will-change: transform;
       transition: transform 280ms cubic-bezier(0.2, 0.75, 0.25, 1), box-shadow 280ms ease;
     }
     .sp-theme-page .sp-hero-tilt.is-tilting {
+      will-change: transform;
       transition-duration: 70ms;
       box-shadow: 0 30px 65px rgba(25, 83, 45, 0.27);
     }
@@ -169,81 +166,31 @@
     }
     .sp-theme-page .sp-knowledge-section {
       position: relative;
-      isolation: isolate;
-      overflow: hidden;
       background:
-        radial-gradient(ellipse at 12% 18%, rgba(166, 230, 181, 0.62), transparent 34%),
-        radial-gradient(ellipse at 88% 72%, rgba(163, 223, 202, 0.58), transparent 36%),
+        radial-gradient(ellipse at 12% 18%, rgba(166, 230, 181, 0.35), transparent 45%),
+        radial-gradient(ellipse at 88% 72%, rgba(163, 223, 202, 0.35), transparent 45%),
         #edf7ee;
     }
     .sp-theme-section-content {
       position: relative;
       z-index: 1;
     }
-    .sp-theme-page .sp-knowledge-goo {
-      position: absolute;
-      z-index: 0;
-      inset: -8rem;
-      overflow: hidden;
-      pointer-events: none;
-      filter: url(#sp-knowledge-goo);
-      opacity: 0.95;
-    }
-    .sp-theme-page .sp-knowledge-blob {
-      position: absolute;
-      display: block;
-      border-radius: 50%;
-      background: #9cddb0;
-      animation: knowledgeGooFloat 10s ease-in-out infinite alternate;
-    }
-    .sp-theme-page .sp-knowledge-blob:nth-child(2) {
-      width: 24rem;
-      height: 24rem;
-      top: 2%;
-      left: 2%;
-      animation-delay: -2s;
-    }
-    .sp-theme-page .sp-knowledge-blob:nth-child(3) {
-      width: 21rem;
-      height: 21rem;
-      top: 30%;
-      right: 0;
-      background: #8dd5bd;
-      animation-duration: 13s;
-      animation-delay: -5s;
-    }
-    .sp-theme-page .sp-knowledge-blob:nth-child(4) {
-      width: 19rem;
-      height: 19rem;
-      bottom: -2%;
-      left: 36%;
-      background: #b9df8d;
-      animation-duration: 12s;
-      animation-delay: -4s;
-    }
-    @keyframes knowledgeGooFloat {
-      0% { transform: translate3d(-28px, -18px, 0) scale(0.88); }
-      50% { transform: translate3d(36px, 24px, 0) scale(1.12); }
-      100% { transform: translate3d(-12px, 46px, 0) scale(1); }
-    }
     .sp-theme-page .sp-knowledge-section .faq-item {
-      border-radius: 1.5rem 1rem 1.75rem 1rem;
-      transition: border-radius 350ms ease, transform 350ms ease, background 350ms ease, box-shadow 350ms ease;
+      border-radius: 1.25rem;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
     .sp-theme-page .sp-knowledge-section .faq-active {
-      border-radius: 1rem 1.75rem 1rem 1.75rem;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(225, 243, 229, 0.9)) !important;
-      box-shadow: 0 22px 48px rgba(39, 101, 57, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-      transform: scale(1.02);
+      border-radius: 1.25rem;
+      background: #ffffff !important;
+      border-color: #397b4e !important;
+      box-shadow: 0 10px 28px rgba(39, 101, 57, 0.08);
     }
-    @media (prefers-reduced-motion: reduce) {
-      .sp-theme-page .sp-knowledge-blob {
-        animation: none;
-      }
-    }
-    @keyframes floatSlow { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
-    @keyframes floatAlt { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
     @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .sp-marquee-track {
+      will-change: transform;
+      transform: translateZ(0);
+      contain: layout paint;
+    }
     .sp-animate-float { animation: floatSlow 6s ease-in-out infinite; }
     .sp-animate-float-alt { animation: floatAlt 5s ease-in-out infinite 1s; }
     .premium-input { width: 100%; padding: 0.95rem 1.25rem; background-color: #f7fbf7; border: 1.5px solid #d7e5d9; border-radius: 0.875rem; color: #1e3326; font-size: 0.95rem; transition: all 0.25s ease; outline: none; }
@@ -566,7 +513,7 @@
         <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
         <p class="text-center text-xs font-bold tracking-[0.16em] text-[#397b4e] uppercase mb-4">Trusted by industry leaders</p>
-        <div class="flex w-[200%] animate-[marqueeScroll_22s_linear_infinite]">
+        <div class="flex w-[200%] animate-[marqueeScroll_22s_linear_infinite] sp-marquee-track">
             @for ($k = 0; $k < 2; $k++)
             <div class="flex justify-around items-center w-1/2 opacity-70 gap-12 px-6">
                 @foreach (['TechCorp', 'GlobalBank', 'Nexus', 'Innovate', 'Starlight'] as $brand)
@@ -579,7 +526,7 @@
 
     {{-- 2b. TOPIC MARQUEE --}}
     <div class="bg-[#397b4e] py-4 overflow-hidden" aria-label="What we cover">
-        <div class="flex w-max animate-[marqueeScroll_32s_linear_infinite]">
+        <div class="flex w-max animate-[marqueeScroll_32s_linear_infinite] sp-marquee-track">
             @for ($k = 0; $k < 2; $k++)
                 @foreach ($topics as $topic)
                     <span class="shrink-0 px-6 text-sm font-bold uppercase tracking-wider text-white whitespace-nowrap">{{ $topic }}</span>
@@ -858,18 +805,6 @@
 
     {{-- 14. PREMIUM FAQ ACCORDION --}}
     <section class="sp-knowledge-section py-24 border-b border-[#d7e5d9]">
-        <div class="sp-knowledge-goo" aria-hidden="true">
-            <svg class="absolute w-0 h-0" aria-hidden="true" focusable="false">
-                <filter id="sp-knowledge-goo">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur" />
-                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="goo" />
-                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-                </filter>
-            </svg>
-            <span class="sp-knowledge-blob"></span>
-            <span class="sp-knowledge-blob"></span>
-            <span class="sp-knowledge-blob"></span>
-        </div>
         <div class="sp-theme-section-content container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
             <div class="text-center mb-16">
                 <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Knowledge Base</span>
@@ -906,7 +841,7 @@
                     </div>
                 </div>
                 <div class="lg:col-span-8 min-w-0">
-                    <div id="blogTrack" class="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
+                    <div id="blogTrack" class="flex gap-6 overflow-x-auto snap-x no-scrollbar pb-2" style="overscroll-behavior-x: contain; overscroll-behavior-y: auto;">
                         @foreach ($blogs as $blog)
                         @php
                             $day = $blog[0]; $mon = $blog[1]; $cat = $blog[2]; $title = $blog[3]; $seed = $blog[4]; $href = $blog[5];

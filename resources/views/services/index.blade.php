@@ -1211,11 +1211,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (prevBtn) {
-      prevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        renderReview(currentSlide - 1, 'prev');
-        restartTimer();
-      });
+      prevBtn.addEventListener('click', () => renderReview(currentSlide - 1));
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => renderReview(currentSlide + 1));
+    }
+
+    let reviewTimer = null;
+    const startReviewTimer = () => {
+      if (!reviewTimer) {
+        reviewTimer = setInterval(() => renderReview(currentSlide + 1), 6000);
+      }
+    };
+    const stopReviewTimer = () => {
+      if (reviewTimer) {
+        clearInterval(reviewTimer);
+        reviewTimer = null;
+      }
+    };
+
+    const carouselBox = document.getElementById('experienceCarousel');
+    if (carouselBox) {
+      if ('IntersectionObserver' in window) {
+        const carouselObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              startReviewTimer();
+            } else {
+              stopReviewTimer();
+            }
+          });
+        }, { threshold: 0.1 });
+        carouselObserver.observe(carouselBox);
+      } else {
+        startReviewTimer();
+      }
+
+      carouselBox.addEventListener('mouseenter', stopReviewTimer);
+      carouselBox.addEventListener('mouseleave', startReviewTimer);
     }
     if (nextBtn) {
       nextBtn.addEventListener('click', (e) => {

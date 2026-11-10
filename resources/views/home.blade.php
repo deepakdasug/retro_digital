@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Retrotech - Business Made Easy | 360° IT, AI & Digital Solutions')
 @section('description', 'Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through WhatsApp marketing tools, web development, and custom software.')
@@ -115,50 +115,29 @@
       <div class="about-pinned-showcase" id="aboutShowcase">
         <div class="about-split-canvas">
           
-          {{-- Left Column: Creative Team Manifesto & Culture Card --}}
-          <div class="about-culture-card">
-            <div class="acc-bg-image-wrap">
-              <img src="{{ asset('assets/images/process-2.jpg') }}" alt="Retrotech Creative & Engineering Team" loading="lazy">
-              <div class="acc-gradient-overlay" aria-hidden="true"></div>
+          {{-- Left Column: Certificate --}}
+          <div class="about-credential-stack">
+
+            {{-- Verified Expertise --}}
+            <div class="acred-card acred-card--expertise" data-anim="left">
+              <div class="acred-header">
+                <span class="acred-icon-wrap"><i class="fa-solid fa-medal"></i></span>
+                <div>
+                  <h3 class="acred-title">Verified Expertise</h3>
+                  <p class="acred-subtitle">Recognized for excellence in IT services &amp; digital marketing</p>
+                </div>
+                <span class="acred-live-badge"><span class="acred-pulse"></span>Certified</span>
+              </div>
+              <div class="acred-certificate-frame">
+                <img
+                  src="{{ asset('assets/images/certificate.png') }}"
+                  alt="Retrotech Digital Certificate of Excellence for IT Services and Digital Marketing Solutions"
+                  loading="lazy"
+                >
+              </div>
             </div>
 
-            <div class="acc-content-wrap">
-              <div class="acc-top-badge">
-                <span class="acc-pulse-dot" aria-hidden="true"></span>
-                <span>The Retrotech Collective</span>
-              </div>
-
-              <div class="acc-team-stat">
-                <span class="acc-team-dot"></span>
-                <span>48 In-House Senior Engineers • Delhi NCR &amp; Global Hub</span>
-              </div>
-
-              <div class="acc-quote-box">
-                <i class="fa-solid fa-quote-left acc-quote-icon" aria-hidden="true"></i>
-                <blockquote class="acc-quote-text">
-                  “We are web designers, developers, project managers, and digital marketing professionals dedicated to creative solutions using the latest trends.”
-                </blockquote>
-              </div>
-
-              <div class="acc-bottom-highlights">
-                <div class="acc-highlight-item">
-                  <span class="acc-hl-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                  <div>
-                    <strong>Creative &amp; Strategic</strong>
-                    <small>Human-centric UI/UX and brand storytelling</small>
-                  </div>
-                </div>
-                <div class="acc-highlight-item">
-                  <span class="acc-hl-icon"><i class="fa-solid fa-microchip"></i></span>
-                  <div>
-                    <strong>Future-Ready Code</strong>
-                    <small>Modern frameworks, microservices &amp; AI</small>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-
           {{-- Right Column: 6 Core Pillars Grid with Slide Window --}}
           <div class="about-pillars-mosaic-window" id="aboutPillarsMosaicWindow">
             <div class="about-pillars-mosaic" id="aboutPillarsMosaic">
@@ -227,37 +206,7 @@
             </div>
           </div>
 
-          {{-- Pillar 05 --}}
-          <div class="pillar-tile-item" data-anim="right">
-            <div class="pti-thumb-wrap">
-              <img src="{{ asset('assets/images/tech-development/saas-application.jpg') }}" alt="Verified Expertise" loading="lazy">
-              <span class="pti-number">05</span>
-            </div>
-            <div class="pti-content">
-              <div class="pti-header">
-                <span class="pti-icon"><i class="fa-solid fa-certificate"></i></span>
-                <h3 class="pti-title">Verified Expertise</h3>
-              </div>
-              <p class="pti-desc">Senior full-stack developers, certified cloud architects, and battle-tested industry standards delivering clean, maintainable systems.</p>
-              <div class="pti-kpi"><i class="fa-solid fa-award"></i> Top 1% Senior Engineers</div>
-            </div>
-          </div>
-
-          {{-- Pillar 06 --}}
-          <div class="pillar-tile-item" data-anim="up">
-            <div class="pti-thumb-wrap">
-              <img src="{{ asset('assets/images/tech-development/software-development.jpg') }}" alt="Always Honest" loading="lazy">
-              <span class="pti-number">06</span>
-            </div>
-            <div class="pti-content">
-              <div class="pti-header">
-                <span class="pti-icon"><i class="fa-solid fa-handshake-angle"></i></span>
-                <h3 class="pti-title">Always Honest</h3>
-              </div>
-              <p class="pti-desc">100% transparent pricing with zero hidden surprises, open communication, and dependable project delivery that builds enduring trust.</p>
-              <div class="pti-kpi"><i class="fa-solid fa-shield-halved"></i> Zero Vendor Lock-In</div>
-            </div>
-          </div>
+          
 
         </div>
       </div>
@@ -1075,15 +1024,8 @@
         <p class="bento-subtitle">We deliver innovative IT solutions tailored to the unique challenges and goals of businesses across diverse industries.</p>
       </div>
 
-      {{-- 2026 Interactive Industry Segmented Filter Bar & Slide Navigation Controls --}}
+      {{-- Industry carousel navigation --}}
       <div class="industries-toolbar" data-anim="down">
-        <div class="industries-filter-bar">
-          <button type="button" class="ifb-btn active" data-filter="all"><i class="fa-solid fa-shapes"></i> All Domains</button>
-          <button type="button" class="ifb-btn" data-filter="enterprise"><i class="fa-solid fa-network-wired"></i> Enterprise &amp; SaaS</button>
-          <button type="button" class="ifb-btn" data-filter="fintech"><i class="fa-solid fa-shield-halved"></i> FinTech &amp; Health</button>
-          <button type="button" class="ifb-btn" data-filter="commerce"><i class="fa-solid fa-cart-shopping"></i> E-Commerce &amp; Retail</button>
-        </div>
-
         <div class="ind-carousel-ctrls">
           <button type="button" class="ind-nav-btn" id="indPrevBtn" aria-label="Previous Domains">
             <i class="fa-solid fa-arrow-left"></i>
@@ -1649,7 +1591,7 @@
     <div class="bento-container">
       <div class="faq-split-layout">
         {{-- Left Sticky Support Desk Card --}}
-        <div class="faq-help-desk" data-anim="left">
+        <div class="faq-help-desk">
           <div class="bento-kicker-badge">
             <span class="bkb-ping"><span class="bkb-ping-dot"></span></span>
             <span class="bkb-text">Support &amp; Clarity</span>
@@ -1691,7 +1633,7 @@
         </div>
 
         {{-- Right Accordion Stack --}}
-        <div class="faq-accordion-group" data-anim="right">
+        <div class="faq-accordion-group">
           {{-- Section 9 Feature: FAQ Live Real-Time Search Bar --}}
           <div class="faq-search-widget">
             <div class="faq-search-input-wrap">
