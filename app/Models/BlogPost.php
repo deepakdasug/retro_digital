@@ -55,24 +55,6 @@ class BlogPost extends Model
         'published_at' => 'datetime',
     ];
 
-    public function getImageUrlAttribute(): ?string
-    {
-        if (empty($this->image_path)) {
-            return asset('assets/images/tech-development/web-development.jpg');
-        }
-
-        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
-            return $this->image_path;
-        }
-
-        $cleanPath = ltrim($this->image_path, '/');
-        if (str_starts_with($cleanPath, 'storage/')) {
-            $cleanPath = substr($cleanPath, 8);
-        }
-
-        return asset('storage/' . $cleanPath);
-    }
-
     public function getContentHtmlAttribute(): string
     {
         $blocks = $this->content_blocks ?? [];
