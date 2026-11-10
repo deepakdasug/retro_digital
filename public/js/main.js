@@ -131,7 +131,7 @@ function initRetrotech() {
     if (slotRect.width === 0 || slotRect.height === 0) return;
 
     const scrollY = getScrollY();
-    const windowW = window.innerWidth;
+    const windowW = document.documentElement.clientWidth || window.innerWidth;
     const windowH = window.innerHeight;
 
     const transitionDistance = windowH * 0.85;
@@ -211,10 +211,46 @@ function initRetrotech() {
     }
   };
 
+  /* =========================================================================
+     2B. ABOUT SPLIT-CANVAS PINNED SLIDE ENGINE
+     Left card stays pinned/stationary in view.
+     Right 6-pillars mosaic smoothly slides up through the window as user scrolls.
+     When slide completes, page scrolling continues forward.
+     ========================================================================= */
+  const aboutShowcase = document.getElementById('aboutShowcase');
+  const aboutMosaic = document.getElementById('aboutPillarsMosaic');
+  const aboutMosaicWindow = document.getElementById('aboutPillarsMosaicWindow');
+
+  const handleAboutShowcaseScroll = () => {
+    if (!aboutShowcase || !aboutMosaic || !aboutMosaicWindow) return;
+    if (window.innerWidth < 992) {
+      aboutMosaic.style.transform = 'none';
+      return;
+    }
+
+    const rect = aboutShowcase.getBoundingClientRect();
+    const windowH = window.innerHeight;
+    const headerOffset = 96;
+    const totalScrollable = aboutShowcase.offsetHeight - windowH;
+
+    if (totalScrollable <= 0) return;
+
+    const scrolledInside = headerOffset - rect.top;
+    const progress = Math.min(Math.max(scrolledInside / totalScrollable, 0), 1);
+
+    const mosaicH = aboutMosaic.scrollHeight;
+    const windowH_mosaic = aboutMosaicWindow.clientHeight;
+    const maxSlide = Math.max(0, mosaicH - windowH_mosaic);
+
+    const currentSlide = progress * maxSlide;
+    aboutMosaic.style.transform = `translate3d(0, -${currentSlide.toFixed(1)}px, 0)`;
+  };
+
   const onScroll = () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
         handleVideoScroll();
+        handleAboutShowcaseScroll();
         ticking = false;
       });
       ticking = true;
@@ -228,6 +264,7 @@ function initRetrotech() {
   // Run after a frame so layout/paint has settled (important in Blade layouts)
   requestAnimationFrame(() => {
     handleVideoScroll();
+    handleAboutShowcaseScroll();
     onScroll();
   });
 

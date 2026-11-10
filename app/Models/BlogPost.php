@@ -55,6 +55,33 @@ class BlogPost extends Model
         'published_at' => 'datetime',
     ];
 
+    public function getContentHtmlAttribute(): string
+    {
+        $blocks = $this->content_blocks ?? [];
+        if (is_string($blocks)) {
+            return $blocks;
+        }
+        if (!is_array($blocks)) {
+            return '';
+        }
+        if (count($blocks) === 1 && ($blocks[0]['type'] ?? null) === 'html') {
+            return $blocks[0]['content'] ?? '';
+        }
+
+        return collect($blocks)->map(function (array $block): string {
+            $text = e($block['content'] ?? '');
+            return match ($block['type'] ?? null) {
+                'heading' => '<h2>' . $text . '</h2>',
+                'subheading' => '<h3>' . $text . '</h3>',
+                'paragraph' => '<p>' . nl2br($text) . '</p>',
+                'image' => !empty($block['image_path'])
+                    ? '<figure class="image"><img src="' . e(Storage::url($block['image_path'])) . '" alt="' . e($block['alt'] ?? $this->title) . '"></figure>'
+                    : '',
+                default => '',
+            };
+        })->implode("\n");
+    }
+
     public function getImageUrlAttribute(): ?string
     {
         if (empty($this->image_path)) {
@@ -84,38 +111,11 @@ class BlogPost extends Model
             return asset($this->image_path);
         }
 
-        if (Storage::disk('public')->exists($this->image_path)) {
-            return Storage::url($this->image_path);
+        if (Storage::disk('public')->exists($cleanPath)) {
+            return Storage::url($cleanPath);
         }
 
-        return asset('storage/' . $cleanPath);
-    }
-
-    public function getContentHtmlAttribute(): string
-    {
-        $blocks = $this->content_blocks ?? [];
-        if (is_string($blocks)) {
-            return $blocks;
-        }
-        if (!is_array($blocks)) {
-            return '';
-        }
-        if (count($blocks) === 1 && ($blocks[0]['type'] ?? null) === 'html') {
-            return $blocks[0]['content'] ?? '';
-        }
-
-        return collect($blocks)->map(function (array $block): string {
-            $text = e($block['content'] ?? '');
-            return match ($block['type'] ?? null) {
-                'heading' => '<h2>' . $text . '</h2>',
-                'subheading' => '<h3>' . $text . '</h3>',
-                'paragraph' => '<p>' . nl2br($text) . '</p>',
-                'image' => !empty($block['image_path'])
-                    ? '<figure class="image"><img src="' . e(Storage::url($block['image_path'])) . '" alt="' . e($block['alt'] ?? $this->title) . '"></figure>'
-                    : '',
-                default => '',
-            };
-        })->implode("\n");
+        return asset('assets/images/tech-development/web-development.jpg');
     }
 
     public function faqs()

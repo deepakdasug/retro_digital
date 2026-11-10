@@ -9,53 +9,6 @@
        1. HERO SECTION: Business Made Easy with Retrotech
        ========================================================================= --}}
   <main class="hero-section" id="home" >
-    {{-- Left Floating High-Tech Telemetry HUD (Desktop Spatial Anchor) --}}
-    <div class="hero-floating-hud hero-hud-left" aria-hidden="true">
-      <div class="h-hud-glass">
-        <div class="h-hud-header">
-          <span class="h-hud-icon"><i class="fa-solid fa-bolt-lightning"></i></span>
-          <div class="h-hud-info">
-            <span class="h-hud-tag">Edge Telemetry</span>
-            <span class="h-hud-status"><span class="h-hud-dot"></span> Live 38ms TTFB</span>
-          </div>
-        </div>
-        <div class="h-hud-graph">
-          <span class="hhg-bar" style="height: 40%"></span>
-          <span class="hhg-bar" style="height: 65%"></span>
-          <span class="hhg-bar" style="height: 50%"></span>
-          <span class="hhg-bar" style="height: 85%"></span>
-          <span class="hhg-bar" style="height: 100%"></span>
-          <span class="hhg-bar" style="height: 75%"></span>
-        </div>
-        <div class="h-hud-foot">
-          <span>Global Edge: 285 PoPs</span>
-          <strong class="h-hud-green">99.98%</strong>
-        </div>
-      </div>
-    </div>
-
-    {{-- Right Floating High-Tech Security HUD (Desktop Spatial Anchor) --}}
-    <div class="hero-floating-hud hero-hud-right" aria-hidden="true">
-      <div class="h-hud-glass">
-        <div class="h-hud-header">
-          <span class="h-hud-icon"><i class="fa-solid fa-shield-halved"></i></span>
-          <div class="h-hud-info">
-            <span class="h-hud-tag">Security Core</span>
-            <span class="h-hud-status"><span class="h-hud-dot dot-green"></span> Zero-Trust SSL</span>
-          </div>
-        </div>
-        <div class="h-hud-pills">
-          <span><i class="fa-solid fa-lock"></i> AES-256</span>
-          <span><i class="fa-solid fa-user-shield"></i> RBAC</span>
-          <span><i class="fa-solid fa-certificate"></i> SOC2 Ready</span>
-        </div>
-        <div class="h-hud-foot">
-          <span>Vulnerability Shield</span>
-          <strong class="h-hud-green">Active 🛡️</strong>
-        </div>
-      </div>
-    </div>
-
     <div class="hero-content hero-content-new">
       <!-- <div class="hero-announcement-pill">
         <!-- <span class="hap-dot"></span>
@@ -240,54 +193,56 @@
 
 
       {{-- 2026 Deeply Considered Split Canvas: Culture Manifesto + 6 Pillars Grid --}}
-      <div class="about-split-canvas">
-        
-        {{-- Left Column: Creative Team Manifesto & Culture Card --}}
-        <div class="about-culture-card" data-anim="left">
-          <div class="acc-bg-image-wrap">
-            <img src="{{ asset('assets/images/process-2.jpg') }}" alt="Retrotech Creative & Engineering Team" loading="lazy">
-            <div class="acc-gradient-overlay" aria-hidden="true"></div>
-          </div>
-
-          <div class="acc-content-wrap">
-            <div class="acc-top-badge">
-              <span class="acc-pulse-dot" aria-hidden="true"></span>
-              <span>The Retrotech Collective</span>
+      <div class="about-pinned-showcase" id="aboutShowcase">
+        <div class="about-split-canvas">
+          
+          {{-- Left Column: Creative Team Manifesto & Culture Card --}}
+          <div class="about-culture-card">
+            <div class="acc-bg-image-wrap">
+              <img src="{{ asset('assets/images/process-2.jpg') }}" alt="Retrotech Creative & Engineering Team" loading="lazy">
+              <div class="acc-gradient-overlay" aria-hidden="true"></div>
             </div>
 
-            <div class="acc-team-stat">
-              <span class="acc-team-dot"></span>
-              <span>48 In-House Senior Engineers • Delhi NCR &amp; Global Hub</span>
-            </div>
+            <div class="acc-content-wrap">
+              <div class="acc-top-badge">
+                <span class="acc-pulse-dot" aria-hidden="true"></span>
+                <span>The Retrotech Collective</span>
+              </div>
 
-            <div class="acc-quote-box">
-              <i class="fa-solid fa-quote-left acc-quote-icon" aria-hidden="true"></i>
-              <blockquote class="acc-quote-text">
-                “We are web designers, developers, project managers, and digital marketing professionals dedicated to creative solutions using the latest trends.”
-              </blockquote>
-            </div>
+              <div class="acc-team-stat">
+                <span class="acc-team-dot"></span>
+                <span>48 In-House Senior Engineers • Delhi NCR &amp; Global Hub</span>
+              </div>
 
-            <div class="acc-bottom-highlights">
-              <div class="acc-highlight-item">
-                <span class="acc-hl-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                <div>
-                  <strong>Creative &amp; Strategic</strong>
-                  <small>Human-centric UI/UX and brand storytelling</small>
+              <div class="acc-quote-box">
+                <i class="fa-solid fa-quote-left acc-quote-icon" aria-hidden="true"></i>
+                <blockquote class="acc-quote-text">
+                  “We are web designers, developers, project managers, and digital marketing professionals dedicated to creative solutions using the latest trends.”
+                </blockquote>
+              </div>
+
+              <div class="acc-bottom-highlights">
+                <div class="acc-highlight-item">
+                  <span class="acc-hl-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                  <div>
+                    <strong>Creative &amp; Strategic</strong>
+                    <small>Human-centric UI/UX and brand storytelling</small>
+                  </div>
+                </div>
+                <div class="acc-highlight-item">
+                  <span class="acc-hl-icon"><i class="fa-solid fa-microchip"></i></span>
+                  <div>
+                    <strong>Future-Ready Code</strong>
+                    <small>Modern frameworks, microservices &amp; AI</small>
+                  </div>
                 </div>
               </div>
-              <div class="acc-highlight-item">
-                <span class="acc-hl-icon"><i class="fa-solid fa-microchip"></i></span>
-                <div>
-                  <strong>Future-Ready Code</strong>
-                  <small>Modern frameworks, microservices &amp; AI</small>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
 
-        {{-- Right Column: 6 Core Pillars Grid --}}
-        <div class="about-pillars-mosaic">
+          {{-- Right Column: 6 Core Pillars Grid with Slide Window --}}
+          <div class="about-pillars-mosaic-window" id="aboutPillarsMosaicWindow">
+            <div class="about-pillars-mosaic" id="aboutPillarsMosaic">
           
           {{-- Pillar 01 --}}
           <div class="pillar-tile-item" data-anim="right">
@@ -386,10 +341,11 @@
           </div>
 
         </div>
-
       </div>
+
     </div>
-  </section>
+  </div>
+</section>
 
   {{-- =========================================================================
        4. SERVICES SECTION: Your Business Growth Through IT Solutions (Bento Grid)
