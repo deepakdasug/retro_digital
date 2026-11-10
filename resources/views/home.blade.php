@@ -1591,7 +1591,7 @@
     <div class="bento-container">
       <div class="faq-split-layout">
         {{-- Left Sticky Support Desk Card --}}
-        <div class="faq-help-desk" data-anim="left">
+        <div class="faq-help-desk">
           <div class="bento-kicker-badge">
             <span class="bkb-ping"><span class="bkb-ping-dot"></span></span>
             <span class="bkb-text">Support &amp; Clarity</span>
@@ -1633,7 +1633,7 @@
         </div>
 
         {{-- Right Accordion Stack --}}
-        <div class="faq-accordion-group" data-anim="right">
+        <div class="faq-accordion-group">
           {{-- Section 9 Feature: FAQ Live Real-Time Search Bar --}}
           <div class="faq-search-widget">
             <div class="faq-search-input-wrap">

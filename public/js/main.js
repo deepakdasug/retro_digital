@@ -9,8 +9,8 @@ function initRetrotech() {
   const lenis = window.Lenis && !prefersReducedMotion
     ? new window.Lenis({
         autoRaf: true,
-        lerp: 0.075,
-        wheelMultiplier: 1,
+        lerp: 0.1,
+        wheelMultiplier: 1.05,
         touchMultiplier: 1.0,
         smoothWheel: true,
         syncTouch: false,

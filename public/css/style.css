@@ -5028,8 +5028,7 @@ body.home-page .acred-card--expertise:hover {
 }
 
 .faq-help-desk {
-  position: sticky;
-  top: 100px;
+  position: relative;
   display: flex;
   flex-direction: column;
 }

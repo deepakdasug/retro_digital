@@ -47,6 +47,9 @@
   align-items: center;
   gap: 32px;
   animation: ribbonSlide 26s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout paint;
 }
 
 .srv-top-ribbon span {
@@ -1646,6 +1649,9 @@
   align-items: center;
   gap: 28px;
   animation: ambientTicker 26s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout paint;
 }
 
 .srv-ambient-banner span {

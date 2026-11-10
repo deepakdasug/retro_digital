@@ -1208,16 +1208,38 @@ document.addEventListener('DOMContentLoaded', function() {
       nextBtn.addEventListener('click', () => renderReview(currentSlide + 1));
     }
 
-    let reviewTimer = setInterval(() => {
-      renderReview(currentSlide + 1);
-    }, 6000);
+    let reviewTimer = null;
+    const startReviewTimer = () => {
+      if (!reviewTimer) {
+        reviewTimer = setInterval(() => renderReview(currentSlide + 1), 6000);
+      }
+    };
+    const stopReviewTimer = () => {
+      if (reviewTimer) {
+        clearInterval(reviewTimer);
+        reviewTimer = null;
+      }
+    };
 
     const carouselBox = document.getElementById('experienceCarousel');
     if (carouselBox) {
-      carouselBox.addEventListener('mouseenter', () => clearInterval(reviewTimer));
-      carouselBox.addEventListener('mouseleave', () => {
-        reviewTimer = setInterval(() => renderReview(currentSlide + 1), 6000);
-      });
+      if ('IntersectionObserver' in window) {
+        const carouselObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              startReviewTimer();
+            } else {
+              stopReviewTimer();
+            }
+          });
+        }, { threshold: 0.1 });
+        carouselObserver.observe(carouselBox);
+      } else {
+        startReviewTimer();
+      }
+
+      carouselBox.addEventListener('mouseenter', stopReviewTimer);
+      carouselBox.addEventListener('mouseleave', startReviewTimer);
     }
   }
 });
