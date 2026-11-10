@@ -8,68 +8,15 @@
   {{-- =========================================================================
        1. HERO SECTION: Business Made Easy with Retrotech
        ========================================================================= --}}
-  <main class="hero-section" id="home" >
-    {{-- Left Floating High-Tech Telemetry HUD (Desktop Spatial Anchor) --}}
-    <div class="hero-floating-hud hero-hud-left" aria-hidden="true">
-      <div class="h-hud-glass">
-        <div class="h-hud-header">
-          <span class="h-hud-icon"><i class="fa-solid fa-bolt-lightning"></i></span>
-          <div class="h-hud-info">
-            <span class="h-hud-tag">Edge Telemetry</span>
-            <span class="h-hud-status"><span class="h-hud-dot"></span> Live 38ms TTFB</span>
-          </div>
-        </div>
-        <div class="h-hud-graph">
-          <span class="hhg-bar" style="height: 40%"></span>
-          <span class="hhg-bar" style="height: 65%"></span>
-          <span class="hhg-bar" style="height: 50%"></span>
-          <span class="hhg-bar" style="height: 85%"></span>
-          <span class="hhg-bar" style="height: 100%"></span>
-          <span class="hhg-bar" style="height: 75%"></span>
-        </div>
-        <div class="h-hud-foot">
-          <span>Global Edge: 285 PoPs</span>
-          <strong class="h-hud-green">99.98%</strong>
-        </div>
-      </div>
-    </div>
-
-    {{-- Right Floating High-Tech Security HUD (Desktop Spatial Anchor) --}}
-    <div class="hero-floating-hud hero-hud-right" aria-hidden="true">
-      <div class="h-hud-glass">
-        <div class="h-hud-header">
-          <span class="h-hud-icon"><i class="fa-solid fa-shield-halved"></i></span>
-          <div class="h-hud-info">
-            <span class="h-hud-tag">Security Core</span>
-            <span class="h-hud-status"><span class="h-hud-dot dot-green"></span> Zero-Trust SSL</span>
-          </div>
-        </div>
-        <div class="h-hud-pills">
-          <span><i class="fa-solid fa-lock"></i> AES-256</span>
-          <span><i class="fa-solid fa-user-shield"></i> RBAC</span>
-          <span><i class="fa-solid fa-certificate"></i> SOC2 Ready</span>
-        </div>
-        <div class="h-hud-foot">
-          <span>Vulnerability Shield</span>
-          <strong class="h-hud-green">Active 🛡️</strong>
-        </div>
-      </div>
-    </div>
-
+  <main class="hero-section" id="home">
     <div class="hero-content hero-content-new">
-      <!-- <div class="hero-announcement-pill">
-        <!-- <span class="hap-dot"></span>
-        <span class="hap-text">New: WhatsApp Marketing &amp; AI Automation Suite 2026</span>
-        <i class="fa-solid fa-arrow-right hap-arrow" aria-hidden="true"></i> -->
-      <!-- </div> --> -->
-
       <h1 class="hero-title-main">
         Business Made Easy<br><span class="hero-title-gradient">with Retrotech</span>
       </h1>
 
       <p class="hero-desc-main">
         Boost revenue through WhatsApp marketing and custom software
-          </p>
+      </p>
 
       <div class="hero-cta-group">
         <div class="hero-buttons-row">
@@ -82,58 +29,6 @@
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
-
-        <!-- <div class="hero-social-proof">
-          <!-- <div class="hsp-avatars">
-            <span class="hsp-av hsp-av-1">AM</span>
-            <span class="hsp-av hsp-av-2">SJ</span>
-            <span class="hsp-av hsp-av-3">VS</span>
-            <span class="hsp-av hsp-av-4">PS</span>
-            <span class="hsp-av hsp-av-5">DM</span>
-          </div> -->
-          <!-- <div class="hsp-text">
-            <div class="hsp-stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <strong>4.9/5.0</strong>
-            </div>
-            <span>Trusted by 500+ Businesses • 24hr Technical SLA</span>
-          </div> -->
-        <!-- </div> --> 
-
-        <!-- <div class="hero-service-selector">
-          <!-- <span class="hss-label">Popular:</span>
-          <a href="#services" class="hss-tag"><i class="fa-solid fa-laptop-code"></i> Website Development</a>
-          <a href="#services" class="hss-tag"><i class="fa-solid fa-chart-line"></i> SEO &amp; Marketing</a>
-          <a href="#services" class="hss-tag"><i class="fa-solid fa-mobile-screen"></i> App Development</a>
-          <a href="#services" class="hss-tag"><i class="fa-solid fa-cloud"></i> SaaS &amp; Software</a> -->
-        </div> -->
-
-        {{-- Grand 4-Column Command Metric Strip --}}
-        <!-- <div class="hero-metric-strip">
-          <div class="hms-item">
-            <span class="hms-num">350<span class="hms-accent">+</span></span>
-            <span class="hms-label">Enterprise Deliveries</span>
-          </div>
-          <div class="hms-divider" aria-hidden="true"></div>
-          <div class="hms-item">
-            <span class="hms-num">99.98<span class="hms-accent">%</span></span>
-            <span class="hms-label">Uptime Architecture</span>
-          </div>
-          <div class="hms-divider" aria-hidden="true"></div>
-          <div class="hms-item">
-            <span class="hms-num">&lt;38<span class="hms-accent">ms</span></span>
-            <span class="hms-label">Global Edge Latency</span>
-          </div>
-          <div class="hms-divider" aria-hidden="true"></div>
-          <div class="hms-item">
-            <span class="hms-num">4.8<span class="hms-accent">x</span></span>
-            <span class="hms-label">Lead Surge Multiplier</span>
-          </div>
-        </div> -->
       </div>
     </div>
   </main>
