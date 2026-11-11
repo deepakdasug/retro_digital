@@ -45,6 +45,24 @@ function initRetrotech() {
      1. CONTINUOUS AUTOMATIC BACKGROUND VIDEO PLAYBACK
      ========================================================================= */
   const heroVideo = document.getElementById('heroVideo');
+  let heroVideoIsVisible = true;
+
+  const syncHeroVideoPlayback = () => {
+    if (!heroVideo) return;
+    if (!heroVideoIsVisible || document.visibilityState !== 'visible') {
+      if (!heroVideo.paused) heroVideo.pause();
+      return;
+    }
+
+    heroVideo.muted = true;
+    if (heroVideo.paused) {
+      heroVideo.play()
+        .then(() => { heroVideo.playbackRate = 0.6; })
+        .catch(() => {});
+    } else {
+      heroVideo.playbackRate = 0.6;
+    }
+  };
 
   if (heroVideo) {
     heroVideo.muted = true;
@@ -58,27 +76,16 @@ function initRetrotech() {
 
     const startPlayback = () => {
       heroVideo.muted = true;
-      const playPromise = heroVideo.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            heroVideo.playbackRate = 0.6;
-          })
-          .catch((err) => {
-            console.warn('Autoplay waiting for user gesture:', err);
-          });
-      }
+      syncHeroVideoPlayback();
     };
 
     startPlayback();
     heroVideo.addEventListener('loadedmetadata', startPlayback);
     heroVideo.addEventListener('canplay', startPlayback);
+    document.addEventListener('visibilitychange', syncHeroVideoPlayback);
 
     const triggerOnInteraction = () => {
-      if (heroVideo.paused) {
-        heroVideo.play().catch(() => {});
-        heroVideo.playbackRate = 0.6;
-      }
+      syncHeroVideoPlayback();
       window.removeEventListener('click', triggerOnInteraction);
       window.removeEventListener('touchstart', triggerOnInteraction);
       window.removeEventListener('scroll', triggerOnInteraction);
@@ -92,7 +99,7 @@ function initRetrotech() {
 
     heroVideo.addEventListener('ended', () => {
       heroVideo.currentTime = 0;
-      heroVideo.play().catch(() => {});
+      syncHeroVideoPlayback();
     });
   }
 
@@ -119,6 +126,14 @@ function initRetrotech() {
   let windowW = window.innerWidth;
   let windowH = window.innerHeight;
   let measurementsReady = false;
+
+  // Last values written to the DOM. Comparing against these lets us skip frames
+  // where nothing actually changed (e.g. the whole page after the video docks).
+  const lastApplied = {
+    w: null, h: null, x: null, y: null, radius: null, shadow: null,
+    heroOpacity: null, heroShift: null, heroPointer: null,
+    cultureShift: null, headerScrolled: null
+  };
 
   const getScrollY = () =>
     window.pageYOffset ||
@@ -277,8 +292,10 @@ function initRetrotech() {
       }
     }
 
-    if (siteHeader) {
-      siteHeader.classList.toggle('scrolled', scrollY > 40);
+    const scrolled = scrollY > 40;
+    if (lastApplied.headerScrolled !== scrolled) {
+      if (siteHeader) siteHeader.classList.toggle('scrolled', scrolled);
+      lastApplied.headerScrolled = scrolled;
     }
   };
 
@@ -456,11 +473,48 @@ function initRetrotech() {
   /* =========================================================================
      6. BENTO SERVICES SECTION: 2026+ NEXT-GEN SPATIAL & KINETIC ENGINE
      ========================================================================= */
+  const animationSections = document.querySelectorAll('.bento-services-section, .mid-cta-section');
+  if ('IntersectionObserver' in window) {
+    const sectionMotionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle('is-offscreen', !entry.isIntersecting);
+      });
+    }, { rootMargin: '120px 0px', threshold: 0.01 });
+    animationSections.forEach((section) => sectionMotionObserver.observe(section));
+  }
+
   const bentoSection = document.querySelector('.bento-services-section#services');
   if (bentoSection) {
     bentoSection.classList.add('bento-scroll-enabled');
     const bentoElements = bentoSection.querySelectorAll('[data-bento-scroll]');
     const bentoCards = bentoSection.querySelectorAll('[data-bento-card]');
+    const bavConnectors = bentoSection.querySelectorAll('.bav-connector');
+
+    const updateBavTravel = (connector) => {
+      connector.style.setProperty('--bav-travel', `${connector.clientWidth}px`);
+    };
+    bavConnectors.forEach(updateBavTravel);
+    if ('ResizeObserver' in window) {
+      const bavResizeObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => updateBavTravel(entry.target));
+      });
+      bavConnectors.forEach((connector) => bavResizeObserver.observe(connector));
+    } else {
+      window.addEventListener('resize', () => bavConnectors.forEach(updateBavTravel), { passive: true });
+    }
+
+    // Keep decorative card animations idle until their card is near the viewport.
+    if ('IntersectionObserver' in window) {
+      const bentoMotionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-nearby', entry.isIntersecting);
+        });
+      }, { rootMargin: '120px 0px', threshold: 0.01 });
+
+      bentoCards.forEach((card) => bentoMotionObserver.observe(card));
+    } else {
+      bentoCards.forEach((card) => card.classList.add('is-nearby'));
+    }
 
     /* 6.1 Native Off-Thread Intersection Observer (Zero-Jank Reveal) */
     if ('IntersectionObserver' in window) {
@@ -546,7 +600,8 @@ function initRetrotech() {
 
     /* 6.4 Real-Time Oscilloscope Wave Synthesizer (Card 3) */
     const wavePath = bentoSection.querySelector('.bst-wave-path');
-    if (wavePath) {
+    const waveCanvas = bentoSection.querySelector('.bst-wave-canvas');
+    if (wavePath && waveCanvas && !prefersReducedMotion) {
       let phase = 0;
       let waveRafId = null;
 
@@ -560,7 +615,7 @@ function initRetrotech() {
         waveRafId = requestAnimationFrame(animateWave);
       };
 
-      // Only run when section is intersecting
+      // Animate only while the small waveform itself is on screen.
       if ('IntersectionObserver' in window) {
         const waveObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
@@ -571,8 +626,8 @@ function initRetrotech() {
               waveRafId = null;
             }
           });
-        }, { threshold: 0.1 });
-        waveObserver.observe(bentoSection);
+        }, { threshold: 0.05 });
+        waveObserver.observe(waveCanvas);
       } else {
         waveRafId = requestAnimationFrame(animateWave);
       }
