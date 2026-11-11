@@ -106,25 +106,26 @@ function initRetrotech() {
   /* =========================================================================
      2. VIDEO SCROLL DOCKING ENGINE
      ========================================================================= */
+  /* =========================================================================
+     2. VIDEO SCROLL DOCKING ENGINE (HIGH PERFORMANCE)
+     ========================================================================= */
   const videoContainer = document.getElementById('videoContainer');
   const videoDockSlot = document.getElementById('videoDockSlot');
   const heroContent = document.querySelector('.hero-content');
   const siteHeader = document.getElementById('siteHeader');
-  // Cached once — querying these inside the scroll handler forced a DOM lookup every frame.
-  const dockSplitCanvas = document.querySelector('.about-split-canvas');
-  const dockCultureImg = document.querySelector('.acc-bg-image-wrap img');
-
-  if (heroVideo && videoContainer && 'IntersectionObserver' in window) {
-    const videoVisibilityObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        heroVideoIsVisible = entry.isIntersecting;
-        syncHeroVideoPlayback();
-      });
-    }, { threshold: 0.01 });
-    videoVisibilityObserver.observe(videoContainer);
-  }
+  const splitCanvas = document.querySelector('.about-split-canvas');
+  const cultureImg = document.querySelector('.acc-bg-image-wrap img');
 
   let ticking = false;
+  let slotDocTop = 0;
+  let slotLeft = 0;
+  let slotW = 0;
+  let slotH = 0;
+  let splitCanvasDocTop = 0;
+  let splitCanvasH = 0;
+  let windowW = window.innerWidth;
+  let windowH = window.innerHeight;
+  let measurementsReady = false;
 
   // Last values written to the DOM. Comparing against these lets us skip frames
   // where nothing actually changed (e.g. the whole page after the video docks).
@@ -140,42 +141,78 @@ function initRetrotech() {
     document.body.scrollTop ||
     0;
 
+  const measureLayout = () => {
+    windowW = document.documentElement.clientWidth || window.innerWidth;
+    windowH = window.innerHeight;
+    const scrollY = getScrollY();
+
+    if (videoDockSlot) {
+      const r = videoDockSlot.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) {
+        slotDocTop = r.top + scrollY;
+        slotLeft = r.left;
+        slotW = r.width;
+        slotH = r.height;
+        measurementsReady = true;
+      }
+    }
+
+    if (splitCanvas) {
+      const cr = splitCanvas.getBoundingClientRect();
+      splitCanvasDocTop = cr.top + scrollY;
+      splitCanvasH = cr.height;
+    }
+  };
+
+  let lastW = null;
+  let lastH = null;
+  let lastTransform = '';
+  let lastRadius = null;
+  let lastShadow = null;
+  let lastHeroOpacity = null;
+  let lastHeroTransform = '';
+  let videoIsOffscreen = false;
+
   const handleVideoScroll = () => {
-    if (!videoDockSlot || !videoContainer) {
+    if (!videoContainer) {
       if (siteHeader) siteHeader.classList.add('scrolled');
       return;
     }
 
-    /* --- READS FIRST ---
-       All layout reads now happen before any style write. Previously the culture
-       card rect was read *after* the container styles were written, which forced
-       the browser to flush layout synchronously on every single frame. */
-    const windowW = document.documentElement.clientWidth || window.innerWidth;
-    const windowH = window.innerHeight;
-
-    // If the dock slot has no size yet (hidden / not laid out), skip until it does.
-    const slotRect = videoDockSlot.getBoundingClientRect();
-    if (slotRect.width === 0 || slotRect.height === 0) return;
-
-    const scrollY = getScrollY();
-
-    let cultureShift = null;
-    if (dockSplitCanvas && dockCultureImg) {
-      const rect = dockSplitCanvas.getBoundingClientRect();
-      if (rect.top < windowH && rect.bottom > 0) {
-        const progress = (windowH - rect.top) / (windowH + rect.height);
-        cultureShift = (progress - 0.5) * 44;
-      }
+    if (!measurementsReady || slotW === 0) {
+      measureLayout();
+      if (!measurementsReady || slotW === 0) return;
     }
 
+    const scrollY = getScrollY();
     const transitionDistance = windowH * 0.85;
     const rawProgress = scrollY / transitionDistance;
     const p = Math.min(Math.max(rawProgress, 0), 1);
 
-    const targetW = slotRect.width;
-    const targetH = slotRect.height;
-    const targetX = slotRect.left;
-    const targetY = slotRect.top;
+    const targetW = slotW;
+    const targetH = slotH;
+    const targetX = slotLeft;
+    const targetY = slotDocTop - scrollY;
+
+    // When the docked video has scrolled completely off the top of the viewport,
+    // hide it and pause decoding to free 100% GPU/CPU for the rest of the page.
+    if (p >= 1.0 && targetY < -targetH - 120) {
+      if (!videoIsOffscreen) {
+        videoIsOffscreen = true;
+        videoContainer.style.visibility = 'hidden';
+        if (heroVideo && !heroVideo.paused) {
+          heroVideo.pause();
+        }
+      }
+      if (siteHeader) siteHeader.classList.add('scrolled');
+      return;
+    } else if (videoIsOffscreen) {
+      videoIsOffscreen = false;
+      videoContainer.style.visibility = 'visible';
+      if (heroVideo && heroVideo.paused) {
+        heroVideo.play().catch(() => {});
+      }
+    }
 
     const midW = Math.min(windowW * 0.54, 660);
     const midH = midW * (9 / 16);
@@ -187,58 +224,78 @@ function initRetrotech() {
     if (p <= 0.5) {
       const subP = p / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
-      curW = windowW + (midW - windowW) * ease;
-      curH = windowH + (midH - windowH) * ease;
-      curX = midX * ease;
-      curY = midY * ease;
+      curW = Math.round(windowW + (midW - windowW) * ease);
+      curH = Math.round(windowH + (midH - windowH) * ease);
+      curX = Math.round(midX * ease);
+      curY = Math.round(midY * ease);
       curShadow = ease * 25;
       curRadius = ease * 14;
     } else if (p < 1.0) {
       const subP = (p - 0.5) / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
-      curW = midW + (targetW - midW) * ease;
-      curH = midH + (targetH - midH) * ease;
-      curX = midX + (targetX - midX) * ease;
-      curY = midY + (targetY - midY) * ease;
+      curW = Math.round(midW + (targetW - midW) * ease);
+      curH = Math.round(midH + (targetH - midH) * ease);
+      curX = Math.round(midX + (targetX - midX) * ease);
+      curY = Math.round(midY + (targetY - midY) * ease);
       curShadow = 25 - ease * 15;
       curRadius = 14;
     } else {
       curW = targetW;
       curH = targetH;
-      curX = targetX;
-      curY = targetY;
+      curX = Math.round(targetX);
+      curY = Math.round(targetY);
       curShadow = 10;
       curRadius = 14;
     }
 
-    /* --- WRITES ---
-       Only touch the DOM when a value actually changed. Resizing a full-screen
-       element re-triggers layout + paint, so skipping identical writes removes
-       almost all of that cost once the video is docked to its slot. */
-    if (lastApplied.w !== curW) { videoContainer.style.width = `${curW}px`; lastApplied.w = curW; }
-    if (lastApplied.h !== curH) { videoContainer.style.height = `${curH}px`; lastApplied.h = curH; }
-    if (lastApplied.x !== curX || lastApplied.y !== curY) {
-      videoContainer.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
-      lastApplied.x = curX;
-      lastApplied.y = curY;
+    // Only mutate width/height/radius/shadow when their values change (prevents layout thrashing)
+    if (curW !== lastW) {
+      videoContainer.style.width = `${curW}px`;
+      lastW = curW;
     }
-    if (lastApplied.radius !== curRadius) { videoContainer.style.borderRadius = `${curRadius}px`; lastApplied.radius = curRadius; }
-    const shadowCss = curShadow > 0 ? `0 10px ${curShadow}px rgba(0,0,0,0.22)` : 'none';
-    if (lastApplied.shadow !== shadowCss) { videoContainer.style.boxShadow = shadowCss; lastApplied.shadow = shadowCss; }
+    if (curH !== lastH) {
+      videoContainer.style.height = `${curH}px`;
+      lastH = curH;
+    }
+    const nextTransform = `translate3d(${curX}px, ${curY}px, 0)`;
+    if (nextTransform !== lastTransform) {
+      videoContainer.style.transform = nextTransform;
+      lastTransform = nextTransform;
+    }
+    const roundedRadius = Math.round(curRadius);
+    if (roundedRadius !== lastRadius) {
+      videoContainer.style.borderRadius = `${roundedRadius}px`;
+      lastRadius = roundedRadius;
+    }
+    const roundedShadow = Math.round(curShadow);
+    if (roundedShadow !== lastShadow) {
+      videoContainer.style.boxShadow = roundedShadow > 0 ? `0 10px ${roundedShadow}px rgba(0,0,0,0.22)` : 'none';
+      lastShadow = roundedShadow;
+    }
 
     if (heroContent) {
       const heroOpacity = Math.max(0, 1 - p * 2.2);
-      if (lastApplied.heroOpacity !== heroOpacity) { heroContent.style.opacity = heroOpacity; lastApplied.heroOpacity = heroOpacity; }
-      const heroShift = -p * 60;
-      if (lastApplied.heroShift !== heroShift) { heroContent.style.transform = `translateY(${heroShift}px)`; lastApplied.heroShift = heroShift; }
-      const heroPointer = heroOpacity < 0.2 ? 'none' : 'auto';
-      if (lastApplied.heroPointer !== heroPointer) { heroContent.style.pointerEvents = heroPointer; lastApplied.heroPointer = heroPointer; }
+      if (Math.abs(heroOpacity - (lastHeroOpacity ?? -1)) > 0.01) {
+        heroContent.style.opacity = heroOpacity.toFixed(2);
+        lastHeroOpacity = heroOpacity;
+        heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
+      }
+      const heroShift = Math.round(-p * 60);
+      const nextHeroTransform = `translateY(${heroShift}px)`;
+      if (nextHeroTransform !== lastHeroTransform) {
+        heroContent.style.transform = nextHeroTransform;
+        lastHeroTransform = nextHeroTransform;
+      }
     }
 
     /* Parallax depth on About Culture card image during scroll */
-    if (cultureShift !== null && lastApplied.cultureShift !== cultureShift) {
-      dockCultureImg.style.transform = `translate3d(0, ${cultureShift.toFixed(1)}px, 0) scale(1.08)`;
-      lastApplied.cultureShift = cultureShift;
+    if (splitCanvas && cultureImg && splitCanvasH > 0) {
+      const topInView = splitCanvasDocTop - scrollY;
+      if (topInView < windowH && topInView + splitCanvasH > 0) {
+        const progress = (windowH - topInView) / (windowH + splitCanvasH);
+        const shiftY = ((progress - 0.5) * 44).toFixed(1);
+        cultureImg.style.transform = `translate3d(0, ${shiftY}px, 0) scale(1.08)`;
+      }
     }
 
     const scrolled = scrollY > 40;
@@ -274,11 +331,18 @@ function initRetrotech() {
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  window.addEventListener('load', onScroll);
+  window.addEventListener('resize', () => {
+    measureLayout();
+    onScroll();
+  }, { passive: true });
+  window.addEventListener('load', () => {
+    measureLayout();
+    onScroll();
+  });
 
   // Run after a frame so layout/paint has settled (important in Blade layouts)
   requestAnimationFrame(() => {
+    measureLayout();
     handleVideoScroll();
     onScroll();
   });
@@ -989,8 +1053,8 @@ function initRetrotech() {
 
     const updateProgressBar = () => {
       const scrollY = window.scrollY || window.pageYOffset;
-      const progress = (scrollY / docHeight) * 100;
-      scrollProgressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      const progress = Math.min(1, Math.max(0, scrollY / docHeight));
+      scrollProgressBar.style.transform = `scaleX(${progress})`;
       progressRaf = null;
     };
 

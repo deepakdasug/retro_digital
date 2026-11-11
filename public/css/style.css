@@ -151,8 +151,8 @@ body.inner-page section[id] {
   will-change: transform, width, height, border-radius;
   border-radius: 0px;
   box-shadow: none;
-  /* Scope the per-frame resize to this subtree instead of re-laying-out the page. */
-  contain: layout paint;
+  contain: paint;
+  backface-visibility: hidden;
 }
 
 #heroVideo {
@@ -10710,13 +10710,15 @@ body.home-page .marquee-ticker-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 0%;
+  width: 100%;
   height: 3px;
   background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.8), 0 0 20px rgba(52, 211, 153, 0.4);
   z-index: 999999;
   pointer-events: none;
-  transition: width 0.08s ease-out;
+  transform-origin: 0 0;
+  transform: scaleX(0);
+  will-change: transform;
 }
 
 /* ==========================================================================

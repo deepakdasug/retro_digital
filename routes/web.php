@@ -37,7 +37,7 @@ Route::get('/blog/{slug}', [PublicBlogController::class, 'show'])->name('blog.sh
 
 // --- CONTACT ROUTES ---
 Route::get('/contact', fn () => view('contact'))->name('contact.page');
-// Route::get('/contact-us', fn () => view('contact'))->name('contact.us');
+Route::redirect('/contact-us', '/contact', 301);
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
 // --- LEGAL ROUTES ---
@@ -162,8 +162,7 @@ Route::get('/services/{service}', [ServiceController::class, 'show'])->name('ser
 Route::get('/industries', [IndustryController::class, 'index'])
     ->name('industries.index');
 
-// Route::get('/who-we-serve', [IndustryController::class, 'index'])
-    // ->name('who-we-serve');
+Route::redirect('/who-we-serve', '/industries', 301);
 
 Route::get('/industries/{slug}', [IndustryController::class, 'show'])
     ->name('industries.show');
