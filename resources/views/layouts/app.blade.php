@@ -24,9 +24,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
-  @unless (request()->routeIs('admin.*'))
-    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.26/dist/lenis.css">
-  @endunless
+  <link rel="stylesheet" href="{{ asset('vendor/lenis/lenis.css') }}?v={{ file_exists(public_path('vendor/lenis/lenis.css')) ? filemtime(public_path('vendor/lenis/lenis.css')) : '1.0' }}">
   @stack('styles')
 </head>
 
@@ -49,10 +47,28 @@
     @include('partials.whatsapp-widget')
   @endunless
 
+  <script src="{{ asset('vendor/lenis/lenis.min.js') }}?v={{ file_exists(public_path('vendor/lenis/lenis.min.js')) ? filemtime(public_path('vendor/lenis/lenis.min.js')) : '1.0' }}"></script>
+  <script>
+    (function () {
+      if (!window.Lenis || window.retroLenis) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      window.retroLenis = new window.Lenis({
+        autoRaf: true,
+        lerp: 0.1,
+        duration: 2,
+        easing: function (time) { return 1 - Math.pow(1 - time, 3); },
+        wheelMultiplier: 1.05,
+        touchMultiplier: 1.0,
+        smoothWheel: true,
+        syncTouch: false,
+        anchors: false,
+        allowNestedScroll: true,
+        stopInertiaOnNavigate: true
+      });
+    })();
+  </script>
   @unless (request()->routeIs('admin.*'))
-    <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js"></script>
     <script src="{{ asset('js/main.js') }}?v={{ file_exists(public_path('js/main.js')) ? filemtime(public_path('js/main.js')) : '1.0' }}"></script>
-
   @endunless
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

@@ -7,23 +7,8 @@
 function initRetrotech() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lenisEasing = (time) => 1 - Math.pow(1 - time, 3);
-  const lenis = window.Lenis && !prefersReducedMotion
-    ? new window.Lenis({
-        autoRaf: true,
-        lerp: 0.1,
-        duration: 2,
-        easing: lenisEasing,
-        wheelMultiplier: 1.05,
-        touchMultiplier: 1.0,
-        smoothWheel: true,
-        syncTouch: false,
-        anchors: false,
-        allowNestedScroll: true,
-        stopInertiaOnNavigate: true
-      })
-    : null;
-
-  if (lenis) window.retroLenis = lenis;
+  // Lenis is initialised globally in layouts/app.blade.php for every page.
+  const lenis = window.retroLenis || null;
 
   /* =========================================================================
      0. SMOOTH ANCHOR SCROLL
