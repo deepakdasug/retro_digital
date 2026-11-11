@@ -115,7 +115,6 @@ function initRetrotech() {
      2. VIDEO SCROLL DOCKING ENGINE
      ========================================================================= */
   const videoContainer = document.getElementById('videoContainer');
-  const videoDarkOverlay = document.getElementById('videoDarkOverlay');
   const videoDockSlot = document.getElementById('videoDockSlot');
   const heroContent = document.querySelector('.hero-content');
   const siteHeader = document.getElementById('siteHeader');
@@ -196,10 +195,6 @@ function initRetrotech() {
       heroContent.style.opacity = heroOpacity;
       heroContent.style.transform = `translateY(${-p * 60}px)`;
       heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
-    }
-
-    if (videoDarkOverlay) {
-      videoDarkOverlay.style.opacity = Math.max(0, 1 - p * 2.2);
     }
 
     /* Parallax depth on About Culture card image during scroll */

@@ -165,6 +165,22 @@ body.inner-page section[id] {
   filter: brightness(0.6);
 }
 
+/* Keep the original dark tint clipped to the video as it docks. */
+.video-dark-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 12, 0.35) 0%,
+    rgba(8, 18, 12, 0.15) 45%,
+    rgba(8, 18, 12, 0.48) 100%
+  );
+  opacity: 1;
+  pointer-events: none;
+}
+
 /* --- Site Header & Navigation Bar --- */
 .site-header {
   position: fixed;
@@ -228,7 +244,7 @@ body.inner-page .site-header .hamburger-bar {
 
 /* Brand Logo */
 .brand-logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   text-decoration: none;
   transition: transform var(--transition-fast);
@@ -750,6 +766,10 @@ body.inner-page .site-header .hamburger-bar {
   z-index: 1;
 }
 
+/* Temporary neutral test: remove this override to restore the gradient above. */
+body.home-page .hero-section::before {
+  background: none;
+}
 
 .hero-section {
     position: relative;
@@ -1208,7 +1228,8 @@ body.inner-page .site-header .hamburger-bar {
   color: var(--color-charcoal-dark);
   padding: 8rem 2rem 2rem;
   width: 100%;
-  box-shadow: 0 -30px 60px rgba(0, 0, 0, 0.15);
+  /* Test without the divider shadow; previous value was 0 -30px 60px rgba(0, 0, 0, 0.15). */
+  box-shadow: none;
 }
 
 .topic-container {
@@ -3708,6 +3729,51 @@ body.inner-page .site-header .hamburger-bar {
 
 .about-credential-stack {
   width: 100%;
+}
+
+body.home-page .about-more-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: min(218px, 100%);
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.4rem;
+  border: 2px solid #37e1a6;
+  border-radius: 9999px;
+  background: linear-gradient(110deg, #087348 0%, #0ca975 100%);
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12), 0 8px 20px rgba(16, 185, 129, 0.2);
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+body.home-page .about-more-link > i {
+  font-size: 0.85em;
+  transition: transform var(--transition-fast);
+}
+
+body.home-page .about-more-link:hover {
+  transform: translateY(-2px);
+  border-color: #6af0bf;
+  background: linear-gradient(110deg, #076b44 0%, #099565 100%);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16), 0 10px 24px rgba(16, 185, 129, 0.28);
+}
+
+body.home-page .about-more-link:hover > i {
+  transform: translateX(3px);
+}
+
+body.home-page .about-more-link:focus-visible {
+  outline: 3px solid rgba(47, 111, 70, 0.28);
+  outline-offset: 3px;
 }
 
 .acred-card {
@@ -10166,7 +10232,6 @@ body.contact-page-leaving::after {
    ========================================================================== */
 
 /* Shared setup for every blend overlay */
-.hero-section::after,
 .topic-section#about::after,
 .why-choose-section#why-choose-us::before,
 .why-choose-section#why-choose-us::after,
@@ -10188,15 +10253,7 @@ body.contact-page-leaving::after {
   z-index: 10;
 }
 
-/* ── 1. Hero → Marquee (#13251a)
-   Hero bottom: fade to dark forest ── */
-.hero-section {
-  position: relative;
-}
-.hero-section::after {
-  bottom: 0;
-  background: linear-gradient(to bottom, transparent 0%, #13251a 100%);
-}
+/* ── 1. Hero → Marquee: no divider overlay ── */
 
 /* ── 2. Marquee — no blend overlays, ticker must stay fully visible ── */
 

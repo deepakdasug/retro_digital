@@ -80,34 +80,6 @@
       </div>
 
 
-{{-- =========================================================================
-       2. CONTINUOUS SERVICES TICKER MARQUEE
-       ========================================================================= --}}
-  <div class="marquee-ticker-bar" aria-hidden="true">
-    <div class="ticker-track">
-      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      {{-- Duplicate set for seamless loop --}}
-      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
-    </div>
-  </div>
 
 
 
@@ -136,6 +108,9 @@
                 >
               </div>
             </div>
+
+            <a class="about-more-link" href="{{ route('about') }}">More About Us <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            
 
           </div>
           {{-- Right Column: 6 Core Pillars Grid with Slide Window --}}
@@ -214,6 +189,37 @@
     </div>
   </div>
 </section>
+
+
+{{-- =========================================================================
+       2. CONTINUOUS SERVICES TICKER MARQUEE
+       ========================================================================= --}}
+  <div class="marquee-ticker-bar" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      {{-- Duplicate set for seamless loop --}}
+      <span class="ticker-item">CONSULTING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">WEB DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">MOBILE APPS <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">BRANDING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">UI/UX DESIGN <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">DIGITAL MARKETING <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SEO OPTIMIZATION <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SAAS DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+      <span class="ticker-item">SOFTWARE DEVELOPMENT <i class="fa-solid fa-star-of-life"></i></span>
+    </div>
+  </div>
+
 
   {{-- =========================================================================
        4. SERVICES SECTION: Your Business Growth Through IT Solutions (Bento Grid)
