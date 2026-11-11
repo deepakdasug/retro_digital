@@ -281,7 +281,10 @@
 
               {{-- Image 08: Mobile & Web App Architecture Preview --}}
               <div class="bento-preview-img-wrap">
-                <img src="{{ asset('assets/images/tech-development/mobile-app-development.jpg') }}" alt="Web &amp; Mobile App Architecture" loading="lazy">
+                <picture>
+                  <source srcset="{{ asset('assets/images/tech-development/mobile-app-development.webp') }}" type="image/webp">
+                  <img src="{{ asset('assets/images/tech-development/mobile-app-development.jpg') }}" alt="Web &amp; Mobile App Architecture" loading="lazy" decoding="async">
+                </picture>
                 <div class="bento-preview-img-overlay"></div>
                 <span class="bento-preview-badge"><i class="fa-solid fa-mobile-screen"></i> Cross-Platform iOS &amp; Web</span>
               </div>
@@ -404,7 +407,7 @@
 
             {{-- Image 09: Dedicated Cloud Infrastructure Preview --}}
             <div class="bento-preview-img-wrap">
-              <img src="{{ asset('assets/images/data-center-new.jpg') }}" alt="Cloud Microservices Infrastructure" loading="lazy">
+              <img src="{{ asset('assets/images/data-center-new.jpg') }}" alt="Cloud Microservices Infrastructure" loading="lazy" decoding="async">
               <div class="bento-preview-img-overlay"></div>
               <span class="bento-preview-badge"><i class="fa-solid fa-server"></i> Dedicated Cloud Nodes</span>
             </div>
@@ -463,7 +466,10 @@
 
             {{-- Image 10: Multi-Tenant Cloud Architecture Preview --}}
             <div class="bento-preview-img-wrap">
-              <img src="{{ asset('assets/images/tech-development/api-development.jpg') }}" alt="Scalable SaaS Architecture" loading="lazy">
+              <picture>
+                <source srcset="{{ asset('assets/images/tech-development/api-development.webp') }}" type="image/webp">
+                <img src="{{ asset('assets/images/tech-development/api-development.jpg') }}" alt="Scalable SaaS Architecture" loading="lazy" decoding="async">
+              </picture>
               <div class="bento-preview-img-overlay"></div>
               <span class="bento-preview-badge"><i class="fa-solid fa-cloud"></i> Multi-Tenant SaaS DB</span>
             </div>
@@ -523,7 +529,7 @@
 
               {{-- Image 11: Enterprise Growth & Conversions Preview --}}
               <div class="bento-preview-img-wrap">
-                <img src="{{ asset('assets/images/enterprise-clients.jpg') }}" alt="Enterprise Growth &amp; Analytics" loading="lazy">
+                <img src="{{ asset('assets/images/enterprise-clients.jpg') }}" alt="Enterprise Growth &amp; Analytics" loading="lazy" decoding="async">
                 <div class="bento-preview-img-overlay"></div>
                 <span class="bento-preview-badge"><i class="fa-solid fa-arrow-trend-up"></i> +340% Conversions</span>
               </div>
@@ -600,7 +606,7 @@
               
               {{-- Image 12: Global Technology & Engineering Reach --}}
               <div class="bento-preview-img-wrap" style="height: 105px; max-width: 480px;">
-                <img src="{{ asset('assets/images/global-locations.jpg') }}" alt="Global IT &amp; Digital Network" loading="lazy">
+                <img src="{{ asset('assets/images/global-locations.jpg') }}" alt="Global IT &amp; Digital Network" loading="lazy" decoding="async">
                 <div class="bento-preview-img-overlay"></div>
                 <span class="bento-preview-badge"><i class="fa-solid fa-globe"></i> Global 24/7 Operations</span>
               </div>
@@ -1075,7 +1081,10 @@
         <div class="industry-card-pro" data-anim="up" data-industry-cat="fintech">
           {{-- Image 20: Healthcare & Telemedicine --}}
           <div class="icp-img-wrap">
-            <img src="{{ asset('assets/images/tech-development/mobile-app-development.jpg') }}" alt="Healthcare &amp; MedTech" loading="lazy">
+            <picture>
+              <source srcset="{{ asset('assets/images/tech-development/mobile-app-development.webp') }}" type="image/webp">
+              <img src="{{ asset('assets/images/tech-development/mobile-app-development.jpg') }}" alt="Healthcare &amp; MedTech" loading="lazy" decoding="async">
+            </picture>
             <div class="icp-img-overlay"></div>
             <span class="icp-img-tag"><i class="fa-solid fa-heart-pulse"></i> MedTech</span>
           </div>
@@ -1233,9 +1242,9 @@
        7. MID-PAGE CONVERSION BANNER: Aurora Horizon Glass Canvas
        ========================================================================= --}}
   <section class="mid-cta-section">
-    <div class="mid-cta-panel mid-cta-aurora" data-anim="zoom">
+    <div class="mid-cta-panel mid-cta-aurora" data-anim="up">
       <div class="mid-cta-mesh-glow"></div>
-      <div class="mid-cta-left" data-anim="left">
+      <div class="mid-cta-left">
         <div class="mid-cta-status-pill">
           <span class="mid-pulse-dot"></span>
           <span>Available for New Sprint Allocations • Q2 2026</span>
@@ -1296,10 +1305,10 @@
         </div>
       </div>
 
-      <div class="mid-cta-right" data-anim="right">
+      <div class="mid-cta-right">
         {{-- Image 27: Elite Engineering Cohort Collaboration Preview --}}
         <div class="mid-cta-media-wrap">
-          <img src="{{ asset('assets/images/enterprise-clients.jpg') }}" alt="Retrotech Engineering &amp; Client Success Team" loading="lazy">
+          <img src="{{ asset('assets/images/enterprise-clients.jpg') }}" alt="Retrotech Engineering &amp; Client Success Team" loading="lazy" decoding="async">
           <span class="mid-cta-media-badge"><i class="fa-solid fa-users-gear"></i> Elite Engineering Team</span>
         </div>
 

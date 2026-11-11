@@ -45,6 +45,24 @@ function initRetrotech() {
      1. CONTINUOUS AUTOMATIC BACKGROUND VIDEO PLAYBACK
      ========================================================================= */
   const heroVideo = document.getElementById('heroVideo');
+  let heroVideoIsVisible = true;
+
+  const syncHeroVideoPlayback = () => {
+    if (!heroVideo) return;
+    if (!heroVideoIsVisible || document.visibilityState !== 'visible') {
+      if (!heroVideo.paused) heroVideo.pause();
+      return;
+    }
+
+    heroVideo.muted = true;
+    if (heroVideo.paused) {
+      heroVideo.play()
+        .then(() => { heroVideo.playbackRate = 0.6; })
+        .catch(() => {});
+    } else {
+      heroVideo.playbackRate = 0.6;
+    }
+  };
 
   if (heroVideo) {
     heroVideo.muted = true;
@@ -58,27 +76,16 @@ function initRetrotech() {
 
     const startPlayback = () => {
       heroVideo.muted = true;
-      const playPromise = heroVideo.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            heroVideo.playbackRate = 0.6;
-          })
-          .catch((err) => {
-            console.warn('Autoplay waiting for user gesture:', err);
-          });
-      }
+      syncHeroVideoPlayback();
     };
 
     startPlayback();
     heroVideo.addEventListener('loadedmetadata', startPlayback);
     heroVideo.addEventListener('canplay', startPlayback);
+    document.addEventListener('visibilitychange', syncHeroVideoPlayback);
 
     const triggerOnInteraction = () => {
-      if (heroVideo.paused) {
-        heroVideo.play().catch(() => {});
-        heroVideo.playbackRate = 0.6;
-      }
+      syncHeroVideoPlayback();
       window.removeEventListener('click', triggerOnInteraction);
       window.removeEventListener('touchstart', triggerOnInteraction);
       window.removeEventListener('scroll', triggerOnInteraction);
@@ -92,7 +99,7 @@ function initRetrotech() {
 
     heroVideo.addEventListener('ended', () => {
       heroVideo.currentTime = 0;
-      heroVideo.play().catch(() => {});
+      syncHeroVideoPlayback();
     });
   }
 
@@ -103,8 +110,29 @@ function initRetrotech() {
   const videoDockSlot = document.getElementById('videoDockSlot');
   const heroContent = document.querySelector('.hero-content');
   const siteHeader = document.getElementById('siteHeader');
+  // Cached once — querying these inside the scroll handler forced a DOM lookup every frame.
+  const dockSplitCanvas = document.querySelector('.about-split-canvas');
+  const dockCultureImg = document.querySelector('.acc-bg-image-wrap img');
+
+  if (heroVideo && videoContainer && 'IntersectionObserver' in window) {
+    const videoVisibilityObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        heroVideoIsVisible = entry.isIntersecting;
+        syncHeroVideoPlayback();
+      });
+    }, { threshold: 0.01 });
+    videoVisibilityObserver.observe(videoContainer);
+  }
 
   let ticking = false;
+
+  // Last values written to the DOM. Comparing against these lets us skip frames
+  // where nothing actually changed (e.g. the whole page after the video docks).
+  const lastApplied = {
+    w: null, h: null, x: null, y: null, radius: null, shadow: null,
+    heroOpacity: null, heroShift: null, heroPointer: null,
+    cultureShift: null, headerScrolled: null
+  };
 
   const getScrollY = () =>
     window.pageYOffset ||
@@ -118,13 +146,27 @@ function initRetrotech() {
       return;
     }
 
+    /* --- READS FIRST ---
+       All layout reads now happen before any style write. Previously the culture
+       card rect was read *after* the container styles were written, which forced
+       the browser to flush layout synchronously on every single frame. */
+    const windowW = document.documentElement.clientWidth || window.innerWidth;
+    const windowH = window.innerHeight;
+
     // If the dock slot has no size yet (hidden / not laid out), skip until it does.
     const slotRect = videoDockSlot.getBoundingClientRect();
     if (slotRect.width === 0 || slotRect.height === 0) return;
 
     const scrollY = getScrollY();
-    const windowW = document.documentElement.clientWidth || window.innerWidth;
-    const windowH = window.innerHeight;
+
+    let cultureShift = null;
+    if (dockSplitCanvas && dockCultureImg) {
+      const rect = dockSplitCanvas.getBoundingClientRect();
+      if (rect.top < windowH && rect.bottom > 0) {
+        const progress = (windowH - rect.top) / (windowH + rect.height);
+        cultureShift = (progress - 0.5) * 44;
+      }
+    }
 
     const transitionDistance = windowH * 0.85;
     const rawProgress = scrollY / transitionDistance;
@@ -169,33 +211,40 @@ function initRetrotech() {
       curRadius = 14;
     }
 
-    videoContainer.style.width = `${curW}px`;
-    videoContainer.style.height = `${curH}px`;
-    videoContainer.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
-    videoContainer.style.borderRadius = `${curRadius}px`;
-    videoContainer.style.boxShadow = curShadow > 0 ? `0 10px ${curShadow}px rgba(0,0,0,0.22)` : 'none';
+    /* --- WRITES ---
+       Only touch the DOM when a value actually changed. Resizing a full-screen
+       element re-triggers layout + paint, so skipping identical writes removes
+       almost all of that cost once the video is docked to its slot. */
+    if (lastApplied.w !== curW) { videoContainer.style.width = `${curW}px`; lastApplied.w = curW; }
+    if (lastApplied.h !== curH) { videoContainer.style.height = `${curH}px`; lastApplied.h = curH; }
+    if (lastApplied.x !== curX || lastApplied.y !== curY) {
+      videoContainer.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+      lastApplied.x = curX;
+      lastApplied.y = curY;
+    }
+    if (lastApplied.radius !== curRadius) { videoContainer.style.borderRadius = `${curRadius}px`; lastApplied.radius = curRadius; }
+    const shadowCss = curShadow > 0 ? `0 10px ${curShadow}px rgba(0,0,0,0.22)` : 'none';
+    if (lastApplied.shadow !== shadowCss) { videoContainer.style.boxShadow = shadowCss; lastApplied.shadow = shadowCss; }
 
     if (heroContent) {
       const heroOpacity = Math.max(0, 1 - p * 2.2);
-      heroContent.style.opacity = heroOpacity;
-      heroContent.style.transform = `translateY(${-p * 60}px)`;
-      heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
+      if (lastApplied.heroOpacity !== heroOpacity) { heroContent.style.opacity = heroOpacity; lastApplied.heroOpacity = heroOpacity; }
+      const heroShift = -p * 60;
+      if (lastApplied.heroShift !== heroShift) { heroContent.style.transform = `translateY(${heroShift}px)`; lastApplied.heroShift = heroShift; }
+      const heroPointer = heroOpacity < 0.2 ? 'none' : 'auto';
+      if (lastApplied.heroPointer !== heroPointer) { heroContent.style.pointerEvents = heroPointer; lastApplied.heroPointer = heroPointer; }
     }
 
     /* Parallax depth on About Culture card image during scroll */
-    const splitCanvas = document.querySelector('.about-split-canvas');
-    const cultureImg = document.querySelector('.acc-bg-image-wrap img');
-    if (splitCanvas && cultureImg) {
-      const rect = splitCanvas.getBoundingClientRect();
-      if (rect.top < windowH && rect.bottom > 0) {
-        const progress = (windowH - rect.top) / (windowH + rect.height);
-        const shiftY = (progress - 0.5) * 44;
-        cultureImg.style.transform = `translate3d(0, ${shiftY.toFixed(1)}px, 0) scale(1.08)`;
-      }
+    if (cultureShift !== null && lastApplied.cultureShift !== cultureShift) {
+      dockCultureImg.style.transform = `translate3d(0, ${cultureShift.toFixed(1)}px, 0) scale(1.08)`;
+      lastApplied.cultureShift = cultureShift;
     }
 
-    if (siteHeader) {
-      siteHeader.classList.toggle('scrolled', scrollY > 40);
+    const scrolled = scrollY > 40;
+    if (lastApplied.headerScrolled !== scrolled) {
+      if (siteHeader) siteHeader.classList.toggle('scrolled', scrolled);
+      lastApplied.headerScrolled = scrolled;
     }
   };
 
@@ -366,11 +415,48 @@ function initRetrotech() {
   /* =========================================================================
      6. BENTO SERVICES SECTION: 2026+ NEXT-GEN SPATIAL & KINETIC ENGINE
      ========================================================================= */
+  const animationSections = document.querySelectorAll('.bento-services-section, .mid-cta-section');
+  if ('IntersectionObserver' in window) {
+    const sectionMotionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle('is-offscreen', !entry.isIntersecting);
+      });
+    }, { rootMargin: '120px 0px', threshold: 0.01 });
+    animationSections.forEach((section) => sectionMotionObserver.observe(section));
+  }
+
   const bentoSection = document.querySelector('.bento-services-section#services');
   if (bentoSection) {
     bentoSection.classList.add('bento-scroll-enabled');
     const bentoElements = bentoSection.querySelectorAll('[data-bento-scroll]');
     const bentoCards = bentoSection.querySelectorAll('[data-bento-card]');
+    const bavConnectors = bentoSection.querySelectorAll('.bav-connector');
+
+    const updateBavTravel = (connector) => {
+      connector.style.setProperty('--bav-travel', `${connector.clientWidth}px`);
+    };
+    bavConnectors.forEach(updateBavTravel);
+    if ('ResizeObserver' in window) {
+      const bavResizeObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => updateBavTravel(entry.target));
+      });
+      bavConnectors.forEach((connector) => bavResizeObserver.observe(connector));
+    } else {
+      window.addEventListener('resize', () => bavConnectors.forEach(updateBavTravel), { passive: true });
+    }
+
+    // Keep decorative card animations idle until their card is near the viewport.
+    if ('IntersectionObserver' in window) {
+      const bentoMotionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-nearby', entry.isIntersecting);
+        });
+      }, { rootMargin: '120px 0px', threshold: 0.01 });
+
+      bentoCards.forEach((card) => bentoMotionObserver.observe(card));
+    } else {
+      bentoCards.forEach((card) => card.classList.add('is-nearby'));
+    }
 
     /* 6.1 Native Off-Thread Intersection Observer (Zero-Jank Reveal) */
     if ('IntersectionObserver' in window) {
@@ -456,7 +542,8 @@ function initRetrotech() {
 
     /* 6.4 Real-Time Oscilloscope Wave Synthesizer (Card 3) */
     const wavePath = bentoSection.querySelector('.bst-wave-path');
-    if (wavePath) {
+    const waveCanvas = bentoSection.querySelector('.bst-wave-canvas');
+    if (wavePath && waveCanvas && !prefersReducedMotion) {
       let phase = 0;
       let waveRafId = null;
 
@@ -470,7 +557,7 @@ function initRetrotech() {
         waveRafId = requestAnimationFrame(animateWave);
       };
 
-      // Only run when section is intersecting
+      // Animate only while the small waveform itself is on screen.
       if ('IntersectionObserver' in window) {
         const waveObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
@@ -481,8 +568,8 @@ function initRetrotech() {
               waveRafId = null;
             }
           });
-        }, { threshold: 0.1 });
-        waveObserver.observe(bentoSection);
+        }, { threshold: 0.05 });
+        waveObserver.observe(waveCanvas);
       } else {
         waveRafId = requestAnimationFrame(animateWave);
       }

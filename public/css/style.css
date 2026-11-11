@@ -151,6 +151,8 @@ body.inner-page section[id] {
   will-change: transform, width, height, border-radius;
   border-radius: 0px;
   box-shadow: none;
+  /* Scope the per-frame resize to this subtree instead of re-laying-out the page. */
+  contain: layout paint;
 }
 
 #heroVideo {
@@ -204,6 +206,12 @@ body.inner-page section[id] {
   -webkit-backdrop-filter: blur(20px);
   border-bottom-color: var(--theme-border-light, rgba(47, 111, 70, 0.15));
   box-shadow: 0 4px 25px rgba(21, 39, 29, 0.08);
+}
+
+body.home-page .site-header.scrolled {
+  background: rgba(248, 250, 248, 0.98);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Interior pages header visibility - leaves Home Page header completely intact */
@@ -1812,12 +1820,12 @@ body.home-page .hero-section::before {
   z-index: 1;
 }
 
+/* The radial fills are feathered already, so avoid a large rasterized blur. */
 .bento-ambient-glow {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  filter: blur(40px);
 }
 
 .bento-ambient-glow-1 {
@@ -2445,6 +2453,7 @@ body.home-page .hero-section::before {
 
 .bav-ping-dot {
   position: absolute;
+  left: 0;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -2458,10 +2467,10 @@ body.home-page .hero-section::before {
 }
 
 @keyframes bavDataFlow {
-  0% { left: 0%; opacity: 0; }
+  0% { transform: translateX(0); opacity: 0; }
   20% { opacity: 1; }
   80% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+  100% { transform: translateX(var(--bav-travel, 90px)); opacity: 0; }
 }
 
 .bento-feature-list {
@@ -2590,7 +2599,6 @@ body.home-page .hero-section::before {
   stroke: #10b981;
   stroke-width: 2.5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 4px #10b981);
 }
 
 .bst-wave-path-bg {
@@ -2966,42 +2974,38 @@ body.home-page .hero-section::before {
    BENTO GRID KINETIC ON-SCROLL PHYSICS & 3D GYROSCOPIC TILT
    ========================================================================== */
 .bento-scroll-enabled [data-bento-scroll] {
-  will-change: transform, opacity;
-  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s ease,
               box-shadow 0.35s ease,
               border-color 0.25s ease;
 }
 
-/* Left elements initial/below state (enter from left with subtle 3D angle) */
+/* Keep reveal motion small and two-dimensional for large content cards. */
 .bento-scroll-enabled [data-bento-scroll="left"] {
-  --bento-dist: 110px;
-  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0) rotateY(4deg);
+  --bento-dist: 28px;
+  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0);
   opacity: 0;
 }
 
-/* Right elements initial/below state (enter from right with subtle 3D angle) */
 .bento-scroll-enabled [data-bento-scroll="right"] {
-  --bento-dist: 110px;
-  transform: translate3d(var(--bento-dist), 0, 0) rotateY(-4deg);
+  --bento-dist: 28px;
+  transform: translate3d(var(--bento-dist), 0, 0);
   opacity: 0;
 }
 
-/* Top header initial/below state */
 .bento-scroll-enabled [data-bento-scroll="top"] {
-  transform: translate3d(0, -40px, 0);
+  transform: translate3d(0, -20px, 0);
   opacity: 0;
 }
 
-/* Bottom banner initial/below state */
 .bento-scroll-enabled [data-bento-scroll="bottom"] {
-  transform: translate3d(0, 70px, 0) scale(0.97);
+  transform: translate3d(0, 28px, 0);
   opacity: 0;
 }
 
 /* ACTIVE STATE (In Viewport: Aligned and fully visible) */
 .bento-scroll-enabled [data-bento-scroll].is-active {
-  transform: perspective(1000px) rotateX(var(--rot-x, 0deg)) rotateY(var(--rot-y, 0deg)) translate3d(0, 0, 0) scale(1) !important;
+  transform: translate3d(0, 0, 0) !important;
   opacity: 1 !important;
 }
 
@@ -3015,29 +3019,54 @@ body.home-page .hero-section::before {
 /* VISIBLE & SCROLLED-PAST STATE (Stay Solid & Visible) */
 .bento-scroll-enabled [data-bento-scroll].is-active,
 .bento-scroll-enabled [data-bento-scroll].is-above {
-  transform: translate3d(0, 0, 0) rotateY(0deg) scale(1) !important;
+  transform: translate3d(0, 0, 0) !important;
   opacity: 1 !important;
 }
 
 /* BELOW STATE (When scrolled back down) */
 .bento-scroll-enabled [data-bento-scroll="left"].is-below {
-  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0) rotateY(4deg);
+  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0);
   opacity: 0;
 }
 
 .bento-scroll-enabled [data-bento-scroll="right"].is-below {
-  transform: translate3d(var(--bento-dist), 0, 0) rotateY(-4deg);
+  transform: translate3d(var(--bento-dist), 0, 0);
   opacity: 0;
 }
 
 .bento-scroll-enabled [data-bento-scroll="top"].is-below {
-  transform: translate3d(0, -40px, 0);
+  transform: translate3d(0, -20px, 0);
   opacity: 0;
 }
 
 .bento-scroll-enabled [data-bento-scroll="bottom"].is-below {
-  transform: translate3d(0, 70px, 0) scale(0.97);
+  transform: translate3d(0, 28px, 0);
   opacity: 0;
+}
+
+/* Pause decorative loops on off-screen cards to avoid background GPU work. */
+.bento-card .bento-dot-pulse,
+.bento-card .bav-ping-dot,
+.bento-card .btw-cursor,
+.bento-card .bento-aurora-line {
+  animation-play-state: paused;
+}
+
+.bento-card.is-nearby .bento-dot-pulse,
+.bento-card.is-nearby .bav-ping-dot,
+.bento-card.is-nearby .btw-cursor,
+.bento-card.is-nearby .bento-aurora-line {
+  animation-play-state: running;
+}
+
+/* Keep decorative motion idle until these large sections approach the viewport. */
+.bento-services-section.is-offscreen *,
+.mid-cta-section.is-offscreen * {
+  animation-play-state: paused !important;
+}
+
+.bento-services-section.is-offscreen .bkb-ping::before {
+  animation-play-state: paused !important;
 }
 
 /* Responsive Breakpoints for Bento Grid */
@@ -3087,7 +3116,7 @@ body.home-page .hero-section::before {
   }
   .bento-scroll-enabled [data-bento-scroll="left"],
   .bento-scroll-enabled [data-bento-scroll="right"] {
-    --bento-dist: 45px;
+    --bento-dist: 20px;
     transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0);
   }
   .bento-scroll-enabled [data-bento-scroll="right"] {
@@ -4852,7 +4881,6 @@ body.home-page .acred-card--expertise:hover {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(110, 192, 136, 0.22) 0%, rgba(47, 111, 70, 0.08) 50%, transparent 75%);
   pointer-events: none;
-  filter: blur(40px);
 }
 
 .mid-cta-left {
@@ -4867,7 +4895,6 @@ body.home-page .acred-card--expertise:hover {
   gap: 0.6rem;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(12px);
   padding: 0.35rem 1rem;
   border-radius: 9999px;
   font-size: 0.78rem;
@@ -5001,7 +5028,6 @@ body.home-page .acred-card--expertise:hover {
   color: #ffffff;
   background: rgba(37, 211, 102, 0.2);
   border: 1.5px solid rgba(37, 211, 102, 0.5);
-  backdrop-filter: blur(12px);
   padding: 0.95rem 2.2rem;
   border-radius: 9999px;
   text-decoration: none;
@@ -10104,6 +10130,12 @@ body.contact-page-leaving::after {
   filter: brightness(0.92) contrast(1.05);
 }
 
+.bento-preview-img-wrap picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .bento-card:hover .bento-preview-img-wrap img {
   transform: scale(1.06);
   filter: brightness(1.02) contrast(1.08);
@@ -10445,6 +10477,12 @@ body.home-page .marquee-ticker-bar {
   animation: imgSkeletonShimmer 2.4s infinite ease-in-out;
 }
 
+/* Bento previews already have real images; don't animate a hidden backing layer. */
+.bento-preview-img-wrap {
+  animation: none;
+  background: #edf5ef;
+}
+
 @keyframes imgSkeletonShimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
@@ -10541,8 +10579,7 @@ body.home-page .marquee-ticker-bar {
 
 /* 5. Mid CTA Interactive Scope & Sprint Estimator Widget */
 .mid-cta-calc-widget {
-  background: rgba(15, 31, 21, 0.85);
-  backdrop-filter: blur(16px);
+  background: rgba(15, 31, 21, 0.96);
   border: 1.5px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 1.65rem 1.75rem;
