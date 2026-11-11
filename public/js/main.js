@@ -233,16 +233,10 @@ function initRetrotech() {
       curRadius = 14;
     }
 
-    // Only mutate width/height/radius/shadow when their values change (prevents layout thrashing)
-    if (curW !== lastW) {
-      videoContainer.style.width = `${curW}px`;
-      lastW = curW;
-    }
-    if (curH !== lastH) {
-      videoContainer.style.height = `${curH}px`;
-      lastH = curH;
-    }
-    const nextTransform = `translate3d(${curX}px, ${curY}px, 0)`;
+    // Hardware-accelerated GPU scaling: transform scales the video texture without layout reflows
+    const scaleX = windowW > 0 ? (curW / windowW) : 1;
+    const scaleY = windowH > 0 ? (curH / windowH) : 1;
+    const nextTransform = `translate3d(${curX}px, ${curY}px, 0) scale(${scaleX.toFixed(4)}, ${scaleY.toFixed(4)})`;
     if (nextTransform !== lastTransform) {
       videoContainer.style.transform = nextTransform;
       lastTransform = nextTransform;

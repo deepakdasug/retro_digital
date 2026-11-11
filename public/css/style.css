@@ -141,14 +141,14 @@ body.inner-page section[id] {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   transform: translate3d(0, 0, 0);
   z-index: 200;
   overflow: hidden;
   pointer-events: none;
   transform-origin: 0 0;
-  will-change: transform, width, height, border-radius;
+  will-change: transform;
   border-radius: 0px;
   box-shadow: none;
   contain: paint;
