@@ -54,9 +54,13 @@
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       window.retroLenis = new window.Lenis({
         autoRaf: true,
-        smoothWheel: false,
+        duration: 1.1,
+        easing: function (time) { return 1 - Math.pow(1 - time, 3); },
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        smoothWheel: true,
         syncTouch: false,
-        anchors: true,
+        anchors: false,
         allowNestedScroll: true,
         stopInertiaOnNavigate: true
       });
