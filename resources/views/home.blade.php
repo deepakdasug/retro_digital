@@ -1390,20 +1390,27 @@
       let currentTestiDot = 0;
       const updateTestiDots = (idx) => {
         if (!dots.length) return;
-        currentTestiDot = (idx + dots.length) % dots.length;
+        currentTestiDot = Math.max(0, Math.min(idx, dots.length - 1));
         dots.forEach((d, i) => d.classList.toggle('active', i === currentTestiDot));
+        if (prevBtn) prevBtn.disabled = currentTestiDot === 0;
+        if (nextBtn) nextBtn.disabled = currentTestiDot === dots.length - 1;
       };
+      updateTestiDots(0);
 
       if (prevBtn) {
         prevBtn.addEventListener('click', function () {
-          stage.scrollBy({ left: -390, behavior: 'smooth' });
-          updateTestiDots(currentTestiDot - 1);
+          if (currentTestiDot > 0) {
+            stage.scrollBy({ left: -390, behavior: 'smooth' });
+            updateTestiDots(currentTestiDot - 1);
+          }
         });
       }
       if (nextBtn) {
         nextBtn.addEventListener('click', function () {
-          stage.scrollBy({ left: 390, behavior: 'smooth' });
-          updateTestiDots(currentTestiDot + 1);
+          if (currentTestiDot < dots.length - 1) {
+            stage.scrollBy({ left: 390, behavior: 'smooth' });
+            updateTestiDots(currentTestiDot + 1);
+          }
         });
       }
       dots.forEach((dot, idx) => {

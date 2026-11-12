@@ -2,151 +2,167 @@
 @extends('layouts.app')
 
 @section('title', '404 - Page Not Found | Retrotech Digital')
-@section('description', 'The page you are looking for could not be found. Search our site or jump straight to Services, Industries, Blog, or Contact.')
+@section('description', 'The page you are looking for could not be found. Return to Retrotech Digital homepage.')
 @section('robots', 'noindex, follow')
 
 @push('styles')
     <style>
-        .error-404 {
-            max-width: 48rem;
-            margin: 0 auto;
-            padding: 6rem 1rem 5rem;
-            text-align: center;
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        .error-404__eyebrow {
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: #9ca3af;
-            margin: 0;
-        }
-        .error-404__title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            color: #111827;
-            margin: 0.75rem 0 0;
-            line-height: 1.15;
-        }
-        .error-404__lead {
-            font-size: 1.05rem;
-            color: #4b5563;
-            margin: 1rem auto 0;
-            max-width: 36rem;
-        }
-        .error-404__form {
+        .error-page-wrapper {
+            position: relative;
+            min-height: calc(100vh - 200px);
             display: flex;
+            align-items: center;
             justify-content: center;
-            margin: 2rem auto 0;
-            max-width: 32rem;
+            padding: 5rem 1.5rem 6rem;
+            background: linear-gradient(180deg, #f8faf8 0%, #f4f8f5 50%, #f8faf8 100%);
+            overflow: hidden;
         }
-        .error-404__input {
-            flex: 1;
-            padding: 0.85rem 1rem;
-            border: 1px solid #d1d5db;
-            border-right: 0;
-            border-radius: 0.375rem 0 0 0.375rem;
-            font: inherit;
-            outline: none;
-        }
-        .error-404__input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-        .error-404__button {
-            padding: 0.85rem 1.5rem;
-            background: #2563eb;
-            color: #fff;
-            font: inherit;
-            font-weight: 600;
-            border: 0;
-            border-radius: 0 0.375rem 0.375rem 0;
-            cursor: pointer;
-        }
-        .error-404__button:hover { background: #1d4ed8; }
-        .error-404__links-label {
-            margin: 2.5rem 0 0;
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-        .error-404__links {
-            list-style: none;
-            padding: 0;
-            margin: 0.75rem 0 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
-        }
-        .error-404__links a {
-            display: inline-block;
-            padding: 0.55rem 1.25rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            color: #1f2937;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-        .error-404__links a:hover {
-            border-color: #2563eb;
-            color: #1d4ed8;
-        }
-        .error-404__home {
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-        .error-404__home a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .error-404__home a:hover { text-decoration: underline; }
-        .sr-only {
+
+        .error-ambient-glow {
             position: absolute;
-            width: 1px; height: 1px;
-            padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0,0,0,0);
-            white-space: nowrap; border: 0;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.45;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.18) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .error-card-box {
+            position: relative;
+            z-index: 1;
+            max-width: 40rem;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid rgba(47, 111, 70, 0.14);
+            border-radius: 26px;
+            padding: 3.75rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 16px 45px rgba(21, 39, 29, 0.06);
+        }
+
+        .error-kicker-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.22);
+            color: #dc2626;
+            font-size: 0.75rem;
+            font-weight: 750;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-kicker-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+            animation: errorPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes errorPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.5; }
+        }
+
+        .error-num-red {
+            font-family: var(--font-family, 'Inter', system-ui, sans-serif);
+            font-size: clamp(5.5rem, 14vw, 8.5rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+            color: #dc2626;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 45%, #b91c1c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 0.5rem;
+            text-shadow: 0 8px 30px rgba(220, 38, 38, 0.15);
+        }
+
+        .error-title {
+            font-family: var(--font-family, 'Inter', system-ui, sans-serif);
+            font-size: clamp(1.65rem, 3.2vw, 2.15rem);
+            font-weight: 800;
+            color: #15271d;
+            margin: 0 0 0.85rem;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .error-lead {
+            font-size: 0.98rem;
+            color: #5d7063;
+            max-width: 30rem;
+            margin: 0 auto 2.5rem;
+            line-height: 1.65;
+        }
+
+        .error-home-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #2f6f46;
+            border: 1px solid #2f6f46;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.85rem 1.85rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(47, 111, 70, 0.25);
+        }
+
+        .error-home-cta:hover {
+            background: #1e5a38;
+            border-color: #1e5a38;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 90, 56, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            .error-card-box {
+                padding: 2.75rem 1.5rem;
+                border-radius: 20px;
+            }
         }
     </style>
 @endpush
 
 @section('content')
-    <section class="error-404">
-        <p class="error-404__eyebrow">Error 404</p>
+    <main class="error-page-wrapper">
+        <div class="error-ambient-glow" aria-hidden="true"></div>
 
-        <h1 class="error-404__title">404 - Page Not Found</h1>
+        <section class="error-card-box">
+            <div class="error-kicker-badge">
+                <span class="error-kicker-dot" aria-hidden="true"></span>
+                <span>Error 404 • Destination Not Found</span>
+            </div>
 
-        <p class="error-404__lead">
-            The page you're looking for may have been moved, renamed, or never existed.
-            Try searching, or jump straight to one of these pages.
-        </p>
+            <div class="error-num-red" aria-label="Error code 404">404</div>
 
-        {{-- Search bar --}}
-        <form class="error-404__form" action="{{ url('/search') }}" method="GET" role="search">
-            <label for="q" class="sr-only">Search the site</label>
-            <input
-                id="q"
-                name="q"
-                type="search"
-                class="error-404__input"
-                placeholder="Search services, industries, articles…"
-                autocomplete="off"
-            >
-            <button type="submit" class="error-404__button">Search</button>
-        </form>
+            <h1 class="error-title">Page Not Found</h1>
 
-        {{-- Direct links --}}
-        <p class="error-404__links-label">Or go straight to:</p>
-        <ul class="error-404__links">
-            <li><a href="{{ url('/services') }}">Services</a></li>
-            <li><a href="{{ url('/industries') }}">Industries</a></li>
-            <li><a href="{{ url('/blog') }}">Blog</a></li>
-            <li><a href="{{ url('/contact') }}">Contact</a></li>
-        </ul>
+            <p class="error-lead">
+                The link you followed may be broken, or the page may have been moved or removed.
+            </p>
 
-        <p class="error-404__home">
-            <a href="{{ url('/') }}">&larr; Back to the homepage</a>
-        </p>
-    </section>
+            <a href="{{ route('home') }}" class="error-home-cta">
+                <i class="fa-solid fa-arrow-left"></i> Return to Homepage
+            </a>
+        </section>
+    </main>
 @endsection
