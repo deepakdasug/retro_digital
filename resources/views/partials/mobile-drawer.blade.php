@@ -10,14 +10,14 @@
         <summary class="mobile-nav-link">Services</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
           <li class="mobile-overview-item"><a href="{{ route('services.index') }}" class="mobile-overview-link"><span>View All Services</span> <i class="fa-solid fa-arrow-right"></i></a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'marketing-platform']) }}">Marketing Platform</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'search-engine-optimization']) }}">Search Engine Optimization</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'paid-marketing']) }}">Paid Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'email-marketing']) }}">Email Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'video-marketing']) }}">Video Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'content-marketing']) }}">Content Marketing</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'orm-services']) }}">ORM Services</a></li>
+          <li><a href="{{ route('services.digital-marketing') }}">Marketing Platform</a></li>
+          <li><a href="{{ route('services.show', 'search-engine-optimization') }}">Search Engine Optimization</a></li>
+          <li><a href="{{ route('services.show', 'social-media-marketing') }}">Social Media Marketing</a></li>
+          <li><a href="{{ route('services.show', 'paid-marketing') }}">Paid Marketing</a></li>
+          <li><a href="{{ route('services.show', 'email-marketing') }}">Email Marketing</a></li>
+          <li><a href="{{ route('services.show', 'video-marketing') }}">Video Marketing</a></li>
+          <li><a href="{{ route('services.show', 'content-marketing') }}">Content Marketing</a></li>
+          <li><a href="{{ route('services.show', 'orm-services') }}">ORM Services</a></li>
           <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Development</a></li>
           <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
           <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">Mobile App Development</a></li>
