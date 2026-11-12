@@ -460,129 +460,29 @@ function initRetrotech() {
   }
 
   /* =========================================================================
-     6. BENTO SERVICES SECTION: 2026+ NEXT-GEN SPATIAL & KINETIC ENGINE
+     6. HOME SERVICES SECTION: INTERACTIVE CATEGORY FILTER
      ========================================================================= */
-  const bentoSection = document.querySelector('.bento-services-section#services');
-  if (bentoSection) {
-    bentoSection.classList.add('bento-scroll-enabled');
-    const bentoElements = bentoSection.querySelectorAll('[data-bento-scroll]');
-    const bentoCards = bentoSection.querySelectorAll('[data-bento-card]');
+  const srvFilterBtns = document.querySelectorAll('.services-filter-bar .sfb-btn');
+  const srvCards = document.querySelectorAll('.services-showcase-grid .service-card');
 
-    /* 6.1 Native Off-Thread Intersection Observer (Zero-Jank Reveal) */
-    if ('IntersectionObserver' in window) {
-      const bentoObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-active');
-            entry.target.classList.remove('is-above', 'is-below');
-            bentoObserver.unobserve(entry.target);
+  if (srvFilterBtns.length > 0 && srvCards.length > 0) {
+    srvFilterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') || 'all';
+        srvFilterBtns.forEach(b => b.classList.toggle('active', b === btn));
+
+        srvCards.forEach((card) => {
+          const cat = card.getAttribute('data-category') || 'all';
+          if (filter === 'all' || cat === filter) {
+            card.style.display = '';
+            card.style.opacity = '1';
+            card.style.transform = 'none';
+          } else {
+            card.style.display = 'none';
           }
         });
-      }, {
-        root: null,
-        rootMargin: '0px 0px -40px 0px',
-        threshold: 0.1
-      });
-
-      bentoElements.forEach((el) => bentoObserver.observe(el));
-    } else {
-      bentoElements.forEach((el) => el.classList.add('is-active'));
-    }
-
-    /* 6.2 Dynamic Cursor Spotlight & 3D Spatial Tilt Physics */
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      bentoCards.forEach((card) => {
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          card.style.setProperty('--mouse-x', `${x}px`);
-          card.style.setProperty('--mouse-y', `${y}px`);
-
-          // Subtle 3D Gyroscopic Perspective Tilt
-          const rotX = (((y / rect.height) - 0.5) * -6).toFixed(2);
-          const rotY = (((x / rect.width) - 0.5) * 6).toFixed(2);
-          card.style.setProperty('--rot-x', `${rotX}deg`);
-          card.style.setProperty('--rot-y', `${rotY}deg`);
-        });
-
-        card.addEventListener('mouseleave', () => {
-          card.style.setProperty('--rot-x', '0deg');
-          card.style.setProperty('--rot-y', '0deg');
-        });
-      });
-    }
-
-    /* 6.3 Interactive IDE Code Studio Tab Switcher (Card 1) */
-    const tabButtons = bentoSection.querySelectorAll('.btw-tab');
-    const tabPanes = bentoSection.querySelectorAll('.btw-tab-pane');
-
-    tabButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const targetTab = btn.getAttribute('data-tab');
-        tabButtons.forEach(b => b.classList.toggle('active', b === btn));
-        tabPanes.forEach(p => p.classList.toggle('active', p.id === `pane-${targetTab}`));
       });
     });
-
-    /* 6.3.1 Live Interactive Latency Benchmark Simulator */
-    const runBenchBtn = bentoSection.querySelector('#btwRunBench');
-    const runBenchOut = bentoSection.querySelector('#btwRunOut');
-    if (runBenchBtn && runBenchOut) {
-      runBenchBtn.addEventListener('click', () => {
-        runBenchBtn.disabled = true;
-        const icon = runBenchBtn.querySelector('i');
-        if (icon) icon.className = 'fa-solid fa-spinner fa-spin';
-        runBenchOut.textContent = 'Pinging Edge Network...';
-        runBenchOut.style.color = '#38bdf8';
-
-        setTimeout(() => {
-          const latency = Math.floor(Math.random() * 16) + 22; // 22ms - 37ms
-          runBenchOut.innerHTML = `⚡ Benchmark: <strong>${latency}ms</strong> edge TTFB (99.98% SLA Verified)`;
-          runBenchOut.style.color = '#22c55e';
-          if (icon) icon.className = 'fa-solid fa-check';
-          setTimeout(() => {
-            runBenchBtn.disabled = false;
-            if (icon) icon.className = 'fa-solid fa-play';
-          }, 2500);
-        }, 500);
-      });
-    }
-
-    /* 6.4 Real-Time Oscilloscope Wave Synthesizer (Card 3) */
-    const wavePath = bentoSection.querySelector('.bst-wave-path');
-    if (wavePath) {
-      let phase = 0;
-      let waveRafId = null;
-
-      const animateWave = () => {
-        phase += 0.045;
-        const p1 = 24 + Math.sin(phase) * 14;
-        const p2 = 24 + Math.cos(phase * 1.2) * 12;
-        const p3 = 24 + Math.sin(phase * 0.8 + 1) * 14;
-        const d = `M0,24 Q37.5,${p1.toFixed(1)} 75,24 T150,${p2.toFixed(1)} T225,${p3.toFixed(1)} T300,24`;
-        wavePath.setAttribute('d', d);
-        waveRafId = requestAnimationFrame(animateWave);
-      };
-
-      // Only run when section is intersecting
-      if ('IntersectionObserver' in window) {
-        const waveObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              if (!waveRafId) waveRafId = requestAnimationFrame(animateWave);
-            } else if (waveRafId) {
-              cancelAnimationFrame(waveRafId);
-              waveRafId = null;
-            }
-          });
-        }, { threshold: 0.1 });
-        waveObserver.observe(bentoSection);
-      } else {
-        waveRafId = requestAnimationFrame(animateWave);
-      }
-    }
   }
 
   const serviceCards = document.querySelectorAll('[data-service-card]');
@@ -663,7 +563,7 @@ function initRetrotech() {
 
       animElements.forEach((el) => {
         // Elements inside sliders should reveal immediately to prevent transform collisions
-        if (el.closest('.why-slider-track') || el.closest('.ind-slider-track')) {
+        if (el.closest('.ind-slider-track')) {
           el.classList.add('is-inview', 'is-animated');
         } else {
           animObserver.observe(el);
@@ -675,133 +575,89 @@ function initRetrotech() {
   }
 
   /* =========================================================================
-     8.4 BENTO CAPABILITY DISCIPLINE SWITCHER
+     8.45 WHY CHOOSE US: SMOOTH CONTINUOUS SCROLL STACKING CARDS
      ========================================================================= */
-  const bentoFilterBtns = document.querySelectorAll('.bdn-btn');
-  const bentoCards = document.querySelectorAll('.bento-grid .bento-card');
+  const whyTrack = document.getElementById('whyScrollTrack');
+  const whyPinned = document.getElementById('whyPinnedViewport');
+  const card0 = document.querySelector('.why-cards-stage .why-stack-card[data-index="0"]');
+  const card1 = document.querySelector('.why-cards-stage .why-stack-card[data-index="1"]');
+  const card2 = document.querySelector('.why-cards-stage .why-stack-card[data-index="2"]');
 
-  if (bentoFilterBtns.length > 0 && bentoCards.length > 0) {
-    bentoFilterBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-bento-filter') || 'all';
-        bentoFilterBtns.forEach(b => b.classList.toggle('active', b === btn));
+  if (whyTrack && card0 && card1 && card2) {
+    let ticking = false;
 
-        bentoCards.forEach((card) => {
-          const cat = card.getAttribute('data-bento-cat') || 'all';
-          if (filter === 'all' || cat === filter || cat === 'all') {
-            card.style.display = '';
-            card.style.opacity = '1';
-            card.style.transform = 'none';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-  }
-
-  /* =========================================================================
-     8.45 WHY CHOOSE US INTERACTIVE SLIDE CAROUSEL
-     ========================================================================= */
-  const whyViewport = document.getElementById('whySliderViewport');
-  const whyTrack = document.getElementById('whySliderTrack');
-  const whyPrevBtn = document.getElementById('whyPrevBtn');
-  const whyNextBtn = document.getElementById('whyNextBtn');
-  const whyActivePage = document.getElementById('whyActivePage');
-  const whyTotalPages = document.getElementById('whyTotalPages');
-  const whyDots = document.querySelectorAll('#whyNavDots .why-dot');
-  const whyCards = document.querySelectorAll('.why-slider-track .why-matrix-card');
-
-  if (whyViewport && whyTrack && whyCards.length > 0) {
-    let currentWhySlide = 0;
-
-    const getCardsPerView = () => {
-      if (window.innerWidth <= 640) return 1;
-      if (window.innerWidth <= 1024) return 2;
-      return 3;
+    // Hermite smoothstep for acceleration and deceleration with zero jerk
+    const smoothstep = (min, max, value) => {
+      const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+      return x * x * (3 - 2 * x);
     };
 
-    const updateWhyCarousel = () => {
-      const cardsPerView = getCardsPerView();
-      const maxSlide = Math.max(0, Math.ceil(whyCards.length / cardsPerView) - 1);
-      if (currentWhySlide > maxSlide) currentWhySlide = maxSlide;
-
-      const card = whyCards[0];
-      if (!card) return;
-      const cardWidth = card.getBoundingClientRect().width;
-      const gap = 24; // 1.5rem
-      const slideDistance = (cardWidth + gap) * cardsPerView;
-
-      whyTrack.style.transform = `translateX(-${currentWhySlide * slideDistance}px)`;
-
-      if (whyActivePage) whyActivePage.textContent = currentWhySlide + 1;
-      if (whyTotalPages) whyTotalPages.textContent = maxSlide + 1;
-
-      if (whyPrevBtn) whyPrevBtn.disabled = currentWhySlide === 0;
-      if (whyNextBtn) whyNextBtn.disabled = currentWhySlide >= maxSlide;
-
-      if (whyDots.length > 0) {
-        whyDots.forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === currentWhySlide);
-          dot.style.display = idx <= maxSlide ? '' : 'none';
-        });
+    const getStickyTop = () => {
+      if (whyPinned) {
+        const topVal = parseInt(window.getComputedStyle(whyPinned).top, 10);
+        if (!isNaN(topVal)) return topVal;
       }
+      return window.innerWidth <= 860 ? 65 : 72;
     };
 
-    if (whyPrevBtn) {
-      whyPrevBtn.addEventListener('click', () => {
-        if (currentWhySlide > 0) {
-          currentWhySlide--;
-          updateWhyCarousel();
-        }
-      });
-    }
+    const updateStackPhysics = () => {
+      const rect = whyTrack.getBoundingClientRect();
+      const trackHeight = whyTrack.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollDistance = trackHeight - viewportHeight;
 
-    if (whyNextBtn) {
-      whyNextBtn.addEventListener('click', () => {
-        const cardsPerView = getCardsPerView();
-        const maxSlide = Math.max(0, Math.ceil(whyCards.length / cardsPerView) - 1);
-        if (currentWhySlide < maxSlide) {
-          currentWhySlide++;
-          updateWhyCarousel();
-        }
-      });
-    }
+      if (scrollDistance <= 0) {
+        ticking = false;
+        return;
+      }
 
-    if (whyDots.length > 0) {
-      whyDots.forEach((dot) => {
-        dot.addEventListener('click', () => {
-          const targetIndex = parseInt(dot.getAttribute('data-index') || '0', 10);
-          currentWhySlide = targetIndex;
-          updateWhyCarousel();
-        });
-      });
-    }
+      const stickyTop = getStickyTop();
+      // Progress from 0 (starts sticking) to 1 (reaches end of track)
+      const progress = Math.min(1, Math.max(0, (stickyTop - rect.top) / scrollDistance));
 
-    // Touch Swipe Support
-    let touchStartX = 0;
-    let touchEndX = 0;
+      // Phase 1: Card 1 stacks smoothly over Card 0 (scroll progress 0.03 to 0.48)
+      const p1 = smoothstep(0.03, 0.48, progress);
 
-    whyViewport.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+      // Phase 2: Card 2 stacks smoothly over Card 1 (scroll progress 0.50 to 0.95)
+      const p2 = smoothstep(0.50, 0.95, progress);
 
-    whyViewport.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0 && whyNextBtn && !whyNextBtn.disabled) {
-          currentWhySlide++;
-          updateWhyCarousel();
-        } else if (diff < 0 && whyPrevBtn && !whyPrevBtn.disabled) {
-          currentWhySlide--;
-          updateWhyCarousel();
-        }
+      // Card 0 physics (bottom-most card)
+      const scale0 = 1 - (p1 * 0.05) - (p2 * 0.03);
+      const op0 = 1 - (p1 * 0.35) - (p2 * 0.25);
+      const bright0 = 1 - (p1 * 0.12) - (p2 * 0.08);
+      card0.style.transform = `scale(${scale0.toFixed(4)})`;
+      card0.style.opacity = op0.toFixed(3);
+      card0.style.filter = `brightness(${bright0.toFixed(3)})`;
+
+      // Card 1 physics (middle card: rises over Card 0, then scales beneath Card 2)
+      const y1 = (1 - p1) * 105;
+      const scale1 = 1 - (p2 * 0.05);
+      const op1 = p1 > 0 ? (1 - (p2 * 0.35)) : 0;
+      const bright1 = 1 - (p2 * 0.12);
+      card1.style.visibility = p1 > 0 ? 'visible' : 'hidden';
+      card1.style.transform = `translate3d(0, ${y1.toFixed(2)}%, 0) scale(${scale1.toFixed(4)})`;
+      card1.style.opacity = op1.toFixed(3);
+      card1.style.filter = `brightness(${bright1.toFixed(3)})`;
+
+      // Card 2 physics (top-most card: rises over Card 1)
+      const y2 = (1 - p2) * 105;
+      const op2 = p2 > 0 ? 1 : 0;
+      card2.style.visibility = p2 > 0 ? 'visible' : 'hidden';
+      card2.style.transform = `translate3d(0, ${y2.toFixed(2)}%, 0) scale(1)`;
+      card2.style.opacity = op2.toFixed(3);
+
+      ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateStackPhysics);
+        ticking = true;
       }
     }, { passive: true });
 
-    window.addEventListener('resize', updateWhyCarousel);
-    updateWhyCarousel();
+    window.addEventListener('resize', updateStackPhysics, { passive: true });
+    updateStackPhysics();
   }
 
   /* =========================================================================
@@ -903,32 +759,6 @@ function initRetrotech() {
     updateIndCarousel();
   }
 
-  /* =========================================================================
-     8.6 INTERACTIVE MID-CTA SCOPE & SPRINT ESTIMATOR
-     ========================================================================= */
-  const mccPills = document.querySelectorAll('.mcc-pill');
-  const mccOutType = document.getElementById('mccOutType');
-  const mccOutSprints = document.getElementById('mccOutSprints');
-  const mccOutTeam = document.getElementById('mccOutTeam');
-  const mccWaLink = document.getElementById('mccWaLink');
-
-  if (mccPills.length > 0 && mccOutType && mccOutSprints && mccOutTeam && mccWaLink) {
-    mccPills.forEach((pill) => {
-      pill.addEventListener('click', () => {
-        mccPills.forEach(p => p.classList.toggle('active', p === pill));
-        const type = pill.getAttribute('data-type') || 'Web Platform';
-        const sprints = pill.getAttribute('data-sprints') || '2–4 Sprints';
-        const team = pill.getAttribute('data-team') || 'Senior Full-Stack Lead + UI/UX';
-
-        mccOutType.textContent = type;
-        mccOutSprints.textContent = sprints;
-        mccOutTeam.textContent = team;
-
-        const waMsg = `Hi Retrotech, I used your Project Estimator for a ${type} project (${sprints}). Dedicated cohort: ${team}. Let's discuss next steps.`;
-        mccWaLink.href = `https://wa.me/919973960072?text=${encodeURIComponent(waMsg)}`;
-      });
-    });
-  }
 
   if ('IntersectionObserver' in window) {
     const statsCounterObserver = new IntersectionObserver((entries) => {
@@ -1069,6 +899,24 @@ function initRetrotech() {
         faqSearchInput.focus();
       });
     }
+  }
+
+  /* =========================================================================
+     15b. HOMEPAGE ACCORDION AUTO-FOLD SIBLINGS
+     ========================================================================= */
+  const faqAccordionItems = document.querySelectorAll('.faq-accordion-group .faq-acc-item');
+  if (faqAccordionItems.length > 0) {
+    faqAccordionItems.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          faqAccordionItems.forEach((sibling) => {
+            if (sibling !== item && sibling.open) {
+              sibling.removeAttribute('open');
+            }
+          });
+        }
+      });
+    });
   }
 
   /* =========================================================================
