@@ -1795,13 +1795,12 @@ body.home-page .hero-section::before {
 .bento-services-section {
   position: relative;
   z-index: 25;
-  background: #fbfdfc;
+  background: linear-gradient(180deg, #f7fbf8 0%, #fbfdfc 50%, #f7fbf8 100%);
   padding: 7rem 2rem 8rem;
   width: 100%;
-  border-top: 2px dashed rgba(47, 111, 70, 0.22);
-  border-bottom: 1px solid var(--theme-border-light, rgba(47, 111, 70, 0.12));
+  border-top: 2px solid rgba(47, 111, 70, 0.14);
+  border-bottom: 1px solid rgba(47, 111, 70, 0.10);
   overflow: hidden;
-  perspective: 1400px;
 }
 
 /* Spatial Mesh & Ambient Aurora */
@@ -1874,13 +1873,11 @@ body.home-page .hero-section::before {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--theme-green-brand, #2f6f46);
-  background: rgba(234, 244, 236, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: #e6f2ea;
+  border: 1px solid rgba(47, 111, 70, 0.22);
+  box-shadow: 0 2px 10px rgba(47, 111, 70, 0.10), inset 0 1px 0 rgba(255,255,255,0.8);
   padding: 0.4rem 1rem;
   border-radius: 9999px;
-  border: 1px solid rgba(47, 111, 70, 0.18);
-  box-shadow: 0 2px 10px rgba(47, 111, 70, 0.08);
   margin-bottom: 1.15rem;
 }
 
@@ -1954,38 +1951,50 @@ body.home-page .hero-section::before {
 .bento-span-2 { grid-column: span 2; }
 .bento-span-3 { grid-column: span 3; }
 
-/* Base Bento Card Architecture with Dynamic Cursor Spotlight */
+/* Base Bento Card Architecture */
 .bento-card {
   position: relative;
   background: #ffffff;
-  border: 1px solid var(--theme-border-light, rgba(47, 111, 70, 0.14));
+  border: 1px solid rgba(47, 111, 70, 0.14);
   border-radius: 26px;
   padding: 2.35rem 2.25rem;
-  box-shadow: 0 0 0 1px rgba(47, 111, 70, 0.05),
-              0 4px 20px -2px rgba(21, 39, 29, 0.05);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
+  box-shadow: 0 1px 3px rgba(21, 39, 29, 0.04),
+              0 4px 24px -4px rgba(21, 39, 29, 0.08);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transform-style: preserve-3d;
+  /* Flat transform context — no 3D layer stack */
+  transform-style: flat;
+  /* Layout containment prevents sibling relayout on card state changes */
+  contain: layout style;
 }
 
-/* Dynamic Cursor Spotlight Shader (follows mouse movement) */
-.bento-card::before {
+.bento-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px -4px rgba(21, 39, 29, 0.14),
+              0 0 0 1.5px rgba(47, 111, 70, 0.22);
+  border-color: rgba(47, 111, 70, 0.28);
+}
+
+/* Accent top-border glow on hover — no expensive backdrop-filter */
+.bento-card::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(52, 211, 153, 0.12), transparent 75%);
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #34d399, #10b981, transparent);
   opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: 1;
+  transition: opacity 0.38s ease;
+  pointer-events: none;
+  border-radius: 26px 26px 0 0;
 }
 
-.bento-card:hover::before {
+.bento-card:hover::after {
   opacity: 1;
 }
 
@@ -2451,7 +2460,6 @@ body.home-page .hero-section::before {
   height: 7px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 8px #10b981;
   animation: bavDataFlow 2s infinite linear;
 }
 
@@ -2592,7 +2600,8 @@ body.home-page .hero-section::before {
   stroke: #10b981;
   stroke-width: 2.5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 4px #10b981);
+  /* Removed filter:drop-shadow — SVG filter repaints entire SVG bounding box on
+     every RAF frame, causing jank. The green stroke colour reads clearly without it. */
 }
 
 .bst-wave-path-bg {
@@ -2965,82 +2974,51 @@ body.home-page .hero-section::before {
 }
 
 /* ==========================================================================
-   BENTO GRID KINETIC ON-SCROLL PHYSICS & 3D GYROSCOPIC TILT
+   BENTO GRID ON-SCROLL REVEAL — GPU-FRIENDLY TRANSLATE + FADE
    ========================================================================== */
+/* Only promote layers while animating; drop will-change once settled */
 .bento-scroll-enabled [data-bento-scroll] {
-  will-change: transform, opacity;
-  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s ease,
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity  0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease,
               border-color 0.25s ease;
 }
 
-/* Left elements initial/below state (enter from left with subtle 3D angle) */
+/* Hidden states: simple translate + fade — no rotateY, no scale */
 .bento-scroll-enabled [data-bento-scroll="left"] {
-  --bento-dist: 110px;
-  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0) rotateY(4deg);
+  transform: translateX(-60px);
   opacity: 0;
+  will-change: transform, opacity;
 }
-
-/* Right elements initial/below state (enter from right with subtle 3D angle) */
 .bento-scroll-enabled [data-bento-scroll="right"] {
-  --bento-dist: 110px;
-  transform: translate3d(var(--bento-dist), 0, 0) rotateY(-4deg);
+  transform: translateX(60px);
   opacity: 0;
+  will-change: transform, opacity;
 }
-
-/* Top header initial/below state */
 .bento-scroll-enabled [data-bento-scroll="top"] {
-  transform: translate3d(0, -40px, 0);
+  transform: translateY(-28px);
   opacity: 0;
+  will-change: transform, opacity;
 }
-
-/* Bottom banner initial/below state */
 .bento-scroll-enabled [data-bento-scroll="bottom"] {
-  transform: translate3d(0, 70px, 0) scale(0.97);
+  transform: translateY(50px);
   opacity: 0;
+  will-change: transform, opacity;
 }
 
-/* ACTIVE STATE (In Viewport: Aligned and fully visible) */
-.bento-scroll-enabled [data-bento-scroll].is-active {
-  transform: perspective(1000px) rotateX(var(--rot-x, 0deg)) rotateY(var(--rot-y, 0deg)) translate3d(0, 0, 0) scale(1) !important;
-  opacity: 1 !important;
-}
-
-/* Hover on active cards incorporates 3D tilt elevation */
-.bento-scroll-enabled .bento-card[data-bento-scroll].is-active:hover {
-  transform: perspective(1000px) rotateX(var(--rot-x, 0deg)) rotateY(var(--rot-y, 0deg)) translate3d(0, -6px, 12px) scale(1.008) !important;
-  box-shadow: 0 24px 50px -12px rgba(21, 39, 29, 0.16),
-              0 0 0 1px rgba(47, 111, 70, 0.32);
-}
-
-/* VISIBLE & SCROLLED-PAST STATE (Stay Solid & Visible) */
+/* Active: settled, remove GPU hint so layer is released */
 .bento-scroll-enabled [data-bento-scroll].is-active,
 .bento-scroll-enabled [data-bento-scroll].is-above {
-  transform: translate3d(0, 0, 0) rotateY(0deg) scale(1) !important;
+  transform: translate3d(0, 0, 0) !important;
   opacity: 1 !important;
+  will-change: auto;
 }
 
-/* BELOW STATE (When scrolled back down) */
-.bento-scroll-enabled [data-bento-scroll="left"].is-below {
-  transform: translate3d(calc(-1 * var(--bento-dist)), 0, 0) rotateY(4deg);
-  opacity: 0;
-}
-
-.bento-scroll-enabled [data-bento-scroll="right"].is-below {
-  transform: translate3d(var(--bento-dist), 0, 0) rotateY(-4deg);
-  opacity: 0;
-}
-
-.bento-scroll-enabled [data-bento-scroll="top"].is-below {
-  transform: translate3d(0, -40px, 0);
-  opacity: 0;
-}
-
-.bento-scroll-enabled [data-bento-scroll="bottom"].is-below {
-  transform: translate3d(0, 70px, 0) scale(0.97);
-  opacity: 0;
-}
+/* Below (scrolled back past) — restore hidden state */
+.bento-scroll-enabled [data-bento-scroll="left"].is-below  { transform: translateX(-60px); opacity: 0; will-change: transform, opacity; }
+.bento-scroll-enabled [data-bento-scroll="right"].is-below { transform: translateX(60px);  opacity: 0; will-change: transform, opacity; }
+.bento-scroll-enabled [data-bento-scroll="top"].is-below   { transform: translateY(-28px); opacity: 0; will-change: transform, opacity; }
+.bento-scroll-enabled [data-bento-scroll="bottom"].is-below{ transform: translateY(50px);  opacity: 0; will-change: transform, opacity; }
 
 /* Responsive Breakpoints for Bento Grid */
 @media (max-width: 1100px) {
@@ -3514,10 +3492,8 @@ body.home-page .hero-section::before {
   font-size: 0.825rem;
   font-weight: 600;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.26);
   padding: 0.4rem 0.95rem;
   border-radius: 9999px;
   text-decoration: none;
@@ -4135,16 +4111,14 @@ body.home-page .acred-card--expertise:hover {
   position: absolute;
   top: 0.6rem;
   right: 0.6rem;
-  background: rgba(21, 39, 29, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(21, 39, 29, 0.88);
   color: #a7f3d0;
   font-size: 0.72rem;
   font-weight: 850;
   padding: 0.2rem 0.55rem;
   border-radius: 6px;
   letter-spacing: 0.05em;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(167, 243, 208, 0.2);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -10125,11 +10099,10 @@ body.contact-page-leaving::after {
   font-size: 0.7rem;
   font-weight: 750;
   color: #34d399;
-  background: rgba(13, 26, 18, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(13, 26, 18, 0.92);
   padding: 0.2rem 0.55rem;
   border-radius: 6px;
-  border: 1px solid rgba(52, 211, 153, 0.25);
+  border: 1px solid rgba(52, 211, 153, 0.3);
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -10178,11 +10151,10 @@ body.contact-page-leaving::after {
   font-size: 0.72rem;
   font-weight: 750;
   color: #ffffff;
-  background: rgba(17, 34, 23, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(17, 34, 23, 0.92);
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   letter-spacing: 0.02em;
 }
 
@@ -10225,11 +10197,10 @@ body.contact-page-leaving::after {
   font-size: 0.7rem;
   font-weight: 750;
   color: #34d399;
-  background: rgba(17, 34, 23, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(17, 34, 23, 0.92);
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(52, 211, 153, 0.3);
+  border: 1px solid rgba(52, 211, 153, 0.35);
   letter-spacing: 0.02em;
 }
 
@@ -10270,11 +10241,10 @@ body.contact-page-leaving::after {
   font-size: 0.76rem;
   font-weight: 750;
   color: #ffffff;
-  background: rgba(15, 31, 21, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 31, 21, 0.92);
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.28);
 }
 
 /* ==========================================================================
@@ -10543,9 +10513,8 @@ body.home-page .marquee-ticker-bar {
 
 /* 5. Mid CTA Interactive Scope & Sprint Estimator Widget */
 .mid-cta-calc-widget {
-  background: rgba(15, 31, 21, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 31, 21, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
   padding: 1.65rem 1.75rem;
   margin-top: 2rem;
@@ -12572,4 +12541,205 @@ body.home-page .marquee-ticker-bar {
   body.home-page .about-pinned-showcase .about-split-canvas {
     grid-template-columns: 1.15fr 1.25fr;
   }
+}
+
+/* =========================================================================
+   HOMEPAGE INTERACTIVE REDIRECTION BUTTONS & CARDS
+   ========================================================================= */
+a.industry-card-pro {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+a.industry-card-pro:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.icp-action-row {
+  margin-top: auto;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(47, 111, 70, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.icp-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #2f6f46;
+  transition: transform 0.22s ease, color 0.22s ease;
+}
+
+a.industry-card-pro:hover .icp-action-link {
+  color: #065f46;
+  transform: translateX(4px);
+}
+
+.ind-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1.35rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 1.5px solid rgba(47, 111, 70, 0.25);
+  color: #1e5233;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  box-shadow: 0 2px 8px rgba(21, 39, 29, 0.04);
+}
+
+.ind-view-all-btn:hover {
+  background: #065f46;
+  border-color: #065f46;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(6, 95, 70, 0.2);
+  text-decoration: none;
+}
+
+.bdn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  cursor: pointer;
+}
+
+.bdn-link:hover {
+  background: #10b981;
+  border-color: #10b981;
+  color: #0a0f0d;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.mobile-overview-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-overview-link {
+  color: #34d399 !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/* ==========================================================================
+   BENTO SECTION — PERFORMANCE-SAFE VISUAL POLISH
+   No backdrop-filter, no perspective stacking, no 3D composite layers.
+   Uses solid composited properties: background, border, box-shadow, opacity.
+   ========================================================================== */
+
+/* Subtle dot-grid mesh on the section background for depth without blur */
+.bento-services-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(47, 111, 70, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Accent glow orbs — composited opacity-only animation, zero layout cost */
+.bento-ambient-glow-1 {
+  animation: bentoGlowPulse 8s ease-in-out infinite alternate;
+}
+.bento-ambient-glow-2 {
+  animation: bentoGlowPulse 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes bentoGlowPulse {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Card colour accents — flagship gets a mint tint on left edge */
+.bento-card-flagship {
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.6) 0%, #ffffff 40%);
+  border-left: 3px solid rgba(16, 185, 129, 0.35);
+}
+.bento-card-software {
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.5) 0%, #ffffff 40%);
+  border-left: 3px solid rgba(59, 130, 246, 0.25);
+}
+.bento-card-saas {
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.5) 0%, #ffffff 40%);
+  border-left: 3px solid rgba(47, 111, 70, 0.3);
+}
+.bento-card-growth {
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.5) 0%, #ffffff 40%);
+  border-left: 3px solid rgba(245, 158, 11, 0.25);
+}
+
+/* Top-edge aurora shimmer on card hover (replaces expensive spotlight shader) */
+.bento-card:hover::after {
+  opacity: 1;
+}
+
+/* Discipline filter bar — replace backdrop-filter with solid pill */
+.bento-discipline-nav {
+  background: rgba(241, 248, 243, 0.98);
+  border: 1px solid rgba(47, 111, 70, 0.18);
+  box-shadow: 0 2px 12px rgba(21, 39, 29, 0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Industries filter bar — replace backdrop-filter with solid pill */
+.industries-filter-bar {
+  background: rgba(241, 248, 243, 0.98) !important;
+  border: 1px solid rgba(47, 111, 70, 0.18) !important;
+  box-shadow: 0 2px 10px rgba(21, 39, 29, 0.06) !important;
+  /* Remove any residual backdrop-filter set inline */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Oscilloscope wave canvas — add a subtle gradient fill for visual richness */
+.bst-wave-canvas {
+  background: linear-gradient(180deg, rgba(236, 253, 245, 0.8) 0%, rgba(255,255,255,0.4) 100%) !important;
+}
+
+/* Wave background stroke — slightly more visible for contrast */
+.bst-wave-path-bg {
+  stroke: rgba(47, 111, 70, 0.22);
+  stroke-width: 1.8;
+}
+
+/* Architecture visual connector pulsing dots — keep but ensure no filter cost */
+.bav-ping-dot {
+  box-shadow: none; /* remove glow — was triggering paint on every animation frame */
+}
+.bav-ping-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.3);
+  animation: bavGlowRing 2s infinite linear;
+}
+@keyframes bavGlowRing {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
 }

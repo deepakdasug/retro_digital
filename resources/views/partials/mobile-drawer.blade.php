@@ -9,6 +9,7 @@
       <details>
         <summary class="mobile-nav-link">Services</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
+          <li class="mobile-overview-item"><a href="{{ route('services.index') }}" class="mobile-overview-link"><span>View All Services</span> <i class="fa-solid fa-arrow-right"></i></a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'marketing-platform']) }}">Marketing Platform</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'search-engine-optimization']) }}">Search Engine Optimization</a></li>
           <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
@@ -26,11 +27,11 @@
           <li><a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}">API Development</a></li>
           <li><a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}">Software Development</a></li>
           <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">WhatsApp Integration</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'our-platform']) }}">Our Platform</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-exploration']) }}">Tech Exploration</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'tech-solutions']) }}">Tech Solutions</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-support']) }}">IT Support</a></li>
-          <li><a href="{{ route('catalog.show', ['section' => 'services', 'slug' => 'it-services']) }}">IT Services</a></li>
+          <li><a href="{{ route('services.index') }}">Our Platform</a></li>
+          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Exploration</a></li>
+          <li><a href="{{ route('services.index') }}">Tech Solutions</a></li>
+          <li><a href="{{ route('services.index') }}">IT Support</a></li>
+          <li><a href="{{ route('services.index') }}">IT Services</a></li>
           <li><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing Services</a></li>
         </ul>
       </details>
@@ -39,6 +40,7 @@
       <details>
         <summary class="mobile-nav-link">Industries</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
+          <li class="mobile-overview-item"><a href="{{ route('industries.index') }}" class="mobile-overview-link"><span>View All Industries</span> <i class="fa-solid fa-arrow-right"></i></a></li>
           <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}">Ecommerce &amp; Multivendor</a></li>
           <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real Estate &amp; Construction</a></li>
           <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufacturing</a></li>
@@ -51,9 +53,9 @@
           <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil and Gas</a></li>
           <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
           <li><a href="{{ route('industries.show', 'other-industries') }}">Other Industries</a></li>
-          <li><a href="#">Our Platform</a></li>
-          <li><a href="#">Tech Exploration</a></li>
-          <li><a href="#">Tech Solutions</a></li>
+          <li><a href="{{ route('industries.index') }}">Our Platform</a></li>
+          <li><a href="{{ route('industries.index') }}">Tech Exploration</a></li>
+          <li><a href="{{ route('industries.index') }}">Tech Solutions</a></li>
         </ul>
       </details>
     </li>

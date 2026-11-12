@@ -14,7 +14,7 @@
 
         {{-- Services dropdown --}}
         <li class="nav-item has-dropdown">
-          <a href="#" role="button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          <a href="{{ route('services.index') }}" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
             Services <i class="fa-solid fa-caret-down dropdown-arrow"></i>
           </a>
           <div class="dropdown-menu glass-panel services-mega-menu">
@@ -24,7 +24,7 @@
                 <h2 id="marketing-services-heading"><a href="{{ route('services.show', 'digital-marketing') }}">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Explore technology services for secure operations and responsible asset lifecycle management.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('services.show', 'search-engine-optimization') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
+                  <li><a href="{{ route('services.show', 'seo-services') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
                   <li><a href="{{ route('services.show', 'social-media-marketing') }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
                   <li><a href="{{ route('services.show', 'paid-marketing') }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
                   <li><a href="{{ route('services.show', 'email-marketing') }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
@@ -51,22 +51,22 @@
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">
                 <article>
-                  <h2><a href="#">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('services.index') }}">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Bring technology lifecycle services together around your organization’s needs.</p>
                 </article>
                 <article>
-                  <h2><a href="#">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>
-                  <h2><a href="#">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('services.index') }}">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Find support for equipment, data, and operational requirements.</p>
                 </article>
               </section>
             </div>
             <div class="services-mega-cards">
-              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Support</strong><small>Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
-              <a href="#" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Services</strong><small>End-to-end IT solutions including infrastructure management, cloud services, cybersecurity, system integration, and ongoing maintenance.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="{{ route('services.index') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Support</strong><small>Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
+              <a href="{{ route('services.index') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>IT Services</strong><small>End-to-end IT solutions including infrastructure management, cloud services, cybersecurity, system integration, and ongoing maintenance.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
               <a href="{{ route('services.show', 'digital-marketing') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="" aria-hidden="true" loading="lazy"></a>
             </div>
           </div>
@@ -74,7 +74,7 @@
 
         {{-- Industries dropdown --}}
         <li class="nav-item has-dropdown">
-          <a href="#" role="button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          <a href="{{ route('industries.index') }}" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
             Industries <i class="fa-solid fa-caret-down dropdown-arrow"></i>
           </a>
           <div class="dropdown-menu glass-panel services-mega-menu industries-mega-menu">
@@ -100,15 +100,15 @@
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">
                 <article>
-                  <h2><a href="#">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('industries.index') }}">Our Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Bring technology lifecycle services together around your organization’s needs.</p>
                 </article>
                 <article>
-                  <h2><a href="#">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('industries.index') }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>
-                  <h2><a href="#">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('industries.index') }}">Tech Solutions <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Find support for equipment, data, and operational requirements.</p>
                 </article>
               </section>

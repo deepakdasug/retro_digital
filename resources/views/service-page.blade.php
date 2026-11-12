@@ -1,7 +1,17 @@
 @extends('layouts.app')
 
-@section('title', ($service->title ?? 'Service') . ' - Retrotech')
-@section('description', $service->meta_description ?? 'Professional ' . ($service->title ?? 'Technology') . ' services by Retrotech.')
+@php
+    $ogImage = $service->hero_image ?? null;
+    if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
+        $ogImage = asset($ogImage);
+    }
+    $ogImage = $ogImage ?: asset('assets/images/logo.png');
+@endphp
+
+@section('title', ($service->title ?? 'Technology Service') . ' | Retrotech Digital')
+@section('description', $service->meta_description ?? ('Professional ' . ($service->title ?? 'Technology') . ' services by Retrotech Digital.'))
+@section('canonical', route('services.show', $service->slug))
+@section('og_image', $ogImage)
 
 @push('styles')
   <script src="https://cdn.tailwindcss.com"></script>

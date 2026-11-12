@@ -183,9 +183,6 @@ Route::get('/web/{webPage}', [FrontendWebPageController::class, 'show'])->name('
 | MUST be the LAST route — otherwise it captures /industries/{slug}, /services/{slug}, etc.
 */
 Route::get('/{section}/{slug}', function (string $section, string $slug) {
-    abort_unless(in_array($section, ['services', 'industries'], true), 404);
-
-    // Legacy tech-development service slugs → redirect to the tech-development controller
     $techSlugs = [
         'web-development' => 'web-development',
         'mobile-app-development' => 'mobile-app-development',
@@ -199,20 +196,11 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
         'tech-development' => 'web-development',
     ];
 
+    // 1. Preserve legacy 301s
     if ($section === 'services' && isset($techSlugs[$slug])) {
         return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
     }
 
-    // Industry pages from config
-    $sectionData = config("site_pages.$section");
-    $page = $sectionData ? collect($sectionData['items'])->firstWhere('slug', $slug) : null;
-
-    if (!$page && $section === 'industries') {
-        $sectionData = config('footer_industries');
-        $page = collect($sectionData['items'])->firstWhere('slug', $slug);
-    }
-
-    abort_unless($page, 404);
-
-    return view('catalog.show', ['section' => $sectionData, 'page' => $page]);
+    // 2. No catalog view yet — return a real 404, never 500
+    abort(404);
 })->where('section', 'services|industries')->name('catalog.show');

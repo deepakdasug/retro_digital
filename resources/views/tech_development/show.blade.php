@@ -1,11 +1,21 @@
 @extends('layouts.app')
 
-@section('title', $techDevelopment->meta_title ?: ($techDevelopment->name . ' - Retrotech Digital'))
+@php
+    $ogImage = $techDevelopment->hero_image ?? null;
+    if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
+        $ogImage = asset($ogImage);
+    }
+    $ogImage = $ogImage ?: asset('assets/images/logo.png');
+@endphp
+
+@section('title', ($techDevelopment->meta_title ?: $techDevelopment->name) . ' | Retrotech Digital')
 @section('description', $techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'))
+@section('canonical', route('tech-development.show', $techDevelopment->slug))
+@section('og_image', $ogImage)
 
 @push('styles')
     <link rel="stylesheet"
-        href="{{ asset('css/tech-development.css') }}?v={{ time() }}">
+        href="{{ asset('css/tech-development.css') }}?v={{ file_exists(public_path('css/tech-development.css')) ? filemtime(public_path('css/tech-development.css')) : '1.0' }}">
 @endpush
 
 @section('content')

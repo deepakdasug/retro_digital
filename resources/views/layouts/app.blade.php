@@ -4,19 +4,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Retrotech - Business Made Easy')</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta name="description"
-    content="@yield('description', 'Business Made Easy with Retrotech. Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through WhatsApp marketing tools.')">
-  @stack('head')
-  <meta name="keywords"
-    content="Retrotech, WhatsApp marketing, business automation, customer engagement, WhatsApp API, marketing tools">
-  <meta name="author" content="Retrotech">
+  {{-- Primary SEO --}}
+  <title>@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')</title>
+  <meta name="description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
+  <meta name="robots" content="@yield('robots', 'index, follow, max-image-preview:large')">
+  <link rel="canonical" href="@yield('canonical', url()->current())">
 
+  {{-- Open Graph / Facebook / LinkedIn / WhatsApp --}}
+  <meta property="og:site_name" content="Retrotech Digital">
+  <meta property="og:type" content="@yield('og_type', 'website')">
+  <meta property="og:url" content="@yield('canonical', url()->current())">
+  <meta property="og:title" content="@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')">
+  <meta property="og:description" content="@yield('description', 'Enterprise web development, software engineering, and digital growth solutions.')">
+  <meta property="og:image" content="@yield('og_image', asset('assets/images/logo.png'))">
+  <meta property="og:locale" content="en_US">
+
+  {{-- Twitter Card --}}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="@yield('canonical', url()->current())">
+  <meta name="twitter:title" content="@yield('title', 'Retrotech Digital')">
+  <meta name="twitter:description" content="@yield('description', 'Enterprise web development, software engineering, and digital growth solutions.')">
+  <meta name="twitter:image" content="@yield('og_image', asset('assets/images/logo.png'))">
+
+  {{-- Icons --}}
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/icon.ico') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/logo.png') }}">
+
+  {{-- Fonts --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -25,6 +44,9 @@
 
   <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
   <link rel="stylesheet" href="{{ asset('vendor/lenis/lenis.css') }}?v={{ file_exists(public_path('vendor/lenis/lenis.css')) ? filemtime(public_path('vendor/lenis/lenis.css')) : '1.0' }}">
+
+  {{-- page-specific extras (JSON-LD, preloads, per-page <style>) --}}
+  @stack('head')
   @stack('styles')
 </head>
 

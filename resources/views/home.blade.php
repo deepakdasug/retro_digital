@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Retrotech - Business Made Easy | 360° IT, AI & Digital Solutions')
 @section('description', 'Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through WhatsApp marketing tools, web development, and custom software.')
@@ -24,7 +24,7 @@
             <span>Get a Free Consultation</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
-          <a href="#services" class="hero-secondary-btn">
+          <a href="{{ route('services.index') }}" class="hero-secondary-btn">
             <span>Explore Services</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
@@ -43,7 +43,7 @@
         About Us
       </span>
 
-      <h2 class="redefining-heading" data-anim="down">
+      <h2 class="redefining-heading">
         <span class="heading-row-1">Smart IT, AI &amp; Marketing</span>
         <span class="heading-row-2">
           <span class="word-modern">Solutions</span>
@@ -261,6 +261,7 @@
           <button type="button" class="bdn-btn" data-bento-filter="automation">
             <i class="fa-brands fa-whatsapp"></i> WhatsApp &amp; Growth
           </button>
+    
         </div>
       </header>
 
@@ -611,12 +612,16 @@
                 <span class="bento-preview-badge"><i class="fa-solid fa-globe"></i> Global 24/7 Operations</span>
               </div>
 
+              
+
               <p class="bento-desc">"We are web designers, developers, project managers, and digital marketing professionals dedicated to creative solutions using the latest trends."</p>
               <div class="bento-eco-sla">
                 <span class="bento-sla-dot"></span>
                 <span>Guaranteed Expert Response Within 24 Hours • Free Technical Consultation</span>
               </div>
             </div>
+
+            
 
             <div class="bento-eco-right">
               <div class="bento-eco-chips">
@@ -632,6 +637,11 @@
             </div>
           </div>
         </article>
+
+        <a href="{{ route('services.index') }}" class="bdn-link" title="Explore all services">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> All Services Page
+          </a>
+
       </div>
     </div>
   </section>
@@ -1051,12 +1061,16 @@
             <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
+        <a href="{{ route('industries.index') }}" class="ind-view-all-btn">
+          <span>View All Industries</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
 
       <div class="ind-slider-viewport" id="indSliderViewport">
         <div class="industries-pro-grid ind-slider-track" id="indSliderTrack">
         {{-- Industry 1 --}}
-        <div class="industry-card-pro" data-anim="left" data-industry-cat="commerce">
+        <a href="{{ route('industries.show', 'ecommerce-multivendor') }}" class="industry-card-pro" data-anim="left" data-industry-cat="commerce">
           {{-- Image 19: E-Commerce Storefronts --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/tech-development/web-development.jpg') }}" alt="E-Commerce &amp; Retail" loading="lazy">
@@ -1075,10 +1089,13 @@
             <span>Stripe &amp; Razorpay</span>
             <span>WMS Sync</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 2 --}}
-        <div class="industry-card-pro" data-anim="up" data-industry-cat="fintech">
+        <a href="{{ route('industries.show', 'medical-and-healthcare') }}" class="industry-card-pro" data-anim="up" data-industry-cat="fintech">
           {{-- Image 20: Healthcare & Telemedicine --}}
           <div class="icp-img-wrap">
             <picture>
@@ -1100,10 +1117,13 @@
             <span>HL7 / FHIR</span>
             <span>Patient CRM</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 3 --}}
-        <div class="industry-card-pro" data-anim="down" data-industry-cat="fintech">
+        <a href="{{ route('industries.show', 'finance-and-insurance') }}" class="industry-card-pro" data-anim="down" data-industry-cat="fintech">
           {{-- Image 21: Banking & FinTech --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/enterprise.webp') }}" alt="Banking &amp; FinTech" loading="lazy">
@@ -1122,10 +1142,13 @@
             <span>Zero-Trust</span>
             <span>Fraud AI</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 4 --}}
-        <div class="industry-card-pro" data-anim="right" data-industry-cat="commerce">
+        <a href="{{ route('industries.show', 'real-estate-and-construction') }}" class="industry-card-pro" data-anim="right" data-industry-cat="commerce">
           {{-- Image 22: Real Estate & PropTech --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/global-locations.jpg') }}" alt="Real Estate &amp; PropTech" loading="lazy">
@@ -1144,10 +1167,13 @@
             <span>MLS / IDX Sync</span>
             <span>WhatsApp Bot</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 5 --}}
-        <div class="industry-card-pro" data-anim="left" data-industry-cat="enterprise">
+        <a href="{{ route('industries.show', 'edtech-and-e-learning') }}" class="industry-card-pro" data-anim="left" data-industry-cat="enterprise">
           {{-- Image 23: Education & EdTech --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/tech-development/saas-application.jpg') }}" alt="Education &amp; EdTech" loading="lazy">
@@ -1166,10 +1192,13 @@
             <span>SCORM</span>
             <span>Gamification</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 6 --}}
-        <div class="industry-card-pro" data-anim="up" data-industry-cat="enterprise">
+        <a href="{{ route('industries.show', 'other-industries') }}" class="industry-card-pro" data-anim="up" data-industry-cat="enterprise">
           {{-- Image 24: SaaS & Tech Startups --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/tech-development/api-development.jpg') }}" alt="SaaS &amp; Tech Startups" loading="lazy">
@@ -1188,10 +1217,13 @@
             <span>Stripe Billing</span>
             <span>OpenAPI</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 7 --}}
-        <div class="industry-card-pro" data-anim="down" data-industry-cat="enterprise">
+        <a href="{{ route('industries.show', 'manufacturing') }}" class="industry-card-pro" data-anim="down" data-industry-cat="enterprise">
           {{-- Image 25: Manufacturing & Logistics --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/it-asset-remarketing.jpg') }}" alt="Manufacturing &amp; Logistics" loading="lazy">
@@ -1210,10 +1242,13 @@
             <span>Barcode &amp; QR</span>
             <span>ERP Sync</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
 
         {{-- Industry 8 --}}
-        <div class="industry-card-pro" data-anim="right" data-industry-cat="commerce">
+        <a href="{{ route('industries.show', 'travel-and-hospitality') }}" class="industry-card-pro" data-anim="right" data-industry-cat="commerce">
           {{-- Image 26: Travel & Hospitality --}}
           <div class="icp-img-wrap">
             <img src="{{ asset('assets/images/hard-drive-disposal.jpg') }}" alt="Travel &amp; Hospitality" loading="lazy">
@@ -1232,7 +1267,10 @@
             <span>Multi-Currency</span>
             <span>Guest WA Bot</span>
           </div>
-        </div>
+          <div class="icp-action-row">
+            <span class="icp-action-link">Explore Industry <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
       </div>
     </div>
   </div>

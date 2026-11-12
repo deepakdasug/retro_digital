@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+@php
+    // 1. OG Image Fallback Chain: og_image -> hero_image -> default logo
+    $ogImagePath = $industry->og_image ?: ($industry->hero_image ?: 'assets/images/logo.png');
+    
+    // Handle absolute vs relative URLs
+    $finalOgImage = \Illuminate\Support\Str::startsWith($ogImagePath, ['http://', 'https://']) 
+        ? $ogImagePath 
+        : asset($ogImagePath);
+
+    // 2. Canonical Fallback Chain: canonical_url -> route() using slug
+    $finalCanonical = $industry->canonical_url ?: route('industries.show', $industry->slug);
+@endphp
+
+@section('title', $industry->meta_title ?: ($industry->name . ' IT & Digital Solutions | Retrotech Digital'))
+
+@section('description', $industry->meta_description ?: ($industry->short_description ?: 'Comprehensive ' . $industry->name . ' technology solutions by Retrotech Digital.'))
+
+@section('canonical', $finalCanonical)
+
+@section('og_image', $finalOgImage)
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/industry.css') }}">
 @endpush

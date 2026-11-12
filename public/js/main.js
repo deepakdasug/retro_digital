@@ -100,25 +100,21 @@ function initRetrotech() {
      2. VIDEO SCROLL DOCKING ENGINE
      ========================================================================= */
   /* =========================================================================
-     2. VIDEO SCROLL DOCKING ENGINE (HIGH PERFORMANCE)
+     2. VIDEO SCROLL DOCKING ENGINE (HIGH PERFORMANCE & SUB-PIXEL PRECISION)
      ========================================================================= */
   const videoContainer = document.getElementById('videoContainer');
   const videoDockSlot = document.getElementById('videoDockSlot');
+  const videoDarkOverlay = document.getElementById('videoDarkOverlay');
   const heroContent = document.querySelector('.hero-content');
   const siteHeader = document.getElementById('siteHeader');
   const splitCanvas = document.querySelector('.about-split-canvas');
   const cultureImg = document.querySelector('.acc-bg-image-wrap img');
 
   let ticking = false;
-  let slotDocTop = 0;
-  let slotLeft = 0;
-  let slotW = 0;
-  let slotH = 0;
   let splitCanvasDocTop = 0;
   let splitCanvasH = 0;
   let windowW = window.innerWidth;
   let windowH = window.innerHeight;
-  let measurementsReady = false;
 
   const getScrollY = () =>
     window.pageYOffset ||
@@ -130,17 +126,6 @@ function initRetrotech() {
     windowW = document.documentElement.clientWidth || window.innerWidth;
     windowH = window.innerHeight;
     const scrollY = getScrollY();
-
-    if (videoDockSlot) {
-      const r = videoDockSlot.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) {
-        slotDocTop = r.top + scrollY;
-        slotLeft = r.left;
-        slotW = r.width;
-        slotH = r.height;
-        measurementsReady = true;
-      }
-    }
 
     if (splitCanvas) {
       const cr = splitCanvas.getBoundingClientRect();
@@ -156,32 +141,28 @@ function initRetrotech() {
   let lastShadow = null;
   let lastHeroOpacity = null;
   let lastHeroTransform = '';
+  let lastDarkOverlayOpacity = null;
+  let lastBrightness = null;
   let videoIsOffscreen = false;
 
   const handleVideoScroll = () => {
-    if (!videoContainer) {
+    if (!videoContainer || !videoDockSlot) {
       if (siteHeader) siteHeader.classList.add('scrolled');
       return;
     }
 
-    if (!measurementsReady || slotW === 0) {
-      measureLayout();
-      if (!measurementsReady || slotW === 0) return;
+    // Always sample the live bounding rectangle of the dock slot
+    const slotRect = videoDockSlot.getBoundingClientRect();
+    if (slotRect.width === 0 || slotRect.height === 0) {
+      return;
     }
 
     const scrollY = getScrollY();
-    const transitionDistance = windowH * 0.85;
-    const rawProgress = scrollY / transitionDistance;
-    const p = Math.min(Math.max(rawProgress, 0), 1);
+    windowW = document.documentElement.clientWidth || window.innerWidth;
+    windowH = window.innerHeight;
 
-    const targetW = slotW;
-    const targetH = slotH;
-    const targetX = slotLeft;
-    const targetY = slotDocTop - scrollY;
-
-    // When the docked video has scrolled completely off the top of the viewport,
-    // hide it and pause decoding to free 100% GPU/CPU for the rest of the page.
-    if (p >= 1.0 && targetY < -targetH - 120) {
+    // Off-screen handling: when slot has scrolled well past top of viewport, hide container & pause playback
+    if (slotRect.top < -slotRect.height - 100) {
       if (!videoIsOffscreen) {
         videoIsOffscreen = true;
         videoContainer.style.visibility = 'hidden';
@@ -199,65 +180,106 @@ function initRetrotech() {
       }
     }
 
-    const midW = Math.min(windowW * 0.54, 660);
+    // Calculate dynamic docking progress based on real element document position:
+    // Slot reaches its natural reading position around 38% - 44% from top of viewport.
+    const slotDocTop = slotRect.top + scrollY;
+    const dockViewportTargetY = Math.max(80, windowH * 0.42);
+    const dockCompleteScroll = Math.max(120, slotDocTop - dockViewportTargetY);
+
+    const rawProgress = scrollY / dockCompleteScroll;
+    const p = Math.min(Math.max(rawProgress, 0), 1);
+
+    // Precise live target geometry: fits exactly into the square/rectangular dock slot
+    const targetW = slotRect.width;
+    const targetH = slotRect.height;
+    const targetX = slotRect.left;
+    const targetY = slotRect.top;
+
+    // Centered mid-stage card geometry
+    const midW = Math.min(Math.max(windowW * 0.54, 300), Math.min(660, windowW * 0.9));
     const midH = midW * (9 / 16);
     const midX = (windowW - midW) / 2;
-    const midY = (windowH - midH) / 2 - 20;
+    const midY = (windowH - midH) / 2 - 15;
 
     let curW, curH, curX, curY, curShadow, curRadius;
 
     if (p <= 0.5) {
+      // Stage 1: Shrink from full-screen hero to floating center card
       const subP = p / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
-      curW = Math.round(windowW + (midW - windowW) * ease);
-      curH = Math.round(windowH + (midH - windowH) * ease);
-      curX = Math.round(midX * ease);
-      curY = Math.round(midY * ease);
+      curW = windowW + (midW - windowW) * ease;
+      curH = windowH + (midH - windowH) * ease;
+      curX = midX * ease;
+      curY = midY * ease;
       curShadow = ease * 25;
       curRadius = ease * 14;
     } else if (p < 1.0) {
+      // Stage 2: Smooth glide from center directly into the slot box
       const subP = (p - 0.5) / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
-      curW = Math.round(midW + (targetW - midW) * ease);
-      curH = Math.round(midH + (targetH - midH) * ease);
-      curX = Math.round(midX + (targetX - midX) * ease);
-      curY = Math.round(midY + (targetY - midY) * ease);
-      curShadow = 25 - ease * 15;
+      curW = midW + (targetW - midW) * ease;
+      curH = midH + (targetH - midH) * ease;
+      curX = midX + (targetX - midX) * ease;
+      curY = midY + (targetY - midY) * ease;
+      curShadow = 25 * (1 - ease);
       curRadius = 14;
     } else {
+      // Stage 3: Fully docked — 100% exact match with slot dimensions and coordinates
       curW = targetW;
       curH = targetH;
-      curX = Math.round(targetX);
-      curY = Math.round(targetY);
-      curShadow = 10;
+      curX = targetX;
+      curY = targetY;
+      curShadow = 0;
       curRadius = 14;
     }
 
-    // Only mutate width/height/radius/shadow when their values change (prevents layout thrashing)
-    if (curW !== lastW) {
-      videoContainer.style.width = `${curW}px`;
-      lastW = curW;
+    // Apply geometry with sub-pixel precision
+    const roundedW = Math.round(curW * 10) / 10;
+    const roundedH = Math.round(curH * 10) / 10;
+    if (roundedW !== lastW) {
+      videoContainer.style.width = `${roundedW}px`;
+      lastW = roundedW;
     }
-    if (curH !== lastH) {
-      videoContainer.style.height = `${curH}px`;
-      lastH = curH;
+    if (roundedH !== lastH) {
+      videoContainer.style.height = `${roundedH}px`;
+      lastH = roundedH;
     }
-    const nextTransform = `translate3d(${curX}px, ${curY}px, 0)`;
+
+    const nextTransform = `translate3d(${curX.toFixed(1)}px, ${curY.toFixed(1)}px, 0)`;
     if (nextTransform !== lastTransform) {
       videoContainer.style.transform = nextTransform;
       lastTransform = nextTransform;
     }
+
     const roundedRadius = Math.round(curRadius);
     if (roundedRadius !== lastRadius) {
       videoContainer.style.borderRadius = `${roundedRadius}px`;
       lastRadius = roundedRadius;
     }
+
     const roundedShadow = Math.round(curShadow);
     if (roundedShadow !== lastShadow) {
-      videoContainer.style.boxShadow = roundedShadow > 0 ? `0 10px ${roundedShadow}px rgba(0,0,0,0.22)` : 'none';
+      videoContainer.style.boxShadow = roundedShadow > 0 ? `0 10px ${roundedShadow}px rgba(0,0,0,0.2)` : 'none';
       lastShadow = roundedShadow;
     }
 
+    // Fade dark overlay out & increase video brightness to 100% when docked
+    if (videoDarkOverlay) {
+      const overlayOpacity = Math.max(0, 1 - p * 1.5);
+      if (Math.abs(overlayOpacity - (lastDarkOverlayOpacity ?? -1)) > 0.02) {
+        videoDarkOverlay.style.opacity = overlayOpacity.toFixed(2);
+        lastDarkOverlayOpacity = overlayOpacity;
+      }
+    }
+    if (heroVideo) {
+      const brightness = 0.6 + p * 0.4;
+      if (Math.abs(brightness - (lastBrightness ?? -1)) > 0.02) {
+        heroVideo.style.filter = `brightness(${brightness.toFixed(2)})`;
+        lastBrightness = brightness;
+      }
+    }
+
+    // Hero title and CTA fade out
     if (heroContent) {
       const heroOpacity = Math.max(0, 1 - p * 2.2);
       if (Math.abs(heroOpacity - (lastHeroOpacity ?? -1)) > 0.01) {
@@ -273,7 +295,7 @@ function initRetrotech() {
       }
     }
 
-    /* Parallax depth on About Culture card image during scroll */
+    // Parallax depth on About Culture card image during scroll
     if (splitCanvas && cultureImg && splitCanvasH > 0) {
       const topInView = splitCanvasDocTop - scrollY;
       if (topInView < windowH && topInView + splitCanvasH > 0) {
@@ -314,6 +336,9 @@ function initRetrotech() {
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
+  if (window.retroLenis) {
+    window.retroLenis.on('scroll', onScroll);
+  }
   window.addEventListener('resize', () => {
     measureLayout();
     onScroll();
@@ -385,6 +410,11 @@ function initRetrotech() {
     }
 
     toggle.addEventListener('click', (event) => {
+      const href = toggle.getAttribute('href');
+      if (href && href !== '#' && href !== '') {
+        // Real link destination (e.g., /services or /industries) -> allow normal navigation
+        return;
+      }
       event.preventDefault();
       if (!item) return;
       const shouldOpen = !item.classList.contains('is-open');
@@ -417,7 +447,7 @@ function initRetrotech() {
   if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileDrawer);
   if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeMobileDrawer);
 
-  document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+  document.querySelectorAll('a.mobile-nav-link, .mobile-services-links a').forEach((link) => {
     link.addEventListener('click', closeMobileDrawer);
   });
 
@@ -489,25 +519,30 @@ function initRetrotech() {
       bentoElements.forEach((el) => el.classList.add('is-active'));
     }
 
-    /* 6.2 Dynamic Cursor Spotlight & 3D Spatial Tilt Physics */
+    /* 6.2 Lightweight 3D Tilt on Hover — RAF-throttled, desktop only */
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       bentoCards.forEach((card) => {
+        let tiltRaf = null;
+        let lastMX = 0, lastMY = 0;
+
         card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          card.style.setProperty('--mouse-x', `${x}px`);
-          card.style.setProperty('--mouse-y', `${y}px`);
-
-          // Subtle 3D Gyroscopic Perspective Tilt
-          const rotX = (((y / rect.height) - 0.5) * -6).toFixed(2);
-          const rotY = (((x / rect.width) - 0.5) * 6).toFixed(2);
-          card.style.setProperty('--rot-x', `${rotX}deg`);
-          card.style.setProperty('--rot-y', `${rotY}deg`);
+          lastMX = e.clientX;
+          lastMY = e.clientY;
+          if (tiltRaf) return; // skip until next frame
+          tiltRaf = requestAnimationFrame(() => {
+            const rect = card.getBoundingClientRect();
+            const x = lastMX - rect.left;
+            const y = lastMY - rect.top;
+            const rotX = (((y / rect.height) - 0.5) * -5).toFixed(2);
+            const rotY = (((x / rect.width)  - 0.5) *  5).toFixed(2);
+            card.style.setProperty('--rot-x', `${rotX}deg`);
+            card.style.setProperty('--rot-y', `${rotY}deg`);
+            tiltRaf = null;
+          });
         });
 
         card.addEventListener('mouseleave', () => {
+          if (tiltRaf) { cancelAnimationFrame(tiltRaf); tiltRaf = null; }
           card.style.setProperty('--rot-x', '0deg');
           card.style.setProperty('--rot-y', '0deg');
         });
@@ -677,7 +712,7 @@ function initRetrotech() {
   /* =========================================================================
      8.4 BENTO CAPABILITY DISCIPLINE SWITCHER
      ========================================================================= */
-  const bentoFilterBtns = document.querySelectorAll('.bdn-btn');
+  const bentoFilterBtns = document.querySelectorAll('button.bdn-btn[data-bento-filter]');
   const bentoCards = document.querySelectorAll('.bento-grid .bento-card');
 
   if (bentoFilterBtns.length > 0 && bentoCards.length > 0) {
