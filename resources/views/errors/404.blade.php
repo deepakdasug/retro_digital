@@ -1,12 +1,9 @@
 {{-- resources/views/errors/404.blade.php --}}
 @extends('layouts.app')
 
-@section('title', '404 - Page Not Found | Retrotech')
+@section('title', '404 - Page Not Found | Retrotech Digital')
 @section('description', 'The page you are looking for could not be found. Search our site or jump straight to Services, Industries, Blog, or Contact.')
-
-@push('head')
-    <meta name="robots" content="noindex, follow">
-@endpush
+@section('robots', 'noindex, follow')
 
 @push('styles')
     <style>

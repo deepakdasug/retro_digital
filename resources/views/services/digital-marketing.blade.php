@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Digital Marketing Services | Retrotech Digital')
-@section('description', 'Grow your brand with data-driven digital marketing, advanced SEO, and AI-enabled dashboards by Retrotech Digital.')
+@section('title', 'Digital Marketing Services & SEO | Retrotech Digital')
+@section('description', 'Grow your brand with data-driven digital marketing, technical SEO, paid campaigns, and conversational AI WhatsApp marketing engines by Retrotech Digital.')
+@section('canonical', route('services.digital-marketing'))
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/digital-marketing.css') }}?v={{ filemtime(public_path('css/digital-marketing.css')) }}">

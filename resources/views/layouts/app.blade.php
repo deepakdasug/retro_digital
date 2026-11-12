@@ -17,20 +17,21 @@
   <meta property="og:type" content="@yield('og_type', 'website')">
   <meta property="og:url" content="@yield('canonical', url()->current())">
   <meta property="og:title" content="@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')">
-  <meta property="og:description" content="@yield('description', 'Enterprise web development, software engineering, and digital growth solutions.')">
+  <meta property="og:description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
   <meta property="og:image" content="@yield('og_image', asset('assets/images/logo.png'))">
   <meta property="og:locale" content="en_US">
 
   {{-- Twitter Card --}}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="@yield('canonical', url()->current())">
-  <meta name="twitter:title" content="@yield('title', 'Retrotech Digital')">
-  <meta name="twitter:description" content="@yield('description', 'Enterprise web development, software engineering, and digital growth solutions.')">
+  <meta name="twitter:title" content="@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')">
+  <meta name="twitter:description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
   <meta name="twitter:image" content="@yield('og_image', asset('assets/images/logo.png'))">
 
   {{-- Icons --}}
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/icon.ico') }}">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/logo.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/retrotech-mark.png') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/retrotech-mark.png') }}">
 
   {{-- Fonts --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">

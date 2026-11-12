@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Retrotech - Business Made Easy | 360° IT, AI & Digital Solutions')
-@section('description', 'Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through WhatsApp marketing tools, web development, and custom software.')
+@section('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')
+@section('description', 'Accelerate enterprise growth with Retrotech Digital. We engineer bespoke web platforms, mobile applications, custom SaaS architectures, and WhatsApp automation.')
+@section('canonical', route('home'))
+@section('og_type', 'website')
 
 @section('content')
 

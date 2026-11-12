@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Retrotech Journal - Enterprise Tech, ITAD & Software Insights')
-@section('description', 'Practical strategies, engineering deep dives, certified data security frameworks, and sustainable technology lifecycle insights curated by Retrotech Digital architects.')
+@section('title', 'Retrotech Journal - Enterprise Tech & Software Insights')
+@section('description', 'Practical engineering strategies, software architecture, data security frameworks, and digital growth insights curated by Retrotech Digital architects.')
+@section('canonical', route('blog'))
 
 @push('head')
-<meta name="keywords" content="ITAD insights, enterprise data security blog, hardware remarketing strategies, data center decommissioning guides, software engineering architecture, Retrotech digital journal">
-<link rel="canonical" href="{{ url('/blog') }}">
+<meta name="keywords" content="IT insights, enterprise data security blog, software engineering architecture, Retrotech digital journal">
 
 @if(isset($posts) && $posts->isNotEmpty())
 @php

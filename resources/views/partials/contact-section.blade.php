@@ -14,7 +14,11 @@
                 <span class="contact-inc-dot" aria-hidden="true"></span>
                 Get in Touch
             </span>
-            <h2 class="contact-inc-info-title">Let's Grow Your Business</h2>
+            @if(request()->routeIs('contact.page'))
+                <h1 class="contact-inc-info-title">Let's Grow Your Business</h1>
+            @else
+                <h2 class="contact-inc-info-title">Let's Grow Your Business</h2>
+            @endif
             <p class="contact-inc-info-sub">Have a question or project in mind? Connect with our team for strategic guidance and scalable execution.</p>
 
             <ul class="contact-inc-channels">

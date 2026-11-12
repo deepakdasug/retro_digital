@@ -1,16 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Who We Serve: Global Partners, Clients & Industry Leaders - Retrotech Digital')
-@section('description', 'We proudly serve a wide range of global partners, clients & industry leaders, delivering certified IT and technology solutions to businesses of all sizes across the world.')
+@section('title', 'Industries We Serve: Enterprise IT Solutions | Retrotech')
+@section('description', 'Discover tailored IT and software solutions engineered for healthcare, fintech, e-commerce, logistics, manufacturing, edtech, real estate, and hospitality.')
+@section('canonical', route('industries.index'))
 
 @push('head')
-<meta name="keywords" content="Industries We Serve, Global Partners, IT Solutions, ITAD, Retrotech Digital, Who We Serve, Digital Transformation">
-<link rel="canonical" href="{{ url('/industries') }}">
-<meta property="og:locale" content="en_US">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Who We Serve: Global Partners, Clients & Industry Leaders - Retrotech Digital">
-<meta property="og:description" content="We proudly serve a wide range of global partners, clients & industry leaders, delivering certified IT solutions to businesses of all sizes across the world.">
-<meta property="og:url" content="{{ url('/industries') }}">
+<meta name="keywords" content="Industries We Serve, Global Partners, IT Solutions, Retrotech Digital, Who We Serve, Digital Transformation">
 @endpush
 
 @push('styles')

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Frequently Asked Questions (FAQs) - Retrotech Digital')
-@section('description', 'Comprehensive answers to common questions about certified IT asset disposition (ITAD), NIST 800-88 data destruction, hardware remarketing, and environmental compliance.')
+@section('description', 'Clear answers to common questions about Retrotech Digital\'s custom software engineering, web development, mobile apps, project timelines, and post-launch SLAs.')
+@section('canonical', route('faqs'))
 
 @push('head')
-<meta name="keywords" content="ITAD FAQs, data destruction questions, enterprise hardware remarketing, data center decommissioning, e-waste recycling compliance, Retrotech help center">
-<link rel="canonical" href="{{ url('/faqs') }}">
+<meta name="keywords" content="IT services FAQs, web development questions, mobile apps, custom software engineering, Retrotech Digital help center">
 
 @if(isset($faqs) && $faqs->isNotEmpty())
 @php

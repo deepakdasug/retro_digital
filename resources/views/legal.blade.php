@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title', $title . ' - Retrotech')
+@section('title', $title . ' - Retrotech Digital')
 @section('description', $summary)
+@section('canonical', url()->current())
 
 @section('content')
 <main>

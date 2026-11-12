@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'IT & Digital Services | SEO, Web, Apps & CRM - Retrotech Digital')
+@section('title', 'IT & Digital Services Catalog | Retrotech Digital')
 @section('description', 'Grow with Retrotech Digital\'s SEO, digital marketing, web and app development, Salesforce, ERPNext, SaaS, API and WhatsApp integration services.')
+@section('canonical', route('services.index'))
 
 @push('head')
 <meta name="keywords" content="IT services, digital marketing services, SEO services, web development, mobile app development, Salesforce, ERPNext, SaaS development, API development, WhatsApp integration">
-<link rel="canonical" href="{{ url('/services') }}">
 @endpush
 
 @push('styles')

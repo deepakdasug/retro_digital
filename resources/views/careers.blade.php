@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Careers at Retrotech')
-@section('description', 'Learn about working at Retrotech and get in touch about future opportunities.')
+@section('title', 'Careers at Retrotech Digital | Join Our Tech Team')
+@section('description', 'Explore career opportunities at Retrotech Digital. Join our engineering, UI/UX design, and growth teams building modern enterprise technology platforms.')
+@section('canonical', route('careers'))
 
 @section('content')
 <main>

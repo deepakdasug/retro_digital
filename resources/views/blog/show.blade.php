@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $post->meta_title ?: ($post->title . ' - Retrotech Insights'))
-@section('description', $post->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($post->excerpt ?: $post->content_html), 160))
-
 @php
   $articleUrl = $post->canonical_url ?: route('blog.show', $post->slug);
   $articleImage = $post->image_url;
@@ -31,14 +28,18 @@
   ] : null;
 @endphp
 
+@section('title', $post->meta_title ?: ($post->title . ' - Retrotech Insights'))
+@section('description', $post->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($post->excerpt ?: $post->content_html), 155))
+@section('canonical', $articleUrl)
+@section('og_type', 'article')
+@if($articleImage)
+@section('og_image', $articleImage)
+@endif
+@if($post->robots_meta)
+@section('robots', $post->robots_meta)
+@endif
+
 @push('head')
-<link rel="canonical" href="{{ $articleUrl }}">
-<meta name="robots" content="{{ $post->robots_meta ?: 'index, follow' }}">
-<meta property="og:type" content="article">
-<meta property="og:title" content="{{ $post->meta_title ?: $post->title }}">
-<meta property="og:description" content="{{ $post->meta_description ?: $post->excerpt }}">
-<meta property="og:url" content="{{ $articleUrl }}">
-@if($articleImage)<meta property="og:image" content="{{ $articleImage }}">@endif
 <script type="application/ld+json">@json($articleSchema)</script>
 @if($faqSchema)
 <script type="application/ld+json">@json($faqSchema)</script>

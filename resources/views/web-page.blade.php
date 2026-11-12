@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
+@php
+    $ogImage = !empty($webPage->banner_image) ? asset($webPage->banner_image) : asset('assets/images/logo.png');
+@endphp
+
 @section('title', $webPage->meta_title ?: ($webPage->title . ' - Retrotech Digital'))
 @section('description', $webPage->meta_description ?: ($webPage->short_description ?: 'Professional digital services by Retrotech.'))
+@section('canonical', route('web-pages.show', $webPage->slug))
+@section('og_image', $ogImage)
 
 @push('styles')
   <script src="https://cdn.tailwindcss.com"></script>

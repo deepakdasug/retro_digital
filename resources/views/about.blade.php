@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'About Us - Retrotech | 360° IT, AI & Digital Solutions Company')
-@section('description', 'Learn about Retrotech: A premier 360° IT and Digital Solutions Company delivering bespoke Web Development, Mobile Apps, SaaS Platforms, Cloud Architecture, and WhatsApp Marketing Automation.')
+@section('title', 'About Retrotech Digital | 360° IT & Enterprise Solutions')
+@section('description', 'Learn about Retrotech Digital: delivering custom web applications, native mobile apps, scalable SaaS architecture, cloud engineering, and WhatsApp solutions.')
+@section('canonical', route('about'))
 
 @section('content')
   <main class="about-page-main">
