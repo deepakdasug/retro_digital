@@ -16,12 +16,6 @@ class ServiceController extends Controller
     public function show(string $slug)
     {
 
-        // Aliases for marketing services
-        $marketingAliases = [
-            'seo-services' => 'search-engine-optimization',
-        ];
-        $slug = $marketingAliases[$slug] ?? $slug;
-
         if ($slug === 'digital-marketing') {
             $service = Service::where('slug', 'digital-marketing')->first();
             return view('services.digital-marketing', compact('service'));
@@ -29,6 +23,17 @@ class ServiceController extends Controller
 
         // 1. Find the service in marketing services
         $service = Service::where('slug', $slug)->first();
+        if (! $service && in_array($slug, ['seo-services', 'search-engine-optimization'], true)) {
+            $alternateSlug = $slug === 'seo-services'
+                ? 'search-engine-optimization'
+                : 'seo-services';
+            $service = Service::where('slug', $alternateSlug)->first();
+
+            if ($service) {
+                return redirect()->route('services.show', ['service' => $service->slug], 301);
+            }
+        }
+
         if ($service) {
             return view('service-page', [
                 'service' => $service

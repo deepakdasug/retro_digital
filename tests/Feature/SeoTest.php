@@ -93,6 +93,21 @@ class SeoTest extends TestCase
         $response->assertSee('"@type":"Service"', false);
     }
 
+    public function test_seo_service_alias_redirects_to_the_existing_service_slug(): void
+    {
+        Service::create([
+            'title' => 'Search Engine Optimization',
+            'slug' => 'seo-services',
+            'robots_index' => true,
+        ]);
+
+        $response = $this->get(route('services.show', 'search-engine-optimization'));
+
+        $response->assertRedirect(route('services.show', 'seo-services'));
+        $response->assertStatus(301);
+        $this->get(route('services.show', 'seo-services'))->assertOk();
+    }
+
     public function test_tech_development_pages_use_indexing_metadata_and_current_canonical_route(): void
     {
         $tech = TechDevelopment::create([
