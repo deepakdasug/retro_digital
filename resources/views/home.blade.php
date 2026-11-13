@@ -393,7 +393,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'search-engine-optimization') }}">Digital Marketing &amp; Technical SEO</a>
+              <a href="{{ route('services.show', 'seo-services') }}">Digital Marketing &amp; Technical SEO</a>
             </h3>
             <p class="sc-desc">
               Data-driven organic search ranking, performance PPC marketing, and conversion funnel optimization that acquires high-intent leads and maximizes ROI.
