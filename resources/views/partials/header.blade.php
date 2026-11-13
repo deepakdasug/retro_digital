@@ -24,7 +24,7 @@
                 <h2 id="marketing-services-heading"><a href="{{ route('services.show', 'digital-marketing') }}">Marketing Platform <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Explore technology services for secure operations and responsible asset lifecycle management.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('services.show', 'search-engine-optimization') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
+                  <li><a href="{{ route('services.show', 'seo-services') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
                   <li><a href="{{ route('services.show', 'social-media-marketing') }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
                   <li><a href="{{ route('services.show', 'paid-marketing') }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
                   <li><a href="{{ route('services.show', 'email-marketing') }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
