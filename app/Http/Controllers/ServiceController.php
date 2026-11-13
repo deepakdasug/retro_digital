@@ -42,9 +42,7 @@ class ServiceController extends Controller
             abort(404);
         }
 
-        return view('service-page', [
-            'service' => $service
-        ]);
+        return view('service-page', ['service' => $service]);
     }
     public function digitalMarketing()
     {

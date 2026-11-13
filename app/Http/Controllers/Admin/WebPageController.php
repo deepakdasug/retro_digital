@@ -217,6 +217,8 @@ class WebPageController extends Controller
             'hero_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg,gif|max:10240',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:2000',
+            'robots_index' => 'nullable|boolean',
+            'robots_follow' => 'nullable|boolean',
             'is_published' => 'nullable',
             'sections' => 'nullable|array',
         ]);
@@ -248,6 +250,12 @@ class WebPageController extends Controller
                 'hero_image' => $heroImagePath,
                 'meta_title' => $request->meta_title ?: ($request->name . ' - Retrotech Digital'),
                 'meta_description' => $request->meta_description ?: $request->short_description,
+                'robots_index' => $request->has('robots_index')
+                    ? $request->boolean('robots_index')
+                    : ($serviceModel->robots_index ?? true),
+                'robots_follow' => $request->has('robots_follow')
+                    ? $request->boolean('robots_follow')
+                    : ($serviceModel->robots_follow ?? true),
                 'is_published' => $request->has('is_published') ? (bool) $request->is_published : true,
             ]);
 
@@ -417,8 +425,11 @@ class WebPageController extends Controller
             'slug' => $serviceModel->slug,
             'category' => 'Marketing Service',
             'short_description' => $serviceModel->short_description,
-            'meta_title' => $serviceModel->title,
+            'meta_title' => $serviceModel->meta_title ?: $serviceModel->title,
             'meta_description' => $serviceModel->meta_description,
+            'canonical_url' => $serviceModel->canonical_url,
+            'robots_index' => $serviceModel->robots_index,
+            'robots_follow' => $serviceModel->robots_follow,
             'hero_image' => $serviceModel->hero_image,
             'is_published' => true,
             'sections' => $sections,
@@ -438,7 +449,11 @@ class WebPageController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:services,slug,' . $serviceModel->id,
             'short_description' => 'nullable|string|max:500',
-            'meta_description' => 'nullable|string|max:500',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:320',
+            'canonical_url' => 'nullable|url|max:255',
+            'robots_index' => 'nullable|boolean',
+            'robots_follow' => 'nullable|boolean',
             'hero_image' => 'nullable|string',
             'hero_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg,gif|max:10240',
             'sections' => 'nullable|array',
@@ -576,7 +591,15 @@ class WebPageController extends Controller
                 'title' => $request->title,
                 'slug' => $slug,
                 'short_description' => $request->short_description,
+                'meta_title' => $request->meta_title,
                 'meta_description' => $request->meta_description,
+                'canonical_url' => $request->filled('canonical_url') ? $request->canonical_url : null,
+                'robots_index' => $request->has('robots_index')
+                    ? $request->boolean('robots_index')
+                    : ($techModel->robots_index ?? true),
+                'robots_follow' => $request->has('robots_follow')
+                    ? $request->boolean('robots_follow')
+                    : ($techModel->robots_follow ?? true),
                 'hero_image' => $heroImagePath,
                 'content' => $content,
             ]);

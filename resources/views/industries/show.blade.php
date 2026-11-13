@@ -10,16 +10,22 @@
         : asset($ogImagePath);
 
     // 2. Canonical Fallback Chain: canonical_url -> route() using slug
-    $finalCanonical = $industry->canonical_url ?: route('industries.show', $industry->slug);
+    $finalCanonical = \App\Support\SeoCanonical::resolve(
+        $industry->canonical_url,
+        route('industries.show', $industry->slug),
+        ['/who-we-serve']
+    );
 @endphp
 
 @section('title', $industry->meta_title ?: ($industry->name . ' IT & Digital Solutions | Retrotech Digital'))
 
-@section('description', $industry->meta_description ?: ($industry->short_description ?: 'Comprehensive ' . $industry->name . ' technology solutions by Retrotech Digital.'))
+@section('description', \Illuminate\Support\Str::limit($industry->meta_description ?: ($industry->short_description ?: 'Comprehensive ' . $industry->name . ' technology solutions by Retrotech Digital.'), 160))
 
 @section('canonical', $finalCanonical)
+@section('robots', (($industry->robots_index ?? true) ? 'index' : 'noindex') . ', ' . (($industry->robots_follow ?? true) ? 'follow' : 'nofollow'))
 
 @section('og_image', $finalOgImage)
+@section('og_image_alt', $industry->name . ' solutions')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/industry.css') }}">

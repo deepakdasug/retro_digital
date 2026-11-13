@@ -1,17 +1,37 @@
 @extends('layouts.app')
 
 @php
-    $ogImage = $service->hero_image ?? null;
+    $fallbackCanonical = route('services.show', $service->slug);
+    $canonicalUrl = \App\Support\SeoCanonical::resolve($service->canonical_url, $fallbackCanonical);
+    $metaDescription = \Illuminate\Support\Str::limit(
+        $service->meta_description ?: ($service->short_description ?: 'Professional ' . ($service->title ?? 'Technology') . ' services by Retrotech Digital.'),
+        160
+    );
+    $ogImage = $service->og_image ?: $service->hero_image;
     if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
-        $ogImage = asset($ogImage);
+        $ogImage = asset(ltrim($ogImage, '/'));
     }
     $ogImage = $ogImage ?: asset('assets/images/logo.png');
+    $serviceSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Service',
+        'name' => $service->title,
+        'description' => $metaDescription,
+        'url' => $canonicalUrl,
+        'provider' => ['@id' => rtrim(config('app.url'), '/') . '/#organization'],
+    ];
 @endphp
 
-@section('title', ($service->title ?? 'Technology Service') . ' | Retrotech Digital')
-@section('description', $service->meta_description ?? ('Professional ' . ($service->title ?? 'Technology') . ' services by Retrotech Digital.'))
-@section('canonical', route('services.show', $service->slug))
+@section('title', $service->meta_title ?: (($service->title ?? 'Technology Service') . ' | Retrotech Digital'))
+@section('description', $metaDescription)
+@section('canonical', $canonicalUrl)
+@section('robots', (($service->robots_index ?? true) ? 'index' : 'noindex') . ', ' . (($service->robots_follow ?? true) ? 'follow' : 'nofollow'))
 @section('og_image', $ogImage)
+@section('og_image_alt', ($service->title ?? 'Technology') . ' service')
+
+@push('head')
+<script type="application/ld+json">@json($serviceSchema)</script>
+@endpush
 
 @push('styles')
   <script src="https://cdn.tailwindcss.com"></script>

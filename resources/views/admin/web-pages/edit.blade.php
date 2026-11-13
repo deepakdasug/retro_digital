@@ -767,12 +767,12 @@
                     <div class="wp-serp-card">
                         <span class="wp-serp-badge">Live Google Search Preview</span>
                         <div class="wp-serp-url">
-                            <span style="font-weight: 700; color: #166534;">retrodigital.in</span>
+                            <span style="font-weight: 700; color: #166534;">{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
                             <span style="color: #5f6368;">› {{ !empty($isService) ? 'services' : 'web' }} › </span>
                             <span id="serpSlugPreview" style="color: #5f6368;">{{ old('slug', $webPage->slug) }}</span>
                         </div>
                         <div class="wp-serp-title" id="serpTitlePreview">
-                            {{ old('meta_title', $webPage->meta_title ?: $webPage->title) }} | Retro Digital
+                            {{ old('meta_title', $webPage->meta_title ?: $webPage->title) }} | Retrotech Digital
                         </div>
                         <div class="wp-serp-desc" id="serpDescPreview">
                             {{ old('meta_description', $webPage->meta_description ?: ($webPage->short_description ?: 'Brief summary of this page for search results, cards, and page previews.')) }}
@@ -796,6 +796,21 @@
                             <textarea name="meta_description" id="metaDescInput" rows="2" placeholder="150-160 characters search snippet" class="wp-textarea">{{ old('meta_description', $webPage->meta_description) }}</textarea>
                         </div>
                     </div>
+                    @if (!empty($isService))
+                        <div style="margin-top: 1rem;">
+                            <label class="wp-label">
+                                <span>Canonical URL</span>
+                                <span class="wp-hint">Leave blank to use this service page's own URL</span>
+                            </label>
+                            <input type="url" name="canonical_url" value="{{ old('canonical_url', $webPage->canonical_url) }}" placeholder="https://www.example.com/services/your-service" class="wp-input">
+                            <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 0.9rem;">
+                                <input type="hidden" name="robots_index" value="0">
+                                <label><input type="checkbox" name="robots_index" value="1" @checked(old('robots_index', $webPage->robots_index ?? true))> Allow indexing</label>
+                                <input type="hidden" name="robots_follow" value="0">
+                                <label><input type="checkbox" name="robots_follow" value="1" @checked(old('robots_follow', $webPage->robots_follow ?? true))> Allow link following</label>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- 4. PUBLICATION & VISIBILITY -->

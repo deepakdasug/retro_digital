@@ -1,5 +1,6 @@
 
 <section class="contact-section " id="contact">
+    @php($previewMode = $previewMode ?? false)
     <div class="contact-inc-container">
 
         {{-- Left: Concise Info Card --}}
@@ -60,8 +61,12 @@
                 <p class="contact-inc-form-sub">Fill out the quick details below and our team will get back to you promptly.</p>
             </div>
 
-            <form class="contact-inc-form" action="{{ route('contact.submit') }}" method="POST">
-                @csrf
+            @if($previewMode)
+                <fieldset class="contact-inc-form blog-contact-preview-form" disabled style="border:0;padding:0;margin:0;min-width:0">
+            @else
+                <form class="contact-inc-form" action="{{ route('contact.submit') }}" method="POST">
+                    @csrf
+            @endif
 
                 @if (session('success'))
                     <div class="contact-inc-success" role="status">
@@ -167,7 +172,11 @@
                         Submit Message <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                     </button>
                 </div>
-            </form>
+            @if($previewMode)
+                </fieldset>
+            @else
+                </form>
+            @endif
         </div>
     </div>
 </section>

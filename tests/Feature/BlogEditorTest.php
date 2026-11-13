@@ -20,17 +20,25 @@ class BlogEditorTest extends TestCase
         ]);
     }
 
-    public function test_admin_can_view_blog_create_page_with_ckeditor_assets(): void
+    public function test_admin_can_complete_blog_details_before_opening_the_full_page_editor(): void
     {
         $admin = $this->createAdminUser();
 
         $response = $this->actingAs($admin)->get(route('admin.blog.create'));
 
         $response->assertStatus(200);
-        $response->assertSee('vendor/ckeditor5/ckeditor5.umd.js');
-        $response->assertSee('vendor/ckeditor5/ckeditor5.css');
-        $response->assertSee('js/blog-editor.js');
+        $response->assertSee('js/blog-page-editor.js');
         $response->assertSee('id="blogContent"', false);
+        $response->assertSee('id="blogDetailsStep"', false);
+        $response->assertSee('id="blogEditorStep"', false);
+        $response->assertSee('Continue to page editor');
+        $response->assertSee('Add section');
+        $response->assertSee('Add image');
+        $response->assertSee('blog-live-preview');
+        $response->assertSee('id="siteHeader"', false);
+        $response->assertSee('css/blog-post.css');
+        $response->assertSee('fieldset class="contact-inc-form blog-contact-preview-form" disabled', false);
+        $response->assertDontSee('<form class="contact-inc-form"', false);
         $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="blogs"', false);
         $response->assertSee('window.location.assign(dashboardUrl.toString())', false);
         $response->assertDontSee('name="published_at"', false);

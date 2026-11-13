@@ -68,6 +68,8 @@ class TechDevelopmentEditorTest extends TestCase
         $response->assertSee('Edit Tech Development');
         $response->assertSee('Enterprise SaaS Development');
         $response->assertSee('Zero-trust multi-tenant isolation.');
+        $response->assertSee('name="robots_index"', false);
+        $response->assertSee('name="robots_follow"', false);
     }
 
     public function test_admin_can_update_tech_development_and_its_sections(): void
@@ -116,10 +118,42 @@ class TechDevelopmentEditorTest extends TestCase
         $this->assertSame('Cloud APIs & Microservices', $tech->name);
         $this->assertSame('cloud-apis-microservices', $tech->slug);
         $this->assertSame('Scalable Enterprise Cloud APIs', $tech->hero_title);
+        $this->assertTrue($tech->robots_index);
+        $this->assertTrue($tech->robots_follow);
 
         $diffSection->refresh();
         $this->assertSame('Updated Differentiator Title', $diffSection->title);
         $this->assertSame('Updated differentiator description text.', $diffSection->description);
+    }
+
+    public function test_admin_can_disable_indexing_and_link_following_for_a_tech_page(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $admin->assignRole('super-admin');
+
+        $tech = TechDevelopment::create([
+            'name' => 'Private API Service',
+            'slug' => 'private-api-service',
+            'is_published' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->put(route('admin.tech-developments.update', $tech->id), [
+            'name' => $tech->name,
+            'slug' => $tech->slug,
+            'robots_index' => 0,
+            'robots_follow' => 0,
+            'is_published' => 1,
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard', ['tab' => 'webpage']));
+
+        $tech->refresh();
+        $this->assertFalse($tech->robots_index);
+        $this->assertFalse($tech->robots_follow);
+
+        $publicResponse = $this->get(route('tech-development.show', $tech->slug));
+        $publicResponse->assertOk();
+        $publicResponse->assertSee('<meta name="robots" content="noindex, nofollow">', false);
     }
 }
 

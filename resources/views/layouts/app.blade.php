@@ -1,5 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+  $seoBaseUrl = rtrim(config('app.url'), '/');
+  $seoPath = trim(request()->path(), '/');
+  $defaultCanonical = $seoBaseUrl . '/' . ($seoPath === '' ? '' : $seoPath);
+  $defaultRobots = request()->routeIs('admin.*')
+      || request()->is('login', 'register', 'forgot-password', 'reset-password/*', 'two-factor-challenge')
+      ? 'noindex, nofollow'
+      : 'index, follow, max-image-preview:large';
+  $seoGraph = [
+    '@context' => 'https://schema.org',
+    '@graph' => [
+      [
+        '@type' => 'Organization',
+        '@id' => $seoBaseUrl . '/#organization',
+        'name' => 'Retrotech Digital',
+        'url' => $seoBaseUrl . '/',
+        'logo' => [
+          '@type' => 'ImageObject',
+          'url' => $seoBaseUrl . '/assets/images/logo.png',
+        ],
+      ],
+      [
+        '@type' => 'WebSite',
+        '@id' => $seoBaseUrl . '/#website',
+        'name' => 'Retrotech Digital',
+        'url' => $seoBaseUrl . '/',
+        'publisher' => ['@id' => $seoBaseUrl . '/#organization'],
+      ],
+    ],
+  ];
+@endphp
 
 <head>
   <meta charset="UTF-8">
@@ -9,24 +40,30 @@
   {{-- Primary SEO --}}
   <title>@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')</title>
   <meta name="description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
-  <meta name="robots" content="@yield('robots', 'index, follow, max-image-preview:large')">
-  <link rel="canonical" href="@yield('canonical', url()->current())">
+  <meta name="robots" content="@yield('robots', $defaultRobots)">
+  <link rel="canonical" href="@yield('canonical', $defaultCanonical)">
 
   {{-- Open Graph / Facebook / LinkedIn / WhatsApp --}}
   <meta property="og:site_name" content="Retrotech Digital">
   <meta property="og:type" content="@yield('og_type', 'website')">
-  <meta property="og:url" content="@yield('canonical', url()->current())">
+  <meta property="og:url" content="@yield('canonical', $defaultCanonical)">
   <meta property="og:title" content="@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')">
   <meta property="og:description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
   <meta property="og:image" content="@yield('og_image', asset('assets/images/logo.png'))">
+  <meta property="og:image:alt" content="@yield('og_image_alt', 'Retrotech Digital')">
   <meta property="og:locale" content="en_US">
 
   {{-- Twitter Card --}}
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="@yield('canonical', url()->current())">
+  <meta name="twitter:url" content="@yield('canonical', $defaultCanonical)">
   <meta name="twitter:title" content="@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')">
   <meta name="twitter:description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
   <meta name="twitter:image" content="@yield('og_image', asset('assets/images/logo.png'))">
+  <meta name="twitter:image:alt" content="@yield('og_image_alt', 'Retrotech Digital')">
+
+  @unless (request()->routeIs('admin.*'))
+    <script type="application/ld+json">@json($seoGraph)</script>
+  @endunless
 
   {{-- Icons --}}
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/icon.ico') }}">

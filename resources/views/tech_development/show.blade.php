@@ -1,17 +1,21 @@
 @extends('layouts.app')
 
 @php
-    $ogImage = $techDevelopment->hero_image ?? null;
+    $fallbackCanonical = route('tech-development.show', $techDevelopment->slug);
+    $canonicalUrl = \App\Support\SeoCanonical::resolve($techDevelopment->canonical_url, $fallbackCanonical);
+    $ogImage = $techDevelopment->og_image ?: $techDevelopment->hero_image;
     if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
-        $ogImage = asset($ogImage);
+        $ogImage = asset(ltrim($ogImage, '/'));
     }
     $ogImage = $ogImage ?: asset('assets/images/logo.png');
 @endphp
 
 @section('title', ($techDevelopment->meta_title ?: $techDevelopment->name) . ' | Retrotech Digital')
-@section('description', $techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'))
-@section('canonical', route('tech-development.show', $techDevelopment->slug))
+@section('description', \Illuminate\Support\Str::limit($techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'), 160))
+@section('canonical', $canonicalUrl)
+@section('robots', (($techDevelopment->robots_index ?? true) ? 'index' : 'noindex') . ', ' . (($techDevelopment->robots_follow ?? true) ? 'follow' : 'nofollow'))
 @section('og_image', $ogImage)
+@section('og_image_alt', $techDevelopment->name . ' services')
 
 @push('styles')
     <link rel="stylesheet"

@@ -23,6 +23,8 @@ class Industry extends Model
         'meta_keywords',
         'canonical_url',
         'og_image',
+        'robots_index',
+        'robots_follow',
         'is_published',
         'sort_order',
     ];
@@ -32,6 +34,8 @@ class Industry extends Model
         return [
             'is_published' => 'boolean',
             'sort_order' => 'integer',
+            'robots_index' => 'boolean',
+            'robots_follow' => 'boolean',
         ];
     }
 

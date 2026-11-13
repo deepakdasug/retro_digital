@@ -8,57 +8,114 @@ use Spatie\Sitemap\Tags\Url;
 use App\Models\Service;
 use App\Models\Industry;
 use App\Models\TechDevelopment;
-use App\Models\Post; // Uncomment if you have a blog
+use App\Models\BlogPost;
+use App\Models\WebPage;
+use App\Support\SeoCanonical;
+use Illuminate\Support\Str;
 
 class GenerateSitemap extends Command
 {
-    protected $signature = 'sitemap:generate';
+    protected $signature = 'sitemap:generate {--path= : Write the sitemap to a specific path}';
     protected $description = 'Generate the sitemap.xml file dynamically';
 
     public function handle(): void
     {
         $sitemap = Sitemap::create();
 
-        // 1. Add your static pages
-        $sitemap->add(Url::create(url('/'))->setPriority(1.0));
-        $sitemap->add(Url::create(url('/services'))->setPriority(0.9));
-        $sitemap->add(Url::create(url('/industries'))->setPriority(0.9));
-        $sitemap->add(Url::create(url('/contact'))->setPriority(0.5));
+        foreach ([
+            'home' => 1.0,
+            'about' => 0.6,
+            'careers' => 0.4,
+            'faqs' => 0.6,
+            'services.index' => 0.9,
+            'industries.index' => 0.9,
+            'blog' => 0.8,
+            'contact.page' => 0.5,
+        ] as $routeName => $priority) {
+            $sitemap->add(Url::create(route($routeName))->setPriority($priority));
+        }
 
-        // 2. Add dynamic service pages
         Service::where('robots_index', true)->get()
-            ->each(fn (Service $service) => $sitemap->add(
-                Url::create(url("/services/{$service->slug}"))
+            ->each(function (Service $service) use ($sitemap): void {
+                $fallback = route('services.show', $service->slug);
+                $canonical = SeoCanonical::resolve(
+                    $service->canonical_url,
+                    $fallback
+                );
+
+                if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
+                    return;
+                }
+
+                $sitemap->add(Url::create($canonical)
                     ->setLastModificationDate($service->updated_at)
-                    ->setPriority(0.8)
-            ));
+                    ->setPriority(0.8));
+            });
 
-        // 3. Add dynamic industry pages
-        Industry::where('robots_index', true)->get()
-            ->each(fn (Industry $industry) => $sitemap->add(
-                Url::create(url("/industries/{$industry->slug}"))
+        Industry::where('is_published', true)
+            ->where('robots_index', true)
+            ->get()
+            ->each(function (Industry $industry) use ($sitemap): void {
+                $fallback = route('industries.show', $industry->slug);
+                $canonical = SeoCanonical::resolve(
+                    $industry->canonical_url,
+                    $fallback,
+                    ['/who-we-serve']
+                );
+
+                if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
+                    return;
+                }
+
+                $sitemap->add(Url::create($canonical)
                     ->setLastModificationDate($industry->updated_at)
-                    ->setPriority(0.7)
-            ));
+                    ->setPriority(0.7));
+            });
 
-        // 4. Add dynamic tech-development pages
-        TechDevelopment::where('robots_index', true)->get()
-            ->each(fn (TechDevelopment $tech) => $sitemap->add(
-                Url::create(url("/tech-development/{$tech->slug}"))
+        TechDevelopment::where('is_published', true)
+            ->where('robots_index', true)
+            ->get()
+            ->each(function (TechDevelopment $tech) use ($sitemap): void {
+                $fallback = route('tech-development.show', $tech->slug);
+                $canonical = SeoCanonical::resolve($tech->canonical_url, $fallback);
+
+                if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
+                    return;
+                }
+
+                $sitemap->add(Url::create($canonical)
                     ->setLastModificationDate($tech->updated_at)
                     ->setPriority(0.7)
+                );
+            });
+
+        WebPage::where('is_published', true)->get()
+            ->each(fn (WebPage $webPage) => $sitemap->add(
+                Url::create(route('web-pages.show', $webPage->slug))
+                    ->setLastModificationDate($webPage->updated_at)
+                    ->setPriority(0.6)
             ));
 
-        // 5. Add blog posts (if applicable)
-        // Post::where('published', true)->get()
-        //     ->each(fn (Post $post) => $sitemap->add(
-        //         Url::create(url("/blog/{$post->slug}"))
-        //             ->setLastModificationDate($post->updated_at)
-        //             ->setPriority(0.6)
-        //     ));
+        BlogPost::where('is_published', true)->get()
+            ->each(function (BlogPost $post) use ($sitemap): void {
+                if (Str::contains(Str::lower($post->robots_meta ?? 'index, follow'), 'noindex')) {
+                    return;
+                }
 
-        $sitemap->writeToFile(public_path('sitemap.xml'));
+                $fallback = route('blog.show', $post->slug);
+                $canonical = SeoCanonical::resolve($post->canonical_url, $fallback);
+                if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
+                    return;
+                }
 
-        $this->info('Sitemap generated successfully at: ' . public_path('sitemap.xml'));
+                $sitemap->add(Url::create($canonical)
+                    ->setLastModificationDate($post->updated_at)
+                    ->setPriority(0.6));
+            });
+
+        $path = $this->option('path') ?: public_path('sitemap.xml');
+        $sitemap->writeToFile($path);
+
+        $this->info('Sitemap generated successfully at: ' . $path);
     }
 }

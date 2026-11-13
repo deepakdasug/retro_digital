@@ -3,6 +3,7 @@
 @section('title', $title . ' - Retrotech Digital')
 @section('description', $summary)
 @section('canonical', url()->current())
+@section('robots', 'noindex, follow')
 
 @section('content')
 <main>

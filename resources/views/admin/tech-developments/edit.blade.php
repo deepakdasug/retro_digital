@@ -237,6 +237,18 @@
                            placeholder="e.g. Build responsive, SEO-optimized websites and web apps with Retrotech Digital." 
                            style="width: 100%; padding: 0.55rem 0.85rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.85rem;">
                 </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 1rem;">
+                    <input type="hidden" name="robots_index" value="0">
+                    <label style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <input type="checkbox" name="robots_index" value="1" {{ old('robots_index', $techDevelopment->robots_index ?? true) ? 'checked' : '' }}>
+                        Allow search engines to index this page
+                    </label>
+                    <input type="hidden" name="robots_follow" value="0">
+                    <label style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                        <input type="checkbox" name="robots_follow" value="1" {{ old('robots_follow', $techDevelopment->robots_follow ?? true) ? 'checked' : '' }}>
+                        Allow search engines to follow links
+                    </label>
+                </div>
             </div>
         </article>
 

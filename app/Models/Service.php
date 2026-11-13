@@ -13,7 +13,12 @@ class Service extends Model
         'slug',
         'title',
         'short_description',
+        'meta_title',
         'meta_description',
+        'canonical_url',
+        'og_image',
+        'robots_index',
+        'robots_follow',
         'hero_image',
         'icon_svg',
         'content',
@@ -21,6 +26,8 @@ class Service extends Model
 
     protected $casts = [
         'content' => 'array',
+        'robots_index' => 'boolean',
+        'robots_follow' => 'boolean',
     ];
 
     public function getRouteKeyName(): string

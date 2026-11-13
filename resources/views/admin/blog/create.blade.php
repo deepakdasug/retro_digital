@@ -2,6 +2,19 @@
 
 @php
     $post = $post ?? null;
+    $previewPost = $post ?? new \App\Models\BlogPost();
+    if (!$post) {
+        $previewPost->forceFill([
+            'title' => old('title', ''),
+            'excerpt' => old('excerpt', ''),
+            'author_name' => auth()->user()->name,
+            'author_designation' => auth()->user()->designation ?? null,
+            'category' => old('category'),
+            'tags' => filled(old('tags')) ? collect(explode(',', old('tags')))->map(fn ($tag) => trim($tag))->filter()->values()->all() : null,
+            'content_blocks' => [['type' => 'html', 'content' => old('content_blocks', old('content', ''))]],
+        ]);
+        $previewPost->setRelation('faqs', collect());
+    }
 @endphp
 
 @section('title', ($post ? 'Edit' : 'Create') . ' Blog Post - Admin')
@@ -32,19 +45,6 @@
     .section-icon { width: 22px; height: 22px; flex: 0 0 22px; display: inline-flex; align-items: center; justify-content: center; color: #ffffff; background: linear-gradient(145deg, #438b59, #2f754a); border: 0; border-radius: 6px; font-size: 9px; box-shadow: 0 2px 5px rgba(47, 117, 74, 0.2); }
     .section-title { margin: 0; color: #203b29; font-size: 13px; line-height: 1.2; font-weight: 750; }
     .section-description { margin: 1px 0 0; color: #718075; font-size: 10px; line-height: 1.25; }
-
-    .blog-editor-field { height: auto; min-height: 280px; }
-    .ck.ck-editor { width: 100%; }
-    .ck.ck-toolbar { border-color: #d8e5dc; background: #f4f8f5; }
-    .ck.ck-button.ck-on, .ck.ck-button:not(.ck-disabled):hover { color: #2f754a; }
-    .ck.ck-editor__editable_inline { min-height: 280px; border-color: #cbd5e0; background: #fff; color: #24382b; }
-    .ck.ck-editor__editable_inline:focus { border-color: #398158; box-shadow: 0 0 0 3px rgba(57, 129, 88, .12); }
-    #article-section { height: auto; min-height: 0; padding-bottom: 8px; display: flex; flex-direction: column; }
-    #article-section > .article-editor-group { display: flex; flex: 0 0 auto; flex-direction: column; min-height: 0; margin-bottom: 0; }
-    #article-section .ck.ck-editor { display: flex; flex: 0 0 auto; flex-direction: column; min-height: 0; }
-    #article-section .ck-editor__top { flex: 0 0 auto; }
-    #article-section .ck-editor__main { display: flex; flex: 0 0 58.5vh; height: 58.5vh; min-height: 252px; }
-    #article-section .ck-editor__editable_inline { flex: 1 1 auto; height: 100%; min-height: 0; overflow-y: auto; }
 
     .btn-submit { width: 100%; background: #2f754a; color: white; padding: 12px 18px; border: none; border-radius: 9px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 0; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; box-shadow: 0 6px 14px rgba(47, 117, 74, 0.2); }
     .btn-submit:hover { background: #245d39; transform: translateY(-1px); box-shadow: 0 9px 18px rgba(47, 117, 74, 0.25); }
@@ -78,6 +78,29 @@
     .faq-actions { margin: 4px 0 5px; }
     .form-actions { display: flex; justify-content: flex-end; padding: 5px 0 0; }
     .form-actions .btn-submit { width: auto; min-width: 140px; padding: 7px 11px; font-size: 12px; }
+    .blog-editor-step[hidden] { display: none !important; }
+    .admin-container.blog-editor-active { max-width: 1440px; }
+    .admin-container.blog-editor-active .admin-card { padding: 14px; }
+    .blog-editor-toolbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; margin: 0 0 14px; background: #fff; border: 1px solid #dfe9e1; border-radius: 10px; box-shadow: 0 4px 14px rgba(24, 55, 34, 0.1); }
+    .blog-editor-toolbar__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .blog-editor-toolbar button, .blog-editor-section__actions button { border: 1px solid #cbd9ce; border-radius: 6px; padding: 7px 10px; color: #23462f; background: #f3f8f4; font-weight: 650; cursor: pointer; }
+    .blog-editor-toolbar .blog-editor-save { color: #fff; background: #2f754a; border-color: #2f754a; }
+    .blog-live-preview { overflow: hidden; border: 1px solid #dfe9e1; border-radius: 12px; background: #f8faf8; }
+    .blog-live-preview .site-header { position: relative; }
+    .blog-editor-inline-controls, .blog-editor-faq-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin: 0 0 6px; }
+    .blog-editor-inline-controls button, .blog-editor-faq-controls button { padding: 4px 8px; border: 1px solid #cbd9ce; border-radius: 6px; color: #23462f; background: #f3f8f4; font-size: 11px; font-weight: 650; cursor: pointer; }
+    .blog-editor-section { position: relative; margin: 12px 0; padding: 12px; border: 1px dashed transparent; border-radius: 8px; }
+    .blog-editor-section:hover, .blog-editor-section:focus-within { border-color: #62a976; background: rgba(242, 249, 243, 0.55); }
+    .blog-editor-section__actions { display: flex; justify-content: flex-end; gap: 6px; margin: 0 0 8px; }
+    .blog-editor-section__actions button { padding: 4px 7px; font-size: 11px; }
+    .blog-editor-section__actions .blog-editor-delete { color: #a12c2c; background: #fff4f4; border-color: #f0caca; }
+    .blog-editor-section__content[contenteditable="true"] { outline: 2px solid #75ae82; outline-offset: 4px; background: #fff; }
+    .blog-live-preview [contenteditable="true"] { outline: 2px solid #75ae82; outline-offset: 3px; background: #fff; }
+    .blog-editor-image-input { display: none; }
+    .blog-editor-insert { display: flex; justify-content: center; padding: 6px; }
+    .blog-editor-insert button { padding: 5px 10px; border: 1px dashed #7ca889; border-radius: 6px; color: #2f754a; background: #f7fbf8; cursor: pointer; }
+    .blog-editor-step-note { margin: 0; color: #53675a; font-size: 12px; }
+    .blog-editor-error { margin: 10px 0; color: #a12c2c; font-weight: 650; }
     @keyframes faqFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 768px) {
@@ -109,7 +132,7 @@
             </div>
 
             <h1 class="admin-title">{{ $post ? 'Edit Blog Post' : 'Create New Blog Post' }}</h1>
-            <p class="admin-form-subtitle">Build a polished article by completing each section below.</p>
+            <p class="admin-form-subtitle">Step 1: set URL, SEO, and publishing details not shown to readers. Step 2 edits the visible page.</p>
         </div>
 
         @if ($errors->any())
@@ -129,82 +152,38 @@
                 @method('PUT')
             @endif
 
+            <div id="blogDetailsStep" class="blog-editor-step">
             <nav class="section-jump" aria-label="Jump to form section">
-                <span class="section-jump-label">Jump to:</span>
-                <a href="#author-section">Author</a><span class="section-jump-separator" aria-hidden="true">·</span>
-                <a href="#article-section">Article</a><span class="section-jump-separator" aria-hidden="true">·</span>
-                <a href="#faqs-section">FAQs</a><span class="section-jump-separator" aria-hidden="true">·</span>
+                <span class="section-jump-label">Step 1: page settings not shown to readers</span>
+                <a href="#article-section">URL &amp; SEO</a><span class="section-jump-separator" aria-hidden="true">·</span>
                 <a href="#publishing-section">Publishing</a>
             </nav>
 
-            <section class="form-section" id="author-section" aria-labelledby="author-section-title">
-                <div class="section-header">
-                    <span class="section-icon"><i class="fa-solid fa-user-pen" aria-hidden="true"></i></span>
-                    <div>
-                        <h2 class="section-title" id="author-section-title">Author &amp; Organization</h2>
-                        <p class="section-description">Set the byline and organize this article for readers.</p>
-                    </div>
-                </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label class="form-label">Author</label>
-                    <div class="form-control" style="display:flex; align-items:center; background:#f3f7f4; color:#374151; min-height:23px;">{{ old('author_name', $post?->author_name ?? auth()->user()->name) }}</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Role / Position</label>
-                    <div class="form-control" style="display:flex; align-items:center; background:#f3f7f4; color:#374151; min-height:23px;">{{ old('author_designation', $post?->author_designation ?? auth()->user()->designation ?? 'Admin') ?: 'Admin' }}</div>
-                </div>
-            </div>
-
-            </section>
-
             <section class="form-section" id="article-section" aria-labelledby="article-section-title">
                 <div class="section-header">
-                    <span class="section-icon"><i class="fa-solid fa-heading" aria-hidden="true"></i></span>
+                    <span class="section-icon"><i class="fa-solid fa-link" aria-hidden="true"></i></span>
                     <div>
-                        <h2 class="section-title" id="article-section-title">Article</h2>
-                        <p class="section-description">Set the headline, URL, summary, image, and article content.</p>
+                        <h2 class="section-title" id="article-section-title">URL &amp; Search Settings</h2>
+                        <p class="section-description">These details affect search engines and sharing, not the visible article layout.</p>
                     </div>
                 </div>
 
             <div class="grid-2">
                 <div class="form-group">
-                    <label class="form-label">Category (Optional)</label>
-                    <input type="text" name="category" value="{{ old('category', $post?->category) }}" class="form-control" placeholder="e.g. Technology">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tags (Comma Separated)</label>
-                    <input type="text" name="tags" value="{{ old('tags', $post && is_array($post->tags) ? implode(', ', $post->tags) : '') }}" class="form-control" placeholder="tech, coding, laravel">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Main Headline *</label>
-                <input type="text" name="title" id="titleInput" value="{{ old('title', $post?->title) }}" class="form-control" style="font-size: 12px; font-weight: bold;" placeholder="Enter a catchy title..." required>
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label class="form-label">Slug (URL) *</label>
-                    <input type="text" name="slug" id="slugInput" value="{{ old('slug', $post?->slug) }}" class="form-control" placeholder="auto-generated-if-empty" required>
+                    <label class="form-label">Slug (URL)</label>
+                    <input type="text" name="slug" id="slugInput" value="{{ old('slug', $post?->slug) }}" class="form-control" placeholder="Generated from the headline if blank">
                     <small style="color: #718096;">Customize the URL part (e.g., <code>my-awesome-post</code>).</small>
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Featured Image (Main Thumbnail)</label>
-                    <input type="file" name="image" class="form-control" style="padding: 4px 6px;">
-                    @if ($post && $post->image_path)
-                        <img src="{{ Storage::url($post->image_path) }}" alt="Current featured image" style="display:block; max-width:200px; max-height:110px; object-fit:cover; margin-top:8px; border-radius:8px;">
-                        <small style="color: #38a169;">Choose a new image to replace the current one.</small>
-                    @endif
+                    <label class="form-label">Canonical URL</label>
+                    <input type="url" name="canonical_url" value="{{ old('canonical_url', $post?->canonical_url) }}" class="form-control" placeholder="https://...">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Short Excerpt (Shown on the blog list) *</label>
-                <textarea name="excerpt" rows="3" class="form-control" placeholder="A brief summary of the article..." required>{{ old('excerpt', $post?->excerpt) }}</textarea>
-            </div>
+            <input type="hidden" name="title" id="titleInput" value="{{ old('title', $post?->title) }}">
+            <input type="hidden" name="excerpt" id="excerptInput" value="{{ old('excerpt', $post?->excerpt) }}">
+            <input type="hidden" name="category" id="categoryInput" value="{{ old('category', $post?->category) }}">
+            <input type="hidden" name="tags" id="tagsInput" value="{{ old('tags', $post && is_array($post->tags) ? implode(', ', $post->tags) : '') }}">
 
             <div class="section-header" style="margin-top: 6px;">
                 <span class="section-icon"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span>
@@ -232,10 +211,6 @@
 
             <div class="grid-2">
                 <div class="form-group">
-                    <label class="form-label">Canonical URL</label>
-                    <input type="url" name="canonical_url" value="{{ old('canonical_url', $post?->canonical_url) }}" class="form-control" placeholder="https://...">
-                </div>
-                <div class="form-group">
                     <label class="form-label">Robots Meta</label>
                     <select name="robots_meta" class="form-control">
                         <option value="index, follow" @selected(old('robots_meta', $post?->robots_meta) == 'index, follow')>index, follow (Default)</option>
@@ -251,77 +226,9 @@
                 <textarea name="schema_markup" rows="3" class="form-control" placeholder='{"@@context": "https://schema.org" ...}'>{{ old('schema_markup', $post?->schema_markup ? json_encode($post->schema_markup) : '') }}</textarea>
             </div>
 
-            <div class="form-group article-editor-group">
-                <label class="form-label" for="blogContent">Article Content *</label>
-                <textarea id="blogContent" name="content_blocks" class="form-control blog-editor-field"
-                    data-upload-url="{{ route('admin.blog.upload_media') }}"
-                    data-csrf-token="{{ csrf_token() }}"
-                    placeholder="Write your article content here...">{{ old('content_blocks', $post?->content_html ?? '') }}</textarea>
-            </div>
-            </section>
-
-            <section class="form-section" id="faqs-section" aria-labelledby="faqs-section-title">
-                <div class="section-header">
-                    <span class="section-icon"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span>
-                    <div>
-                        <h2 class="section-title" id="faqs-section-title">Frequently Asked Questions</h2>
-                        <p class="section-description">Answer common reader questions and add useful context to your post.</p>
-                    </div>
-                </div>
-
-            @php
-                $currentFaqs = old('faqs', isset($faqs) && count($faqs) ? $faqs->map(fn($f) => [
-                    'id' => $f->id ?? null,
-                    'question' => $f->question ?? '',
-                    'answer' => $f->answer ?? '',
-                    'order' => $f->order ?? 0,
-                ])->toArray() : ($post && $post->relationLoaded('faqs') ? $post->faqs->map(fn($f) => [
-                    'id' => $f->id,
-                    'question' => $f->question,
-                    'answer' => $f->answer,
-                    'order' => $f->order,
-                ])->toArray() : []));
-            @endphp
-
-            <div id="noFaqsBox" style="text-align: center; padding: 28px 16px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; margin-bottom: 16px; {{ count($currentFaqs) ? 'display: none;' : '' }}">
-                <i class="fa-regular fa-comments" style="font-size: 28px; color: #94a3b8; margin-bottom: 8px; display: block;"></i>
-                <p style="margin: 0 0 4px 0; font-weight: 600; color: #475569; font-size: 14px;">No FAQs attached yet</p>
-                <p style="margin: 0; color: #94a3b8; font-size: 13px;">Click &ldquo;Add FAQ&rdquo; to attach questions and answers to this blog.</p>
-            </div>
-
-            <div id="faqsList" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px;">
-                @foreach ($currentFaqs as $index => $faq)
-                    <div class="faq-item" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; position: relative; animation: faqFadeIn 0.2s ease-in;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">
-                            <span class="faq-badge" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: #2563eb; background: #eff6ff; padding: 4px 10px; border-radius: 6px; border: 1px solid #dbeafe;">
-                                <i class="fa-solid fa-circle-question"></i> FAQ #<span class="faq-index-label">{{ $loop->iteration }}</span>
-                            </span>
-                            <button type="button" class="btn-remove-faq" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Remove this FAQ">
-                                <i class="fa-solid fa-trash-can"></i> Remove
-                            </button>
-                        </div>
-
-                        <input type="hidden" name="faqs[{{ $index }}][id]" value="{{ $faq['id'] ?? '' }}" class="faq-input-id">
-                        <input type="hidden" name="faqs[{{ $index }}][order]" value="{{ $faq['order'] ?? $loop->iteration }}" class="faq-input-order">
-
-                        <div class="form-group" style="margin-bottom: 14px;">
-                            <label class="form-label" style="font-size: 13px;">Question</label>
-                            <input type="text" name="faqs[{{ $index }}][question]" value="{{ $faq['question'] ?? '' }}" class="form-control faq-input-question" placeholder="e.g., Why is IT asset disposition necessary?" style="background: #ffffff;">
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label" style="font-size: 13px;">Answer</label>
-                            <textarea name="faqs[{{ $index }}][answer]" rows="3" class="form-control faq-input-answer" placeholder="Enter clear, helpful answer here..." style="background: #ffffff;">{{ $faq['answer'] ?? '' }}</textarea>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="faq-actions">
-                <button type="button" id="btnAddFaq" style="display: inline-flex; align-items: center; gap: 8px; background: #0f766e; color: #ffffff; padding: 10px 18px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-                    <i class="fa-solid fa-plus"></i> Add FAQ
-                </button>
-            </div>
+            <textarea id="blogContent" name="content_blocks" hidden
+                data-upload-url="{{ route('admin.blog.upload_media') }}"
+                data-csrf-token="{{ csrf_token() }}">{{ old('content_blocks', $post?->content_html ?? '') }}</textarea>
             </section>
 
             <section class="form-section" id="publishing-section" aria-labelledby="publishing-section-title">
@@ -345,9 +252,89 @@
             </section>
 
             <div class="form-actions">
-                <button type="submit" class="btn-submit">
-                    <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> {{ $post ? 'Save Changes' : 'Save Blog Post' }}
+                <button type="button" class="btn-submit" id="continueToBlogEditor">
+                    Continue to page editor <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </button>
+                <noscript>
+                    <button type="submit" class="btn-submit">{{ $post ? 'Save Changes' : 'Save Blog Post' }}</button>
+                </noscript>
+            </div>
+            </div>
+
+            <div id="blogEditorStep" class="blog-editor-step" hidden>
+                <div class="blog-editor-toolbar">
+                    <div>
+                        <strong>Website page editor</strong>
+                        <p class="blog-editor-step-note">Your page content stays in the website preview. Add, edit, or delete its sections here.</p>
+                    </div>
+                    <div class="blog-editor-toolbar__actions">
+                        <button type="button" id="backToBlogDetails"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to details</button>
+                        <button type="button" id="addBlogSection"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add section</button>
+                        <button type="button" id="addBlogImage"><i class="fa-regular fa-image" aria-hidden="true"></i> Add image</button>
+                        <button type="button" id="changeFeaturedImage"><i class="fa-regular fa-image" aria-hidden="true"></i> Change featured image</button>
+                        <button type="button" id="manageBlogFaqs"><i class="fa-regular fa-circle-question" aria-hidden="true"></i> Manage FAQs</button>
+                        <button type="submit" class="blog-editor-save"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> {{ $post ? 'Save Changes' : 'Save Blog Post' }}</button>
+                    </div>
+                    <input type="file" name="image" id="featuredImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                </div>
+                <div id="blogEditorError" class="blog-editor-error" role="alert" hidden></div>
+                <div class="blog-live-preview">
+                    @include('partials.header')
+                    @include('partials.mobile-drawer')
+                    <main class="blog-post-page">
+                        @include('partials.blog-post', ['post' => $previewPost])
+                    </main>
+                    @include('partials.contact-section', ['previewMode' => true])
+                    @include('partials.footer')
+                    @include('partials.whatsapp-widget')
+                </div>
+
+                <section class="form-section" id="faqs-section" aria-labelledby="faqs-section-title">
+                    <div class="section-header">
+                        <span class="section-icon"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span>
+                        <div>
+                            <h2 class="section-title" id="faqs-section-title">Frequently Asked Questions (FAQs)</h2>
+                            <p class="section-description">Add, edit, or remove FAQs; changes appear in the website preview above.</p>
+                        </div>
+                    </div>
+                    @php
+                        $currentFaqs = old('faqs', isset($faqs) && count($faqs) ? $faqs->map(fn($f) => [
+                            'id' => $f->id ?? null,
+                            'question' => $f->question ?? '',
+                            'answer' => $f->answer ?? '',
+                            'order' => $f->order ?? 0,
+                        ])->toArray() : ($post && $post->relationLoaded('faqs') ? $post->faqs->map(fn($f) => [
+                            'id' => $f->id,
+                            'question' => $f->question,
+                            'answer' => $f->answer,
+                            'order' => $f->order,
+                        ])->toArray() : []));
+                    @endphp
+                    <div id="noFaqsBox" style="text-align:center;padding:18px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;margin-bottom:8px;{{ count($currentFaqs) ? 'display:none;' : '' }}">
+                        <p style="margin:0;color:#64748b;font-size:12px;">No FAQs yet. Add one to show the FAQ section on the article.</p>
+                    </div>
+                    <div id="faqsList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+                        @foreach ($currentFaqs as $index => $faq)
+                            <div class="faq-item" style="background:#f8fafc;border:1px solid #d8e9dc;border-radius:8px;padding:10px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                                    <strong>FAQ #<span class="faq-index-label">{{ $loop->iteration }}</span></strong>
+                                    <button type="button" class="btn-remove-faq">Remove FAQ</button>
+                                </div>
+                                <input type="hidden" name="faqs[{{ $index }}][id]" value="{{ $faq['id'] ?? '' }}" class="faq-input-id">
+                                <input type="hidden" name="faqs[{{ $index }}][order]" value="{{ $faq['order'] ?? $loop->iteration }}" class="faq-input-order">
+                                <div class="form-group">
+                                    <label class="form-label">Question</label>
+                                    <input type="text" name="faqs[{{ $index }}][question]" value="{{ $faq['question'] ?? '' }}" class="form-control faq-input-question">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Answer</label>
+                                    <textarea name="faqs[{{ $index }}][answer]" rows="2" class="form-control faq-input-answer">{{ $faq['answer'] ?? '' }}</textarea>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <button type="button" id="btnAddFaq">Add FAQ</button>
+                </section>
             </div>
         </form>
     </div>
@@ -355,46 +342,20 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('vendor/ckeditor5/ckeditor5.css') }}">
+<link rel="stylesheet" href="{{ asset('css/blog-post.css') }}">
 <style>
-    .ck-menubar { border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
-    #article-section .ck.ck-editor__editable_inline { min-height: 0; }
-    textarea.blog-editor-field { height: auto; min-height: 0; }
-    .ck-editor--fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; display: flex !important; flex-direction: column !important; background: #ffffff !important; border-radius: 0 !important; box-sizing: border-box !important; }
-    .ck-editor--fullscreen .ck-editor__top { position: sticky !important; top: 0 !important; z-index: 10 !important; }
-    .ck-editor--fullscreen .ck-editor__main { flex: 1 1 auto !important; overflow-y: auto !important; height: calc(100vh - 120px) !important; background: #f9fafb; padding: 24px 0; }
-    .ck-editor--fullscreen .ck-editor__editable_inline { min-height: 100% !important; max-width: 960px !important; margin: 0 auto !important; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px !important; }
-    body.ck-editor-fullscreen-active { overflow: hidden !important; }
+    @media (max-width: 800px) {
+        .blog-editor-toolbar { align-items: flex-start; flex-direction: column; }
+        .blog-editor-toolbar__actions { width: 100%; }
+        .blog-editor-toolbar__actions button { flex: 1 1 auto; }
+    }
 </style>
 @endpush
 
 @push('scripts')
-<script src="{{ asset('vendor/ckeditor5/ckeditor5.umd.js') }}"></script>
-<script src="{{ asset('js/blog-editor.js') }}"></script>
+<script src="{{ asset('js/blog-page-editor.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const titleInput = document.getElementById('titleInput');
-        const slugInput = document.getElementById('slugInput');
-        const isEditing = @json((bool) $post);
-        let slugEdited = false;
-
-        if (slugInput) {
-            slugInput.addEventListener('input', function () {
-                slugEdited = true;
-            });
-        }
-
-        if (titleInput && slugInput) {
-            titleInput.addEventListener('input', function () {
-                if (!slugEdited && !isEditing) {
-                    slugInput.value = this.value
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/(^-|-$)+/g, '');
-                }
-            });
-        }
-
         // ================= FAQ DYNAMIC HANDLER =================
         const faqsContainer = document.getElementById('faqsList');
         const btnAddFaq = document.getElementById('btnAddFaq');

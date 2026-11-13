@@ -17,6 +17,10 @@ class TechDevelopment extends Model
         'hero_image',
         'meta_title',
         'meta_description',
+        'canonical_url',
+        'og_image',
+        'robots_index',
+        'robots_follow',
         'is_published',
     ];
 
@@ -24,6 +28,8 @@ class TechDevelopment extends Model
     {
         return [
             'is_published' => 'boolean',
+            'robots_index' => 'boolean',
+            'robots_follow' => 'boolean',
         ];
     }
 

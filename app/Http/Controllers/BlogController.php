@@ -13,9 +13,7 @@ class BlogController extends Controller
     public function index(Request $request)
     {
         $query = BlogPost::query()
-            ->where('is_published', true)
-            ->whereNotNull('category')
-            ->where('category', '!=', '');
+            ->where('is_published', true);
 
         // Optional search filter
         if ($request->filled('q')) {

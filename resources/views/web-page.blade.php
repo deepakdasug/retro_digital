@@ -7,37 +7,11 @@
 @section('title', $webPage->meta_title ?: ($webPage->title . ' - Retrotech Digital'))
 @section('description', $webPage->meta_description ?: ($webPage->short_description ?: 'Professional digital services by Retrotech.'))
 @section('canonical', route('web-pages.show', $webPage->slug))
+@section('robots', $webPage->is_published ? 'index, follow, max-image-preview:large' : 'noindex, nofollow')
 @section('og_image', $ogImage)
+@section('og_image_alt', $webPage->title)
 
 @push('styles')
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      corePlugins: { preflight: false },
-      theme: {
-        extend: {
-          colors: {
-            retro: {
-              charcoal: '#1e3326',
-              dark: '#16281e',
-              darkCard: '#1f382a',
-              mid: '#334b39',
-              muted: '#637568',
-              green: '#397b4e',
-              greenHover: '#285d3a',
-              emerald: '#25d366',
-              mint: '#eaf4eb',
-              tint: '#f0f7f0',
-              bg: '#f7fbf7',
-              border: '#d7e5d9'
-            }
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
-        }
-      }
-    }
-  </script>
-
   <style>
     .sp-theme-page { font-family: 'Inter', system-ui, sans-serif; color: #334b39; background-color: #f7fbf7; }
     @keyframes floatSlow { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }

@@ -764,12 +764,12 @@
                     <div class="wp-serp-card">
                         <span class="wp-serp-badge">Live Google Search Preview</span>
                         <div class="wp-serp-url">
-                            <span style="font-weight: 700; color: #166534;">retrodigital.in</span>
+                            <span style="font-weight: 700; color: #166534;">{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
                             <span style="color: #5f6368;">› web › </span>
                             <span id="serpSlugPreview" style="color: #5f6368;">{{ old('slug', 'conversion-rate-optimization') }}</span>
                         </div>
                         <div class="wp-serp-title" id="serpTitlePreview">
-                            {{ old('meta_title', old('title', 'Page Title')) }} | Retro Digital
+                            {{ old('meta_title', old('title', 'Page Title')) }} | Retrotech Digital
                         </div>
                         <div class="wp-serp-desc" id="serpDescPreview">
                             {{ old('meta_description', old('short_description', 'Brief summary of this page for search results, cards, and page previews.')) }}
