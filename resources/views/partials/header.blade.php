@@ -24,7 +24,7 @@
                 <h2 id="marketing-services-heading"><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Grow your reach through SEO, paid campaigns, social media, and content marketing.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('services.show', 'seo-services') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
+                  <li><a href="{{ route('services.show', 'search-engine-optimization') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
                   <li><a href="{{ route('services.show', 'social-media-marketing') }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
                   <li><a href="{{ route('services.show', 'paid-marketing') }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
                   <li><a href="{{ route('services.show', 'email-marketing') }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
@@ -65,7 +65,7 @@
               </section>
             </div>
             <div class="services-mega-cards">
-              <a href="{{ route('services.show', 'seo-services') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Search Engine Optimization</strong><small>Improve organic visibility with search-focused website and content optimization.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Search engine optimization services" loading="lazy"></a>
+              <a href="{{ route('services.show', 'search-engine-optimization') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Search Engine Optimization</strong><small>Improve organic visibility with search-focused website and content optimization.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Search engine optimization services" loading="lazy"></a>
               <a href="{{ route('services.show', 'web-development') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Web Development</strong><small>Build responsive websites and web applications around your business requirements.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Web development services" loading="lazy"></a>
               <a href="{{ route('services.show', 'digital-marketing') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Digital Marketing Services" loading="lazy"></a>
             </div>
