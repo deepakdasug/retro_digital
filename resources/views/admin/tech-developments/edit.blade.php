@@ -21,12 +21,12 @@
             </h1>
             <p style="font-size: 0.875rem; color: #6b7280; margin: 0.25rem 0 0 0;">
                 Configuring: <strong style="color: #111827;">{{ $techDevelopment->name }}</strong> · 
-                <span style="font-family: monospace; color: #059669;">/tech-development/{{ $techDevelopment->slug }}</span>
+                <span style="font-family: monospace; color: #059669;">/services/{{ $techDevelopment->slug }}</span>
             </p>
         </div>
 
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <a href="{{ route('tech-development.show', ['slug' => $techDevelopment->slug]) }}" 
+            <a href="{{ route('services.show', $techDevelopment->slug) }}" 
                target="_blank" 
                rel="noopener" 
                class="admin-secondary-button" 
@@ -117,7 +117,7 @@
                         URL Slug *
                     </label>
                     <div style="display: flex; align-items: center; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background: #f9fafb;">
-                        <span style="padding: 0 0.65rem; color: #6b7280; font-size: 0.8rem; font-family: monospace;">/tech-development/</span>
+                        <span style="padding: 0 0.65rem; color: #6b7280; font-size: 0.8rem; font-family: monospace;">/services/</span>
                         <input type="text" 
                                name="slug" 
                                value="{{ old('slug', $techDevelopment->slug) }}" 

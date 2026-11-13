@@ -7,7 +7,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\TechDevelopmentController;
 use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
 use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
@@ -134,19 +133,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 3. TECH DEVELOPMENT ROUTES
+| 3. UNIFIED SERVICES ROUTES (Marketing & Tech Development)
 |--------------------------------------------------------------------------
-*/
-Route::get('/tech-development/{slug}', [TechDevelopmentController::class, 'show'])
-    ->name('tech-development.show');
-
-
-/*
-|--------------------------------------------------------------------------
-| 4. DYNAMIC SERVICES ROUTE
-|--------------------------------------------------------------------------
-| All 7 marketing service pages route through ServiceController.
-| The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'.
+| Both Marketing and Tech Development pages route through ServiceController.
+| The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'
+| or dynamically by TechDevelopment model.
 */
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/digital-marketing', [ServiceController::class, 'digitalMarketing'])->name('services.digital-marketing');
@@ -155,22 +146,26 @@ Route::get('/services/{service}', [ServiceController::class, 'show'])->name('ser
 
 /*
 |--------------------------------------------------------------------------
-| 5. INDUSTRY ROUTES (Database Driven)
+| 4. INDUSTRY ROUTES (Who We Serve - Database Driven)
 |--------------------------------------------------------------------------
 | Must be declared BEFORE any generic catch-all route.
 */
-Route::get('/industries', [IndustryController::class, 'index'])
+Route::get('/who-we-serve', [IndustryController::class, 'index'])
     ->name('industries.index');
 
-Route::redirect('/who-we-serve', '/industries', 301);
+Route::redirect('/industries', '/who-we-serve', 301);
 
-Route::get('/industries/{slug}', [IndustryController::class, 'show'])
+Route::get('/who-we-serve/{slug}', [IndustryController::class, 'show'])
     ->name('industries.show');
+
+Route::get('/industries/{slug}', function (string $slug) {
+    return redirect()->route('industries.show', ['slug' => $slug], 301);
+});
 
 
 /*
 |--------------------------------------------------------------------------
-| 6. DYNAMIC WEB PAGES (Frontend Renderer)
+| 5. DYNAMIC WEB PAGES (Frontend Renderer)
 |--------------------------------------------------------------------------
 */
 Route::get('/web/{webPage}', [FrontendWebPageController::class, 'show'])->name('web-pages.show');
@@ -178,7 +173,7 @@ Route::get('/web/{webPage}', [FrontendWebPageController::class, 'show'])->name('
 
 /*
 |--------------------------------------------------------------------------
-| 7. DYNAMIC CATALOG CATCH-ALL (Legacy service redirects + fallback)
+| 6. DYNAMIC CATALOG CATCH-ALL (Legacy service redirects + fallback)
 |--------------------------------------------------------------------------
 | MUST be the LAST route — otherwise it captures /industries/{slug}, /services/{slug}, etc.
 */
@@ -198,7 +193,7 @@ Route::get('/{section}/{slug}', function (string $section, string $slug) {
 
     // 1. Preserve legacy 301s
     if ($section === 'services' && isset($techSlugs[$slug])) {
-        return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
+        return redirect()->route('services.show', ['service' => $techSlugs[$slug]], 301);
     }
 
     // 2. No catalog view yet — return a real 404, never 500

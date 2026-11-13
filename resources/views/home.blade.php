@@ -275,7 +275,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development &amp; Architecture</a>
+              <a href="{{ route('services.show', 'web-development') }}">Web Development &amp; Architecture</a>
             </h3>
             <p class="sc-desc">
               High-performance, responsive websites and dynamic web applications built with modern frameworks, sub-80ms edge speeds, and clean API architecture.
@@ -286,7 +286,7 @@
               <span class="sc-tag">REST &amp; GraphQL</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}" class="sc-action-btn">
+              <a href="{{ route('services.show', 'web-development') }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -306,7 +306,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">Mobile App Development</a>
+              <a href="{{ route('services.show', 'mobile-app-development') }}">Mobile App Development</a>
             </h3>
             <p class="sc-desc">
               Native and cross-platform iOS and Android mobile apps engineered for fluid 120Hz gesture response, offline data sync, and biometric security.
@@ -317,7 +317,7 @@
               <span class="sc-tag">iOS &amp; Android</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}" class="sc-action-btn">
+              <a href="{{ route('services.show', 'mobile-app-development') }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -334,7 +334,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}">Custom Software Development</a>
+              <a href="{{ route('services.show', 'software-development') }}">Custom Software Development</a>
             </h3>
             <p class="sc-desc">
               Tailored enterprise software designed to eliminate manual bottlenecks, automate operational workflows, and scale without friction.
@@ -345,7 +345,7 @@
               <span class="sc-tag">Microservices</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}" class="sc-action-btn">
+              <a href="{{ route('services.show', 'software-development') }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -365,7 +365,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}">SaaS &amp; Cloud Applications</a>
+              <a href="{{ route('services.show', 'saas-application') }}">SaaS &amp; Cloud Applications</a>
             </h3>
             <p class="sc-desc">
               Scalable multi-tenant cloud software platforms built for recurring revenue, featuring automated billing, tenant isolation, and elastic cloud scaling.
@@ -376,7 +376,7 @@
               <span class="sc-tag">Stripe Billing</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}" class="sc-action-btn">
+              <a href="{{ route('services.show', 'saas-application') }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>

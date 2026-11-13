@@ -33,18 +33,18 @@ class GenerateSitemap extends Command
                     ->setPriority(0.8)
             ));
 
-        // 3. Add dynamic industry pages
+        // 3. Add dynamic industry pages (under /who-we-serve/{slug})
         Industry::where('robots_index', true)->get()
             ->each(fn (Industry $industry) => $sitemap->add(
-                Url::create(url("/industries/{$industry->slug}"))
+                Url::create(url("/who-we-serve/{$industry->slug}"))
                     ->setLastModificationDate($industry->updated_at)
                     ->setPriority(0.7)
             ));
 
-        // 4. Add dynamic tech-development pages
+        // 4. Add dynamic tech-development pages (under /services/{slug})
         TechDevelopment::where('robots_index', true)->get()
             ->each(fn (TechDevelopment $tech) => $sitemap->add(
-                Url::create(url("/tech-development/{$tech->slug}"))
+                Url::create(url("/services/{$tech->slug}"))
                     ->setLastModificationDate($tech->updated_at)
                     ->setPriority(0.7)
             ));

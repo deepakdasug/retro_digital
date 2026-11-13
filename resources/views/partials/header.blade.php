@@ -35,17 +35,17 @@
               </section>
 
               <section class="services-mega-group" aria-labelledby="development-services-heading">
-                <h2 id="development-services-heading"><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="development-services-heading"><a href="{{ route('services.show', 'web-development') }}">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Plan and support the digital systems your organization relies on every day.</p>
                 <ul class="services-mega-links">
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
-                  <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
+                  <li><a href="{{ route('services.show', 'web-development') }}"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
+                  <li><a href="{{ route('services.show', 'mobile-app-development') }}"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
+                  <li><a href="{{ route('services.show', 'custom-application') }}"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
+                  <li><a href="{{ route('services.show', 'crm-development') }}"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
+                  <li><a href="{{ route('services.show', 'saas-application') }}"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
+                  <li><a href="{{ route('services.show', 'api-development') }}"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
+                  <li><a href="{{ route('services.show', 'software-development') }}"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
+                  <li><a href="{{ route('services.show', 'whatsapp-integration') }}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
                 </ul>
               </section>
 
@@ -55,7 +55,7 @@
                   <p>Bring technology lifecycle services together around your organization’s needs.</p>
                 </article>
                 <article>
-                  <h2><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('services.show', 'web-development') }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>

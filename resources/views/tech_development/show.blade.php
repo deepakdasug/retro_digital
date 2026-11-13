@@ -10,7 +10,7 @@
 
 @section('title', ($techDevelopment->meta_title ?: $techDevelopment->name) . ' | Retrotech Digital')
 @section('description', $techDevelopment->meta_description ?: ($techDevelopment->short_description ?: 'High-performance tech development services by Retrotech Digital.'))
-@section('canonical', route('tech-development.show', $techDevelopment->slug))
+@section('canonical', route('services.show', $techDevelopment->slug))
 @section('og_image', $ogImage)
 
 @push('styles')

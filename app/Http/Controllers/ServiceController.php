@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\TechDevelopment;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -18,34 +19,48 @@ class ServiceController extends Controller
             $service = Service::where('slug', 'digital-marketing')->first();
             return view('services.digital-marketing', compact('service'));
         }
-        // Find the service by its URL slug (e.g., /services/search-engine-optimization)
+
+        // 1. Find the service in marketing services
         $service = Service::where('slug', $slug)->first();
-
-        if (!$service) {
-            $techSlugs = [
-                'web-development' => 'web-development',
-                'mobile-app-development' => 'mobile-app-development',
-                'custom-application' => 'custom-application',
-                'salesforce-erpnext-services' => 'crm-development',
-                'crm-development' => 'crm-development',
-                'saas-application' => 'saas-application',
-                'api-development' => 'api-development',
-                'software-development' => 'software-development',
-                'whatsapp-integration' => 'whatsapp-integration',
-                'tech-development' => 'web-development',
-            ];
-
-            if (isset($techSlugs[$slug])) {
-                return redirect()->route('tech-development.show', ['slug' => $techSlugs[$slug]], 301);
-            }
-
-            abort(404);
+        if ($service) {
+            return view('service-page', [
+                'service' => $service
+            ]);
         }
 
-        return view('service-page', [
-            'service' => $service
-        ]);
+        // 2. Find in Tech Development (render directly without redirect)
+        $techSlugs = [
+            'web-development'             => 'web-development',
+            'mobile-app-development'      => 'mobile-app-development',
+            'custom-application'          => 'custom-application',
+            'salesforce-erpnext-services' => 'crm-development',
+            'crm-development'             => 'crm-development',
+            'saas-application'            => 'saas-application',
+            'api-development'             => 'api-development',
+            'software-development'        => 'software-development',
+            'whatsapp-integration'        => 'whatsapp-integration',
+            'tech-development'            => 'web-development',
+        ];
+
+        $targetSlug = $techSlugs[$slug] ?? $slug;
+
+        $techDevelopment = TechDevelopment::with([
+            'sections' => function ($query) {
+                $query->where('is_visible', true)
+                      ->orderBy('sort_order');
+            }
+        ])
+        ->where('slug', $targetSlug)
+        ->where('is_published', true)
+        ->first();
+
+        if ($techDevelopment) {
+            return view('tech_development.show', compact('techDevelopment'));
+        }
+
+        abort(404);
     }
+
     public function digitalMarketing()
     {
         return $this->show('digital-marketing');

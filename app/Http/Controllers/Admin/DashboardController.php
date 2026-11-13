@@ -66,9 +66,7 @@ class DashboardController extends Controller
                 'title'       => $tech->name ?: $tech->hero_title,
                 'slug'        => $tech->slug,
                 'category'    => 'Tech Development',
-                'url' => \Illuminate\Support\Facades\Route::has('tech-development.show') 
-         ? route('tech-development.show', ['slug' => $tech->slug]) 
-         : url('/tech-development/' . $tech->slug),
+                'url' => route('services.show', ['service' => $tech->slug]),
                 'description' => $tech->short_description ?: $tech->meta_description,
                 'hero_image'  => $tech->hero_image,
                 'icon'        => 'code',

@@ -350,7 +350,7 @@
             <div class="cap-body">
               <h3 class="cap-title">Web Development</h3>
               <p class="cap-desc">Custom web platforms, headless storefronts, and ultra-fast web apps engineered with Laravel 11, React 19, and Next.js.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'web-development') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
@@ -366,7 +366,7 @@
             <div class="cap-body">
               <h3 class="cap-title">Mobile App Development</h3>
               <p class="cap-desc">Intuitive, high-performance native and cross-platform apps built with Flutter, React Native, and Swift for seamless UX.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'mobile-app-development') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
@@ -382,7 +382,7 @@
             <div class="cap-body">
               <h3 class="cap-title">Custom SaaS Products</h3>
               <p class="cap-desc">Scalable multi-tenant architectures, automated billing integrations, database isolation, and high-concurrency microservices.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'saas-application') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
@@ -398,7 +398,7 @@
             <div class="cap-body">
               <h3 class="cap-title">WhatsApp Marketing Automation</h3>
               <p class="cap-desc">Official WhatsApp Cloud API integrations, automated lead capture, broadcast marketing, and interactive chatbot workflows.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'whatsapp-integration') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
@@ -414,7 +414,7 @@
             <div class="cap-body">
               <h3 class="cap-title">API &amp; Cloud Integration</h3>
               <p class="cap-desc">High-throughput REST and GraphQL APIs connecting payment gateways, ERP systems, third-party databases, and microservices.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'api-development') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
@@ -430,7 +430,7 @@
             <div class="cap-body">
               <h3 class="cap-title">CRM &amp; ERP Solutions</h3>
               <p class="cap-desc">Custom business workflow management, sales pipelines, inventory automation, and internal tool dashboards tailored to your processes.</p>
-              <a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}" class="cap-link">
+              <a href="{{ route('services.show', 'crm-development') }}" class="cap-link">
                 <span>Explore Discipline</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>

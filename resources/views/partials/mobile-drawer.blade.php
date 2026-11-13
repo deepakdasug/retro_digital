@@ -18,17 +18,17 @@
           <li><a href="{{ route('services.show', 'video-marketing') }}">Video Marketing</a></li>
           <li><a href="{{ route('services.show', 'content-marketing') }}">Content Marketing</a></li>
           <li><a href="{{ route('services.show', 'orm-services') }}">ORM Services</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Development</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">Mobile App Development</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce &amp; ERPNext Services</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}">SaaS Application</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}">API Development</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}">Software Development</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">WhatsApp Integration</a></li>
+          <li><a href="{{ route('services.show', 'web-development') }}">Tech Development</a></li>
+          <li><a href="{{ route('services.show', 'web-development') }}">Web Development</a></li>
+          <li><a href="{{ route('services.show', 'mobile-app-development') }}">Mobile App Development</a></li>
+          <li><a href="{{ route('services.show', 'custom-application') }}">Custom Application</a></li>
+          <li><a href="{{ route('services.show', 'crm-development') }}">Salesforce &amp; ERPNext Services</a></li>
+          <li><a href="{{ route('services.show', 'saas-application') }}">SaaS Application</a></li>
+          <li><a href="{{ route('services.show', 'api-development') }}">API Development</a></li>
+          <li><a href="{{ route('services.show', 'software-development') }}">Software Development</a></li>
+          <li><a href="{{ route('services.show', 'whatsapp-integration') }}">WhatsApp Integration</a></li>
           <li><a href="{{ route('services.index') }}">Our Platform</a></li>
-          <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Tech Exploration</a></li>
+          <li><a href="{{ route('services.show', 'web-development') }}">Tech Exploration</a></li>
           <li><a href="{{ route('services.index') }}">Tech Solutions</a></li>
           <li><a href="{{ route('services.index') }}">IT Support</a></li>
           <li><a href="{{ route('services.index') }}">IT Services</a></li>
