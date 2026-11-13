@@ -371,7 +371,7 @@
           <div>
             <span class="admin-metric-label">Tech Development</span>
             <strong>{{ $techDevelopments->count() }}</strong>
-            <small>Under /tech-development/{slug}</small>
+            <small>Under /services/{slug}</small>
           </div>
         </article>
         <article class="admin-metric-card">

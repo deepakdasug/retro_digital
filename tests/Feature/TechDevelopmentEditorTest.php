@@ -151,7 +151,7 @@ class TechDevelopmentEditorTest extends TestCase
         $this->assertFalse($tech->robots_index);
         $this->assertFalse($tech->robots_follow);
 
-        $publicResponse = $this->get(route('tech-development.show', $tech->slug));
+        $publicResponse = $this->get(route('services.show', $tech->slug));
         $publicResponse->assertOk();
         $publicResponse->assertSee('<meta name="robots" content="noindex, nofollow">', false);
     }

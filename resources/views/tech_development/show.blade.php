@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @php
-    $fallbackCanonical = route('tech-development.show', $techDevelopment->slug);
-    $canonicalUrl = \App\Support\SeoCanonical::resolve($techDevelopment->canonical_url, $fallbackCanonical);
+    $fallbackCanonical = route('services.show', $techDevelopment->slug);
+    $canonicalUrl = \App\Support\SeoCanonical::resolve(
+        $techDevelopment->canonical_url,
+        $fallbackCanonical,
+        ['/technology', '/tech-development']
+    );
     $ogImage = $techDevelopment->og_image ?: $techDevelopment->hero_image;
     if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
         $ogImage = asset(ltrim($ogImage, '/'));

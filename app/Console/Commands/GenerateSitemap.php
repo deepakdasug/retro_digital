@@ -60,7 +60,7 @@ class GenerateSitemap extends Command
                 $canonical = SeoCanonical::resolve(
                     $industry->canonical_url,
                     $fallback,
-                    ['/who-we-serve']
+                    ['/industries']
                 );
 
                 if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
@@ -76,8 +76,12 @@ class GenerateSitemap extends Command
             ->where('robots_index', true)
             ->get()
             ->each(function (TechDevelopment $tech) use ($sitemap): void {
-                $fallback = route('tech-development.show', $tech->slug);
-                $canonical = SeoCanonical::resolve($tech->canonical_url, $fallback);
+                $fallback = route('services.show', $tech->slug);
+                $canonical = SeoCanonical::resolve(
+                    $tech->canonical_url,
+                    $fallback,
+                    ['/technology', '/tech-development']
+                );
 
                 if (! SeoCanonical::usesSameHost($canonical, $fallback)) {
                     return;

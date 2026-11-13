@@ -93,6 +93,30 @@ class SeoTest extends TestCase
         $response->assertSee('"@type":"Service"', false);
     }
 
+    public function test_tech_development_pages_use_indexing_metadata_and_current_canonical_route(): void
+    {
+        $tech = TechDevelopment::create([
+            'name' => 'Canonical Technology',
+            'slug' => 'canonical-technology',
+            'is_published' => true,
+            'meta_title' => 'Canonical Technology Meta Title',
+            'meta_description' => 'Technology-specific search description.',
+            'canonical_url' => 'https://www.retrotechdigital.com/technology/canonical-technology',
+            'robots_index' => false,
+            'robots_follow' => false,
+        ]);
+
+        $response = $this->get(route('services.show', $tech->slug));
+
+        $response->assertOk();
+        $response->assertSee('<title>Canonical Technology Meta Title | Retrotech Digital</title>', false);
+        $response->assertSee(
+            '<link rel="canonical" href="' . route('services.show', $tech->slug) . '">',
+            false
+        );
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
     public function test_published_blog_posts_without_categories_remain_discoverable(): void
     {
         $post = BlogPost::create([
@@ -140,7 +164,7 @@ class SeoTest extends TestCase
             'slug' => 'indexable-technology',
             'is_published' => true,
             'robots_index' => true,
-            'canonical_url' => 'https://www.retrotechdigital.com/technology/indexable-technology',
+            'canonical_url' => 'https://www.retrotechdigital.com/services/indexable-technology',
         ]);
         WebPage::create([
             'title' => 'Indexable Web Page',
@@ -179,16 +203,15 @@ class SeoTest extends TestCase
 
             $this->assertIsString($sitemap);
             $this->assertStringContainsString(route('services.show', $service->slug), $sitemap);
-            $this->assertStringContainsString(route('industries.show', $industry->slug), $sitemap);
-            $this->assertStringContainsString('https://www.retrotechdigital.com/technology/indexable-technology', $sitemap);
-            $this->assertStringNotContainsString(route('tech-development.show', 'indexable-technology'), $sitemap);
+            $this->assertStringContainsString('https://www.retrotechdigital.com/who-we-serve/indexable-industry', $sitemap);
+            $this->assertStringContainsString('https://www.retrotechdigital.com/services/indexable-technology', $sitemap);
             $this->assertStringContainsString(route('web-pages.show', 'indexable-web-page'), $sitemap);
             $this->assertStringContainsString(route('blog.show', 'indexable-blog-post'), $sitemap);
             $this->assertStringContainsString(route('about'), $sitemap);
             $this->assertStringNotContainsString('noindex-service', $sitemap);
             $this->assertStringNotContainsString('noindex-blog-post', $sitemap);
             $this->assertStringNotContainsString('http://localhost', $sitemap);
-            $this->assertStringNotContainsString('/who-we-serve/', $sitemap);
+            $this->assertStringNotContainsString('/industries/indexable-industry', $sitemap);
             $this->assertStringNotContainsString('/privacy-policy', $sitemap);
             $this->assertStringNotContainsString('/terms-and-conditions', $sitemap);
         } finally {

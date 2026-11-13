@@ -406,7 +406,7 @@
               </div>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'web-development') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -432,7 +432,7 @@
               <span class="bento-mini-tag">Biometric Auth</span>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'mobile-app-development') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -453,7 +453,7 @@
               <span class="bento-mini-tag">RBAC Security</span>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'custom-application') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -492,7 +492,7 @@
               </div>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'crm-development') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -514,7 +514,7 @@
               <span class="bento-mini-tag">AWS Cloud Auto-Scale</span>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'saas-application']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'saas-application') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -535,7 +535,7 @@
               <span class="bento-mini-tag">&lt;10ms Low Latency</span>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'api-development']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'api-development') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -556,7 +556,7 @@
               <span class="bento-mini-tag">CI/CD Automation</span>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'software-development']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'software-development') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
@@ -595,7 +595,7 @@
               </div>
             </div>
             <div class="bento-card-footer">
-              <a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}" class="card-explore-btn">
+              <a href="{{ route('services.show', 'whatsapp-integration') }}" class="card-explore-btn">
                 <span>Explore Capability</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>

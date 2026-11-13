@@ -58,16 +58,16 @@
         <section class="footer-column" aria-labelledby="footer-technology-solutions-heading">
           <h2 class="footer-heading" id="footer-technology-solutions-heading">Technology Solutions</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('tech-development.show', ['slug' => 'web-development']) }}">Web Development</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'mobile-app-development']) }}">App Development</a>
+            <li><a href="{{ route('services.show', 'web-development') }}">Web Development</a></li>
+            <li><a href="{{ route('services.show', 'mobile-app-development') }}">App Development</a>
             </li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'custom-application']) }}">Custom Application</a>
+            <li><a href="{{ route('services.show', 'custom-application') }}">Custom Application</a>
             </li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">Salesforce Solutions</a>
+            <li><a href="{{ route('services.show', 'crm-development') }}">Salesforce Solutions</a>
             </li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'whatsapp-integration']) }}">Whatsapp
+            <li><a href="{{ route('services.show', 'whatsapp-integration') }}">Whatsapp
                 Integration</a></li>
-            <li><a href="{{ route('tech-development.show', ['slug' => 'crm-development']) }}">CRM Development</a></li>
+            <li><a href="{{ route('services.show', 'crm-development') }}">CRM Development</a></li>
           </ul>
         </section>
 
