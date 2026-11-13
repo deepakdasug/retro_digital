@@ -15,6 +15,8 @@ class ServiceController extends Controller
 
     public function show(string $slug)
     {
+
+        
         if ($slug === 'digital-marketing') {
             $service = Service::where('slug', 'digital-marketing')->first();
             return view('services.digital-marketing', compact('service'));
