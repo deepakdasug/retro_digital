@@ -114,8 +114,7 @@
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       window.retroLenis = new window.Lenis({
         autoRaf: true,
-        duration: 1.1,
-        easing: function (time) { return 1 - Math.pow(1 - time, 3); },
+        duration: 0.65,
         wheelMultiplier: 1.0,
         touchMultiplier: 1.0,
         smoothWheel: true,
