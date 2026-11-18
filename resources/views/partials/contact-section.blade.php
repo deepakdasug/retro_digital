@@ -5,6 +5,7 @@
 
         {{-- Left: Concise Info Card --}}
         <div class="contact-inc-info-card" data-anim="left">
+            @unless(request()->routeIs('home'))
             <div class="contact-live-status-pill">
                 <span class="clsp-ping"><span class="clsp-ping-dot"></span></span>
                 <span class="clsp-text">Engineering Desk: <strong>Available for New Sprints</strong></span>
@@ -15,6 +16,7 @@
                 <span class="contact-inc-dot" aria-hidden="true"></span>
                 Get in Touch
             </span>
+            @endunless
             @if(request()->routeIs('contact.page'))
                 <h1 class="contact-inc-info-title">Let's Grow Your Business</h1>
             @else

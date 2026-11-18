@@ -85,15 +85,15 @@
           </ul>
 
           <div class="footer-socials" aria-label="Social media">
-            <a href="#" class="footer-social-icon is-pinterest" aria-label="Pinterest"><i
+            <a href="https://www.pinterest.com/retrotechdigital/" class="footer-social-icon is-pinterest" aria-label="Pinterest"><i
                 class="fa-brands fa-pinterest-p" aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"
+            <a href="https://www.facebook.com/people/Retrotech-Digital/61592197780253/" class="footer-social-icon is-facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"
                 aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"
+            <a href="https://www.linkedin.com/company/retrotech-digital/" class="footer-social-icon is-linkedin" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"
                 aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"
+            <a href="https://www.instagram.com/retrotech_digital/" class="footer-social-icon is-instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"
                 aria-hidden="true"></i></a>
-            <a href="#" class="footer-social-icon is-youtube" aria-label="YouTube"><i class="fa-brands fa-youtube"
+            <a href="https://www.youtube.com/@RetrotechBusinessSolutions" class="footer-social-icon is-youtube" aria-label="YouTube"><i class="fa-brands fa-youtube"
                 aria-hidden="true"></i></a>
           </div>
         </section>

@@ -32,7 +32,7 @@ function initRetrotech() {
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
     if (lenis) {
-      lenis.scrollTo(offsetPosition, { duration: 2, easing: lenisEasing });
+      lenis.scrollTo(offsetPosition, { duration: 0.9, easing: lenisEasing });
     } else {
       window.scrollTo({
         top: offsetPosition,
@@ -97,22 +97,14 @@ function initRetrotech() {
   }
 
   /* =========================================================================
-     2. VIDEO SCROLL DOCKING ENGINE
+     2. UNIFIED 60FPS COMPOSITOR SCROLL ENGINE & VIDEO DOCKING ENGINE
      ========================================================================= */
-  /* =========================================================================
-     2. VIDEO SCROLL DOCKING ENGINE (HIGH PERFORMANCE & SUB-PIXEL PRECISION)
-     ========================================================================= */
-  const videoContainer = document.getElementById('videoContainer');
-  const videoDockSlot = document.getElementById('videoDockSlot');
-  const videoDarkOverlay = document.getElementById('videoDarkOverlay');
-  const heroContent = document.querySelector('.hero-content');
-  const siteHeader = document.getElementById('siteHeader');
-  const splitCanvas = document.querySelector('.about-split-canvas');
-  const cultureImg = document.querySelector('.acc-bg-image-wrap img');
+  const scrollTasks = [];
+  const registerScrollTask = (fn) => scrollTasks.push(fn);
 
-  let ticking = false;
-  let splitCanvasDocTop = 0;
-  let splitCanvasH = 0;
+  const layoutTasks = [];
+  const registerLayoutTask = (fn) => layoutTasks.push(fn);
+
   let windowW = window.innerWidth;
   let windowH = window.innerHeight;
 
@@ -126,6 +118,60 @@ function initRetrotech() {
     windowW = document.documentElement.clientWidth || window.innerWidth;
     windowH = window.innerHeight;
     const scrollY = getScrollY();
+    for (let i = 0; i < layoutTasks.length; i++) {
+      layoutTasks[i](scrollY, windowW, windowH);
+    }
+  };
+
+  let scrollTicking = false;
+  const dispatchScroll = () => {
+    if (!scrollTicking) {
+      window.requestAnimationFrame(() => {
+        const scrollY = getScrollY();
+        for (let i = 0; i < scrollTasks.length; i++) {
+          scrollTasks[i](scrollY, windowW, windowH);
+        }
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+  };
+
+  const videoContainer = document.getElementById('videoContainer');
+  const videoDockSlot = document.getElementById('videoDockSlot');
+  const videoDarkOverlay = document.getElementById('videoDarkOverlay');
+  const heroContent = document.querySelector('.hero-content');
+  const siteHeader = document.getElementById('siteHeader');
+  const splitCanvas = document.querySelector('.about-split-canvas');
+  const cultureImg = document.querySelector('.acc-bg-image-wrap img');
+
+  let slotDocTop = 0;
+  let slotDocLeft = 0;
+  let slotW = 0;
+  let slotH = 0;
+  let dockCompleteScroll = 0;
+  let videoOffscreenScroll = 999999;
+  let midW = 0, midH = 0, midX = 0, midY = 0;
+  let splitCanvasDocTop = 0;
+  let splitCanvasH = 0;
+
+  const measureVideoDocking = (scrollY, w, h) => {
+    if (videoDockSlot) {
+      const sr = videoDockSlot.getBoundingClientRect();
+      slotDocTop = sr.top + scrollY;
+      slotDocLeft = sr.left;
+      slotW = sr.width;
+      slotH = sr.height;
+
+      const dockViewportTargetY = Math.max(80, h * 0.42);
+      dockCompleteScroll = Math.max(120, slotDocTop - dockViewportTargetY);
+      videoOffscreenScroll = slotDocTop + slotH + 120;
+
+      midW = Math.min(Math.max(w * 0.54, 300), Math.min(660, w * 0.9));
+      midH = midW * (9 / 16);
+      midX = (w - midW) / 2;
+      midY = (h - midH) / 2 - 15;
+    }
 
     if (splitCanvas) {
       const cr = splitCanvas.getBoundingClientRect();
@@ -133,6 +179,8 @@ function initRetrotech() {
       splitCanvasH = cr.height;
     }
   };
+
+  registerLayoutTask(measureVideoDocking);
 
   let lastW = null;
   let lastH = null;
@@ -142,27 +190,19 @@ function initRetrotech() {
   let lastHeroOpacity = null;
   let lastHeroTransform = '';
   let lastDarkOverlayOpacity = null;
-  let lastBrightness = null;
   let videoIsOffscreen = false;
 
-  const handleVideoScroll = () => {
-    if (!videoContainer || !videoDockSlot) {
-      if (siteHeader) siteHeader.classList.add('scrolled');
+  const handleVideoScroll = (scrollY, w, h) => {
+    if (siteHeader) {
+      siteHeader.classList.toggle('scrolled', scrollY > 40);
+    }
+
+    if (!videoContainer || !videoDockSlot || slotW === 0 || slotH === 0) {
       return;
     }
 
-    // Always sample the live bounding rectangle of the dock slot
-    const slotRect = videoDockSlot.getBoundingClientRect();
-    if (slotRect.width === 0 || slotRect.height === 0) {
-      return;
-    }
-
-    const scrollY = getScrollY();
-    windowW = document.documentElement.clientWidth || window.innerWidth;
-    windowH = window.innerHeight;
-
-    // Off-screen handling: when slot has scrolled well past top of viewport, hide container & pause playback
-    if (slotRect.top < -slotRect.height - 100) {
+    // Fast off-screen check: zero layout reflows!
+    if (scrollY > videoOffscreenScroll) {
       if (!videoIsOffscreen) {
         videoIsOffscreen = true;
         videoContainer.style.visibility = 'hidden';
@@ -170,7 +210,6 @@ function initRetrotech() {
           heroVideo.pause();
         }
       }
-      if (siteHeader) siteHeader.classList.add('scrolled');
       return;
     } else if (videoIsOffscreen) {
       videoIsOffscreen = false;
@@ -180,41 +219,26 @@ function initRetrotech() {
       }
     }
 
-    // Calculate dynamic docking progress based on real element document position:
-    // Slot reaches its natural reading position around 38% - 44% from top of viewport.
-    const slotDocTop = slotRect.top + scrollY;
-    const dockViewportTargetY = Math.max(80, windowH * 0.42);
-    const dockCompleteScroll = Math.max(120, slotDocTop - dockViewportTargetY);
-
-    const rawProgress = scrollY / dockCompleteScroll;
+    const rawProgress = dockCompleteScroll > 0 ? scrollY / dockCompleteScroll : 1;
     const p = Math.min(Math.max(rawProgress, 0), 1);
 
-    // Precise live target geometry: fits exactly into the square/rectangular dock slot
-    const targetW = slotRect.width;
-    const targetH = slotRect.height;
-    const targetX = slotRect.left;
-    const targetY = slotRect.top;
-
-    // Centered mid-stage card geometry
-    const midW = Math.min(Math.max(windowW * 0.54, 300), Math.min(660, windowW * 0.9));
-    const midH = midW * (9 / 16);
-    const midX = (windowW - midW) / 2;
-    const midY = (windowH - midH) / 2 - 15;
+    const targetW = slotW;
+    const targetH = slotH;
+    const targetX = slotDocLeft;
+    const targetY = slotDocTop - scrollY;
 
     let curW, curH, curX, curY, curShadow, curRadius;
 
     if (p <= 0.5) {
-      // Stage 1: Shrink from full-screen hero to floating center card
       const subP = p / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
-      curW = windowW + (midW - windowW) * ease;
-      curH = windowH + (midH - windowH) * ease;
+      curW = w + (midW - w) * ease;
+      curH = h + (midH - h) * ease;
       curX = midX * ease;
       curY = midY * ease;
       curShadow = ease * 25;
       curRadius = ease * 14;
     } else if (p < 1.0) {
-      // Stage 2: Smooth glide from center directly into the slot box
       const subP = (p - 0.5) / 0.5;
       const ease = subP * subP * (3 - 2 * subP);
       curW = midW + (targetW - midW) * ease;
@@ -224,7 +248,6 @@ function initRetrotech() {
       curShadow = 25 * (1 - ease);
       curRadius = 14;
     } else {
-      // Stage 3: Fully docked — 100% exact match with slot dimensions and coordinates
       curW = targetW;
       curH = targetH;
       curX = targetX;
@@ -233,7 +256,6 @@ function initRetrotech() {
       curRadius = 14;
     }
 
-    // Apply geometry with sub-pixel precision
     const roundedW = Math.round(curW * 10) / 10;
     const roundedH = Math.round(curH * 10) / 10;
     if (roundedW !== lastW) {
@@ -263,7 +285,7 @@ function initRetrotech() {
       lastShadow = roundedShadow;
     }
 
-    // Fade dark overlay out & increase video brightness to 100% when docked
+    // Fade dark overlay out to reveal bright video with zero GPU decode stall
     if (videoDarkOverlay) {
       const overlayOpacity = Math.max(0, 1 - p * 1.5);
       if (Math.abs(overlayOpacity - (lastDarkOverlayOpacity ?? -1)) > 0.02) {
@@ -271,89 +293,66 @@ function initRetrotech() {
         lastDarkOverlayOpacity = overlayOpacity;
       }
     }
-    if (heroVideo) {
-      const brightness = 0.6 + p * 0.4;
-      if (Math.abs(brightness - (lastBrightness ?? -1)) > 0.02) {
-        heroVideo.style.filter = `brightness(${brightness.toFixed(2)})`;
-        lastBrightness = brightness;
-      }
-    }
 
     // Hero title and CTA fade out
     if (heroContent) {
-      const heroOpacity = Math.max(0, 1 - p * 2.2);
-      if (Math.abs(heroOpacity - (lastHeroOpacity ?? -1)) > 0.01) {
-        heroContent.style.opacity = heroOpacity.toFixed(2);
-        lastHeroOpacity = heroOpacity;
-        heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
-      }
-      const heroShift = Math.round(-p * 60);
-      const nextHeroTransform = `translateY(${heroShift}px)`;
-      if (nextHeroTransform !== lastHeroTransform) {
-        heroContent.style.transform = nextHeroTransform;
-        lastHeroTransform = nextHeroTransform;
+      if (p <= 0.6) {
+        const heroOpacity = Math.max(0, 1 - p * 2.2);
+        if (Math.abs(heroOpacity - (lastHeroOpacity ?? -1)) > 0.01) {
+          heroContent.style.opacity = heroOpacity.toFixed(2);
+          lastHeroOpacity = heroOpacity;
+          heroContent.style.pointerEvents = heroOpacity < 0.2 ? 'none' : 'auto';
+        }
+        const heroShift = Math.round(-p * 60);
+        const nextHeroTransform = `translateY(${heroShift}px)`;
+        if (nextHeroTransform !== lastHeroTransform) {
+          heroContent.style.transform = nextHeroTransform;
+          lastHeroTransform = nextHeroTransform;
+        }
+      } else if (lastHeroOpacity !== 0) {
+        heroContent.style.opacity = '0';
+        heroContent.style.pointerEvents = 'none';
+        lastHeroOpacity = 0;
       }
     }
 
     // Parallax depth on About Culture card image during scroll
     if (splitCanvas && cultureImg && splitCanvasH > 0) {
       const topInView = splitCanvasDocTop - scrollY;
-      if (topInView < windowH && topInView + splitCanvasH > 0) {
-        const progress = (windowH - topInView) / (windowH + splitCanvasH);
+      if (topInView < h && topInView + splitCanvasH > 0) {
+        const progress = (h - topInView) / (h + splitCanvasH);
         const shiftY = ((progress - 0.5) * 44).toFixed(1);
         cultureImg.style.transform = `translate3d(0, ${shiftY}px, 0) scale(1.08)`;
       }
     }
-
-    if (siteHeader) {
-      siteHeader.classList.toggle('scrolled', scrollY > 40);
-    }
   };
 
-  /* =========================================================================
-     2B. ABOUT SPLIT-CANVAS PINNED SLIDE ENGINE
-     Left card stays pinned/stationary in view.
-     Right 6-pillars mosaic smoothly slides up through the window as user scrolls.
-     When slide completes, page scrolling continues forward.
-     ========================================================================= */
-  const aboutShowcase = document.getElementById('aboutShowcase');
-  const aboutMosaic = document.getElementById('aboutPillarsMosaic');
-  const aboutMosaicWindow = document.getElementById('aboutPillarsMosaicWindow');
+  registerScrollTask(handleVideoScroll);
 
-  // Scroll-driven slide removed — mosaic renders as a static grid
-  const handleAboutShowcaseScroll = () => {
-    if (aboutMosaic) aboutMosaic.style.transform = 'none';
-  };
-
-  const onScroll = () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        handleVideoScroll();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  if (window.retroLenis) {
-    window.retroLenis.on('scroll', onScroll);
-  }
+  window.addEventListener('scroll', dispatchScroll, { passive: true });
   window.addEventListener('resize', () => {
     measureLayout();
-    onScroll();
+    dispatchScroll();
   }, { passive: true });
   window.addEventListener('load', () => {
     measureLayout();
-    onScroll();
+    dispatchScroll();
   });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      measureLayout();
+      dispatchScroll();
+    });
+  }
 
-  // Run after a frame so layout/paint has settled (important in Blade layouts)
   requestAnimationFrame(() => {
     measureLayout();
-    handleVideoScroll();
-    onScroll();
+    dispatchScroll();
   });
+  setTimeout(() => {
+    measureLayout();
+    dispatchScroll();
+  }, 350);
 
   /* =========================================================================
      3. CONTACT PAGE POP TRANSITION
@@ -521,15 +520,14 @@ function initRetrotech() {
       entries.forEach((entry) => {
         const card = entry.target;
         const cardIndex = Array.from(serviceCards).indexOf(card);
-        const delay = cardIndex * 100;
+        const delay = cardIndex * 75;
 
         if (entry.isIntersecting) {
           setTimeout(() => card.classList.add('visible'), delay);
-        } else {
-          card.classList.remove('visible');
+          observer.unobserve(card);
         }
       });
-    }, { root: null, rootMargin: '0px', threshold: 0.1 });
+    }, { root: null, rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
 
     serviceCards.forEach((card) => observer.observe(card));
   }
@@ -544,15 +542,14 @@ function initRetrotech() {
       entries.forEach((entry) => {
         const step = entry.target;
         const stepIndex = Array.from(processSteps).indexOf(step);
-        const delay = stepIndex * 150;
+        const delay = stepIndex * 100;
 
         if (entry.isIntersecting) {
           setTimeout(() => step.classList.add('visible'), delay);
-        } else {
-          step.classList.remove('visible');
+          processObserver.unobserve(step);
         }
       });
-    }, { root: null, rootMargin: '0px', threshold: 0.2 });
+    }, { root: null, rootMargin: '0px 0px -40px 0px', threshold: 0.15 });
 
     processSteps.forEach((step) => processObserver.observe(step));
   }
@@ -605,7 +602,7 @@ function initRetrotech() {
   }
 
   /* =========================================================================
-     8.45 WHY CHOOSE US: SMOOTH CONTINUOUS SCROLL STACKING CARDS
+     8.45 WHY CHOOSE US: HIGH-PERFORMANCE 60FPS STACKING CARDS
      ========================================================================= */
   const whyTrack = document.getElementById('whyScrollTrack');
   const whyPinned = document.getElementById('whyPinnedViewport');
@@ -614,179 +611,264 @@ function initRetrotech() {
   const card2 = document.querySelector('.why-cards-stage .why-stack-card[data-index="2"]');
 
   if (whyTrack && card0 && card1 && card2) {
-    let ticking = false;
+    let whyTrackDocTop = 0;
+    let whyTrackHeight = 0;
+    let whyStickyTop = 72;
+    let lastStackProgress = -1;
 
-    // Hermite smoothstep for acceleration and deceleration with zero jerk
     const smoothstep = (min, max, value) => {
       const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
       return x * x * (3 - 2 * x);
     };
 
-    const getStickyTop = () => {
+    const measureWhyStack = (scrollY, w) => {
+      const rect = whyTrack.getBoundingClientRect();
+      whyTrackDocTop = rect.top + scrollY;
+      whyTrackHeight = whyTrack.offsetHeight;
       if (whyPinned) {
         const topVal = parseInt(window.getComputedStyle(whyPinned).top, 10);
-        if (!isNaN(topVal)) return topVal;
+        whyStickyTop = !isNaN(topVal) ? topVal : (w <= 860 ? 65 : 72);
+      } else {
+        whyStickyTop = w <= 860 ? 65 : 72;
       }
-      return window.innerWidth <= 860 ? 65 : 72;
     };
 
-    const updateStackPhysics = () => {
-      const rect = whyTrack.getBoundingClientRect();
-      const trackHeight = whyTrack.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollDistance = trackHeight - viewportHeight;
+    registerLayoutTask(measureWhyStack);
 
-      if (scrollDistance <= 0) {
-        ticking = false;
-        return;
-      }
-
-      const stickyTop = getStickyTop();
-      // Progress from 0 (starts sticking) to 1 (reaches end of track)
-      const progress = Math.min(1, Math.max(0, (stickyTop - rect.top) / scrollDistance));
-
-      // Phase 1: Card 1 stacks smoothly over Card 0 (scroll progress 0.03 to 0.48)
+    const applyStackPhysics = (progress) => {
       const p1 = smoothstep(0.03, 0.48, progress);
-
-      // Phase 2: Card 2 stacks smoothly over Card 1 (scroll progress 0.50 to 0.95)
       const p2 = smoothstep(0.50, 0.95, progress);
 
       // Card 0 physics (bottom-most card)
       const scale0 = 1 - (p1 * 0.05) - (p2 * 0.03);
       const op0 = 1 - (p1 * 0.35) - (p2 * 0.25);
-      const bright0 = 1 - (p1 * 0.12) - (p2 * 0.08);
       card0.style.transform = `scale(${scale0.toFixed(4)})`;
       card0.style.opacity = op0.toFixed(3);
-      card0.style.filter = `brightness(${bright0.toFixed(3)})`;
 
-      // Card 1 physics (middle card: rises over Card 0, then scales beneath Card 2)
+      // Card 1 physics (middle card)
       const y1 = (1 - p1) * 105;
       const scale1 = 1 - (p2 * 0.05);
       const op1 = p1 > 0 ? (1 - (p2 * 0.35)) : 0;
-      const bright1 = 1 - (p2 * 0.12);
       card1.style.visibility = p1 > 0 ? 'visible' : 'hidden';
       card1.style.transform = `translate3d(0, ${y1.toFixed(2)}%, 0) scale(${scale1.toFixed(4)})`;
       card1.style.opacity = op1.toFixed(3);
-      card1.style.filter = `brightness(${bright1.toFixed(3)})`;
 
-      // Card 2 physics (top-most card: rises over Card 1)
+      // Card 2 physics (top-most card)
       const y2 = (1 - p2) * 105;
       const op2 = p2 > 0 ? 1 : 0;
       card2.style.visibility = p2 > 0 ? 'visible' : 'hidden';
       card2.style.transform = `translate3d(0, ${y2.toFixed(2)}%, 0) scale(1)`;
       card2.style.opacity = op2.toFixed(3);
-
-      ticking = false;
     };
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateStackPhysics);
-        ticking = true;
-      }
-    }, { passive: true });
+    const updateStackPhysics = (scrollY, w, h) => {
+      if (whyTrackHeight === 0) return;
+      const scrollDistance = whyTrackHeight - h;
+      if (scrollDistance <= 0) return;
 
-    window.addEventListener('resize', updateStackPhysics, { passive: true });
-    updateStackPhysics();
+      const whyTop = whyTrackDocTop - scrollY;
+
+      // Offscreen fast guards: avoid any DOM writes when not in view
+      if (whyTop > h + 80) {
+        if (lastStackProgress !== 0) {
+          applyStackPhysics(0);
+          lastStackProgress = 0;
+        }
+        return;
+      }
+      if (whyTop + whyTrackHeight < -80) {
+        if (lastStackProgress !== 1) {
+          applyStackPhysics(1);
+          lastStackProgress = 1;
+        }
+        return;
+      }
+
+      const progress = Math.min(1, Math.max(0, (whyStickyTop - whyTop) / scrollDistance));
+      if (Math.abs(progress - lastStackProgress) > 0.001) {
+        applyStackPhysics(progress);
+        lastStackProgress = progress;
+      }
+    };
+
+    registerScrollTask(updateStackPhysics);
   }
 
   /* =========================================================================
-     8.5 INDUSTRIES SLIDE CAROUSEL & SEGMENTED FILTER ENGINE
+     8.5 INDUSTRIES SLIDE CAROUSEL & INFINITE LOOP ENGINE
      ========================================================================= */
   const indViewport = document.getElementById('indSliderViewport');
   const indTrack = document.getElementById('indSliderTrack');
   const indPrevBtn = document.getElementById('indPrevBtn');
   const indNextBtn = document.getElementById('indNextBtn');
-  const indDots = document.querySelectorAll('#indNavDots .ind-dot');
-  const industryCards = document.querySelectorAll('.industry-card-pro');
+  const indNavDots = document.getElementById('indNavDots');
 
-  if (indViewport && indTrack && industryCards.length > 0) {
-    let currentIndSlide = 0;
+  if (indViewport && indTrack) {
+    const originalCards = Array.from(indTrack.querySelectorAll('.industry-card-pro'));
+    const totalOriginals = originalCards.length;
 
-    const getIndCardsPerView = () => {
-      if (window.innerWidth <= 640) return 1;
-      if (window.innerWidth <= 1024) return 2;
-      return 3;
-    };
+    if (totalOriginals > 0) {
+      // 1. Setup Clones for Seamless Infinite Loop
+      // Prepend a full set of clones before first original card in correct forward order
+      const firstOriginal = originalCards[0];
+      originalCards.forEach((card) => {
+        const cloneBefore = card.cloneNode(true);
+        cloneBefore.classList.add('is-clone');
+        cloneBefore.setAttribute('aria-hidden', 'true');
+        cloneBefore.removeAttribute('data-anim');
+        cloneBefore.classList.add('is-animated');
+        indTrack.insertBefore(cloneBefore, firstOriginal);
+      });
 
-    const updateIndCarousel = () => {
-      const cardsPerView = getIndCardsPerView();
-      const maxSlide = Math.max(0, Math.ceil(industryCards.length / cardsPerView) - 1);
-      if (currentIndSlide > maxSlide) currentIndSlide = maxSlide;
+      // Append a full set of clones after the last original card
+      originalCards.forEach((card) => {
+        const cloneAfter = card.cloneNode(true);
+        cloneAfter.classList.add('is-clone');
+        cloneAfter.setAttribute('aria-hidden', 'true');
+        cloneAfter.removeAttribute('data-anim');
+        cloneAfter.classList.add('is-animated');
+        indTrack.appendChild(cloneAfter);
+      });
 
-      const card = industryCards[0];
-      if (!card) return;
-      const cardWidth = card.getBoundingClientRect().width;
-      const gap = 24; // 1.5rem
-      const slideDistance = (cardWidth + gap) * cardsPerView;
+      // Total items in track: 3 * totalOriginals (24 items)
+      // Index totalOriginals (8) corresponds to original Card 0
+      let currentIndex = totalOriginals;
+      let lastActionTime = 0;
+      const actionThrottle = 200; // ms
 
-      indTrack.style.transform = `translateX(-${currentIndSlide * slideDistance}px)`;
+      // 2. Setup Dots for all 8 industries
+      if (indNavDots) {
+        indNavDots.innerHTML = '';
+        for (let i = 0; i < totalOriginals; i++) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'ind-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('data-index', i);
+          dot.setAttribute('aria-label', `Industry ${i + 1}`);
+          indNavDots.appendChild(dot);
+        }
+      }
+      const dots = indNavDots ? Array.from(indNavDots.querySelectorAll('.ind-dot')) : [];
 
-      if (indPrevBtn) indPrevBtn.disabled = currentIndSlide === 0;
-      if (indNextBtn) indNextBtn.disabled = currentIndSlide >= maxSlide;
+      const getStepDistance = () => {
+        const firstCard = indTrack.querySelector('.industry-card-pro');
+        if (!firstCard) return 0;
+        const cardWidth = firstCard.getBoundingClientRect().width;
+        const computedGap = parseFloat(window.getComputedStyle(indTrack).gap) || 24;
+        return cardWidth + computedGap;
+      };
 
-      if (indDots.length > 0) {
-        indDots.forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === currentIndSlide);
-          dot.style.display = idx <= maxSlide ? '' : 'none';
+      const updateDots = () => {
+        const realIndex = ((currentIndex - totalOriginals) % totalOriginals + totalOriginals) % totalOriginals;
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === realIndex);
+        });
+      };
+
+      const setTrackPosition = (withTransition = true) => {
+        const step = getStepDistance();
+        if (withTransition) {
+          indTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
+        } else {
+          indTrack.style.transition = 'none';
+        }
+        indTrack.style.transform = `translate3d(-${currentIndex * step}px, 0, 0)`;
+        updateDots();
+      };
+
+      // Set initial position immediately without transition
+      setTrackPosition(false);
+
+      // 3. Silent Jump / Seamless Wrap on transitionend
+      indTrack.addEventListener('transitionend', (e) => {
+        if (e.target !== indTrack || e.propertyName !== 'transform') return;
+
+        // If index moved beyond originals into the end clone set (>= 16)
+        // or before originals into the start clone set (< 8)
+        if (currentIndex >= totalOriginals * 2 || currentIndex < totalOriginals) {
+          currentIndex = totalOriginals + (((currentIndex - totalOriginals) % totalOriginals + totalOriginals) % totalOriginals);
+          setTrackPosition(false);
+        }
+      });
+
+      // 4. Infinite Loop Navigation (Next / Prev)
+      const nextSlide = () => {
+        const now = Date.now();
+        if (now - lastActionTime < actionThrottle) return;
+        lastActionTime = now;
+        currentIndex++;
+        setTrackPosition(true);
+      };
+
+      const prevSlide = () => {
+        const now = Date.now();
+        if (now - lastActionTime < actionThrottle) return;
+        lastActionTime = now;
+        currentIndex--;
+        setTrackPosition(true);
+      };
+
+      // Ensure buttons are permanently enabled and never disabled
+      if (indNextBtn) {
+        indNextBtn.disabled = false;
+        indNextBtn.removeAttribute('disabled');
+        indNextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          nextSlide();
         });
       }
-    };
 
-    if (indPrevBtn) {
-      indPrevBtn.addEventListener('click', () => {
-        if (currentIndSlide > 0) {
-          currentIndSlide--;
-          updateIndCarousel();
-        }
-      });
-    }
+      if (indPrevBtn) {
+        indPrevBtn.disabled = false;
+        indPrevBtn.removeAttribute('disabled');
+        indPrevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          prevSlide();
+        });
+      }
 
-    if (indNextBtn) {
-      indNextBtn.addEventListener('click', () => {
-        const cardsPerView = getIndCardsPerView();
-        const maxSlide = Math.max(0, Math.ceil(industryCards.length / cardsPerView) - 1);
-        if (currentIndSlide < maxSlide) {
-          currentIndSlide++;
-          updateIndCarousel();
-        }
-      });
-    }
-
-    if (indDots.length > 0) {
-      indDots.forEach((dot) => {
-        dot.addEventListener('click', () => {
+      // 5. Dots Click Navigation
+      dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
           const targetIndex = parseInt(dot.getAttribute('data-index') || '0', 10);
-          currentIndSlide = targetIndex;
-          updateIndCarousel();
+          const currentRealIndex = ((currentIndex - totalOriginals) % totalOriginals + totalOriginals) % totalOriginals;
+          const diff = targetIndex - currentRealIndex;
+          if (diff === 0) return;
+          currentIndex += diff;
+          setTrackPosition(true);
         });
       });
-    }
 
-    // Touch Swipe Support for Industries
-    let indTouchStartX = 0;
-    let indTouchEndX = 0;
+      // 6. Touch Swipe Support
+      let touchStartX = 0;
+      let touchEndX = 0;
 
-    indViewport.addEventListener('touchstart', (e) => {
-      indTouchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+      indViewport.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
 
-    indViewport.addEventListener('touchend', (e) => {
-      indTouchEndX = e.changedTouches[0].screenX;
-      const diff = indTouchStartX - indTouchEndX;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0 && indNextBtn && !indNextBtn.disabled) {
-          currentIndSlide++;
-          updateIndCarousel();
-        } else if (diff < 0 && indPrevBtn && !indPrevBtn.disabled) {
-          currentIndSlide--;
-          updateIndCarousel();
+      indViewport.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+          if (diff > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
         }
-      }
-    }, { passive: true });
+      }, { passive: true });
 
-    window.addEventListener('resize', updateIndCarousel);
-    updateIndCarousel();
+      // 7. Responsive alignment on Resize and Load
+      window.addEventListener('resize', () => {
+        setTrackPosition(false);
+      });
+
+      window.addEventListener('load', () => {
+        setTrackPosition(false);
+      });
+    }
   }
 
 
@@ -849,27 +931,24 @@ function initRetrotech() {
      ========================================================================= */
   const scrollProgressBar = document.getElementById('scrollProgressBar');
   if (scrollProgressBar) {
-    let progressRaf = null;
-    let docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    let docHeight = 1;
+    let lastProgressVal = -1;
 
-    window.addEventListener('resize', () => {
-      docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    }, { passive: true });
+    registerLayoutTask((scrollY, w, h) => {
+      docHeight = Math.max(1, document.documentElement.scrollHeight - h);
+    });
 
-    const updateProgressBar = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
+    const updateProgressBar = (scrollY) => {
+      if (docHeight <= 0) return;
       const progress = Math.min(1, Math.max(0, scrollY / docHeight));
-      scrollProgressBar.style.transform = `scaleX(${progress})`;
-      progressRaf = null;
-    };
-
-    const handleScrollProgress = () => {
-      if (!progressRaf) {
-        progressRaf = requestAnimationFrame(updateProgressBar);
+      const rounded = Math.round(progress * 1000) / 1000;
+      if (rounded !== lastProgressVal) {
+        scrollProgressBar.style.transform = `scaleX(${rounded})`;
+        lastProgressVal = rounded;
       }
     };
-    window.addEventListener('scroll', handleScrollProgress, { passive: true });
-    updateProgressBar();
+
+    registerScrollTask(updateProgressBar);
   }
 
   /* =========================================================================

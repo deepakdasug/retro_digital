@@ -133,7 +133,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('contact.page') }}#contact">Contact Us</a>
+          <a class="nav-link" href="{{ route('contact.page') }}">Contact Us</a>
         </li>
 
       </ul>
