@@ -55,7 +55,7 @@
                                 <td style="padding: 1rem 1.25rem;">
                                     <div style="display: flex; align-items: center; gap: 0.875rem;">
                                         @if($page->hero_image)
-                                            <img src="{{ Str::startsWith($page->hero_image, 'http') ? $page->hero_image : asset($page->hero_image) }}" alt="" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;">
+                                            <img src="{{ \App\Support\ImageUrl::resolve($page->hero_image) }}" alt="" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;">
                                         @else
                                             <div style="width: 44px; height: 44px; border-radius: 8px; background: #eaf4eb; color: #397b4e; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
                                                 <i class="fa-solid fa-globe"></i>

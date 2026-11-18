@@ -76,7 +76,7 @@
                         <!-- Show current image if it exists -->
                         @if($testimonial->image)
                             <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <img src="{{ asset('storage/' . $testimonial->image) }}" alt="Current Image" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                <img src="{{ \App\Support\ImageUrl::resolve($testimonial->image) }}" alt="Current Image" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                                 <small style="color: #6b7280;">Current Image</small>
                             </div>
                         @endif

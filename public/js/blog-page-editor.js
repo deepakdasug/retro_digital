@@ -15,12 +15,18 @@
         var uploadUrl = source.dataset.uploadUrl;
         var csrfToken = source.dataset.csrfToken;
         var featuredImageInput = form.querySelector('input[name="image"]');
+        var removeFeaturedImageButton = document.getElementById('removeFeaturedImage');
+        var removeFeaturedImageFlag = document.getElementById('removeFeaturedImageFlag');
+        var featuredImageWidth = document.getElementById('featuredImageWidth');
+        var featuredImageAlignment = document.getElementById('featuredImageAlignment');
+        var featuredImageObjectUrl = null;
         var titleInput = document.getElementById('titleInput');
         var excerptInput = document.getElementById('excerptInput');
         var categoryInput = document.getElementById('categoryInput');
         var tagsInput = document.getElementById('tagsInput');
         var slugInput = document.getElementById('slugInput');
         var slugEdited = Boolean(slugInput && slugInput.value);
+        var renderingSections = false;
 
         function escapeHtml(value) {
             return String(value || '').replace(/[&<>"']/g, function (character) {
@@ -53,6 +59,12 @@
                 return content ? content.innerHTML.trim() : '';
             }).filter(Boolean).join('\n');
 
+            if (!renderingSections && !articleContent.contains(document.activeElement)) {
+                window.dispatchEvent(new CustomEvent('blog-preview-content-changed', {
+                    detail: { html: source.value }
+                }));
+            }
+
             var textRoot = articleContent.cloneNode(true);
             textRoot.querySelectorAll('.blog-editor-section__actions, .blog-editor-insert').forEach(function (control) {
                 control.remove();
@@ -79,9 +91,12 @@
             controls.className = 'blog-editor-inline-controls';
             var editButton = createButton('Edit ' + label, '', function () {
                 var editing = node.contentEditable === 'true';
-                if (!editing && node.dataset.emptyPlaceholder === 'true') {
-                    node.textContent = '';
-                    node.dataset.emptyPlaceholder = 'false';
+                if (!editing) {
+                    node.hidden = false;
+                    if (node.dataset.emptyPlaceholder === 'true') {
+                        node.textContent = '';
+                        node.dataset.emptyPlaceholder = 'false';
+                    }
                 }
                 node.contentEditable = editing ? 'false' : 'true';
                 editButton.textContent = editing ? 'Edit ' + label : 'Done';
@@ -163,6 +178,17 @@
                 event.currentTarget.textContent = content.contentEditable === 'true' ? 'Done' : 'Edit';
             }));
 
+            actions.appendChild(createButton('Edit with Quill', 'blog-editor-quill-edit', function () {
+                var content = section.querySelector('.blog-editor-section__content');
+                content.contentEditable = 'false';
+                var editButton = section.querySelector('.blog-editor-edit');
+                if (editButton) editButton.textContent = 'Edit';
+                syncContent();
+                window.dispatchEvent(new CustomEvent('blog-quill-edit-section', {
+                    detail: { section: section }
+                }));
+            }));
+
             actions.appendChild(createButton('Replace image', 'blog-editor-replace-image', function () {
                 replaceImage(section);
             }));
@@ -213,43 +239,71 @@
             var parser = new DOMParser();
             var documentFragment = parser.parseFromString('<div>' + html + '</div>', 'text/html');
             var root = documentFragment.body.firstElementChild;
-            articleContent.innerHTML = '';
-            if (!root) return;
-
-            var nodes = Array.prototype.slice.call(root.childNodes).filter(function (node) {
-                return node.nodeType !== Node.TEXT_NODE || node.textContent.trim() !== '';
-            });
             var groups = [];
-            var hasHeadings = nodes.some(function (node) {
-                return node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'h2';
-            });
 
-            if (hasHeadings) {
-                nodes.forEach(function (node) {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'h2') {
-                        groups.push([]);
-                    }
-                    if (!groups.length) groups.push([]);
-                    groups[groups.length - 1].push(node);
+            if (root) {
+                var nodes = Array.prototype.slice.call(root.childNodes).filter(function (node) {
+                    return node.nodeType !== Node.TEXT_NODE || node.textContent.trim() !== '';
                 });
-            } else {
-                nodes.forEach(function (node) {
-                    groups.push([node]);
+                var hasHeadings = nodes.some(function (node) {
+                    return node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'h2';
                 });
+
+                if (hasHeadings) {
+                    nodes.forEach(function (node) {
+                        if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'h2') {
+                            groups.push([]);
+                        }
+                        if (!groups.length) groups.push([]);
+                        groups[groups.length - 1].push(node);
+                    });
+                } else {
+                    nodes.forEach(function (node) {
+                        groups.push([node]);
+                    });
+                }
             }
 
-            groups.forEach(function (group) {
-                var sectionHtml = group.map(function (node) {
-                    return node.nodeType === Node.TEXT_NODE ? escapeHtml(node.textContent) : node.outerHTML;
-                }).join('');
-                var section = makeEditableSection(sectionHtml);
-                addInsertControl(section);
-            });
+            renderingSections = true;
+            try {
+                articleContent.innerHTML = '';
+                groups.forEach(function (group) {
+                    var sectionHtml = group.map(function (node) {
+                        return node.nodeType === Node.TEXT_NODE ? escapeHtml(node.textContent) : node.outerHTML;
+                    }).join('');
+                    var section = makeEditableSection(sectionHtml);
+                    addInsertControl(section);
+                });
 
-            if (!groups.length) {
-                articleContent.innerHTML = '<p class="blog-editor-empty">Your article has no sections yet. Use Add section or Add image to begin.</p>';
+                if (!groups.length) {
+                    articleContent.innerHTML = '<p class="blog-editor-empty">Your article has no sections yet. Use Add section or Add image to begin.</p>';
+                }
+            } finally {
+                renderingSections = false;
             }
+
+            syncContent();
         }
+
+        window.addEventListener('blog-rich-content-changed', function (event) {
+            var html = event.detail && event.detail.html;
+            if (typeof html === 'string') renderSections(html);
+        });
+
+        window.addEventListener('blog-quill-section-saved', function (event) {
+            var section = event.detail && event.detail.section;
+            var html = event.detail && event.detail.html;
+            if (!section || !articleContent.contains(section) || typeof html !== 'string') return;
+
+            var content = section.querySelector('.blog-editor-section__content');
+            if (!content) return;
+
+            content.innerHTML = html;
+            content.contentEditable = 'false';
+            var replaceButton = section.querySelector('.blog-editor-replace-image');
+            if (replaceButton) replaceButton.hidden = !content.querySelector('img');
+            syncContent();
+        });
 
         function updatePreview() {
             var titleNode = document.querySelector('.blog-live-preview .blog-post-header h1');
@@ -452,6 +506,46 @@
         document.getElementById('changeFeaturedImage').addEventListener('click', function () {
             if (featuredImageInput) featuredImageInput.click();
         });
+        function applyFeaturedImageLayout() {
+            var image = document.querySelector('.blog-live-preview .blog-post-featured-image');
+            if (!image) return;
+
+            image.className = 'blog-post-featured-image';
+            var width = featuredImageWidth && featuredImageWidth.value
+                ? featuredImageWidth.value.replace('%', '')
+                : 'auto';
+            var alignment = featuredImageAlignment && featuredImageAlignment.value
+                ? featuredImageAlignment.value
+                : 'center';
+            image.classList.add('blog-post-featured-image--width-' + width);
+            image.classList.add('blog-post-featured-image--align-' + alignment);
+        }
+
+        function updateFeaturedImageControls() {
+            if (removeFeaturedImageButton) {
+                removeFeaturedImageButton.disabled = !document.querySelector('.blog-live-preview .blog-post-featured-image');
+            }
+        }
+
+        if (featuredImageWidth) featuredImageWidth.addEventListener('change', applyFeaturedImageLayout);
+        if (featuredImageAlignment) featuredImageAlignment.addEventListener('change', applyFeaturedImageLayout);
+        if (removeFeaturedImageButton) {
+            removeFeaturedImageButton.addEventListener('click', function () {
+                var image = document.querySelector('.blog-live-preview .blog-post-featured-image');
+                if (!image || !window.confirm('Remove the featured image from this article?')) return;
+
+                image.remove();
+                if (featuredImageInput) featuredImageInput.value = '';
+                if (removeFeaturedImageFlag) removeFeaturedImageFlag.value = '1';
+                if (featuredImageWidth) featuredImageWidth.value = '';
+                if (featuredImageAlignment) featuredImageAlignment.value = '';
+                if (featuredImageObjectUrl) {
+                    URL.revokeObjectURL(featuredImageObjectUrl);
+                    featuredImageObjectUrl = null;
+                }
+                updateFeaturedImageControls();
+            });
+        }
         document.getElementById('manageBlogFaqs').addEventListener('click', function () {
             document.getElementById('faqs-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
             var addButton = document.getElementById('btnAddFaq');
@@ -472,10 +566,28 @@
             featuredImageInput.addEventListener('change', function () {
                 var file = featuredImageInput.files && featuredImageInput.files[0];
                 var image = document.querySelector('.blog-live-preview .blog-post-featured-image');
-                if (!file || !image) return;
-                image.src = URL.createObjectURL(file);
+                if (!file) return;
+
+                if (!image) {
+                    image = document.createElement('img');
+                    image.className = 'blog-post-featured-image';
+                    image.alt = titleInput ? titleInput.value : '';
+                    var header = document.querySelector('.blog-live-preview .blog-post-header');
+                    if (header) header.insertAdjacentElement('afterend', image);
+                    else articleContent.parentNode.insertBefore(image, articleContent);
+                }
+
+                if (featuredImageObjectUrl) URL.revokeObjectURL(featuredImageObjectUrl);
+                featuredImageObjectUrl = URL.createObjectURL(file);
+                image.src = featuredImageObjectUrl;
+                if (removeFeaturedImageFlag) removeFeaturedImageFlag.value = '0';
+                applyFeaturedImageLayout();
+                updateFeaturedImageControls();
             });
         }
+
+        applyFeaturedImageLayout();
+        updateFeaturedImageControls();
 
         form.addEventListener('input', updatePreview);
         form.addEventListener('change', updatePreview);

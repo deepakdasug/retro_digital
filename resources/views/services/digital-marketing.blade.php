@@ -399,7 +399,7 @@
                         <article class="dm-service-card" data-service-idx="{{ $idx }}">
                             <div>
                                 <div class="dm-service-thumb">
-                                    <img src="{{ $area['img'] }}" alt="{{ $area['title'] }}" loading="lazy">
+                                    <img src="{{ \App\Support\ImageUrl::resolve($area['img']) }}" alt="{{ $area['title'] }}" loading="lazy">
                                     <span class="dm-service-tag">{{ $area['tag'] }}</span>
                                     <span class="dm-card-idx-badge">{{ str_pad((string)($idx + 1), 2, '0', STR_PAD_LEFT) }} / 08</span>
                                 </div>
@@ -447,7 +447,7 @@
                     <div class="dm-case-visual" id="dmCaseVisual">
                         @foreach ($projectsData as $i => $proj)
                         <div class="dm-case-slide" data-case-slide="{{ $i }}" style="{{ $i === 0 ? 'opacity: 1; visibility: visible; pointer-events: auto;' : 'opacity: 0; visibility: hidden; pointer-events: none;' }}">
-                            <img src="{{ $proj['img'] }}" alt="{{ $proj['name'] }}" loading="lazy">
+                            <img src="{{ \App\Support\ImageUrl::resolve($proj['img']) }}" alt="{{ $proj['name'] }}" loading="lazy">
                             <span class="dm-case-tag">{{ $proj['name'] }}</span>
                             <span class="dm-case-idx-badge">{{ str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) }} / {{ str_pad((string)count($projectsData), 2, '0', STR_PAD_LEFT) }}</span>
                         </div>
@@ -669,7 +669,7 @@
 
                         <div class="dm-review-author">
                             <div class="dm-author-avatar-wrap">
-                                <img src="{{ $t[2] }}" alt="{{ $t[0] }}" class="dm-author-avatar" loading="lazy" width="44" height="44">
+                                <img src="{{ \App\Support\ImageUrl::resolve($t[2]) }}" alt="{{ $t[0] }}" class="dm-author-avatar" loading="lazy" width="44" height="44">
                                 <span class="dm-avatar-badge" title="Verified Client">✓</span>
                             </div>
                             <div class="dm-author-meta">

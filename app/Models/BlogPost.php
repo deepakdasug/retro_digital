@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Support\ImageUrl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class BlogPost extends Model
 {
@@ -17,6 +17,8 @@ class BlogPost extends Model
     'excerpt', 
     'content_blocks', 
     'image_path', // Featured Image
+    'featured_image_width',
+    'featured_image_alignment',
     
     // Author Details (E-E-A-T)
     'author_name', 
@@ -75,7 +77,7 @@ class BlogPost extends Model
                 'subheading' => '<h3>' . $text . '</h3>',
                 'paragraph' => '<p>' . nl2br($text) . '</p>',
                 'image' => !empty($block['image_path'])
-                    ? '<figure class="image"><img src="' . e(Storage::url($block['image_path'])) . '" alt="' . e($block['alt'] ?? $this->title) . '"></figure>'
+                    ? '<figure class="image"><img src="' . e(ImageUrl::resolve($block['image_path'])) . '" alt="' . e($block['alt'] ?? $this->title) . '"></figure>'
                     : '',
                 default => '',
             };
@@ -84,38 +86,10 @@ class BlogPost extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        if (empty($this->image_path)) {
-            return asset('assets/images/tech-development/web-development.jpg');
-        }
-
-        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
-            return $this->image_path;
-        }
-
-        $cleanPath = ltrim($this->image_path, '/');
-        if (str_starts_with($cleanPath, 'storage/')) {
-            $cleanPath = substr($cleanPath, 8);
-        }
-
-        $base = basename($this->image_path);
-
-        if (file_exists(public_path('assets/images/' . $base))) {
-            return asset('assets/images/' . $base);
-        }
-
-        if (file_exists(public_path('assets/images/tech-development/' . $base))) {
-            return asset('assets/images/tech-development/' . $base);
-        }
-
-        if (file_exists(public_path($this->image_path))) {
-            return asset($this->image_path);
-        }
-
-        if (Storage::disk('public')->exists($cleanPath)) {
-            return Storage::url($cleanPath);
-        }
-
-        return asset('assets/images/tech-development/web-development.jpg');
+        return ImageUrl::resolve(
+            $this->image_path,
+            'assets/images/tech-development/web-development.jpg'
+        );
     }
 
     public function faqs()

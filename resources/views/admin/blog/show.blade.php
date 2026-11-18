@@ -30,7 +30,7 @@
 
     <!-- Featured Image -->
     @if($post->image_path)
-        <img src="{{ Storage::url($post->image_path) }}" alt="{{ $post->title }}" class="w-full rounded-lg shadow-lg mb-8">
+        <img src="{{ \App\Support\ImageUrl::resolve($post->image_path) }}" alt="{{ $post->title }}" class="w-full rounded-lg shadow-lg mb-8">
     @endif
 
     <!-- Dynamic Content Blocks -->
@@ -48,7 +48,7 @@
                 
             @elseif($block['type'] === 'image')
                 <div class="my-8 flex justify-center">
-                    <img src="{{ Storage::url($block['image_path']) }}" 
+                    <img src="{{ \App\Support\ImageUrl::resolve($block['image_path']) }}"
                          class="rounded shadow-sm {{ $block['size'] }} {{ $block['alignment'] }}">
                 </div>
             @endif

@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @php
-    $ogImage = !empty($webPage->banner_image) ? asset($webPage->banner_image) : asset('assets/images/logo.png');
+    $ogImage = \App\Support\ImageUrl::resolve(
+        $webPage->banner_image,
+        asset('assets/images/logo.png')
+    );
 @endphp
 
 @section('title', $webPage->meta_title ?: ($webPage->title . ' - Retrotech Digital'))
@@ -125,7 +128,7 @@
 
                 <div class="relative lg:ml-auto w-full max-w-lg">
                     <div class="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(30,51,38,0.12)] border-4 border-white sp-animate-float">
-                        <img src="{{ !empty($webPage->hero_image) ? (Str::startsWith($webPage->hero_image, 'http') ? $webPage->hero_image : asset($webPage->hero_image)) : 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" 
+                        <img src="{{ \App\Support\ImageUrl::resolve($webPage->hero_image, 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') }}"
                              alt="{{ $webPage->title }} Showcase" 
                              class="w-full h-auto object-cover block">
                     </div>
@@ -180,7 +183,7 @@
                         </div>
                         @if(!empty($c['image']))
                             <div class="rounded-3xl overflow-hidden border-4 border-white shadow-[0_16px_40px_rgba(30,51,38,0.12)]">
-                                <img src="{{ Str::startsWith($c['image'], 'http') ? $c['image'] : asset($c['image']) }}" alt="{{ $section->title }}" class="w-full h-auto object-cover block" loading="lazy">
+                                <img src="{{ \App\Support\ImageUrl::resolve($c['image']) }}" alt="{{ $section->title }}" class="w-full h-auto object-cover block" loading="lazy">
                             </div>
                         @endif
                     </div>
@@ -253,7 +256,7 @@
                                 @php
                                     $aboutImg = !empty($c['image']) ? $c['image'] : 'https://picsum.photos/seed/rt-about/900/1000';
                                 @endphp
-                                <img src="{{ Str::startsWith($aboutImg, 'http') ? $aboutImg : asset($aboutImg) }}" alt="About preview" class="w-full h-auto object-cover block" loading="lazy">
+                                <img src="{{ \App\Support\ImageUrl::resolve($aboutImg) }}" alt="About preview" class="w-full h-auto object-cover block" loading="lazy">
                             </div>
                             <div class="absolute -bottom-5 right-5 bg-[#1e3326] text-white px-6 py-4 rounded-2xl shadow-xl border border-[#397b4e]/40">
                                 <p class="text-xs text-emerald-200/70 mb-0.5">Campaigns delivered</p>
@@ -292,7 +295,7 @@
                             <div class="grid lg:grid-cols-12 gap-8 items-center">
                                 <div class="lg:col-span-4 {{ $i % 2 ? 'lg:order-2' : '' }}">
                                     <div class="rounded-3xl overflow-hidden border-4 border-white shadow-[0_12px_36px_rgba(30,51,38,0.12)]">
-                                        <img src="{{ Str::startsWith($rowImg, 'http') ? $rowImg : asset($rowImg) }}" alt="{{ $rowTitle }}" class="w-full h-64 lg:h-72 object-cover block" loading="lazy">
+                                        <img src="{{ \App\Support\ImageUrl::resolve($rowImg) }}" alt="{{ $rowTitle }}" class="w-full h-64 lg:h-72 object-cover block" loading="lazy">
                                     </div>
                                 </div>
                                 <div class="lg:col-span-8 {{ $i % 2 ? 'lg:order-1' : '' }}">
@@ -347,7 +350,7 @@
                                 @php
                                     $pImg = !empty($p['image']) ? $p['image'] : ('https://picsum.photos/seed/p' . ($i + 1) . '/900/700');
                                 @endphp
-                                <img data-pslide src="{{ Str::startsWith($pImg, 'http') ? $pImg : asset($pImg) }}" 
+                                <img data-pslide src="{{ \App\Support\ImageUrl::resolve($pImg) }}"
                                      alt="{{ $p['name'] ?? 'Project' }}" 
                                      class="w-full h-72 md:h-[26rem] object-cover {{ $i ? 'hidden' : '' }}" 
                                      loading="lazy">
@@ -502,7 +505,7 @@
                     <div class="bg-gradient-to-br from-[#1e3326] to-[#285d3a] rounded-3xl p-10 md:p-14 text-white shadow-2xl">
                         @if(!empty($c['image']))
                             <div class="mb-6 flex justify-center">
-                                <img src="{{ Str::startsWith($c['image'], 'http') ? $c['image'] : asset($c['image']) }}" alt="{{ $c['heading'] ?? 'CTA' }}" class="max-h-48 rounded-2xl object-cover shadow-lg border-2 border-white/20">
+                                <img src="{{ \App\Support\ImageUrl::resolve($c['image']) }}" alt="{{ $c['heading'] ?? 'CTA' }}" class="max-h-48 rounded-2xl object-cover shadow-lg border-2 border-white/20">
                             </div>
                         @endif
                         @if(!empty($c['kicker']))

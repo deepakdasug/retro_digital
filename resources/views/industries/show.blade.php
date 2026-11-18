@@ -5,9 +5,8 @@
     $ogImagePath = $industry->og_image ?: ($industry->hero_image ?: 'assets/images/logo.png');
     
     // Handle absolute vs relative URLs
-    $finalOgImage = \Illuminate\Support\Str::startsWith($ogImagePath, ['http://', 'https://']) 
-        ? $ogImagePath 
-        : asset($ogImagePath);
+    $finalOgImage = \App\Support\ImageUrl::resolve($ogImagePath);
+    $heroBackgroundImage = \App\Support\ImageUrl::resolve($industry->hero_image ?: $industry->intro_image);
 
     // 2. Canonical Fallback Chain: canonical_url -> route() using slug
     $finalCanonical = \App\Support\SeoCanonical::resolve(
@@ -36,7 +35,7 @@
 
         {{-- HERO --}}
         <section class="industry-hero">
-            <div class="industry-hero__image" style="background-image: url('{{ $industry->hero_image ?: $industry->intro_image }}')"></div>
+            <div class="industry-hero__image" style="background-image: url('{{ $heroBackgroundImage }}')"></div>
             <div class="industry-hero__overlay"></div>
 
             <div class="industry-container industry-hero__content">
@@ -87,9 +86,9 @@
 
                 <div class="industry-intro__visual">
                     @if ($industry->intro_image)
-                        <img src="{{ $industry->intro_image }}" alt="{{ $industry->name }} digital solutions" loading="lazy">
+                        <img src="{{ \App\Support\ImageUrl::resolve($industry->intro_image) }}" alt="{{ $industry->name }} digital solutions" loading="lazy">
                     @elseif ($industry->hero_image)
-                        <img src="{{ $industry->hero_image }}" alt="{{ $industry->name }} solutions" loading="lazy">
+                        <img src="{{ \App\Support\ImageUrl::resolve($industry->hero_image) }}" alt="{{ $industry->name }} solutions" loading="lazy">
                     @else
                         <div class="industry-image-placeholder">
                             <span>Industry-focused</span>
@@ -138,8 +137,8 @@
                                         {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
                                     </span>
 
-                                    @if ($feature->icon && (str_starts_with($feature->icon, 'http://') || str_starts_with($feature->icon, 'https://') || str_starts_with($feature->icon, '/')))
-                                        <img class="industry-feature-card__icon" src="{{ $feature->icon }}" alt="" loading="lazy">
+                                    @if ($feature->icon && (str_contains($feature->icon, '/') || preg_match('/\.(?:svg|png|jpe?g|webp|gif)(?:[?#].*)?$/i', $feature->icon)))
+                                        <img class="industry-feature-card__icon" src="{{ \App\Support\ImageUrl::resolve($feature->icon) }}" alt="" loading="lazy">
                                     @elseif ($feature->icon)
                                         <i class="{{ $feature->icon }} industry-feature-card__icon" aria-hidden="true"></i>
                                     @else
@@ -201,7 +200,9 @@
         @php
             $certification = $industry->contents
                 ->firstWhere('content_type', 'certification');
-            $certificationImage = $certification?->image ?: 'https://www.retrotechdigital.com/frontend/img/certificate.png';
+            $certificationImage = \App\Support\ImageUrl::resolve(
+                $certification?->image ?: 'https://www.retrotechdigital.com/frontend/img/certificate.png'
+            );
         @endphp
         <section class="industry-certification section-space">
             <div class="industry-container industry-certification__panel">

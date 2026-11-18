@@ -15,6 +15,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "ckeditor5": "^49.0.0"
+        "quill": "2.0.2",
+        "quill-table-better": "^1.2.3"
     }
 }

@@ -13,11 +13,57 @@
 .blog-post-content p {
   margin-bottom: 1.25rem;
 }
+.blog-post-content .ql-align-center {
+  text-align: center;
+}
+.blog-post-content .ql-align-right {
+  text-align: right;
+}
+.blog-post-content .ql-align-justify {
+  text-align: justify;
+}
+.blog-post-content li[data-list="bullet"] {
+  list-style-type: disc;
+}
+.blog-post-content li[data-list="ordered"] {
+  list-style-type: decimal;
+}
+.blog-post-content .ql-ui {
+  display: none;
+}
+.blog-post-content li.ql-indent-1 { padding-left: 3em; }
+.blog-post-content li.ql-indent-2 { padding-left: 6em; }
+.blog-post-content li.ql-indent-3 { padding-left: 9em; }
+.blog-post-content li.ql-indent-4 { padding-left: 12em; }
+.blog-post-content li.ql-indent-5 { padding-left: 15em; }
+.blog-post-content li.ql-indent-6 { padding-left: 18em; }
+.blog-post-content li.ql-indent-7 { padding-left: 21em; }
+.blog-post-content li.ql-indent-8 { padding-left: 24em; }
 .blog-post-content img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
 }
+.blog-post-content img[width="25%"] { width: 25%; }
+.blog-post-content img[width="50%"] { width: 50%; }
+.blog-post-content img[width="75%"] { width: 75%; }
+.blog-post-content img[width="100%"] { width: 100%; }
+.blog-post-content img[data-image-position="left"] { display: block; margin-left: 0; margin-right: auto; }
+.blog-post-content img[data-image-position="center"] { display: block; margin-left: auto; margin-right: auto; }
+.blog-post-content img[data-image-position="right"] { display: block; margin-left: auto; margin-right: 0; }
+.blog-post-featured-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+}
+.blog-post-featured-image--width-25 { width: 25%; }
+.blog-post-featured-image--width-50 { width: 50%; }
+.blog-post-featured-image--width-75 { width: 75%; }
+.blog-post-featured-image--width-100 { width: 100%; }
+.blog-post-featured-image--align-left { margin-left: 0; margin-right: auto; }
+.blog-post-featured-image--align-center { margin-left: auto; margin-right: auto; }
+.blog-post-featured-image--align-right { margin-left: auto; margin-right: 0; }
 .blog-post-content table {
   width: 100%;
   border-collapse: collapse;

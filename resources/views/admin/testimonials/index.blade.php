@@ -37,7 +37,7 @@
                             <td>
                                 <div class="admin-person-cell">
                                     @if($testimonial->image)
-                                        <img src="{{ asset('storage/' . $testimonial->image) }}" alt="{{ $testimonial->name }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                        <img src="{{ \App\Support\ImageUrl::resolve($testimonial->image) }}" alt="{{ $testimonial->name }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                                     @else
                                         <span class="admin-person-avatar">{{ mb_strtoupper(mb_substr($testimonial->name, 0, 1)) }}</span>
                                     @endif

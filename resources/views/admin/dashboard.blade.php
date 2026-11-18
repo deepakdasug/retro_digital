@@ -315,7 +315,7 @@
                 <td><strong>{{ $blog->author_name }}</strong></td>
                 <td><span class="admin-status-badge {{ $blog->is_published ? '' : 'is-draft' }}"><span></span>{{ $blogStatusLabel }}</span></td>
                 <td><strong class="admin-date-primary">{{ $blog->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $blog->updated_at?->diffForHumans() }}</span></td>
-                <td><div class="admin-row-actions">@if($blog->is_published)<a href="{{ route('blog.show', $blog->slug) }}" class="admin-secondary-button" aria-label="View {{ $blog->title }}" title="View article"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a>@endif @can('blogs.edit')<a href="{{ route('admin.blog.edit', $blog) }}" class="admin-secondary-button" aria-label="Edit {{ $blog->title }}" title="Edit article"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a>@endcan @can('blogs.delete')<form action="{{ route('admin.blog.destroy', $blog) }}" method="POST" onsubmit="return confirm('Delete this post and its uploaded images? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $blog->title }}" title="Delete article"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form>@endcan</div></td>
+                <td><div class="admin-row-actions">@if($blog->is_published)<a href="{{ route('blog.show', $blog->slug) }}" class="admin-secondary-button" aria-label="View {{ $blog->title }}" title="View article"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a>@else<a href="{{ route('admin.blog.preview', $blog) }}" class="admin-secondary-button" aria-label="Preview {{ $blog->title }}" title="Preview draft"><i class="fa-regular fa-eye" aria-hidden="true"></i>Preview</a>@endif @can('blogs.edit')<a href="{{ route('admin.blog.edit', $blog) }}" class="admin-secondary-button" aria-label="Edit {{ $blog->title }}" title="Edit article"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a>@endcan @can('blogs.delete')<form action="{{ route('admin.blog.destroy', $blog) }}" method="POST" onsubmit="return confirm('Delete this post and its uploaded images? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $blog->title }}" title="Delete article"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form>@endcan</div></td>
               </tr>
               <tr id="blog-detail-{{ $blog->id }}" class="admin-detail-row" hidden><td colspan="5"><div class="admin-blog-detail">@if($blog->excerpt)<p class="admin-blog-detail-excerpt">{{ $blog->excerpt }}</p>@endif<div class="admin-blog-detail-meta"><span>Slug: {{ $blog->slug }}</span><span>Status: {{ $blogStatusLabel }}</span>@if($blog->category)<span>Category: {{ $blog->category }}</span>@endif @if($blog->tags)<span>Tags: {{ implode(', ', $blog->tags) }}</span>@endif<span>Published: {{ $blog->published_at?->format('M d, Y') ?? 'Not published' }}</span>@if($blog->author_designation)<span>Author role: {{ $blog->author_designation }}</span>@endif @if($blog->reading_time)<span>Read time: {{ $blog->reading_time }} min</span>@endif<span>Comments: {{ $blog->comment_status ? 'Enabled' : 'Disabled' }}</span></div>@if(filled($blog->content_html))<div class="admin-blog-detail-content">{!! $blog->content_html !!}</div>@endif</div></td></tr>
             @empty
@@ -401,7 +401,7 @@
                 <td>
                   <div class="admin-article-cell">
                     @if($page->hero_image)
-                      <img src="{{ $page->hero_image }}" alt="" loading="lazy" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
+                      <img src="{{ \App\Support\ImageUrl::resolve($page->hero_image) }}" alt="" loading="lazy" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
                     @else
                       <span class="admin-article-placeholder" style="width: 44px; height: 44px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: #eaf6ec; color: #397b4e; flex-shrink: 0;"><i class="fa-solid fa-globe"></i></span>
                     @endif
@@ -569,7 +569,7 @@
                 <td>
                   <div class="admin-person-cell">
                     @if($testimonial->image)
-                      <img src="{{ asset('storage/' . $testimonial->image) }}" alt="{{ $testimonial->name }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid #d1d5db;">
+                      <img src="{{ \App\Support\ImageUrl::resolve($testimonial->image) }}" alt="{{ $testimonial->name }}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid #d1d5db;">
                     @else
                       <span class="admin-person-avatar" style="width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; background: #eaf6ec; color: #397b4e; flex-shrink: 0;">{{ mb_strtoupper(mb_substr($testimonial->name, 0, 1)) }}</span>
                     @endif

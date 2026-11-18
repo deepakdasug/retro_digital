@@ -1284,7 +1284,7 @@
                 <div class="testi-card-top">
                   <div class="testi-author-info">
                     @if(!empty($t->image))
-                      <img src="{{ asset('storage/' . $t->image) }}" alt="{{ $t->name }}" class="testi-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                      <img src="{{ \App\Support\ImageUrl::resolve($t->image) }}" alt="{{ $t->name }}" class="testi-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                       <div class="testi-avatar-initials" style="display: none;">{{ $initial }}</div>
                     @else
                       <div class="testi-avatar-initials">{{ $initial }}</div>

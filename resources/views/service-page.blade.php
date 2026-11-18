@@ -7,11 +7,14 @@
         $service->meta_description ?: ($service->short_description ?: 'Professional ' . ($service->title ?? 'Technology') . ' services by Retrotech Digital.'),
         160
     );
-    $ogImage = $service->og_image ?: $service->hero_image;
-    if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
-        $ogImage = asset(ltrim($ogImage, '/'));
-    }
-    $ogImage = $ogImage ?: asset('assets/images/logo.png');
+    $ogImage = \App\Support\ImageUrl::resolve(
+        $service->og_image ?: $service->hero_image,
+        asset('assets/images/logo.png')
+    );
+    $heroImage = \App\Support\ImageUrl::resolve(
+        $service->hero_image,
+        'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=900&q=80'
+    );
     $serviceSchema = [
         '@context' => 'https://schema.org',
         '@type' => 'Service',
@@ -466,7 +469,7 @@
                 <div class="sp-hero-tilt relative z-20 mt-4 sm:mt-5 lg:mt-3 w-full rounded-[28px] sm:rounded-[34px] overflow-hidden border-[5px] sm:border-[6px] border-white bg-[#14271d] shadow-[0_20px_50px_rgba(25,83,45,0.18)]" data-tilt-card>
 
                     <img
-                        src="{{ $service->hero_image ?? 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=900&q=80' }}"
+                        src="{{ $heroImage }}"
                         alt="{{ $t }} Dashboard"
                         class="sp-hero-image w-full aspect-[1.48/1] object-cover block"
                         loading="eager"

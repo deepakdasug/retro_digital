@@ -29,16 +29,28 @@ class BlogEditorTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('js/blog-page-editor.js');
         $response->assertSee('id="blogContent"', false);
+        $response->assertSee('id="toggleRichTextEditor"', false);
+        $response->assertSee('id="blogRichTextPanel"', false);
+        $response->assertSee('id="blogRichTextSectionActions"', false);
+        $response->assertSee('id="blogContentEditor"', false);
+        $response->assertSee('id="removeFeaturedImage"', false);
+        $response->assertSee('id="featuredImageWidth"', false);
+        $response->assertSee('id="featuredImageAlignment"', false);
+        $response->assertSee('assets/blog-editor-', false);
         $response->assertSee('id="blogDetailsStep"', false);
         $response->assertSee('id="blogEditorStep"', false);
         $response->assertSee('Continue to page editor');
         $response->assertSee('Add section');
         $response->assertSee('Add image');
         $response->assertSee('blog-live-preview');
-        $response->assertSee('id="siteHeader"', false);
+        $response->assertDontSee('id="siteHeader"', false);
+        $response->assertDontSee('class="contact-section ', false);
+        $response->assertDontSee('partials/whatsapp-widget', false);
+        $response->assertSee('.blog-live-preview .blog-post-page { min-height: 0;', false);
+        $response->assertSee('width: min(100%, 1220px); margin: 0 auto;', false);
+        $response->assertSee('.blog-live-preview .blog-post { width: 100%; max-width: none; margin: 0; padding: 0;', false);
+        $response->assertSee('.blog-editor-section { position: relative; width: 100%; margin: 12px 0; padding: 12px 0;', false);
         $response->assertSee('css/blog-post.css');
-        $response->assertSee('fieldset class="contact-inc-form blog-contact-preview-form" disabled', false);
-        $response->assertDontSee('<form class="contact-inc-form"', false);
         $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="blogs"', false);
         $response->assertSee('window.location.assign(dashboardUrl.toString())', false);
         $response->assertDontSee('name="published_at"', false);
@@ -162,6 +174,34 @@ class BlogEditorTest extends TestCase
         $listingResponse->assertSee('Revolutionizing Enterprise IT Lifecycles');
     }
 
+    public function test_quill_list_markup_is_preserved_and_invalid_list_metadata_is_removed(): void
+    {
+        $admin = $this->createAdminUser();
+        $quillHtml = '<ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>Bullet item</li>'
+            . '<li data-list="invalid">Another item</li></ol>'
+            . '<p class="ql-align-center">Centered text</p>'
+            . '<p>Text before image <img src="/storage/blog_images/inline.jpg" width="50%" data-image-position="right"></p>'
+            . '<p><img src="/storage/blog_images/inline.jpg" data-image-position="invalid"></p>';
+
+        $response = $this->actingAs($admin)->post(route('admin.blog.store'), [
+            'title' => 'Quill Formatted Content',
+            'excerpt' => 'Testing formatted Quill content.',
+            'content' => $quillHtml,
+            'is_published' => 1,
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard', ['tab' => 'blogs']));
+
+        $post = BlogPost::where('slug', 'quill-formatted-content')->firstOrFail();
+        $this->assertStringContainsString('data-list="bullet"', $post->content_html);
+        $this->assertStringContainsString('class="ql-align-center"', $post->content_html);
+        $this->assertStringContainsString('width="50%"', $post->content_html);
+        $this->assertStringContainsString('data-image-position="right"', $post->content_html);
+        $this->assertStringNotContainsString('data-image-position="invalid"', $post->content_html);
+        $this->assertStringNotContainsString('data-list="invalid"', $post->content_html);
+        $this->assertStringNotContainsString('contenteditable=', $post->content_html);
+    }
+
     public function test_admin_can_edit_existing_blog_post(): void
     {
         $admin = $this->createAdminUser();
@@ -186,7 +226,7 @@ class BlogEditorTest extends TestCase
         $editPage->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="blogs"', false);
 
         $updatePayload = [
-            'title' => 'Updated Title With CKEditor',
+            'title' => 'Updated Title With Quill',
             'excerpt' => 'Updated excerpt text.',
             'content' => '<h3>Updated Subheading</h3><p>Updated content with rich facilities.</p>',
             'is_published' => 1,
@@ -196,7 +236,7 @@ class BlogEditorTest extends TestCase
         $updateResponse->assertRedirect(route('admin.dashboard', ['tab' => 'blogs']));
 
         $post->refresh();
-        $this->assertSame('Updated Title With CKEditor', $post->title);
+        $this->assertSame('Updated Title With Quill', $post->title);
         $this->assertStringContainsString('Updated Subheading', $post->content_html);
     }
 
@@ -223,6 +263,115 @@ class BlogEditorTest extends TestCase
 
         $post = BlogPost::where('slug', 'draft-strategy-update')->firstOrFail();
         $this->assertStringContainsString('Draft article', $post->content_html);
+    }
+
+    public function test_saved_draft_can_be_previewed_from_dashboard_without_becoming_public(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin)->post(route('admin.blog.store'), [
+            'title' => 'Previewable Draft',
+            'excerpt' => 'A draft that needs a private preview.',
+            'content' => '<h2>Draft preview content</h2><p>Only staff should see this.</p>',
+            'is_published' => 0,
+        ])->assertRedirect(route('admin.dashboard', ['tab' => 'blogs']));
+
+        $post = BlogPost::where('slug', 'previewable-draft')->firstOrFail();
+
+        $dashboard = $this->get(route('admin.dashboard', ['tab' => 'blogs']));
+        $dashboard->assertOk();
+        $dashboard->assertSee(route('admin.blog.preview', $post), false);
+        $dashboard->assertSee('Preview');
+
+        $preview = $this->get(route('admin.blog.preview', $post));
+        $preview->assertOk();
+        $preview->assertSee('Draft preview content');
+        $preview->assertSee('this article is not visible to the public');
+        $preview->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+        $preview->assertSee('href="' . route('admin.dashboard', ['tab' => 'blogs']) . '"', false);
+        $preview->assertSee('Back to blog management');
+
+        $this->get(route('blog.show', $post->slug))->assertNotFound();
+    }
+
+    public function test_admin_can_remove_the_featured_image_from_a_blog_post(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+        \Illuminate\Support\Facades\Storage::disk('public')->put('blog_images/hero.jpg', 'hero image');
+        $admin = $this->createAdminUser();
+        $post = BlogPost::create([
+            'title' => 'Article With Hero Image',
+            'slug' => 'article-with-hero-image',
+            'excerpt' => 'An article with a removable hero image.',
+            'image_path' => 'blog_images/hero.jpg',
+            'featured_image_width' => '50%',
+            'featured_image_alignment' => 'center',
+            'author_name' => $admin->name,
+            'content_blocks' => [['type' => 'html', 'content' => '<p>Article content.</p>']],
+            'is_published' => false,
+            'published_at' => null,
+        ]);
+
+        $response = $this->actingAs($admin)->put(route('admin.blog.update', $post), [
+            'title' => $post->title,
+            'excerpt' => $post->excerpt,
+            'content' => '<p>Article content.</p>',
+            'remove_featured_image' => 1,
+            'featured_image_width' => '',
+            'featured_image_alignment' => '',
+            'is_published' => 0,
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard', ['tab' => 'blogs']));
+        $post->refresh();
+        $this->assertNull($post->image_path);
+        $this->assertNull($post->featured_image_width);
+        $this->assertNull($post->featured_image_alignment);
+        \Illuminate\Support\Facades\Storage::disk('public')->assertMissing('blog_images/hero.jpg');
+
+        $preview = $this->get(route('admin.blog.preview', $post));
+        $preview->assertOk();
+        $preview->assertDontSee('blog-post-featured-image', false);
+    }
+
+    public function test_admin_can_replace_and_position_a_featured_image(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+        \Illuminate\Support\Facades\Storage::disk('public')->put('blog_images/old-hero.jpg', 'old hero');
+        $admin = $this->createAdminUser();
+        $post = BlogPost::create([
+            'title' => 'Article With Replaceable Hero',
+            'slug' => 'article-with-replaceable-hero',
+            'excerpt' => 'An article with a replaceable hero image.',
+            'image_path' => 'blog_images/old-hero.jpg',
+            'author_name' => $admin->name,
+            'content_blocks' => [['type' => 'html', 'content' => '<p>Article content.</p>']],
+            'is_published' => false,
+            'published_at' => null,
+        ]);
+
+        $response = $this->actingAs($admin)->put(route('admin.blog.update', $post), [
+            'title' => $post->title,
+            'excerpt' => $post->excerpt,
+            'content' => '<p>Article content.</p>',
+            'image' => \Illuminate\Http\UploadedFile::fake()->create('replacement.jpg', 100, 'image/jpeg'),
+            'remove_featured_image' => 0,
+            'featured_image_width' => '50%',
+            'featured_image_alignment' => 'right',
+            'is_published' => 0,
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard', ['tab' => 'blogs']));
+        $post->refresh();
+        $this->assertNotSame('blog_images/old-hero.jpg', $post->image_path);
+        $this->assertSame('50%', $post->featured_image_width);
+        $this->assertSame('right', $post->featured_image_alignment);
+        \Illuminate\Support\Facades\Storage::disk('public')->assertMissing('blog_images/old-hero.jpg');
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($post->image_path);
+
+        $preview = $this->get(route('admin.blog.preview', $post));
+        $preview->assertOk();
+        $preview->assertSee('blog-post-featured-image--width-50');
+        $preview->assertSee('blog-post-featured-image--align-right');
     }
 
     public function test_admin_can_upload_photo_and_video_from_computer(): void

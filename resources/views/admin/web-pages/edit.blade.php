@@ -658,7 +658,7 @@
 
                     @php
                         $heroImgSrc = old('hero_image', $webPage->hero_image);
-                        $heroImgFull = $heroImgSrc ? (Str::startsWith($heroImgSrc, 'http') ? $heroImgSrc : asset($heroImgSrc)) : '';
+                        $heroImgFull = \App\Support\ImageUrl::resolve($heroImgSrc);
                     @endphp
 
                     <div>
@@ -1232,6 +1232,25 @@
     // =========================================================================
     // IMAGE FIELD HANDLERS (URL input & File Upload with Instant Preview)
     // =========================================================================
+    function resolveImagePreviewSource(value) {
+        let path = String(value || '').trim();
+        if (!path) return '';
+        if (/^(?:https?:)?\/\//i.test(path) || /^data:image\//i.test(path)) return path;
+
+        path = path.replace(/\\/g, '/').replace(/^(?:\.\/)+/, '').replace(/^\/+/, '');
+        if (path.startsWith('storage/app/public/')) {
+            path = 'storage/' + path.slice('storage/app/public/'.length);
+        } else if (path.startsWith('public/storage/')) {
+            path = path.slice('public/'.length);
+        } else if (path.startsWith('public/')) {
+            path = path.slice('public/'.length);
+        } else if (!/^(?:storage|assets|images|img|frontend)\//.test(path)) {
+            path = 'storage/' + path;
+        }
+
+        return '/' + path;
+    }
+
     function handleImageUrlInput(input) {
         const wrap = input.closest('.image-field-wrap');
         if (!wrap) return;
@@ -1240,7 +1259,7 @@
         const val = input.value.trim();
         const clearBtn = wrap.querySelector('#clearHeroBtn') || document.getElementById('clearHeroBtn');
         if (val) {
-            img.src = val;
+            img.src = resolveImagePreviewSource(val);
             img.style.display = 'block';
             if (icon) icon.style.display = 'none';
             if (clearBtn) clearBtn.style.display = 'inline-flex';
@@ -1322,7 +1341,7 @@
                 </label>
                 <div style="display: flex; gap: 0.75rem; align-items: center;">
                     <div class="img-thumb-preview" style="width: 56px; height: 56px; border-radius: 6px; border: 1px dashed #cbd5e1; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; position: relative;">
-                        <img src="${val}" style="${val ? 'display:block;' : 'display:none;'} width: 100%; height: 100%; object-fit: cover;" alt="Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="${resolveImagePreviewSource(val)}" style="${val ? 'display:block;' : 'display:none;'} width: 100%; height: 100%; object-fit: cover;" alt="Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <span class="placeholder-icon" style="${val ? 'display:none;' : 'display:flex;'} color: #94a3b8; font-size: 1.25rem;">
                             <i class="fa-regular fa-image"></i>
                         </span>
@@ -1732,7 +1751,7 @@
                     </div>
                     <div>
                         <div style="border-radius: 1.25rem; overflow: hidden; border: 4px solid #fff; box-shadow: 0 20px 40px rgba(30,51,38,0.12);">
-                            <img src="${sample.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" style="width: 100%; height: auto; display: block;" alt="Showcase">
+                            <img src="${resolveImagePreviewSource(sample.image) || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" style="width: 100%; height: auto; display: block;" alt="Showcase">
                         </div>
                     </div>
                 </div>
@@ -1784,7 +1803,7 @@
                         ${items.map((row, i) => `
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: center;">
                                 <div style="${i % 2 === 1 ? 'order: 2;' : ''} border-radius: 1rem; overflow: hidden; border: 3px solid #fff; box-shadow: 0 8px 24px rgba(30,51,38,0.08);">
-                                    <img src="${row.image || 'https://picsum.photos/seed/row1/700/520'}" style="width: 100%; height: 180px; object-fit: cover; display: block;" alt="Row">
+                                    <img src="${resolveImagePreviewSource(row.image) || 'https://picsum.photos/seed/row1/700/520'}" style="width: 100%; height: 180px; object-fit: cover; display: block;" alt="Row">
                                 </div>
                                 <div style="${i % 2 === 1 ? 'order: 1;' : ''} background: #f0f7f0; border: 1px solid #d7e5d9; border-radius: 1rem; padding: 1.75rem;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e3326; margin: 0 0 0.5rem 0;">${row.title}</h3>
@@ -1808,7 +1827,7 @@
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center; background: #fff; border: 1px solid #d7e5d9; border-radius: 1.25rem; padding: 2rem;">
                         <div>
-                            <img src="${(items[0] && items[0].image) || 'https://picsum.photos/seed/p1/900/700'}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 0.875rem;" alt="Project">
+                            <img src="${resolveImagePreviewSource(items[0] && items[0].image) || 'https://picsum.photos/seed/p1/900/700'}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 0.875rem;" alt="Project">
                         </div>
                         <div>
                             <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e3326; margin: 0 0 0.5rem 0;">${(items[0] && items[0].name) || 'Retail & E-commerce Platform'}</h3>

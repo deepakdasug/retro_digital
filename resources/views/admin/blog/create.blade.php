@@ -11,6 +11,8 @@
             'author_designation' => auth()->user()->designation ?? null,
             'category' => old('category'),
             'tags' => filled(old('tags')) ? collect(explode(',', old('tags')))->map(fn ($tag) => trim($tag))->filter()->values()->all() : null,
+            'featured_image_width' => old('featured_image_width'),
+            'featured_image_alignment' => old('featured_image_alignment'),
             'content_blocks' => [['type' => 'html', 'content' => old('content_blocks', old('content', ''))]],
         ]);
         $previewPost->setRelation('faqs', collect());
@@ -85,13 +87,23 @@
     .blog-editor-toolbar__actions { display: flex; flex-wrap: wrap; gap: 8px; }
     .blog-editor-toolbar button, .blog-editor-section__actions button { border: 1px solid #cbd9ce; border-radius: 6px; padding: 7px 10px; color: #23462f; background: #f3f8f4; font-weight: 650; cursor: pointer; }
     .blog-editor-toolbar .blog-editor-save { color: #fff; background: #2f754a; border-color: #2f754a; }
-    .blog-live-preview { overflow: hidden; border: 1px solid #dfe9e1; border-radius: 12px; background: #f8faf8; }
-    .blog-live-preview .site-header { position: relative; }
+    .blog-editor-image-setting { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border: 1px solid #cbd9ce; border-radius: 6px; color: #23462f; background: #fff; font-size: 11px; font-weight: 650; }
+    .blog-editor-image-setting select { max-width: 90px; padding: 3px; border: 1px solid #cbd9ce; border-radius: 4px; background: #fff; color: #23462f; }
+    .blog-live-preview { width: min(100%, 1220px); margin: 0 auto; overflow: hidden; border: 1px solid #dfe9e1; border-radius: 12px; background: #f8faf8; box-sizing: border-box; }
+    .blog-live-preview .blog-post-page { min-height: 0; padding: 0; }
+    .blog-live-preview .blog-post { width: 100%; max-width: none; margin: 0; padding: 0; box-sizing: border-box; }
+    .blog-live-preview .blog-post-footer { display: none; }
+    .blog-live-preview .blog-faqs-section { margin-top: 1.5rem !important; padding-top: 1.25rem !important; }
+    .blog-live-preview .blog-faqs-section + * { margin-top: 0; }
     .blog-editor-inline-controls, .blog-editor-faq-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin: 0 0 6px; }
     .blog-editor-inline-controls button, .blog-editor-faq-controls button { padding: 4px 8px; border: 1px solid #cbd9ce; border-radius: 6px; color: #23462f; background: #f3f8f4; font-size: 11px; font-weight: 650; cursor: pointer; }
-    .blog-editor-section { position: relative; margin: 12px 0; padding: 12px; border: 1px dashed transparent; border-radius: 8px; }
+    .blog-live-preview .blog-post-excerpt[contenteditable="true"], .blog-live-preview .blog-post-tags[contenteditable="true"] { display: block; box-sizing: border-box; min-height: 42px; padding: 8px 10px; border: 1px solid #75ae82; border-radius: 6px; outline: 2px solid rgba(117, 174, 130, 0.25); background: #fff; }
+    .blog-live-preview .blog-post-excerpt[contenteditable="true"]:empty::before { content: "Type the article excerpt here..."; color: #718075; }
+    .blog-live-preview .blog-post-tags[contenteditable="true"]:empty::before { content: "Enter tags separated by commas..."; color: #718075; }
+    .blog-editor-section { position: relative; width: 100%; margin: 12px 0; padding: 12px 0; border: 1px dashed transparent; border-radius: 8px; box-sizing: border-box; }
     .blog-editor-section:hover, .blog-editor-section:focus-within { border-color: #62a976; background: rgba(242, 249, 243, 0.55); }
     .blog-editor-section__actions { display: flex; justify-content: flex-end; gap: 6px; margin: 0 0 8px; }
+    .blog-editor-section--quill-editing > .blog-editor-section__actions { display: none; }
     .blog-editor-section__actions button { padding: 4px 7px; font-size: 11px; }
     .blog-editor-section__actions .blog-editor-delete { color: #a12c2c; background: #fff4f4; border-color: #f0caca; }
     .blog-editor-section__content[contenteditable="true"] { outline: 2px solid #75ae82; outline-offset: 4px; background: #fff; }
@@ -101,6 +113,17 @@
     .blog-editor-insert button { padding: 5px 10px; border: 1px dashed #7ca889; border-radius: 6px; color: #2f754a; background: #f7fbf8; cursor: pointer; }
     .blog-editor-step-note { margin: 0; color: #53675a; font-size: 12px; }
     .blog-editor-error { margin: 10px 0; color: #a12c2c; font-weight: 650; }
+    .blog-rich-text-panel { margin: 0 0 14px; padding: 14px; border: 1px solid #dfe9e1; border-radius: 10px; background: #fff; }
+    .blog-rich-text-panel__heading { margin: 0 0 10px; color: #23462f; font-size: 14px; font-weight: 700; }
+    .blog-rich-text-panel__note { margin: 3px 0 10px; color: #53675a; font-size: 12px; }
+    .blog-rich-text-panel .ql-editor { min-height: 260px; }
+    .blog-quill-image-controls { display: inline-flex; align-items: center; gap: 8px; }
+    .blog-quill-image-control { display: inline-flex; align-items: center; gap: 4px; color: #444; font-size: 11px; }
+    .blog-quill-image-control select { min-height: 24px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #222; font: inherit; }
+    .blog-quill-image-control select:disabled { opacity: 0.55; }
+    .blog-rich-text-section-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; }
+    .blog-rich-text-section-actions button { padding: 6px 9px; border: 1px solid #cbd9ce; border-radius: 6px; color: #23462f; background: #f3f8f4; font-weight: 650; cursor: pointer; }
+    .blog-rich-text-section-actions [data-action="save"] { color: #fff; background: #2f754a; border-color: #2f754a; }
     @keyframes faqFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 768px) {
@@ -272,21 +295,48 @@
                         <button type="button" id="addBlogSection"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add section</button>
                         <button type="button" id="addBlogImage"><i class="fa-regular fa-image" aria-hidden="true"></i> Add image</button>
                         <button type="button" id="changeFeaturedImage"><i class="fa-regular fa-image" aria-hidden="true"></i> Change featured image</button>
+                        <button type="button" id="removeFeaturedImage" @if(!$previewPost->image_path) disabled @endif><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Remove hero image</button>
+                        <label class="blog-editor-image-setting" for="featuredImageWidth">Hero size
+                            <select id="featuredImageWidth" name="featured_image_width">
+                                <option value="" @selected(old('featured_image_width', $post?->featured_image_width ?? '') === '')>Default</option>
+                                <option value="25%" @selected(old('featured_image_width', $post?->featured_image_width ?? '') === '25%')>25%</option>
+                                <option value="50%" @selected(old('featured_image_width', $post?->featured_image_width ?? '') === '50%')>50%</option>
+                                <option value="75%" @selected(old('featured_image_width', $post?->featured_image_width ?? '') === '75%')>75%</option>
+                                <option value="100%" @selected(old('featured_image_width', $post?->featured_image_width ?? '') === '100%')>100%</option>
+                            </select>
+                        </label>
+                        <label class="blog-editor-image-setting" for="featuredImageAlignment">Hero position
+                            <select id="featuredImageAlignment" name="featured_image_alignment">
+                                <option value="" @selected(old('featured_image_alignment', $post?->featured_image_alignment ?? '') === '')>Default</option>
+                                <option value="left" @selected(old('featured_image_alignment', $post?->featured_image_alignment ?? '') === 'left')>Left</option>
+                                <option value="center" @selected(old('featured_image_alignment', $post?->featured_image_alignment ?? '') === 'center')>Center</option>
+                                <option value="right" @selected(old('featured_image_alignment', $post?->featured_image_alignment ?? '') === 'right')>Right</option>
+                            </select>
+                        </label>
                         <button type="button" id="manageBlogFaqs"><i class="fa-regular fa-circle-question" aria-hidden="true"></i> Manage FAQs</button>
+                        <button type="button" id="toggleRichTextEditor" aria-controls="blogRichTextPanel" aria-expanded="false">Open rich text editor</button>
                         <button type="submit" class="blog-editor-save"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> {{ $post ? 'Save Changes' : 'Save Blog Post' }}</button>
                     </div>
                     <input type="file" name="image" id="featuredImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <input type="hidden" name="remove_featured_image" id="removeFeaturedImageFlag" value="0">
                 </div>
+                <section id="blogRichTextPanel" class="blog-rich-text-panel" aria-label="Rich text editor" hidden>
+                    <h2 class="blog-rich-text-panel__heading">Rich text editor</h2>
+                    <p id="blogRichTextNote" class="blog-rich-text-panel__note">Select an image, then use Image size or Image position. Edits sync to the preview.</p>
+                    <p id="blogRichTextStatus" class="blog-rich-text-panel__note" role="status" aria-live="polite">The rich text editor loads when opened.</p>
+                    <div id="blogRichTextError" class="blog-editor-error" role="alert" hidden></div>
+                    <div id="blogRichTextSectionActions" class="blog-rich-text-section-actions" hidden>
+                        <span>Editing this section with Quill.</span>
+                        <button type="button" id="saveBlogQuillSection" data-action="save">Save section</button>
+                        <button type="button" id="cancelBlogQuillSection">Cancel</button>
+                    </div>
+                    <div id="blogContentEditor"></div>
+                </section>
                 <div id="blogEditorError" class="blog-editor-error" role="alert" hidden></div>
                 <div class="blog-live-preview">
-                    @include('partials.header')
-                    @include('partials.mobile-drawer')
                     <main class="blog-post-page">
                         @include('partials.blog-post', ['post' => $previewPost])
                     </main>
-                    @include('partials.contact-section', ['previewMode' => true])
-                    @include('partials.footer')
-                    @include('partials.whatsapp-widget')
                 </div>
 
                 <section class="form-section" id="faqs-section" aria-labelledby="faqs-section-title">
@@ -343,11 +393,14 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/blog-post.css') }}">
+@vite('resources/js/blog-editor.js')
 <style>
     @media (max-width: 800px) {
         .blog-editor-toolbar { align-items: flex-start; flex-direction: column; }
         .blog-editor-toolbar__actions { width: 100%; }
         .blog-editor-toolbar__actions button { flex: 1 1 auto; }
+        .blog-live-preview .blog-post-page { padding: 0; }
+        .blog-live-preview .blog-post { padding: 0; }
     }
 </style>
 @endpush

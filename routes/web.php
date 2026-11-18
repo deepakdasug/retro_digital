@@ -86,6 +86,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create')->middleware('permission:blogs.create');
     Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store')->middleware('permission:blogs.create');
     Route::post('/admin/blog/upload-media', [BlogController::class, 'uploadMedia'])->name('admin.blog.upload_media')->middleware('permission:blogs.create');
+    Route::get('/admin/blog/{post}/preview', [BlogController::class, 'preview'])->name('admin.blog.preview');
     Route::get('/admin/blog/{post}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit')->middleware('permission:blogs.edit');
     Route::put('/admin/blog/{post}', [BlogController::class, 'update'])->name('admin.blog.update')->middleware('permission:blogs.edit');
     Route::delete('/admin/blog/{post}', [BlogController::class, 'destroy'])->name('admin.blog.destroy')->middleware('permission:blogs.delete');

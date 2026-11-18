@@ -27,7 +27,9 @@ class BlogController extends Controller
         $this->authorizeAdmin();
         $data = $this->validatedPostData($request);
         $slug = $this->uniqueSlug($request->input('slug') ?: $data['title']);
-        $imagePath = $request->file('image')?->store('blog_images', 'public');
+        $imagePath = $request->boolean('remove_featured_image')
+            ? null
+            : $request->file('image')?->store('blog_images', 'public');
         $content = $this->processContent($request);
         $published = $request->boolean('is_published');
         $postStatus = $published ? 'published' : 'draft';
@@ -42,6 +44,8 @@ class BlogController extends Controller
                 'slug' => $slug,
                 'excerpt' => $data['excerpt'],
                 'image_path' => $imagePath,
+                'featured_image_width' => $data['featured_image_width'] ?? null,
+                'featured_image_alignment' => $data['featured_image_alignment'] ?? null,
                 'content_blocks' => $content,
                 'author_name' => $authorName,
                 'author_designation' => $authorDesignation,
@@ -66,6 +70,17 @@ class BlogController extends Controller
         return redirect()->route('admin.dashboard', ['tab' => 'blogs'])->with('success', 'Blog post created successfully.');
     }
 
+    public function preview(BlogPost $post)
+    {
+        $this->authorizeAdmin();
+        $post->load('faqs');
+
+        return view('blog.show', [
+            'post' => $post,
+            'isAdminPreview' => true,
+        ]);
+    }
+
     public function edit(BlogPost $post)
     {
         $this->authorizeAdmin();
@@ -82,7 +97,8 @@ class BlogController extends Controller
         $this->authorizeAdmin();
         $data = $this->validatedPostData($request);
         $oldImagePath = $post->image_path;
-        $newImagePath = $request->file('image')?->store('blog_images', 'public') ?? $oldImagePath;
+        $newImagePath = $request->file('image')?->store('blog_images', 'public')
+            ?? ($request->boolean('remove_featured_image') ? null : $oldImagePath);
         $oldBlockPaths = $this->contentImagePaths($post);
         $content = $this->processContent($request);
         $retainedBlockPaths = collect($oldBlockPaths)
@@ -101,6 +117,8 @@ class BlogController extends Controller
                 'slug' => $request->filled('slug') ? $this->uniqueSlug($request->input('slug'), $post) : $this->uniqueSlug($data['title'], $post),
                 'excerpt' => $data['excerpt'],
                 'image_path' => $newImagePath,
+                'featured_image_width' => $data['featured_image_width'] ?? null,
+                'featured_image_alignment' => $data['featured_image_alignment'] ?? null,
                 'content_blocks' => $content,
                 'author_name' => $authorName,
                 'author_designation' => $authorDesignation,
@@ -204,6 +222,9 @@ class BlogController extends Controller
             'robots_meta' => ['nullable', 'string', 'max:50'],
             'schema_markup' => ['nullable', 'string', 'max:5000'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'remove_featured_image' => ['sometimes', 'boolean'],
+            'featured_image_width' => ['nullable', 'in:25%,50%,75%,100%'],
+            'featured_image_alignment' => ['nullable', 'in:left,center,right'],
             'is_published' => ['sometimes', 'boolean'],
             'comment_status' => ['sometimes', 'boolean'],
             'faqs' => ['nullable', 'array'],
@@ -354,9 +375,10 @@ class BlogController extends Controller
                 'a' => ['href', 'title', 'target', 'rel', 'id', 'name', 'class', 'style'],
                 'figure' => ['class', 'style'],
                 'figcaption' => ['class', 'style'],
-                'img' => ['src', 'alt', 'width', 'height', 'class', 'style', 'title'],
+                'img' => ['src', 'alt', 'width', 'height', 'class', 'style', 'title', 'data-image-position'],
                 'video' => ['src', 'controls', 'autoplay', 'loop', 'muted', 'poster', 'width', 'height', 'class', 'style', 'preload'],
                 'source' => ['src', 'type'],
+                'li' => ['class', 'style', 'data-list'],
                 'table', 'thead', 'tbody', 'tfoot', 'tr' => ['class', 'style'],
                 'th', 'td' => ['class', 'style', 'colspan', 'rowspan', 'scope'],
                 'input' => ['type', 'disabled', 'checked'],
@@ -369,6 +391,16 @@ class BlogController extends Controller
                 $name = strtolower($attribute->name);
                 $value = trim($attribute->value);
                 if (!in_array($name, $allowedAttributes, true)) {
+                    $node->removeAttribute($attribute->name);
+                    continue;
+                }
+
+                if ($name === 'data-list' && !in_array($value, ['ordered', 'bullet', 'checked', 'unchecked'], true)) {
+                    $node->removeAttribute($attribute->name);
+                    continue;
+                }
+
+                if ($name === 'data-image-position' && !in_array($value, ['left', 'center', 'right'], true)) {
                     $node->removeAttribute($attribute->name);
                     continue;
                 }

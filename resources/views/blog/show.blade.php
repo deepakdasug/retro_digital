@@ -33,13 +33,17 @@
 
 @section('title', $post->meta_title ?: ($post->title . ' - Retrotech Insights'))
 @section('description', $post->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($post->excerpt ?: $post->content_html), 155))
+@if(!($isAdminPreview ?? false))
 @section('canonical', $articleUrl)
+@endif
 @section('og_type', 'article')
 @if($articleImage)
 @section('og_image', $articleImage)
 @section('og_image_alt', $post->title)
 @endif
-@if($post->robots_meta)
+@if($isAdminPreview ?? false)
+@section('robots', 'noindex, nofollow')
+@elseif($post->robots_meta)
 @section('robots', $post->robots_meta)
 @endif
 
@@ -51,6 +55,12 @@
 @endpush
 
 @section('content')
+@if($isAdminPreview ?? false)
+  <aside class="blog-admin-preview-notice" role="status">
+    Draft preview — this article is not visible to the public.
+    <a href="{{ route('admin.blog.edit', $post) }}">Return to editor</a>
+  </aside>
+@endif
 <main class="blog-post-page">
   @include('partials.blog-post', ['post' => $post])
 </main>
@@ -58,4 +68,10 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/blog-post.css') }}">
+@if($isAdminPreview ?? false)
+<style>
+  .blog-admin-preview-notice { padding: 10px 20px; background: #fff4d6; color: #644b00; text-align: center; }
+  .blog-admin-preview-notice a { margin-left: 8px; font-weight: 700; }
+</style>
+@endif
 @endpush

@@ -7,11 +7,10 @@
         $fallbackCanonical,
         ['/technology', '/tech-development']
     );
-    $ogImage = $techDevelopment->og_image ?: $techDevelopment->hero_image;
-    if ($ogImage && ! \Illuminate\Support\Str::startsWith($ogImage, ['http://', 'https://'])) {
-        $ogImage = asset(ltrim($ogImage, '/'));
-    }
-    $ogImage = $ogImage ?: asset('assets/images/logo.png');
+    $ogImage = \App\Support\ImageUrl::resolve(
+        $techDevelopment->og_image ?: $techDevelopment->hero_image,
+        asset('assets/images/logo.png')
+    );
 @endphp
 
 @section('title', ($techDevelopment->meta_title ?: $techDevelopment->name) . ' | Retrotech Digital')
@@ -85,7 +84,7 @@
                                 {{-- Real-World Hero Image Presentation --}}
                                 @if (!empty($techDevelopment->hero_image))
                                     <div class="td-cockpit-media">
-                                        <img src="{{ asset($techDevelopment->hero_image) }}"
+                                        <img src="{{ \App\Support\ImageUrl::resolve($techDevelopment->hero_image) }}"
                                             alt="{{ $techDevelopment->name }}" class="td-cockpit-img"
                                             loading="eager">
                                     </div>

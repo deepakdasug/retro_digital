@@ -181,7 +181,7 @@
                     <div style="display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;">
                         <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; background: #0f172a; border: 1px solid #cbd5e1; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
                             @if(!empty($techDevelopment->hero_image))
-                                <img src="{{ Str::startsWith($techDevelopment->hero_image, 'http') ? $techDevelopment->hero_image : asset($techDevelopment->hero_image) }}" 
+                                <img src="{{ \App\Support\ImageUrl::resolve($techDevelopment->hero_image) }}"
                                      alt="Hero preview" 
                                      id="heroImgPreview" 
                                      style="width: 100%; height: 100%; object-fit: cover;">

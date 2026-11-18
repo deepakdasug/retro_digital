@@ -28,8 +28,20 @@
     @endif
   </header>
 
-  @if($post->image_url)
-    <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="blog-post-featured-image">
+  @php
+    $featuredImageWidthClass = match($post->featured_image_width) {
+      '25%' => '25',
+      '50%' => '50',
+      '75%' => '75',
+      '100%' => '100',
+      default => 'auto',
+    };
+    $featuredImageAlignment = in_array($post->featured_image_alignment, ['left', 'center', 'right'], true)
+      ? $post->featured_image_alignment
+      : 'center';
+  @endphp
+  @if($post->image_path && $post->image_url)
+    <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="blog-post-featured-image blog-post-featured-image--width-{{ $featuredImageWidthClass }} blog-post-featured-image--align-{{ $featuredImageAlignment }}">
   @endif
 
   <div class="blog-post-content ck-content">{!! $post->content_html !!}</div>
@@ -51,6 +63,10 @@
   @endif
 
   <footer class="blog-post-footer">
+    @if($isAdminPreview ?? false)
+      <a href="{{ route('admin.dashboard', ['tab' => 'blogs']) }}">← Back to blog management</a>
+    @else
     <a href="{{ route('blog') }}">← Back to all insights</a>
+    @endif
   </footer>
 </article>
