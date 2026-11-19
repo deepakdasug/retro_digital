@@ -40,19 +40,21 @@ class BlogEditorTest extends TestCase
         $response->assertSee('id="blogDetailsStep"', false);
         $response->assertSee('id="blogEditorStep"', false);
         $response->assertSee('Continue to page editor');
+        $response->assertSee('standalone-editor-shell');
+        $response->assertDontSee('id="adminSidebar"', false);
+        $response->assertDontSee('class="admin-dashboard-page"', false);
         $response->assertSee('Add section');
         $response->assertSee('Add image');
         $response->assertSee('blog-live-preview');
         $response->assertDontSee('id="siteHeader"', false);
         $response->assertDontSee('class="contact-section ', false);
         $response->assertDontSee('partials/whatsapp-widget', false);
-        $response->assertSee('.blog-live-preview .blog-post-page { min-height: 0;', false);
-        $response->assertSee('width: min(100%, 1220px); margin: 0 auto;', false);
-        $response->assertSee('.blog-live-preview .blog-post { width: 100%; max-width: none; margin: 0; padding: 0;', false);
+        $response->assertSee('.blog-live-preview { width: 100%; margin: 0 auto;', false);
+        $response->assertSee('.blog-live-preview .blog-post-page { min-height: 0; padding: 0 1.5rem; }', false);
+        $response->assertDontSee('.blog-live-preview .blog-post { width: 100%; max-width: none; margin: 0; padding: 0;', false);
+        $response->assertDontSee('.blog-live-preview .blog-faqs-section { margin-top: 1.5rem !important;', false);
         $response->assertSee('.blog-editor-section { position: relative; width: 100%; margin: 12px 0; padding: 12px 0;', false);
         $response->assertSee('css/blog-post.css');
-        $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="blogs"', false);
-        $response->assertSee('window.location.assign(dashboardUrl.toString())', false);
         $response->assertDontSee('name="published_at"', false);
         $response->assertDontSee('name="post_status"', false);
     }
@@ -76,7 +78,7 @@ class BlogEditorTest extends TestCase
         $this->assertSame(1, substr_count($response->getContent(), "sidebarToggle.addEventListener('click'"));
     }
 
-    public function test_testimonial_and_webpage_admin_views_use_shared_layout(): void
+    public function test_testimonial_and_webpage_views_use_the_expected_layouts(): void
     {
         $admin = $this->createAdminUser();
         $testimonial = Testimonial::create([
@@ -102,16 +104,21 @@ class BlogEditorTest extends TestCase
             $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="testimonials"', false);
         }
 
-        $webPageViews = [
-            route('admin.web-pages.index') => 'Dynamic Web Pages',
+        $this->actingAs($admin)
+            ->get(route('admin.web-pages.index'))
+            ->assertOk()
+            ->assertSee('Dynamic Web Pages')
+            ->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="webpage"', false);
+
+        foreach ([
             route('admin.web-pages.create') => 'Create Web Page',
             route('admin.web-pages.edit', $webPage) => 'Edit Web Page',
-        ];
-        foreach ($webPageViews as $url => $content) {
+        ] as $url => $content) {
             $response = $this->actingAs($admin)->get($url);
             $response->assertOk();
             $response->assertSee($content);
-            $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="webpage"', false);
+            $response->assertSee('standalone-editor-shell');
+            $response->assertDontSee('id="adminSidebar"', false);
         }
     }
 
@@ -223,7 +230,9 @@ class BlogEditorTest extends TestCase
         $editPage->assertStatus(200);
         $editPage->assertSee('Edit Blog Post');
         $editPage->assertSee('Initial article content');
-        $editPage->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="blogs"', false);
+        $editPage->assertSee('standalone-editor-shell');
+        $editPage->assertDontSee('id="adminSidebar"', false);
+        $editPage->assertDontSee('class="admin-dashboard-page"', false);
 
         $updatePayload = [
             'title' => 'Updated Title With Quill',

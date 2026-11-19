@@ -110,6 +110,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Web Pages CRUD (Create, Read, Update, Delete)
     Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index')->middleware('permission:webpages.view');
     Route::get('/admin/web-pages/create', [AdminWebPageController::class, 'create'])->name('admin.web-pages.create')->middleware('permission:webpages.create');
+    Route::post('/admin/web-pages/preview', [AdminWebPageController::class, 'preview'])->name('admin.web-pages.preview');
     Route::post('/admin/web-pages', [AdminWebPageController::class, 'store'])->name('admin.web-pages.store')->middleware('permission:webpages.create');
     Route::get('/admin/web-pages/{webPage}/edit', [AdminWebPageController::class, 'edit'])->name('admin.web-pages.edit')->middleware('permission:webpages.edit');
     Route::put('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'update'])->name('admin.web-pages.update')->middleware('permission:webpages.edit');
