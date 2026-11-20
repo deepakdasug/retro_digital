@@ -186,7 +186,6 @@ function initRetrotech() {
   let lastH = null;
   let lastTransform = '';
   let lastRadius = null;
-  let lastShadow = null;
   let lastHeroOpacity = null;
   let lastHeroTransform = '';
   let lastDarkOverlayOpacity = null;
@@ -227,7 +226,7 @@ function initRetrotech() {
     const targetX = slotDocLeft;
     const targetY = slotDocTop - scrollY;
 
-    let curW, curH, curX, curY, curShadow, curRadius;
+    let curW, curH, curX, curY, curRadius;
 
     if (p <= 0.5) {
       const subP = p / 0.5;
@@ -236,7 +235,6 @@ function initRetrotech() {
       curH = h + (midH - h) * ease;
       curX = midX * ease;
       curY = midY * ease;
-      curShadow = ease * 25;
       curRadius = ease * 14;
     } else if (p < 1.0) {
       const subP = (p - 0.5) / 0.5;
@@ -245,14 +243,12 @@ function initRetrotech() {
       curH = midH + (targetH - midH) * ease;
       curX = midX + (targetX - midX) * ease;
       curY = midY + (targetY - midY) * ease;
-      curShadow = 25 * (1 - ease);
       curRadius = 14;
     } else {
       curW = targetW;
       curH = targetH;
       curX = targetX;
       curY = targetY;
-      curShadow = 0;
       curRadius = 14;
     }
 
@@ -277,12 +273,6 @@ function initRetrotech() {
     if (roundedRadius !== lastRadius) {
       videoContainer.style.borderRadius = `${roundedRadius}px`;
       lastRadius = roundedRadius;
-    }
-
-    const roundedShadow = Math.round(curShadow);
-    if (roundedShadow !== lastShadow) {
-      videoContainer.style.boxShadow = roundedShadow > 0 ? `0 10px ${roundedShadow}px rgba(0,0,0,0.2)` : 'none';
-      lastShadow = roundedShadow;
     }
 
     // Fade dark overlay out to reveal bright video with zero GPU decode stall

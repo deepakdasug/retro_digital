@@ -130,6 +130,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/webpages')->name('admin.webp
     Route::get('/{service}/edit', [AdminServicePageController::class, 'edit'])->name('edit');
     Route::put('/{service}', [AdminServicePageController::class, 'updateSettings'])->name('update');
     Route::get('/{service}/editor', [AdminServicePageController::class, 'editor'])->name('editor');
+    Route::match(['get', 'post'], '/{service}/sections/preview/{type}', [AdminServicePageController::class, 'previewSection'])->name('sections.preview');
     Route::post('/{service}/save', [AdminServicePageController::class, 'savePage'])->name('save');
     Route::post('/{service}/sections', [AdminServicePageController::class, 'storeSection'])->name('sections.store');
     Route::put('/{service}/sections/{section}', [AdminServicePageController::class, 'updateSection'])->name('sections.update');

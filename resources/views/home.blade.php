@@ -118,8 +118,11 @@
               {{-- Pillar 01 --}}
               <div class="pillar-tile-item" data-anim="right">
                 <div class="pti-thumb-wrap">
-                  <img src="{{ asset('assets/images/tech-development/custom-application.jpg') }}"
-                    alt="End-to-End Solutions" width="600" height="400" loading="lazy">
+                  <picture>
+                    <source srcset="{{ asset('assets/images/tech-development/custom-application.webp') }}" type="image/webp">
+                    <img src="{{ asset('assets/images/tech-development/custom-application.jpg') }}"
+                      alt="End-to-End Solutions" width="600" height="400" loading="lazy" decoding="async">
+                  </picture>
                   <span class="pti-number">01</span>
                 </div>
                 <div class="pti-content">
@@ -136,8 +139,11 @@
               {{-- Pillar 02 --}}
               <div class="pillar-tile-item" data-anim="up">
                 <div class="pti-thumb-wrap">
-                  <img src="{{ asset('assets/images/tech-development/ai-automation.jpg') }}"
-                    alt="AI & Automation Excellence" width="600" height="400" loading="lazy">
+                  <picture>
+                    <source srcset="{{ asset('assets/images/tech-development/ai-automation.webp') }}" type="image/webp">
+                    <img src="{{ asset('assets/images/tech-development/ai-automation.jpg') }}"
+                      alt="AI & Automation Excellence" width="600" height="400" loading="lazy" decoding="async">
+                  </picture>
                   <span class="pti-number">02</span>
                 </div>
                 <div class="pti-content">
@@ -154,8 +160,11 @@
               {{-- Pillar 03 --}}
               <div class="pillar-tile-item" data-anim="right">
                 <div class="pti-thumb-wrap">
-                  <img src="{{ asset('assets/images/tech-development/business-growth.jpg') }}" alt="Business Growth Focus"
-                    width="600" height="400" loading="lazy">
+                  <picture>
+                    <source srcset="{{ asset('assets/images/tech-development/business-growth.webp') }}" type="image/webp">
+                    <img src="{{ asset('assets/images/tech-development/business-growth.jpg') }}" alt="Business Growth Focus"
+                      width="600" height="400" loading="lazy" decoding="async">
+                  </picture>
                   <span class="pti-number">03</span>
                 </div>
                 <div class="pti-content">
@@ -172,8 +181,11 @@
               {{-- Pillar 04 --}}
               <div class="pillar-tile-item" data-anim="up">
                 <div class="pti-thumb-wrap">
-                  <img src="{{ asset('assets/images/tech-development/clients-success-strategies.jpg') }}"
-                    alt="Client Success Strategy" width="600" height="400" loading="lazy">
+                  <picture>
+                    <source srcset="{{ asset('assets/images/tech-development/clients-success-strategies.webp') }}" type="image/webp">
+                    <img src="{{ asset('assets/images/tech-development/clients-success-strategies.jpg') }}"
+                      alt="Client Success Strategy" width="600" height="400" loading="lazy" decoding="async">
+                  </picture>
                   <span class="pti-number">04</span>
                 </div>
                 <div class="pti-content">
@@ -1474,7 +1486,80 @@
   @endif
 
   {{-- =========================================================================
-  9. FREQUENTLY ASKED QUESTIONS (Split Support Canvas)
+  9. FROM THE BLOG: Check Out Latest News Updates & Articles
+  ========================================================================= --}}
+  @php
+    try {
+      $recentPosts = \App\Models\BlogPost::where('is_published', true)->latest('published_at')->take(3)->get();
+    } catch (\Throwable $e) {
+      $recentPosts = collect();
+    }
+  @endphp
+
+  @if($recentPosts->isNotEmpty())
+    @php
+      $blogImageFallbacks = [
+        asset('assets/images/it-asset-management.jpg'),
+        asset('assets/images/data-center-decommissioning.jpg'),
+        asset('assets/images/it-data-destruction.jpg'),
+      ];
+      $usedBlogImages = [];
+    @endphp
+    <section class="home-blog-section" id="blog">
+      <div class="bento-container">
+        <div class="bento-header" data-anim="down">
+          <h2 class="bento-heading">
+            Check Out Latest <span class="bento-heading-gradient">News &amp; Articles</span>
+          </h2>
+          <p class="bento-subtitle">Insights, technological trends, and strategic perspectives from our digital engineering
+            team.</p>
+        </div>
+
+        <div class="home-blog-pro-grid">
+          @foreach($recentPosts as $post)
+            @php
+              $wordCount = str_word_count(strip_tags($post->content ?? ''));
+              $readTime = max(3, ceil($wordCount / 200));
+              $blogImageFallback = $blogImageFallbacks[$loop->index % count($blogImageFallbacks)];
+              $blogImage = $post->image_url;
+              if (empty($post->image_path) || in_array($blogImage, $usedBlogImages, true)) {
+                $blogImage = $blogImageFallback;
+              }
+              $usedBlogImages[] = $blogImage;
+            @endphp
+            <article class="home-blog-card-pro {{ $loop->first ? 'is-featured' : 'is-compact' }}" data-anim="up">
+              <div class="hbcp-img-wrap">
+                <img src="{{ $blogImage }}" alt="{{ $post->title }}" width="400" height="225" loading="lazy"
+                  onerror="this.onerror=null; this.src='{{ $blogImageFallback }}';">
+                <span class="hbcp-read-badge"><i class="fa-regular fa-clock"></i> {{ $readTime }} min read</span>
+              </div>
+              <div class="hbcp-body">
+                <div class="hbcp-meta-row">
+                  <span class="hbcp-cat">{{ $post->category ?: 'TECH & INSIGHTS' }}</span>
+                  @if($post->published_at)
+                    <span class="hbcp-date">{{ $post->published_at->format('M d, Y') }}</span>
+                  @endif
+                </div>
+                <h3 class="hbcp-title">
+                  <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                </h3>
+                <p class="hbcp-excerpt">{{ Str::limit($post->excerpt ?: strip_tags($post->content), 120) }}</p>
+                <div class="hbcp-footer">
+                  <a href="{{ route('blog.show', $post->slug) }}" class="hbcp-link">
+                    <span>Read Article</span>
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+          @endforeach
+        </div>
+      </div>
+    </section>
+  @endif
+
+  {{-- =========================================================================
+  10. FREQUENTLY ASKED QUESTIONS (Split Support Canvas)
   ========================================================================= --}}
   <section class="faq-section-home" id="faqs">
     <div class="bento-container">
@@ -1610,77 +1695,5 @@
     </div>
   </section>
 
-  {{-- =========================================================================
-  10. FROM THE BLOG: Check Out Latest News Updates & Articles
-  ========================================================================= --}}
-  @php
-    try {
-      $recentPosts = \App\Models\BlogPost::where('is_published', true)->latest('published_at')->take(3)->get();
-    } catch (\Throwable $e) {
-      $recentPosts = collect();
-    }
-  @endphp
-
-  @if($recentPosts->isNotEmpty())
-    @php
-      $blogImageFallbacks = [
-        asset('assets/images/it-asset-management.jpg'),
-        asset('assets/images/data-center-decommissioning.jpg'),
-        asset('assets/images/it-data-destruction.jpg'),
-      ];
-      $usedBlogImages = [];
-    @endphp
-    <section class="home-blog-section" id="blog">
-      <div class="bento-container">
-        <div class="bento-header" data-anim="down">
-          <h2 class="bento-heading">
-            Check Out Latest <span class="bento-heading-gradient">News &amp; Articles</span>
-          </h2>
-          <p class="bento-subtitle">Insights, technological trends, and strategic perspectives from our digital engineering
-            team.</p>
-        </div>
-
-        <div class="home-blog-pro-grid">
-          @foreach($recentPosts as $post)
-            @php
-              $wordCount = str_word_count(strip_tags($post->content ?? ''));
-              $readTime = max(3, ceil($wordCount / 200));
-              $blogImageFallback = $blogImageFallbacks[$loop->index % count($blogImageFallbacks)];
-              $blogImage = $post->image_url;
-              if (empty($post->image_path) || in_array($blogImage, $usedBlogImages, true)) {
-                $blogImage = $blogImageFallback;
-              }
-              $usedBlogImages[] = $blogImage;
-            @endphp
-            <article class="home-blog-card-pro" data-anim="up">
-              <div class="hbcp-img-wrap">
-                <img src="{{ $blogImage }}" alt="{{ $post->title }}" width="400" height="225" loading="lazy"
-                  onerror="this.onerror=null; this.src='{{ $blogImageFallback }}';">
-                <span class="hbcp-read-badge"><i class="fa-regular fa-clock"></i> {{ $readTime }} min read</span>
-              </div>
-              <div class="hbcp-body">
-                <div class="hbcp-meta-row">
-                  <span class="hbcp-cat">{{ $post->category ?: 'TECH & INSIGHTS' }}</span>
-                  @if($post->published_at)
-                    <span class="hbcp-date">{{ $post->published_at->format('M d, Y') }}</span>
-                  @endif
-                </div>
-                <h3 class="hbcp-title">
-                  <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
-                </h3>
-                <p class="hbcp-excerpt">{{ Str::limit($post->excerpt ?: strip_tags($post->content), 120) }}</p>
-                <div class="hbcp-footer">
-                  <a href="{{ route('blog.show', $post->slug) }}" class="hbcp-link">
-                    <span>Read Article</span>
-                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                  </a>
-                </div>
-              </div>
-            </article>
-          @endforeach
-        </div>
-      </div>
-    </section>
-  @endif
 
 @endsection

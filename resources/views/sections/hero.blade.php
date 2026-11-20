@@ -5,7 +5,7 @@
 <section class="seo-hero" @if($backgroundUrl) style="--seo-hero-image: url('{{ $backgroundUrl }}')" @endif>
     <div class="seo-container seo-hero-inner">
         <div class="seo-hero-copy">
-            <span class="seo-eyebrow"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Search Engine Optimization</span>
+            <span class="seo-eyebrow"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> {{ $data['eyebrow'] ?? 'A better way forward' }}</span>
             <h1>{{ $data['title'] ?? '' }}</h1>
             <p>{{ $data['subtitle'] ?? '' }}</p>
             @if(!empty($data['cta_text']) && !empty($data['cta_link']))

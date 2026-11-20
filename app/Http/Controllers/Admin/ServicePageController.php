@@ -104,22 +104,186 @@ class ServicePageController extends Controller
     {
         $validated = $request->validate([
             'section_type' => 'required|string|in:' . implode(',', array_keys(config('section_templates'))),
+            'sort_order' => 'required|integer|min:1|max:' . ($service->sections()->count() + 1),
+            'content' => 'nullable|array',
         ]);
         $template = config('section_templates.' . $validated['section_type']);
-        $content = [];
-
+        $fieldRules = [];
         foreach ($template['fields'] as $key => $field) {
-            $content[$key] = ($field['type'] ?? '') === 'repeater' ? [] : '';
+            $type = $field['type'] ?? 'text';
+            if ($type === 'repeater') {
+                $fieldRules["content.{$key}"] = $field['rules'] ?? 'nullable|array';
+                foreach ($field['fields'] ?? [] as $childKey => $childField) {
+                    $fieldRules["content.{$key}.*.{$childKey}"] = $childField['rules'] ?? 'nullable|string';
+                }
+            } else {
+                $fieldRules["content.{$key}"] = $field['rules'] ?? 'nullable|string';
+            }
+        }
+        $request->validate($fieldRules);
+
+        $defaults = $this->sectionPreviewDefaults($template['fields']);
+        $content = [];
+        foreach ($template['fields'] as $key => $field) {
+            if (($field['type'] ?? '') === 'image') {
+                $content[$key] = $request->file("content.{$key}")
+                    ? $request->file("content.{$key}")->store('services/sections', 'public')
+                    : '';
+            } elseif (($field['type'] ?? '') === 'repeater') {
+                $content[$key] = $this->storeRepeaterImages(
+                    $request,
+                    "content.{$key}",
+                    "existing_images.{$key}",
+                    $request->input("content.{$key}", []),
+                    $field['fields'] ?? []
+                );
+            } else {
+                $content[$key] = $request->input("content.{$key}", $defaults[$key] ?? '');
+            }
         }
 
-        $service->sections()->create([
-            'section_type' => $validated['section_type'],
-            'content' => $content,
-            'sort_order' => (int) $service->sections()->max('sort_order') + 1,
-            'is_active' => true,
-        ]);
+        DB::transaction(function () use ($service, $validated, $content): void {
+            $orderedSections = $service->sections()->orderBy('sort_order')->orderBy('id')->get()->all();
+            $newSection = $service->sections()->create([
+                'section_type' => $validated['section_type'],
+                'content' => $content,
+                'sort_order' => count($orderedSections) + 1,
+                'is_active' => true,
+            ]);
 
-        return redirect()->route('admin.webpages.editor', $service)->with('success', 'Section added.');
+            array_splice($orderedSections, $validated['sort_order'] - 1, 0, [$newSection]);
+            foreach ($orderedSections as $index => $section) {
+                $section->update(['sort_order' => $index + 1]);
+            }
+        });
+
+        return redirect()->route('admin.webpages.editor', $service)->with('success', 'Section added at position ' . $validated['sort_order'] . '.');
+    }
+
+    public function previewSection(Request $request, Service $service, string $type)
+    {
+        $template = config("section_templates.{$type}");
+        abort_unless($template, 404);
+
+        $defaults = $this->sectionPreviewDefaults($template['fields']);
+        $data = $request->isMethod('post')
+            ? $this->mergeSectionPreviewData($template['fields'], $defaults, $request->input('content', []))
+            : $defaults;
+
+        $response = [
+            'name' => $template['name'],
+            'fields' => $template['fields'],
+            'defaults' => $defaults,
+        ];
+
+        if ($request->isMethod('post')) {
+            $response['html'] = view($template['view'], [
+                'data' => $data,
+                'section' => null,
+                'sectionType' => $type,
+            ])->render();
+        }
+
+        return response()->json($response);
+    }
+
+    private function mergeSectionPreviewData(array $fields, array $defaults, array $submitted): array
+    {
+        foreach ($fields as $key => $field) {
+            if (!array_key_exists($key, $submitted)) continue;
+            if (($field['type'] ?? '') === 'repeater' && is_array($submitted[$key])) {
+                foreach ($submitted[$key] as $index => $item) {
+                    if (is_array($item)) {
+                        $defaults[$key][$index] ??= $this->sectionPreviewDefaults($field['fields'] ?? []);
+                        $defaults[$key][$index] = $this->mergeSectionPreviewData($field['fields'] ?? [], $defaults[$key][$index], $item);
+                    }
+                }
+            } elseif (($field['type'] ?? '') !== 'image' && is_scalar($submitted[$key])) {
+                $defaults[$key] = (string) $submitted[$key];
+            }
+        }
+
+        return $defaults;
+    }
+
+    private function sectionPreviewDefaults(array $fields): array
+    {
+        $defaults = [];
+
+        foreach ($fields as $key => $field) {
+            $type = $field['type'] ?? 'text';
+
+            if ($type === 'repeater') {
+                $defaults[$key] = [];
+                for ($index = 0; $index < 3; $index++) {
+                    $defaults[$key][] = $this->sectionPreviewDefaults($field['fields'] ?? []);
+                }
+                continue;
+            }
+
+            if ($type === 'image') {
+                $defaults[$key] = '';
+                continue;
+            }
+
+            if ($type === 'select') {
+                $defaults[$key] = array_key_first($field['options'] ?? []) ?? '';
+                continue;
+            }
+
+            $defaults[$key] = $this->sectionSampleValue((string) $key, $field);
+        }
+
+        return $defaults;
+    }
+
+    private function sectionSampleValue(string $key, array $field): string
+    {
+        $key = strtolower($key);
+        $label = strtolower($field['label'] ?? $key);
+
+        if (str_contains($key, 'eyebrow')) return 'A better way forward';
+        if (str_contains($key, 'heading') || ($key === 'title' && !str_contains($label, 'item'))) {
+            return 'A clear solution for your business';
+        }
+        if ($key === 'title') return 'A valuable benefit';
+        if (str_contains($key, 'question')) return 'What should I expect?';
+        if (str_contains($key, 'answer')) return 'We will guide you through every step with a clear plan tailored to your needs.';
+        if (str_contains($key, 'icon')) return 'fa-solid fa-star';
+        if (str_contains($key, 'button') && str_contains($key, 'text') || str_contains($key, 'cta_text')) return 'Get started';
+        if (str_contains($key, 'link')) return '#contact';
+        if ($key === 'value' || str_contains($key, 'metric')) return '01';
+        if ($key === 'label') return 'A result that matters';
+        if (in_array($key, ['body', 'description', 'subtitle', 'subheading', 'intro', 'supporting_copy'], true)) {
+            return 'Use this space to explain your offer, share its value, and help visitors understand what to do next.';
+        }
+
+        if (str_contains($label, 'description') || str_contains($label, 'support')) {
+            return 'Add a short explanation of this benefit and how it helps your customers.';
+        }
+
+        return 'Add ' . ($field['label'] ?? str_replace('_', ' ', $key));
+    }
+
+    private function storeRepeaterImages(Request $request, string $inputPrefix, string $existingPrefix, array $items, array $childFields, array $fallbackItems = []): array
+    {
+        foreach ($items as $index => &$item) {
+            if (! is_array($item)) continue;
+
+            foreach ($childFields as $childKey => $childField) {
+                if (($childField['type'] ?? '') !== 'image') continue;
+
+                $file = $request->file("{$inputPrefix}.{$index}.{$childKey}");
+                $existing = $request->input(
+                    "{$existingPrefix}.{$index}.{$childKey}",
+                    data_get($fallbackItems, "{$index}.{$childKey}", $item[$childKey] ?? '')
+                );
+                $item[$childKey] = $file ? $file->store('services/sections', 'public') : $existing;
+            }
+        }
+        unset($item);
+
+        return $items;
     }
 
     public function savePage(Request $request, Service $service)
@@ -128,6 +292,8 @@ class ServicePageController extends Controller
             'sections' => 'nullable|array',
             'removed_sections' => 'nullable|array',
             'removed_sections.*' => 'required|integer|distinct',
+            'ordered_sections' => 'nullable|array',
+            'ordered_sections.*' => 'required|integer|distinct',
         ];
 
         $sections = $service->sections()->get();
@@ -146,6 +312,9 @@ class ServicePageController extends Controller
                     $rules[$fieldPath] = 'nullable|array|max:12';
                     foreach ($field['fields'] ?? [] as $childKey => $childField) {
                         $rules[$fieldPath . '.*.' . $childKey] = $childField['rules'] ?? 'nullable|string|max:1000';
+                        if (($childField['type'] ?? '') === 'image') {
+                            $rules[$prefix . '.existing_images.' . $key . '.*.' . $childKey] = 'nullable|string|max:1000';
+                        }
                     }
                 } elseif (($field['type'] ?? '') === 'image') {
                     $rules[$fieldPath] = 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120';
@@ -162,8 +331,11 @@ class ServicePageController extends Controller
         $ownedIds = $service->sections()->whereIn('id', $removedIds)->pluck('id')->all();
         abort_unless(count($ownedIds) === count($removedIds), 404);
         $removedLookup = array_fill_keys(array_map('intval', $ownedIds), true);
+        $orderedIds = array_map('intval', $validated['ordered_sections'] ?? []);
+        $ownedOrderedIds = $service->sections()->whereIn('id', $orderedIds)->pluck('id')->map(fn ($id) => (int) $id)->all();
+        abort_unless(count($ownedOrderedIds) === count($orderedIds), 404);
 
-        DB::transaction(function () use ($request, $service, $sections, $ownedIds, $removedLookup): void {
+        DB::transaction(function () use ($request, $service, $sections, $ownedIds, $removedLookup, $orderedIds): void {
             foreach ($sections as $section) {
                 if (isset($removedLookup[(int) $section->id])) {
                     continue;
@@ -177,7 +349,15 @@ class ServicePageController extends Controller
                 $content = [];
                 foreach ($template['fields'] as $key => $field) {
                     if (($field['type'] ?? '') === 'repeater') {
-                        $content[$key] = $request->input("sections.{$section->id}.content.{$key}", []);
+                        $items = $request->input("sections.{$section->id}.content.{$key}", []);
+                        $content[$key] = $this->storeRepeaterImages(
+                            $request,
+                            "sections.{$section->id}.content.{$key}",
+                            "sections.{$section->id}.existing_images.{$key}",
+                            $items,
+                            $field['fields'] ?? [],
+                            data_get($section->content, $key, [])
+                        );
                     } elseif (($field['type'] ?? '') === 'image') {
                         $file = $request->file("sections.{$section->id}.content.{$key}");
                         $content[$key] = $file
@@ -198,12 +378,25 @@ class ServicePageController extends Controller
                 $service->sections()->whereIn('id', $ownedIds)->delete();
             }
 
-            $service->sections()->orderBy('sort_order')->orderBy('id')->get()
-                ->each(fn (ServiceSection $item, int $index) => $item->update(['sort_order' => $index]));
+            $remainingSections = $service->sections()->get()->all();
+            $orderLookup = array_flip($orderedIds);
+            usort($remainingSections, function (ServiceSection $left, ServiceSection $right) use ($orderLookup): int {
+                $leftPosition = $orderLookup[$left->id] ?? PHP_INT_MAX;
+                $rightPosition = $orderLookup[$right->id] ?? PHP_INT_MAX;
+
+                return ($leftPosition <=> $rightPosition)
+                    ?: ($left->sort_order <=> $right->sort_order)
+                    ?: ($left->id <=> $right->id);
+            });
+            foreach ($remainingSections as $index => $item) {
+                $item->update(['sort_order' => $index + 1]);
+            }
             $service->touch();
         });
 
-        return redirect()->route('admin.webpages.editor', $service)->with('success', 'Page saved. All edits and section removals are now live.');
+        return redirect()->route('admin.webpages.editor', $service)
+            ->with('success', 'Your page was saved successfully. All changes are now live.')
+            ->with('page_saved', true);
     }
 
     public function updateSection(Request $request, Service $service, ServiceSection $section)
@@ -218,6 +411,9 @@ class ServicePageController extends Controller
                 $rules["content.$key"] = 'nullable|array|max:12';
                 foreach ($field['fields'] ?? [] as $childKey => $childField) {
                     $rules["content.$key.*.$childKey"] = $childField['rules'] ?? 'nullable|string|max:1000';
+                    if (($childField['type'] ?? '') === 'image') {
+                        $rules["existing_images.$key.*.$childKey"] = 'nullable|string|max:1000';
+                    }
                 }
             } elseif (($field['type'] ?? '') === 'image') {
                 $rules["content.$key"] = 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120';
@@ -229,6 +425,17 @@ class ServicePageController extends Controller
 
         $content = $request->input('content', []);
         foreach ($template['fields'] as $key => $field) {
+            if (($field['type'] ?? '') === 'repeater') {
+                $content[$key] = $this->storeRepeaterImages(
+                    $request,
+                    "content.$key",
+                    "existing_images.$key",
+                    $request->input("content.$key", []),
+                    $field['fields'] ?? [],
+                    data_get($section->content, $key, [])
+                );
+                continue;
+            }
             if (($field['type'] ?? '') !== 'image') {
                 continue;
             }
@@ -253,7 +460,7 @@ class ServicePageController extends Controller
         abort_unless((int) $section->service_id === (int) $service->id, 404);
         $section->delete();
         $service->sections()->orderBy('sort_order')->orderBy('id')->get()
-            ->each(fn (ServiceSection $item, int $index) => $item->update(['sort_order' => $index]));
+            ->each(fn (ServiceSection $item, int $index) => $item->update(['sort_order' => $index + 1]));
 
         return redirect()->route('admin.webpages.editor', $service)->with('success', 'Section removed.');
     }

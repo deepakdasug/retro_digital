@@ -87,6 +87,11 @@ return [
                         'type'  => 'text',
                         'label' => 'Icon (Bootstrap class, e.g. bi bi-star)',
                     ],
+                    'image' => [
+                        'type' => 'image',
+                        'label' => 'Optional feature image',
+                        'rules' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+                    ],
                     'title' => [
                         'type'  => 'text',
                         'label' => 'Item Title',
@@ -187,6 +192,11 @@ return [
                 'label' => 'Description',
                 'rules' => 'nullable|string|max:500',
             ],
+            'background_image' => [
+                'type' => 'image',
+                'label' => 'Optional background image',
+                'rules' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            ],
             'button_text' => [
                 'type'  => 'text',
                 'label' => 'Button Text',
@@ -232,6 +242,8 @@ return [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Main heading', 'rules' => 'nullable|string|max:200'],
             'body' => ['type' => 'textarea', 'label' => 'Supporting copy', 'rules' => 'nullable|string|max:700'],
+            'hero_image' => ['type' => 'image', 'label' => 'Optional hero image', 'rules' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120'],
+            'hero_image_alt' => ['type' => 'text', 'label' => 'Hero image alternative text', 'rules' => 'nullable|string|max:200'],
             'button_text' => ['type' => 'text', 'label' => 'Primary button', 'rules' => 'nullable|string|max:70'],
             'button_link' => ['type' => 'text', 'label' => 'Primary link', 'rules' => 'nullable|string|max:500'],
             'items' => ['type' => 'repeater', 'label' => 'Proof points', 'rules' => 'nullable|array|max:4', 'fields' => [
@@ -270,6 +282,7 @@ return [
             'body' => ['type' => 'textarea', 'label' => 'Intro', 'rules' => 'nullable|string|max:700'],
             'items' => ['type' => 'repeater', 'label' => 'Services', 'rules' => 'nullable|array|max:6', 'fields' => [
                 'icon' => ['type' => 'text', 'label' => 'Icon class', 'rules' => 'nullable|string|max:80'],
+                'image' => ['type' => 'image', 'label' => 'Optional service image', 'rules' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120'],
                 'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'nullable|string|max:100'],
                 'description' => ['type' => 'textarea', 'label' => 'Description', 'rules' => 'nullable|string|max:300'],
             ]],

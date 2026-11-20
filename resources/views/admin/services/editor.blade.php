@@ -3,6 +3,17 @@
 @section('title', $service->title . ' Visual Editor')
 
 @section('content')
+@if(session('page_saved'))
+<main class="seo-save-complete" role="status" aria-live="polite">
+    <div class="seo-save-complete-card">
+        <p>{{ session('success') }}</p>
+        <nav class="seo-save-complete-actions" aria-label="After saving">
+            <a href="{{ route('admin.dashboard', ['tab' => 'webpage']) }}">Go to admin dashboard</a>
+            <a href="{{ route('webpages.show', ['section' => $service->page_section, 'slug' => $service->slug]) }}" target="_blank" rel="noopener">View page <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+        </nav>
+    </div>
+</main>
+@else
 <header class="seo-editor-topbar">
     <a class="seo-editor-brand" href="{{ route('admin.dashboard', ['tab' => 'webpage']) }}">
         <img src="{{ asset('assets/images/retrotech-mark.png') }}" alt="">
@@ -14,19 +25,26 @@
     </div>
 </header>
 
-<main>
+<main class="seo-editor-main">
     <div class="seo-editor-intro">
-        <span class="seo-eyebrow">Page 2 of 2 · {{ $sectionLabels[$service->page_section] ?? 'Webpage' }} visual editor</span>
-        <h1>{{ $service->title }}</h1>
-        <p>Preview <code>/{{ $service->page_section }}/{{ $service->slug }}</code> below, edit each section in place, or add one of the reusable templates.</p>
+        <div class="seo-editor-intro-heading">
+            <div>
+                <span class="seo-eyebrow">Page 2 of 2 · {{ $sectionLabels[$service->page_section] ?? 'Webpage' }} visual editor</span>
+                <h1>{{ $service->title }}</h1>
+            </div>
+            <span class="seo-editor-section-count"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> {{ $service->sections->count() }} sections</span>
+        </div>
+        <p>Edit the page sections below, change their order, or add another reusable layout.</p>
+        <div class="seo-editor-url"><span>Page URL</span><code>/{{ $service->page_section }}/{{ $service->slug }}</code></div>
     </div>
-    @if(session('success'))<div class="seo-editor-flash seo-editor-content">{{ session('success') }}</div>@endif
+    @if(session('success'))<div class="seo-editor-flash seo-editor-content" role="status" aria-live="polite">{{ session('success') }}</div>@endif
     @if($errors->any())<div class="seo-editor-flash seo-editor-content" style="border-color:#e5b9b9;background:#fff3f3;color:#8f2727">Some section values need attention. Review the fields and save again.</div>@endif
     <form id="save-page-form" action="{{ route('admin.webpages.save', $service) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="seo-editor-content seo-save-page-form">
-            <span>Edits and section removals stay as drafts until you save the page.</span>
-            <button class="seo-editor-save" type="submit">Save page</button>
+            <span class="seo-save-page-copy"><strong>Page changes</strong><small>Edits, section order, and removals stay as drafts until saved.</small></span>
+            <span data-save-status role="status" aria-live="polite"></span>
+            <button class="seo-editor-save" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save page</button>
         </div>
 
     <div class="seo-editor-stage">
@@ -37,12 +55,16 @@
                     $data = is_array($section->content) ? $section->content : [];
                 @endphp
                 @continue(!$template)
-                <section class="seo-editor-section {{ $section->is_active ? '' : 'is-hidden' }}" id="section-{{ $section->id }}">
+                <section class="seo-editor-section {{ $section->is_active ? '' : 'is-hidden' }} {{ session('page_saved') ? 'is-collapsed' : '' }}" id="section-{{ $section->id }}">
                     <div class="seo-editor-section-bar">
-                        <span><i class="fa-solid fa-grip-lines" aria-hidden="true"></i> Section {{ $index + 1 }} · {{ $template['name'] }}{{ $section->is_active ? '' : ' · Hidden from visitors' }} <em data-pending-label hidden>· Marked for removal; not live until saved</em></span>
-                        <button class="seo-editor-remove" type="button" data-remove-section="{{ $section->id }}" aria-pressed="false"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Remove</button>
+                        <span><i class="fa-solid fa-grip-lines" aria-hidden="true"></i> <span data-section-position>Section {{ $index + 1 }}</span> · {{ $template['name'] }}{{ $section->is_active ? '' : ' · Hidden from visitors' }} <em data-pending-label hidden>· Marked for removal; not live until saved</em></span>
+                        <div class="seo-editor-section-actions">
+                            <button class="seo-editor-collapse" type="button" data-toggle-section aria-expanded="{{ session('page_saved') ? 'false' : 'true' }}" aria-controls="section-content-{{ $section->id }}"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i> <span>{{ session('page_saved') ? 'Expand' : 'Collapse' }}</span></button>
+                            <button class="seo-editor-remove" type="button" data-remove-section="{{ $section->id }}" aria-pressed="false"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Remove</button>
+                        </div>
                     </div>
 
+                    <div class="seo-editor-section-content" id="section-content-{{ $section->id }}">
                     <div class="seo-editor-preview">
                         @include($template['view'], ['data' => $data, 'section' => $section, 'sectionType' => $section->section_type])
                     </div>
@@ -52,6 +74,12 @@
                             <div class="seo-editor-fields">
                                 <div class="seo-field seo-field-full">
                                     <label><input type="checkbox" name="sections[{{ $section->id }}][is_active]" value="1" @checked(old('sections.' . $section->id . '.is_active', $section->is_active))> Show this section to visitors</label>
+                                    <small>Checked: visible on the live page. Unchecked: hidden from visitors after you save the page.</small>
+                                </div>
+                                <div class="seo-field">
+                                    <label for="section-order-{{ $section->id }}">Display order</label>
+                                    <input id="section-order-{{ $section->id }}" type="number" value="{{ old('sections.' . $section->id . '.sort_order', $index + 1) }}" min="1" max="{{ $service->sections->count() }}" data-section-order data-section-id="{{ $section->id }}">
+                                    <small>Position 1–{{ $service->sections->count() }}. Other sections shift to make room.</small>
                                 </div>
                                 @foreach($template['fields'] as $key => $field)
                                     @php($value = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, '')))
@@ -65,7 +93,15 @@
                                                         @foreach($field['fields'] ?? [] as $childKey => $childField)
                                                             <div class="seo-field">
                                                                 <label>{{ $childField['label'] ?? \Illuminate\Support\Str::headline($childKey) }}</label>
-                                                                @if(($childField['type'] ?? 'text') === 'textarea')
+                                                                @if(($childField['type'] ?? 'text') === 'image')
+                                                                    @php($childImage = data_get($item, $childKey, ''))
+                                                                    @if($childImage)
+                                                                        @php($childImageSrc = str_starts_with($childImage, 'http') ? $childImage : (str_starts_with($childImage, 'assets/') || str_starts_with($childImage, 'storage/') ? asset($childImage) : asset('storage/' . $childImage)))
+                                                                        <img class="seo-existing-image" src="{{ $childImageSrc }}" alt="Current {{ strtolower($childField['label'] ?? 'item') }}">
+                                                                    @endif
+                                                                    <input type="hidden" name="sections[{{ $section->id }}][existing_images][{{ $key }}][{{ $rowIndex }}][{{ $childKey }}]" value="{{ $childImage }}">
+                                                                    <input type="file" name="sections[{{ $section->id }}][content][{{ $key }}][{{ $rowIndex }}][{{ $childKey }}]" accept="image/jpeg,image/png,image/webp,image/gif">
+                                                                @elseif(($childField['type'] ?? 'text') === 'textarea')
                                                                     <textarea name="sections[{{ $section->id }}][content][{{ $key }}][{{ $rowIndex }}][{{ $childKey }}]">{{ data_get($item, $childKey) }}</textarea>
                                                                 @else
                                                                     <input name="sections[{{ $section->id }}][content][{{ $key }}][{{ $rowIndex }}][{{ $childKey }}]" value="{{ data_get($item, $childKey) }}">
@@ -82,7 +118,10 @@
                                                     @foreach($field['fields'] ?? [] as $childKey => $childField)
                                                         <div class="seo-field">
                                                             <label>{{ $childField['label'] ?? \Illuminate\Support\Str::headline($childKey) }}</label>
-                                                            @if(($childField['type'] ?? 'text') === 'textarea')
+                                                            @if(($childField['type'] ?? 'text') === 'image')
+                                                                <input type="hidden" name="sections[{{ $section->id }}][existing_images][{{ $key }}][__INDEX__][{{ $childKey }}]" value="">
+                                                                <input type="file" name="sections[{{ $section->id }}][content][{{ $key }}][__INDEX__][{{ $childKey }}]" accept="image/jpeg,image/png,image/webp,image/gif">
+                                                            @elseif(($childField['type'] ?? 'text') === 'textarea')
                                                                 <textarea name="sections[{{ $section->id }}][content][{{ $key }}][__INDEX__][{{ $childKey }}]"></textarea>
                                                             @else
                                                                 <input name="sections[{{ $section->id }}][content][{{ $key }}][__INDEX__][{{ $childKey }}]">
@@ -117,6 +156,7 @@
                                 @endforeach
                             </div>
                     </details>
+                    </div>
                 </section>
             @empty
                 <div class="seo-editor-content"><p>No sections yet. Add one below to build the page.</p></div>
@@ -127,18 +167,42 @@
 
     <div class="seo-editor-content">
         <section class="seo-add-section">
-            <h2>Add a section</h2>
-            <p>Choose a reusable layout, then fill in its content.</p>
-            <form action="{{ route('admin.webpages.sections.store', $service) }}" method="POST">
+            <div class="seo-add-section-heading"><span class="seo-add-section-icon"><i class="fa-solid fa-plus" aria-hidden="true"></i></span><div><h2>Add a section</h2><p>Choose a layout, fill in its fields, preview it, then add it to the page.</p></div></div>
+            <form id="add-section-form" action="{{ route('admin.webpages.sections.store', $service) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <select name="section_type" required aria-label="Section template">
-                    @foreach($templates as $type => $template)<option value="{{ $type }}">{{ $template['name'] }}</option>@endforeach
+                <div class="seo-add-section-layout">
+                <label for="add-section-type">Section layout</label>
+                <select id="add-section-type" name="section_type" required>
+                    <option value="" selected disabled>Choose a reusable section layout</option>
+                    @foreach($templates as $type => $template)
+                        <option value="{{ $type }}">{{ str_replace(['SEO — ', 'SEO - '], '', $template['name']) }}</option>
+                    @endforeach
                 </select>
-                <button class="seo-editor-save" type="submit">Add section</button>
+                </div>
+                @php($newSectionPosition = $service->sections->count() + 1)
+                <div class="seo-add-section-order">
+                    <label for="new-section-order">Insert at position</label>
+                    <input id="new-section-order" type="number" name="sort_order" min="1" max="{{ $newSectionPosition }}" value="{{ old('sort_order', $newSectionPosition) }}" required>
+                    <small>Choose 1–{{ $newSectionPosition }}. Existing sections shift down.</small>
+                </div>
+                <div class="seo-add-section-fields" data-add-section-fields hidden aria-live="polite"></div>
+                <div class="seo-add-section-actions">
+                <button class="seo-section-preview-button" type="button" data-preview-section data-preview-url="{{ route('admin.webpages.sections.preview', ['service' => $service, 'type' => '__template__']) }}" disabled>Preview layout</button>
+                <button class="seo-editor-save" type="submit" disabled data-add-section-submit>Add section</button>
+                </div>
             </form>
         </section>
     </div>
 </main>
+<div class="seo-section-preview-modal" data-section-preview-modal hidden>
+    <div class="seo-section-preview-backdrop" data-close-section-preview></div>
+    <section class="seo-section-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="section-preview-title">
+        <header><div><span>Reusable layout preview</span><h2 id="section-preview-title" data-preview-title>Section preview</h2></div><button type="button" data-close-section-preview aria-label="Close preview"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></header>
+        <p class="seo-section-preview-note">Sample values are editable in the form. The preview uses your current entries.</p>
+        <div class="seo-section-preview-content" data-preview-content></div>
+    </section>
+</div>
+@endif
 @endsection
 
 @push('scripts')
@@ -155,7 +219,206 @@ document.querySelectorAll('[data-repeater]').forEach((group) => {
     });
 });
 
+const addSectionForm = document.getElementById('add-section-form');
+const sectionTypeSelect = addSectionForm?.querySelector('select[name="section_type"]');
+const sectionFieldsContainer = addSectionForm?.querySelector('[data-add-section-fields]');
+const addSectionSubmit = addSectionForm?.querySelector('[data-add-section-submit]');
+const sectionPreviewButton = document.querySelector('[data-preview-section]');
+const sectionPreviewModal = document.querySelector('[data-section-preview-modal]');
+const sectionPreviewContent = sectionPreviewModal?.querySelector('[data-preview-content]');
+const sectionPreviewTitle = sectionPreviewModal?.querySelector('[data-preview-title]');
+let lastPreviewTrigger = null;
+let sectionFieldId = 0;
+
+const makeSectionField = (key, field, name, value = '') => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'seo-field';
+    if (['textarea', 'richtext', 'image'].includes(field.type)) wrapper.classList.add('seo-field-full');
+    const label = document.createElement('label');
+    label.textContent = field.label || key.replaceAll('_', ' ');
+    const fieldId = `add-section-field-${++sectionFieldId}`;
+    label.htmlFor = fieldId;
+    wrapper.appendChild(label);
+    let control;
+    if (field.type === 'textarea' || field.type === 'richtext') {
+        control = document.createElement('textarea');
+        control.value = value ?? '';
+    } else if (field.type === 'select') {
+        control = document.createElement('select');
+        Object.entries(field.options || {}).forEach(([optionValue, optionLabel]) => {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.textContent = optionLabel;
+            option.selected = String(value) === String(optionValue);
+            control.appendChild(option);
+        });
+    } else {
+        control = document.createElement('input');
+        control.type = field.type === 'image' ? 'file' : 'text';
+        if (field.type === 'image') control.accept = 'image/jpeg,image/png,image/webp,image/gif';
+        else control.value = value ?? '';
+    }
+    control.name = name;
+    control.id = fieldId;
+    wrapper.appendChild(control);
+    return wrapper;
+};
+
+const renderSectionFields = (fields, defaults) => {
+    sectionFieldsContainer.replaceChildren();
+    Object.entries(fields || {}).forEach(([key, field]) => {
+        if (field.type !== 'repeater') {
+            sectionFieldsContainer.appendChild(makeSectionField(key, field, `content[${key}]`, defaults?.[key] ?? ''));
+            return;
+        }
+        const group = document.createElement('div');
+        group.className = 'seo-field seo-field-full seo-add-repeater';
+        const groupLabel = document.createElement('label');
+        groupLabel.textContent = field.label || key.replaceAll('_', ' ');
+        group.appendChild(groupLabel);
+        const rows = document.createElement('div');
+        rows.className = 'seo-repeater-items';
+        const appendRow = (rowData = {}) => {
+            const row = document.createElement('div');
+            row.className = 'seo-repeater-item';
+            Object.entries(field.fields || {}).forEach(([childKey, childField]) => {
+                row.appendChild(makeSectionField(childKey, childField, `content[${key}][${rows.children.length}][${childKey}]`, rowData?.[childKey] ?? ''));
+            });
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'seo-add-repeater-remove';
+            remove.setAttribute('aria-label', 'Remove item');
+            remove.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+            remove.addEventListener('click', () => {
+                row.remove();
+                Array.from(rows.children).forEach((item, index) => item.querySelectorAll('[name]').forEach((input) => {
+                    input.name = input.name.replace(new RegExp(`(content|existing_images)\\[${key}\\]\\[\\d+\\]`), (_, prefix) => `${prefix}[${key}][${index}]`);
+                }));
+            });
+            row.appendChild(remove);
+            rows.appendChild(row);
+        };
+        (defaults?.[key] || []).forEach(appendRow);
+        const add = document.createElement('button');
+        add.type = 'button';
+        add.className = 'seo-section-preview-button seo-add-repeater-button';
+        add.textContent = 'Add item';
+        add.addEventListener('click', () => appendRow());
+        group.append(rows, add);
+        sectionFieldsContainer.appendChild(group);
+    });
+    sectionFieldsContainer.hidden = false;
+};
+
+sectionTypeSelect?.addEventListener('change', async () => {
+    const type = sectionTypeSelect.value;
+    sectionFieldsContainer.replaceChildren();
+    sectionFieldsContainer.hidden = !type;
+    sectionFieldsContainer.textContent = type ? 'Loading fields…' : '';
+    if (sectionPreviewButton) sectionPreviewButton.disabled = true;
+    if (addSectionSubmit) addSectionSubmit.disabled = true;
+    if (!type) return;
+    try {
+        const url = sectionPreviewButton.dataset.previewUrl.replace('__template__', encodeURIComponent(type));
+        const response = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('Template fields could not be loaded.');
+        const result = await response.json();
+        if (sectionTypeSelect.value !== type) return;
+        renderSectionFields(result.fields, result.defaults);
+        if (sectionPreviewButton) sectionPreviewButton.disabled = false;
+        if (addSectionSubmit) addSectionSubmit.disabled = false;
+    } catch (error) {
+        sectionFieldsContainer.textContent = 'The fields for this layout could not be loaded. Please choose it again.';
+    }
+});
+
+sectionPreviewButton?.addEventListener('click', async () => {
+    const selectedType = sectionTypeSelect?.value;
+    if (!selectedType || !sectionPreviewModal || !sectionPreviewContent) return;
+
+    lastPreviewTrigger = sectionPreviewButton;
+    sectionPreviewModal.hidden = false;
+    document.body.classList.add('seo-preview-modal-open');
+    sectionPreviewTitle.textContent = sectionTypeSelect.selectedOptions[0].textContent;
+    sectionPreviewContent.textContent = 'Loading preview…';
+    sectionPreviewModal.querySelector('[data-close-section-preview]')?.focus();
+
+    try {
+        const url = sectionPreviewButton.dataset.previewUrl.replace('__template__', encodeURIComponent(selectedType));
+        const response = await fetch(url, {
+            method: 'POST',
+            body: new FormData(addSectionForm),
+            headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        if (!response.ok) throw new Error('Preview could not be loaded.');
+        const result = await response.json();
+        sectionPreviewTitle.textContent = result.name;
+        sectionPreviewContent.innerHTML = result.html;
+    } catch (error) {
+        sectionPreviewContent.textContent = 'Preview could not be loaded. Please try again.';
+    }
+});
+
+const closeSectionPreview = () => {
+    if (!sectionPreviewModal) return;
+    sectionPreviewModal.hidden = true;
+    document.body.classList.remove('seo-preview-modal-open');
+    lastPreviewTrigger?.focus();
+};
+sectionPreviewModal?.querySelectorAll('[data-close-section-preview]').forEach((button) => {
+    button.addEventListener('click', closeSectionPreview);
+});
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && sectionPreviewModal && !sectionPreviewModal.hidden) closeSectionPreview();
+});
+
 const savePageForm = document.getElementById('save-page-form');
+@if(session('page_saved'))
+document.querySelectorAll('.seo-editor-edit').forEach((editor) => { editor.open = false; });
+@endif
+document.querySelectorAll('[data-toggle-section]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const section = button.closest('.seo-editor-section');
+        const collapsed = section?.classList.toggle('is-collapsed');
+        button.setAttribute('aria-expanded', String(!collapsed));
+        button.querySelector('span').textContent = collapsed ? 'Expand' : 'Collapse';
+        button.querySelector('i').className = collapsed ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up';
+    });
+});
+document.querySelectorAll('[data-section-order]').forEach((input) => {
+    const applySectionOrder = () => {
+        const container = document.querySelector('.seo-editor-stage .seo-service-page');
+        const sections = Array.from(container?.querySelectorAll(':scope > .seo-editor-section') || []);
+        const section = input.closest('.seo-editor-section');
+        if (!container || !section || !sections.length) return;
+
+        const currentIndex = sections.indexOf(section);
+        const requestedIndex = Math.max(0, Math.min(sections.length - 1, Number(input.value || 1) - 1));
+        sections.splice(currentIndex, 1);
+        sections.splice(requestedIndex, 0, section);
+        sections.forEach((item, index) => {
+            container.appendChild(item);
+            const position = index + 1;
+            const orderInput = item.querySelector('[data-section-order]');
+            if (orderInput) {
+                orderInput.value = position;
+                orderInput.max = sections.length;
+                const hint = orderInput.parentElement.querySelector('small');
+                if (hint) hint.textContent = `Position 1–${sections.length}. Other sections shift to make room.`;
+            }
+            const label = item.querySelector('[data-section-position]');
+            if (label) label.textContent = `Section ${position}`;
+        });
+    };
+    input.addEventListener('change', applySectionOrder);
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            applySectionOrder();
+            input.blur();
+        }
+    });
+});
 const pendingSectionRemovals = new Set();
 document.querySelectorAll('[data-remove-section]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -176,7 +439,22 @@ document.querySelectorAll('[data-remove-section]').forEach((button) => {
 });
 
 savePageForm?.addEventListener('submit', () => {
+    document.querySelectorAll('.seo-editor-edit').forEach((editor) => {
+        editor.removeAttribute('open');
+        editor.open = false;
+    });
+    const saveStatus = savePageForm.querySelector('[data-save-status]');
+    if (saveStatus) saveStatus.textContent = 'Saving your page…';
+
     savePageForm.querySelectorAll('[name="removed_sections[]"]').forEach((input) => input.remove());
+    savePageForm.querySelectorAll('[name="ordered_sections[]"]').forEach((input) => input.remove());
+    document.querySelectorAll('.seo-editor-stage .seo-service-page > .seo-editor-section').forEach((section) => {
+        const orderInput = document.createElement('input');
+        orderInput.type = 'hidden';
+        orderInput.name = 'ordered_sections[]';
+        orderInput.value = section.id.replace('section-', '');
+        savePageForm.appendChild(orderInput);
+    });
     pendingSectionRemovals.forEach((sectionId) => {
         const input = document.createElement('input');
         input.type = 'hidden';

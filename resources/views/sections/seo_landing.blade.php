@@ -1,6 +1,12 @@
-@php($layout = $sectionType ?? ($section->section_type ?? ''))
+@php
+    $layout = $sectionType ?? ($section->section_type ?? '');
+@endphp
 
 @if($layout === 'seo_hero')
+@php
+    $heroImage = $data['hero_image'] ?? '';
+    $heroImageUrl = !$heroImage ? '' : (str_starts_with($heroImage, 'http') ? $heroImage : (str_starts_with($heroImage, 'assets/') || str_starts_with($heroImage, 'storage/') ? asset($heroImage) : asset('storage/' . $heroImage)));
+@endphp
 <section class="seo-lp seo-lp-hero">
     <div class="seo-lp-container seo-lp-hero-grid">
         <div class="seo-lp-hero-copy seo-motion-in">
@@ -10,9 +16,13 @@
             <a class="seo-lp-button seo-lp-button-lime" href="{{ $data['button_link'] ?? '/contact#contact' }}">{{ $data['button_text'] ?? 'Plan your SEO growth' }} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
             <div class="seo-lp-hero-note"><i class="fa-solid fa-circle-check"></i> Clear priorities. Useful work. Progress you can understand.</div>
         </div>
-        <div class="seo-lp-search-visual seo-motion-float" aria-hidden="true">
+        <div class="seo-lp-search-visual seo-motion-float">
+            @if($heroImageUrl)
+                <img class="seo-lp-hero-photo" src="{{ $heroImageUrl }}" alt="{{ $data['hero_image_alt'] ?? ($data['heading'] ?? 'Page hero image') }}" loading="eager">
+            @else
             <div class="seo-lp-search-window"><div class="seo-lp-window-top"><span></span><span></span><span></span><small>organic visibility</small></div><div class="seo-lp-searchbar"><i class="fa-brands fa-google"></i> your next customer is searching <i class="fa-solid fa-magnifying-glass"></i></div><div class="seo-lp-serp-result"><small>YOUR BRAND · YOUR DOMAIN</small><strong>Be the clear answer they find</strong><span>Useful pages, strong foundations, and a search strategy shaped around your business.</span></div><div class="seo-lp-serp-lines"><i></i><i></i><i></i></div></div>
             <div class="seo-lp-orbit seo-lp-orbit-one"></div><div class="seo-lp-orbit seo-lp-orbit-two"></div><span class="seo-lp-float-chip seo-lp-chip-one"><i class="fa-solid fa-arrow-trend-up"></i> Grow with intent</span><span class="seo-lp-float-chip seo-lp-chip-two"><i class="fa-solid fa-magnifying-glass-chart"></i> Search strategy</span>
+            @endif
         </div>
     </div>
     <div class="seo-lp-hero-stats seo-lp-container">
@@ -24,7 +34,7 @@
 @elseif($layout === 'seo_audit')
 <section class="seo-lp seo-lp-audit"><div class="seo-lp-container seo-lp-audit-grid"><div class="seo-lp-audit-copy"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><div class="seo-lp-audit-stamp"><i class="fa-solid fa-compass-drafting"></i><span>Find the right next move<br><strong>before you add more noise</strong></span></div></div><div class="seo-lp-audit-list">@foreach(($data['items'] ?? []) as $index => $item)<article><span class="seo-lp-audit-index">0{{ $index + 1 }}</span><div><h3>{{ $item['title'] ?? '' }}</h3><p>{{ $item['description'] ?? '' }}</p></div><i class="fa-solid fa-arrow-right"></i></article>@endforeach</div></div></section>
 @elseif($layout === 'seo_services')
-<section class="seo-lp seo-lp-services"><div class="seo-lp-container"><div class="seo-lp-heading seo-motion-in"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p></div><div class="seo-lp-service-grid">@foreach(($data['items'] ?? []) as $index => $item)<article class="seo-lp-service-card"><span class="seo-lp-service-number">0{{ $index + 1 }}</span><span class="seo-lp-service-icon"><i class="{{ $item['icon'] ?? 'fa-solid fa-arrow-trend-up' }}"></i></span><h3>{{ $item['title'] ?? '' }}</h3><p>{{ $item['description'] ?? '' }}</p><span class="seo-lp-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></article>@endforeach</div></div></section>
+<section class="seo-lp seo-lp-services"><div class="seo-lp-container"><div class="seo-lp-heading seo-motion-in"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p></div><div class="seo-lp-service-grid">@foreach(($data['items'] ?? []) as $index => $item)@php($serviceImage=$item['image'] ?? '')@php($serviceImageUrl=!$serviceImage ? '' : (str_starts_with($serviceImage, 'http') ? $serviceImage : (str_starts_with($serviceImage, 'assets/') || str_starts_with($serviceImage, 'storage/') ? asset($serviceImage) : asset('storage/' . $serviceImage))))<article class="seo-lp-service-card {{ $serviceImageUrl ? 'has-image' : '' }}">@if($serviceImageUrl)<img class="seo-lp-service-image" src="{{ $serviceImageUrl }}" alt="{{ $item['title'] ?? 'Service image' }}" loading="lazy">@else<span class="seo-lp-service-icon"><i class="{{ $item['icon'] ?? 'fa-solid fa-arrow-trend-up' }}"></i></span>@endif<span class="seo-lp-service-number">0{{ $index + 1 }}</span><h3>{{ $item['title'] ?? '' }}</h3><p>{{ $item['description'] ?? '' }}</p><span class="seo-lp-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></article>@endforeach</div></div></section>
 @elseif($layout === 'seo_process')
 <section class="seo-lp seo-lp-process"><div class="seo-lp-container"><div class="seo-lp-heading seo-lp-heading-left"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p></div><div class="seo-lp-timeline">@foreach(($data['items'] ?? []) as $index => $item)<article><div class="seo-lp-timeline-node"><span>0{{ $index + 1 }}</span></div><div class="seo-lp-timeline-card"><small>STEP 0{{ $index + 1 }}</small><h3>{{ $item['title'] ?? '' }}</h3><p>{{ $item['description'] ?? '' }}</p></div></article>@endforeach</div></div></section>
 @elseif($layout === 'seo_intent')
@@ -38,7 +48,7 @@
 @elseif($layout === 'seo_results')
 <section class="seo-lp seo-lp-results"><div class="seo-lp-container seo-lp-results-panel"><div class="seo-lp-results-copy"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><span class="seo-lp-results-note"><i class="fa-solid fa-circle-info"></i> We set targets from your baseline and report actual results transparently.</span></div><div class="seo-lp-results-metrics">@foreach(($data['items'] ?? []) as $index => $item)<article><span class="seo-lp-result-icon"><i class="{{ ['fa-solid fa-eye', 'fa-solid fa-users', 'fa-solid fa-bullseye', 'fa-solid fa-heart-pulse'][$index % 4] }}"></i></span><strong>{{ $item['value'] ?? '' }}</strong><small>{{ $item['label'] ?? '' }}</small></article>@endforeach</div><div class="seo-lp-results-glow"></div></div></section>
 @elseif($layout === 'seo_faq')
-<section class="seo-lp seo-lp-faq"><div class="seo-lp-container seo-lp-faq-grid"><div class="seo-lp-faq-aside"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><div class="seo-lp-faq-mark"><i class="fa-regular fa-circle-question"></i></div></div><div class="seo-lp-faq-list">@foreach(($data['items'] ?? []) as $index => $item)<details @if($index === 0) open @endif><summary><span>{{ $item['title'] ?? '' }}</span><i class="fa-solid fa-plus"></i></summary><p>{{ $item['description'] ?? '' }}</p></details>@endforeach</div></div></section>
+<section class="seo-lp seo-lp-faq"><div class="seo-lp-container"><header class="seo-lp-faq-heading"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? 'Got questions?' }}</span><h2>{{ $data['heading'] ?? 'Frequently Asked Questions' }}</h2><p>{{ $data['body'] ?? 'Get answers to common questions about our services.' }}</p></header><div class="seo-lp-faq-list">@foreach(($data['items'] ?? []) as $item)<details><summary><span>{{ $item['title'] ?? '' }}</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>{{ $item['description'] ?? '' }}</p></details>@endforeach</div></div></section>
 @elseif($layout === 'seo_cta')
 <section class="seo-lp seo-lp-cta"><div class="seo-lp-container"><div class="seo-lp-cta-card"><div class="seo-lp-cta-orbit" aria-hidden="true"></div><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><a class="seo-lp-button seo-lp-button-lime" href="{{ $data['button_link'] ?? '/contact#contact' }}">{{ $data['button_text'] ?? '' }} <i class="fa-solid fa-arrow-right"></i></a><span class="seo-lp-cta-sparkle" aria-hidden="true"><i class="fa-solid fa-star"></i></span></div></div></section>
 @endif

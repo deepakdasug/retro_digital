@@ -5,12 +5,12 @@
 <section class="seo-section">
     <div class="seo-container seo-split {{ ($data['image_position'] ?? 'left') === 'right' ? 'seo-split-reverse' : '' }}">
         <div class="seo-split-image">
-            @if($imageUrl)<img src="{{ $imageUrl }}" alt="{{ $data['image_alt'] ?? ($data['heading'] ?? 'SEO strategy') }}" loading="lazy">@else
-                <div class="seo-image-placeholder"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></div>
+            @if($imageUrl)<img src="{{ $imageUrl }}" alt="{{ $data['image_alt'] ?? ($data['heading'] ?? 'Section image') }}" loading="lazy">@else
+                <div class="seo-image-placeholder"><i class="fa-solid fa-image" aria-hidden="true"></i></div>
             @endif
         </div>
         <div class="seo-split-copy">
-            <span class="seo-eyebrow">{{ $data['eyebrow'] ?? 'A clear path to better search visibility' }}</span>
+            <span class="seo-eyebrow">{{ $data['eyebrow'] ?? 'A better way forward' }}</span>
             @if(!empty($data['heading']))<h2>{{ $data['heading'] }}</h2>@endif
             @if(!empty($data['body']))<div class="seo-body">{!! nl2br(e($data['body'])) !!}</div>@endif
             @if(!empty($data['cta_text']) && !empty($data['cta_link']))
