@@ -1,6 +1,7 @@
-@extends('layouts.standalone-editor')
+@extends('layouts.admin')
 
-@section('title', 'Create Web Page')
+@section('title', 'Create Web Page - Admin')
+@section('page_heading', 'Create Web Page')
 
 @push('styles')
 <script src="https://cdn.tailwindcss.com"></script>
@@ -541,23 +542,6 @@
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
-
-  /* ── Full-width expansion when Step 2 (live editor) is active ── */
-  .wp-page-editor-active .wp-editor-wrap > div {
-    max-width: 1440px !important;
-  }
-  .wp-page-editor-active .wp-unified-form {
-    overflow: visible;
-  }
-  /* Hide the outer page header & footer bar in editor mode — toolbar handles saving */
-  .wp-page-editor-active .wp-editor-page-header,
-  .wp-page-editor-active .wp-footer-bar,
-  .wp-page-editor-active #page-general-section,
-  .wp-page-editor-active #page-sections-card,
-  .wp-page-editor-active #page-seo-section,
-  .wp-page-editor-active #page-publication-section {
-    display: none !important;
-  }
 </style>
 @endpush
 
@@ -596,13 +580,13 @@
     <div style="max-width: 1040px; margin: 0 auto;">
         
         <!-- Top Navigation & Header -->
-        <div class="wp-editor-page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem;">
             <div>
                 <a href="{{ route('admin.web-pages.index') }}" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 600; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.35rem 0.75rem; border-radius: 99px; text-decoration: none; margin-bottom: 0.65rem; transition: all 0.15s ease;">
                     <i class="fa-solid fa-arrow-left"></i> Web Pages List
                 </a>
                 <h1 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.025em; line-height: 1.2;">Add Web Page</h1>
-                <p style="font-size: 0.875rem; color: #64748b; margin: 0.35rem 0 0 0;">Edit the rendered page directly, then set its URL, SEO, and publishing details separately.</p>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0.35rem 0 0 0;">Create and publish a responsive webpage with interactive content sections in a clean unified form.</p>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <a href="{{ route('admin.web-pages.index') }}" class="btn-wp-secondary">Cancel</a>
@@ -616,10 +600,9 @@
             @csrf
             
             <div class="wp-unified-form">
-                @include('admin.web-pages.live-preview')
 
                 <!-- 1. GENERAL INFORMATION & MEDIA -->
-                <div class="wp-form-section" id="page-general-section">
+                <div class="wp-form-section">
                     <div class="wp-section-header">
                         <div>
                             <h2 class="wp-section-title">
@@ -766,7 +749,7 @@
                 </div>
 
                 <!-- 3. SEARCH ENGINE OPTIMIZATION (SEO) -->
-                <div class="wp-form-section" id="page-seo-section">
+                <div class="wp-form-section">
                     <div class="wp-section-header">
                         <div>
                             <h2 class="wp-section-title">
@@ -813,7 +796,7 @@
                 </div>
 
                 <!-- 4. PUBLICATION & VISIBILITY -->
-                <div class="wp-form-section" id="page-publication-section">
+                <div class="wp-form-section">
                     <div class="wp-status-card">
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 40px; height: 40px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 1.15rem;">
@@ -1242,9 +1225,6 @@
         }
 
         updateQuickNav();
-        if (typeof window.refreshVisualPagePreview === 'function') {
-            window.refreshVisualPagePreview();
-        }
     }
 
     // =========================================================================

@@ -1,6 +1,7 @@
-@extends('layouts.standalone-editor')
+@extends('layouts.admin')
 
 @section('title', 'Edit Web Page - ' . $webPage->title)
+@section('page_heading', 'Edit Web Page')
 
 @push('styles')
 <script src="https://cdn.tailwindcss.com"></script>
@@ -534,22 +535,6 @@
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
-
-  /* ── Full-width expansion when Step 2 (live editor) is active ── */
-  .wp-page-editor-active .wp-editor-wrap > div {
-    max-width: 1440px !important;
-  }
-  .wp-page-editor-active .wp-unified-form {
-    overflow: visible;
-  }
-  .wp-page-editor-active .wp-editor-page-header,
-  .wp-page-editor-active .wp-footer-bar,
-  .wp-page-editor-active #page-general-section,
-  .wp-page-editor-active #page-sections-card,
-  .wp-page-editor-active #page-seo-section,
-  .wp-page-editor-active #page-publication-section {
-    display: none !important;
-  }
 </style>
 @endpush
 
@@ -588,7 +573,7 @@
     <div style="max-width: 1040px; margin: 0 auto;">
         
         <!-- Top Navigation & Header -->
-        <div class="wp-editor-page-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem;">
             <div>
                 <a href="{{ route('admin.dashboard', ['tab' => 'webpage']) }}" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 600; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.35rem 0.75rem; border-radius: 99px; text-decoration: none; margin-bottom: 0.65rem; transition: all 0.15s ease;">
                     <i class="fa-solid fa-arrow-left"></i> Web Pages List
@@ -597,6 +582,9 @@
                 <p style="font-size: 0.875rem; color: #64748b; margin: 0.35rem 0 0 0;">Editing: <strong style="color: #0f172a;">{{ $webPage->title }}</strong> (<code>/{{ !empty($isService) ? 'services' : 'web' }}/{{ $webPage->slug }}</code>)</p>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <a href="{{ !empty($isService) ? route('services.show', $webPage->slug) : route('web-pages.show', $webPage->slug) }}" target="_blank" rel="noopener" class="btn-wp-secondary">
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: #16a34a;"></i> View Live
+                </a>
                 <a href="{{ route('admin.dashboard', ['tab' => 'webpage']) }}" class="btn-wp-secondary">Cancel</a>
                 <button type="button" onclick="document.getElementById('wizardForm').requestSubmit()" class="btn-wp-publish">
                     <i class="fa-solid fa-check"></i> Save Changes
@@ -610,10 +598,9 @@
             <input type="hidden" name="sections_submitted" value="1">
             
             <div class="wp-unified-form">
-                @include('admin.web-pages.live-preview')
 
                 <!-- 1. GENERAL INFORMATION & MEDIA -->
-                <div class="wp-form-section" id="page-general-section">
+                <div class="wp-form-section">
                     <div class="wp-section-header">
                         <div>
                             <h2 class="wp-section-title">
@@ -765,7 +752,7 @@
                 </div>
 
                 <!-- 3. SEARCH ENGINE OPTIMIZATION (SEO) -->
-                <div class="wp-form-section" id="page-seo-section">
+                <div class="wp-form-section">
                     <div class="wp-section-header">
                         <div>
                             <h2 class="wp-section-title">
@@ -827,7 +814,7 @@
                 </div>
 
                 <!-- 4. PUBLICATION & VISIBILITY -->
-                <div class="wp-form-section" id="page-publication-section">
+                <div class="wp-form-section">
                     <div class="wp-status-card">
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 40px; height: 40px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 1.15rem;">
@@ -1240,9 +1227,6 @@
         }
 
         updateQuickNav();
-        if (typeof window.refreshVisualPagePreview === 'function') {
-            window.refreshVisualPagePreview();
-        }
     }
 
     // =========================================================================

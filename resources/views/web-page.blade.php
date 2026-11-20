@@ -80,7 +80,7 @@
     PRIMARY PAGE HERO HEADER
     =============================================================================
     --}}
-    <section data-admin-preview-hero class="relative bg-[#f7fbf7] overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-28 border-b border-[#d7e5d9]/60">
+    <section class="relative bg-[#f7fbf7] overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-28 border-b border-[#d7e5d9]/60">
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
             <div class="absolute -top-32 -right-32 w-[550px] h-[550px] bg-[#397b4e]/10 rounded-full blur-3xl opacity-70"></div>
             <div class="absolute bottom-0 left-10 w-[420px] h-[420px] bg-[#25d366]/8 rounded-full blur-3xl opacity-60"></div>
@@ -91,15 +91,15 @@
                 <div class="max-w-2xl">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#eaf4eb] text-[#285d3a] border border-[#c8dfcc] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-sm">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#25d366] animate-pulse shadow-[0_0_8px_#25d366]"></span>
-                        <span data-admin-preview-field="category">{{ ucfirst($webPage->category ?: 'Marketing') }}</span> / {{ str_pad((string) $webPage->id, 2, '0', STR_PAD_LEFT) }}
+                        {{ ucfirst($webPage->category ?: 'Marketing') }} / {{ str_pad((string) $webPage->id, 2, '0', STR_PAD_LEFT) }}
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1e3326] leading-[1.12] tracking-tight mb-6">
-                        <span data-admin-preview-field="title" class="text-transparent bg-clip-text bg-gradient-to-r from-[#1e3326] via-[#285d3a] to-[#397b4e]">{{ $webPage->title }}</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#1e3326] via-[#285d3a] to-[#397b4e]">{{ $webPage->title }}</span>
                     </h1>
 
                     @if($webPage->short_description)
-                        <p data-admin-preview-field="short_description" class="text-lg sm:text-xl text-[#637568] mb-8 leading-relaxed font-normal">
+                        <p class="text-lg sm:text-xl text-[#637568] mb-8 leading-relaxed font-normal">
                             {{ $webPage->short_description }}
                         </p>
                     @endif
@@ -155,12 +155,11 @@
         @php
             $c = $section->content ?? [];
             $sType = $section->section_type;
-            $previewSectionIndex = $section->preview_index ?? $loop->index;
         @endphp
 
         {{-- 1. HERO BANNER --}}
         @if ($sType === 'hero')
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-20 bg-white border-b border-[#d7e5d9]">
+            <section class="py-20 bg-white border-b border-[#d7e5d9]">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div>
@@ -170,15 +169,15 @@
                                     {{ $c['badge'] }}
                                 </div>
                             @endif
-                            <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-4 tracking-tight leading-tight">
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-4 tracking-tight leading-tight">
                                 {{ $c['heading'] ?? $section->title ?? $webPage->title }}
                             </h2>
-                            <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568] mb-8 leading-relaxed">
+                            <p class="text-lg text-[#637568] mb-8 leading-relaxed">
                                 {{ $c['subtitle'] ?? $section->description }}
                             </p>
                             @if(!empty($c['cta_text']))
                                 <a href="{{ $c['cta_link'] ?? '#contact' }}" class="inline-flex items-center px-7 py-3.5 text-sm font-bold text-white bg-[#397b4e] hover:bg-[#285d3a] rounded-full shadow-md hover:-translate-y-0.5 transition-all">
-                                    <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][cta_text]">{{ $c['cta_text'] }}</span> {!! $svg($I['arrow'], 'w-4 h-4 ml-2') !!}
+                                    {{ $c['cta_text'] }} {!! $svg($I['arrow'], 'w-4 h-4 ml-2') !!}
                                 </a>
                             @endif
                         </div>
@@ -198,7 +197,7 @@
                 $topics = is_array($c['topics'] ?? null) ? $c['topics'] : (is_string($c['topics'] ?? null) ? array_filter(array_map('trim', explode(',', $c['topics']))) : []);
             @endphp
             @if(count($topics) > 0)
-                <div data-admin-preview-section="{{ $previewSectionIndex }}" class="bg-[#397b4e] py-4 overflow-hidden border-y border-[#2d633e]" aria-label="Core focus topics">
+                <div class="bg-[#397b4e] py-4 overflow-hidden border-y border-[#2d633e]" aria-label="Core focus topics">
                     <div class="flex w-max animate-[marqueeScroll_32s_linear_infinite]">
                         @for ($k = 0; $k < 2; $k++)
                             @foreach ($topics as $topic)
@@ -216,15 +215,15 @@
             @php
                 $features = $c['items'] ?? $c['features'] ?? [];
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-[#f7fbf7]" id="about">
+            <section class="py-24 bg-[#f7fbf7]" id="about">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
                         <div>
-                            <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][kicker]" class="text-xs font-bold uppercase tracking-[0.15em] text-[#397b4e] block mb-2">{{ $c['kicker'] ?? 'About the service' }}</span>
-                            <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-5 tracking-tight">
+                            <span class="text-xs font-bold uppercase tracking-[0.15em] text-[#397b4e] block mb-2">{{ $c['kicker'] ?? 'About the service' }}</span>
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-5 tracking-tight">
                                 {{ $c['heading'] ?? $section->title ?? 'Targeted, conversion-focused solutions.' }}
                             </h2>
-                            <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][paragraph]" class="text-lg text-[#637568] leading-relaxed mb-8">
+                            <p class="text-lg text-[#637568] leading-relaxed mb-8">
                                 {{ $c['paragraph'] ?? $section->description ?? 'We build scalable solutions tailored to your unique requirements.' }}
                             </p>
                             @if(count($features) > 0)
@@ -240,11 +239,11 @@
                                             <div class="w-12 h-12 rounded-2xl bg-[#eaf4eb] border border-[#c8dfcc] text-[#397b4e] flex items-center justify-center mb-4">
                                                 {!! $renderIcon($ic) !!}
                                             </div>
-                                            <h3 data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $loop->index }}][title]" class="font-bold text-[#1e3326] mb-1.5">{{ $title }}</h3>
-                                            <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $loop->index }}][description]" class="text-sm text-[#637568] leading-relaxed mb-3">{{ $desc }}</p>
+                                            <h3 class="font-bold text-[#1e3326] mb-1.5">{{ $title }}</h3>
+                                            <p class="text-sm text-[#637568] leading-relaxed mb-3">{{ $desc }}</p>
                                             @if($benefit)
                                                 <p class="text-xs text-[#637568] leading-relaxed border-t border-[#d7e5d9] pt-3">
-                                                    <span class="font-bold text-[#285d3a]">Benefit:</span> <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $loop->index }}][benefit]">{{ $benefit }}</span>
+                                                    <span class="font-bold text-[#285d3a]">Benefit:</span> {{ $benefit }}
                                                 </p>
                                             @endif
                                         </div>
@@ -274,14 +273,14 @@
             @php
                 $rows = $c['items'] ?? [];
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-white border-b border-[#d7e5d9]">
+            <section class="py-24 bg-white border-b border-[#d7e5d9]">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="text-center max-w-3xl mx-auto mb-16">
                         <span class="text-xs font-bold uppercase tracking-[0.15em] text-[#397b4e] block mb-2">What's included</span>
-                        <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
                             {{ $c['heading'] ?? $section->title ?? ("Transform your business with our " . $t . " service.") }}
                         </h2>
-                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568]">
+                        <p class="text-lg text-[#637568]">
                             {{ $c['subtitle'] ?? $section->description ?? 'Pick one service or combine them all. Built around your unique objectives.' }}
                         </p>
                     </div>
@@ -305,9 +304,9 @@
                                             <span class="w-11 h-11 rounded-2xl bg-white border border-[#c8dfcc] text-[#397b4e] flex items-center justify-center shrink-0">
                                                 {!! $renderIcon($ic) !!}
                                             </span>
-                                            <h3 data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][title]" class="text-xl font-bold text-[#1e3326]">{{ $rowTitle }}</h3>
+                                            <h3 class="text-xl font-bold text-[#1e3326]">{{ $rowTitle }}</h3>
                                         </div>
-                                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][description]" class="text-[#637568] text-sm sm:text-base leading-relaxed">{{ $rowDesc }}</p>
+                                        <p class="text-[#637568] text-sm sm:text-base leading-relaxed">{{ $rowDesc }}</p>
                                         <hr class="my-6 border-[#d7e5d9]">
                                         <div class="flex flex-wrap items-center justify-between gap-4">
                                             <div class="flex gap-3">
@@ -333,14 +332,14 @@
             @php
                 $projects = $c['items'] ?? [];
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-[#f7fbf7] border-b border-[#d7e5d9]" id="projects">
+            <section class="py-24 bg-[#f7fbf7] border-b border-[#d7e5d9]" id="projects">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="text-center mb-14">
                         <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Our Projects</span>
-                        <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
                             {{ $c['heading'] ?? $section->title ?? 'Real numbers from real clients.' }}
                         </h2>
-                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568]">
+                        <p class="text-lg text-[#637568]">
                             {{ $c['subtitle'] ?? $section->description ?? 'Flip the switch to compare results before and after.' }}
                         </p>
                     </div>
@@ -372,9 +371,9 @@
                                 @endphp
                                 <div data-pslide class="{{ $i ? 'hidden' : '' }}">
                                     <h3 class="text-3xl font-extrabold text-[#1e3326] tracking-tight mb-3">
-                                        Expect great things from <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][name]" class="text-[#397b4e]">{{ $pName }}</span>
+                                        Expect great things from <span class="text-[#397b4e]">{{ $pName }}</span>
                                     </h3>
-                                    <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][description]" class="text-[#637568] mb-6 leading-relaxed">{{ $pDesc }}</p>
+                                    <p class="text-[#637568] mb-6 leading-relaxed">{{ $pDesc }}</p>
                                     
                                     <div class="grid grid-cols-3 gap-3">
                                         @foreach ([['Organic Traffic', 0], ['Ranking Keywords', 1], ['ROI Growth', 2]] as [$label, $k])
@@ -421,15 +420,15 @@
             @php
                 $steps = $c['items'] ?? [];
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-white border-b border-[#d7e5d9]" id="process">
+            <section class="py-24 bg-white border-b border-[#d7e5d9]" id="process">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="grid lg:grid-cols-2 gap-14 items-start">
                         <div class="lg:sticky lg:top-28">
                             <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Full workflow</span>
-                            <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-4 tracking-tight">
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-4 tracking-tight">
                                 {{ $c['heading'] ?? $section->title ?? ("How a " . $t . " project runs, end to end.") }}
                             </h2>
-                            <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568] leading-relaxed mb-8">
+                            <p class="text-lg text-[#637568] leading-relaxed mb-8">
                                 {{ $c['subtitle'] ?? $section->description ?? 'A structured workflow keeps every project on time and on target from kickoff to ongoing optimization.' }}
                             </p>
                             <a href="#contact" class="inline-flex items-center mt-4 px-7 py-3.5 text-sm font-bold text-white bg-[#1e3326] hover:bg-[#14241b] rounded-full hover:-translate-y-0.5 transition-all">
@@ -449,8 +448,8 @@
                                     </span>
                                     <div class="bg-[#f7fbf7] p-6 rounded-3xl border border-[#d7e5d9] hover:border-[#397b4e] transition-colors">
                                         <span class="text-[#397b4e] block mb-2">{!! $renderIcon($ic) !!}</span>
-                                        <h3 data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][title]" class="font-bold text-[#1e3326] mb-1">{{ $stepTitle }}</h3>
-                                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][description]" class="text-sm text-[#637568] leading-relaxed">{{ $stepDesc }}</p>
+                                        <h3 class="font-bold text-[#1e3326] mb-1">{{ $stepTitle }}</h3>
+                                        <p class="text-sm text-[#637568] leading-relaxed">{{ $stepDesc }}</p>
                                     </div>
                                 </li>
                             @endforeach
@@ -465,14 +464,14 @@
             @php
                 $faqs = $c['items'] ?? [];
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-[#f7fbf7] border-b border-[#d7e5d9]">
+            <section class="py-24 bg-[#f7fbf7] border-b border-[#d7e5d9]">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
                     <div class="text-center mb-16">
                         <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Knowledge Base</span>
-                        <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
                             {{ $c['heading'] ?? $section->title ?? 'Frequently Asked Questions' }}
                         </h2>
-                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568]">
+                        <p class="text-lg text-[#637568]">
                             {{ $c['subtitle'] ?? $section->description ?? ("Everything you need to know about our " . $t . " services.") }}
                         </p>
                     </div>
@@ -484,12 +483,12 @@
                             @endphp
                             <div class="bg-white rounded-2xl shadow-sm border border-[#d7e5d9] overflow-hidden faq-item transition-all hover:border-[#397b4e] {{ $i === 0 ? 'faq-active' : '' }}">
                                 <button type="button" class="faq-btn w-full px-8 py-6 text-left font-bold text-lg text-[#1e3326] flex justify-between items-center focus:outline-none">
-                                    <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][question]">{{ $q }}</span>
+                                    {{ $q }}
                                     <div class="w-8 h-8 rounded-full bg-[#f0f7f0] border border-[#d7e5d9] flex items-center justify-center flex-shrink-0 transition-all duration-300 faq-icon text-[#397b4e] ml-4">
                                         {!! $svg('M19 9l-7 7-7-7') !!}
                                     </div>
                                 </button>
-                                <div data-admin-preview-field="sections[{{ $previewSectionIndex }}][items][{{ $i }}][answer]" class="faq-content px-8 pb-6 text-[#637568] text-base leading-relaxed">
+                                <div class="faq-content px-8 pb-6 text-[#637568] text-base leading-relaxed">
                                     {{ $a }}
                                 </div>
                             </div>
@@ -501,7 +500,7 @@
 
         {{-- 8. CTA BANNER --}}
         @if ($sType === 'cta')
-            <section id="contact" data-admin-preview-section="{{ $previewSectionIndex }}" class="py-20 bg-[#eaf4eb] border-y border-[#c8dfcc]">
+            <section id="contact" class="py-20 bg-[#eaf4eb] border-y border-[#c8dfcc]">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                     <div class="bg-gradient-to-br from-[#1e3326] to-[#285d3a] rounded-3xl p-10 md:p-14 text-white shadow-2xl">
                         @if(!empty($c['image']))
@@ -510,21 +509,21 @@
                             </div>
                         @endif
                         @if(!empty($c['kicker']))
-                            <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][kicker]" class="inline-block text-xs font-bold uppercase tracking-[0.16em] text-[#25d366] mb-3">
+                            <span class="inline-block text-xs font-bold uppercase tracking-[0.16em] text-[#25d366] mb-3">
                                 {{ $c['kicker'] }}
                             </span>
                         @endif
-                        <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
                             {{ $c['heading'] ?? $section->title ?? 'Ready to accelerate your growth?' }}
                         </h2>
                         @if(!empty($c['description']) || $section->description)
-                            <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][description]" class="text-emerald-100/90 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                            <p class="text-emerald-100/90 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
                                 {{ $c['description'] ?? $section->description }}
                             </p>
                         @endif
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <a href="{{ $c['button_link'] ?? '#contact' }}" class="inline-flex justify-center items-center px-9 py-4 text-base font-bold text-[#1e3326] bg-[#25d366] hover:bg-[#1fb355] rounded-full shadow-[0_4px_18px_rgba(37,211,102,0.35)] hover:-translate-y-0.5 transition-all">
-                                <span data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][button_text]">{{ $c['button_text'] ?? 'Discuss Your Project' }}</span> <span class="ml-2" aria-hidden="true">↗</span>
+                                {{ $c['button_text'] ?? 'Discuss Your Project' }} <span class="ml-2" aria-hidden="true">↗</span>
                             </a>
                             <a href="https://wa.me/{{ $contact['wa'] }}" target="_blank" rel="noopener" class="inline-flex justify-center items-center px-8 py-4 text-base font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all">
                                 {!! $svg($I['chat'], 'w-5 h-5 mr-2') !!} WhatsApp Us
@@ -548,14 +547,14 @@
                     $relatedServices = \App\Models\Service::latest()->take(3)->get();
                 }
             @endphp
-            <section data-admin-preview-section="{{ $previewSectionIndex }}" class="py-24 bg-white border-b border-[#d7e5d9]">
+            <section class="py-24 bg-white border-b border-[#d7e5d9]">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div class="text-center mb-16">
                         <span class="text-xs font-bold uppercase tracking-[0.16em] text-[#397b4e] block mb-2">Complementary Solutions</span>
-                        <h2 data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][heading]" class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-[#1e3326] mb-3 tracking-tight">
                             {{ $c['heading'] ?? $section->title ?? 'Explore Related Services' }}
                         </h2>
-                        <p data-admin-preview-field="sections[{{ $previewSectionIndex }}][fields][subtitle]" class="text-lg text-[#637568]">
+                        <p class="text-lg text-[#637568]">
                             {{ $c['subtitle'] ?? $section->description ?? 'Combine complementary capabilities to accelerate your time-to-market.' }}
                         </p>
                     </div>
