@@ -40,6 +40,7 @@
   {{-- Primary SEO --}}
   <title>@yield('title', 'Retrotech Digital | 360° IT, Software & Digital Solutions')</title>
   <meta name="description" content="@yield('description', 'Retrotech Digital delivers enterprise web development, mobile apps, custom SaaS architecture, and automated WhatsApp marketing engines.')">
+  @hasSection('keywords')<meta name="keywords" content="@yield('keywords')">@endif
   <meta name="robots" content="@yield('robots', $defaultRobots)">
   <link rel="canonical" href="@yield('canonical', $defaultCanonical)">
 

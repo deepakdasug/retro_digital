@@ -9,30 +9,30 @@
       <details>
         <summary class="mobile-nav-link">Services</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
-          <li class="mobile-overview-item"><a href="{{ route('services.index') }}" class="mobile-overview-link"><span>View All Services</span> <i class="fa-solid fa-arrow-right"></i></a></li>
-          <li><a href="{{ route('services.digital-marketing') }}">Marketing Platform</a></li>
-          <li><a href="{{ route('services.show', 'search-engine-optimization') }}">Search Engine Optimization</a></li>
-          <li><a href="{{ route('services.show', 'social-media-marketing') }}">Social Media Marketing</a></li>
-          <li><a href="{{ route('services.show', 'paid-marketing') }}">Paid Marketing</a></li>
-          <li><a href="{{ route('services.show', 'email-marketing') }}">Email Marketing</a></li>
-          <li><a href="{{ route('services.show', 'video-marketing') }}">Video Marketing</a></li>
-          <li><a href="{{ route('services.show', 'content-marketing') }}">Content Marketing</a></li>
-          <li><a href="{{ route('services.show', 'orm-services') }}">ORM Services</a></li>
-          <li><a href="{{ route('services.show', 'web-development') }}">Tech Development</a></li>
-          <li><a href="{{ route('services.show', 'web-development') }}">Web Development</a></li>
-          <li><a href="{{ route('services.show', 'mobile-app-development') }}">Mobile App Development</a></li>
-          <li><a href="{{ route('services.show', 'custom-application') }}">Custom Application</a></li>
-          <li><a href="{{ route('services.show', 'crm-development') }}">Salesforce &amp; ERPNext Services</a></li>
-          <li><a href="{{ route('services.show', 'saas-application') }}">SaaS Application</a></li>
-          <li><a href="{{ route('services.show', 'api-development') }}">API Development</a></li>
-          <li><a href="{{ route('services.show', 'software-development') }}">Software Development</a></li>
-          <li><a href="{{ route('services.show', 'whatsapp-integration') }}">WhatsApp Integration</a></li>
-          <li><a href="{{ route('services.index') }}">Our Platform</a></li>
-          <li><a href="{{ route('services.show', 'web-development') }}">Tech Exploration</a></li>
-          <li><a href="{{ route('services.index') }}">Tech Solutions</a></li>
-          <li><a href="{{ route('services.index') }}">IT Support</a></li>
-          <li><a href="{{ route('services.index') }}">IT Services</a></li>
-          <li><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing Services</a></li>
+          <li class="mobile-overview-item"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="mobile-overview-link"><span>View All Services</span> <i class="fa-solid fa-arrow-right"></i></a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Marketing Platform</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Search Engine Optimization</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Social Media Marketing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Video Marketing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Content Marketing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">ORM Services</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Development</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Web Development</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Mobile App Development</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Custom Application</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Salesforce &amp; ERPNext Services</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">SaaS Application</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">API Development</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Software Development</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">WhatsApp Integration</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Our Platform</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Exploration</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Solutions</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">IT Support</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">IT Services</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing Services</a></li>
         </ul>
       </details>
     </li>
@@ -40,22 +40,22 @@
       <details>
         <summary class="mobile-nav-link">Industries</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
-          <li class="mobile-overview-item"><a href="{{ route('industries.index') }}" class="mobile-overview-link"><span>View All Industries</span> <i class="fa-solid fa-arrow-right"></i></a></li>
-          <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}">Ecommerce &amp; Multivendor</a></li>
-          <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real Estate &amp; Construction</a></li>
-          <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufacturing</a></li>
-          <li><a href="{{ route('industries.show', 'media-and-entertainment') }}">Media &amp; Entertainment</a></li>
-          <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}">Medical &amp; Healthcare</a></li>
-          <li><a href="{{ route('industries.show', 'personal-beauty-care') }}">Personal Beauty Care</a></li>
-          <li><a href="{{ route('industries.show', 'edtech-and-e-learning') }}">EdTech &amp; E-Learning</a></li>
-          <li><a href="{{ route('industries.show', 'travel-and-hospitality') }}">Travel &amp; Hospitality</a></li>
-          <li><a href="{{ route('industries.show', 'transportation-and-logistics') }}">Transportation &amp; Logistics</a></li>
-          <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil and Gas</a></li>
-          <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
-          <li><a href="{{ route('industries.show', 'other-industries') }}">Other Industries</a></li>
-          <li><a href="{{ route('industries.index') }}">Our Platform</a></li>
-          <li><a href="{{ route('industries.index') }}">Tech Exploration</a></li>
-          <li><a href="{{ route('industries.index') }}">Tech Solutions</a></li>
+          <li class="mobile-overview-item"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="mobile-overview-link"><span>View All Industries</span> <i class="fa-solid fa-arrow-right"></i></a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Ecommerce &amp; Multivendor</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Real Estate &amp; Construction</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Manufacturing</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Media &amp; Entertainment</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Medical &amp; Healthcare</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Personal Beauty Care</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">EdTech &amp; E-Learning</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Travel &amp; Hospitality</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Transportation &amp; Logistics</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Oil and Gas</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Finance &amp; Insurance</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Other Industries</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Our Platform</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Exploration</a></li>
+          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Solutions</a></li>
         </ul>
       </details>
     </li>

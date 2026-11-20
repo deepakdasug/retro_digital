@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
@@ -11,46 +12,21 @@ class Service extends Model
 
     protected $fillable = [
         'slug',
+        'page_section',
         'title',
         'short_description',
+        'description',
+        'icon',
+        'image',
         'meta_title',
         'meta_description',
-        'canonical_url',
+        'meta_keywords',
         'og_image',
-        'robots_index',
-        'robots_follow',
-        'hero_image',
-        'icon_svg',
-        'content',
     ];
 
-    protected $casts = [
-        'content' => 'array',
-        'robots_index' => 'boolean',
-        'robots_follow' => 'boolean',
-    ];
-
-    public function getRouteKeyName(): string
+    public function sections(): HasMany
     {
-        return 'slug';
-    }
-
-    /**
-     * Resolve route binding for both numeric ID and string slug.
-     */
-    public function resolveRouteBinding($value, $field = null)
-    {
-        if ($field) {
-            return parent::resolveRouteBinding($value, $field);
-        }
-
-        if (is_numeric($value)) {
-            $service = $this->where('id', $value)->first();
-            if ($service) {
-                return $service;
-            }
-        }
-
-        return $this->where('slug', $value)->firstOrFail();
+        return $this->hasMany(ServiceSection::class)
+            ->orderBy('sort_order');
     }
 }

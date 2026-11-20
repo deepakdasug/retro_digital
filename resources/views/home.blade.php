@@ -26,7 +26,7 @@
             <span>Get a Free Consultation</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
-          <a href="{{ route('services.index') }}" class="hero-secondary-btn">
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="hero-secondary-btn">
             <span>Explore Services</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
@@ -275,7 +275,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'web-development') }}">Web Development &amp; Architecture</a>
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Web Development &amp; Architecture</a>
             </h3>
             <p class="sc-desc">
               High-performance, responsive websites and dynamic web applications built with modern frameworks, sub-80ms
@@ -287,7 +287,7 @@
               <span class="sc-tag">REST &amp; GraphQL</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'web-development') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -309,7 +309,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'mobile-app-development') }}">Mobile App Development</a>
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Mobile App Development</a>
             </h3>
             <p class="sc-desc">
               Native and cross-platform iOS and Android mobile apps engineered for fluid 120Hz gesture response, offline
@@ -321,7 +321,7 @@
               <span class="sc-tag">iOS &amp; Android</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'mobile-app-development') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -339,7 +339,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'software-development') }}">Custom Software Development</a>
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Custom Software Development</a>
             </h3>
             <p class="sc-desc">
               Tailored enterprise software designed to eliminate manual bottlenecks, automate operational workflows, and
@@ -351,7 +351,7 @@
               <span class="sc-tag">Microservices</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'software-development') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -372,7 +372,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'saas-application') }}">SaaS &amp; Cloud Applications</a>
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">SaaS &amp; Cloud Applications</a>
             </h3>
             <p class="sc-desc">
               Scalable multi-tenant cloud software platforms built for recurring revenue, featuring automated billing,
@@ -384,7 +384,7 @@
               <span class="sc-tag">Stripe Billing</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'saas-application') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -402,7 +402,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'search-engine-optimization') }}">Digital Marketing &amp; Technical
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing &amp; Technical
                 SEO</a>
             </h3>
             <p class="sc-desc">
@@ -415,7 +415,7 @@
               <span class="sc-tag">Meta Ads</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'search-engine-optimization') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -433,7 +433,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="{{ route('services.show', 'whatsapp-integration') }}">WhatsApp Automation &amp; CRM Bot</a>
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">WhatsApp Automation &amp; CRM Bot</a>
             </h3>
             <p class="sc-desc">
               Automate 24/7 customer support, qualify inbound sales leads, and run verified broadcasts using the official
@@ -445,7 +445,7 @@
               <span class="sc-tag">Chatbots</span>
             </div>
             <div class="sc-footer">
-              <a href="{{ route('services.show', 'whatsapp-integration') }}" class="sc-action-btn">
+              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -934,7 +934,7 @@
       <div class="ind-slider-viewport" id="indSliderViewport">
         <div class="industries-pro-grid ind-slider-track" id="indSliderTrack">
           {{-- Industry 1 --}}
-          <a href="{{ route('industries.show', 'ecommerce-multivendor') }}" class="industry-card-pro" data-anim="left"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="left"
             data-industry-cat="commerce">
             {{-- Image 19: E-Commerce Storefronts --}}
             <div class="icp-img-wrap">
@@ -962,7 +962,7 @@
           </a>
 
           {{-- Industry 2 --}}
-          <a href="{{ route('industries.show', 'medical-and-healthcare') }}" class="industry-card-pro" data-anim="up"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="up"
             data-industry-cat="fintech">
             {{-- Image 20: Healthcare & Telemedicine --}}
             <div class="icp-img-wrap">
@@ -994,7 +994,7 @@
           </a>
 
           {{-- Industry 3 --}}
-          <a href="{{ route('industries.show', 'finance-and-insurance') }}" class="industry-card-pro" data-anim="down"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="down"
             data-industry-cat="fintech">
             {{-- Image 21: Banking & FinTech --}}
             <div class="icp-img-wrap">
@@ -1021,7 +1021,7 @@
           </a>
 
           {{-- Industry 4 --}}
-          <a href="{{ route('industries.show', 'real-estate-and-construction') }}" class="industry-card-pro"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro"
             data-anim="right" data-industry-cat="commerce">
             {{-- Image 22: Real Estate & PropTech --}}
             <div class="icp-img-wrap">
@@ -1049,7 +1049,7 @@
           </a>
 
           {{-- Industry 5 --}}
-          <a href="{{ route('industries.show', 'edtech-and-e-learning') }}" class="industry-card-pro" data-anim="left"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="left"
             data-industry-cat="enterprise">
             {{-- Image 23: Education & EdTech --}}
             <div class="icp-img-wrap">
@@ -1077,7 +1077,7 @@
           </a>
 
           {{-- Industry 6 --}}
-          <a href="{{ route('industries.show', 'other-industries') }}" class="industry-card-pro" data-anim="up"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="up"
             data-industry-cat="enterprise">
             {{-- Image 24: SaaS & Tech Startups --}}
             <div class="icp-img-wrap">
@@ -1105,7 +1105,7 @@
           </a>
 
           {{-- Industry 7 --}}
-          <a href="{{ route('industries.show', 'manufacturing') }}" class="industry-card-pro" data-anim="down"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="down"
             data-industry-cat="enterprise">
             {{-- Image 25: Manufacturing & Logistics --}}
             <div class="icp-img-wrap">
@@ -1133,7 +1133,7 @@
           </a>
 
           {{-- Industry 8 --}}
-          <a href="{{ route('industries.show', 'travel-and-hospitality') }}" class="industry-card-pro" data-anim="right"
+          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="right"
             data-industry-cat="commerce">
             {{-- Image 26: Travel & Hospitality --}}
             <div class="icp-img-wrap">

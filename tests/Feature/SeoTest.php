@@ -3,10 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\BlogPost;
-use App\Models\Industry;
-use App\Models\Service;
-use App\Models\TechDevelopment;
-use App\Models\WebPage;
 use App\Support\SeoCanonical;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
@@ -19,33 +15,6 @@ class SeoTest extends TestCase
 
     public function test_dynamic_pages_emit_indexing_directives_and_safe_canonicals(): void
     {
-        $service = Service::create([
-            'title' => 'Private SEO Service',
-            'slug' => 'private-seo-service',
-            'robots_index' => false,
-            'robots_follow' => false,
-        ]);
-        $industry = Industry::create([
-            'name' => 'Private Industry',
-            'slug' => 'private-industry',
-            'is_published' => true,
-            'canonical_url' => 'https://www.retrotechdigital.com/who-we-serve/private-industry',
-            'robots_index' => false,
-            'robots_follow' => true,
-        ]);
-
-        $serviceResponse = $this->get(route('services.show', $service->slug));
-        $serviceResponse->assertOk();
-        $serviceResponse->assertSee('<meta name="robots" content="noindex, nofollow">', false);
-
-        $industryResponse = $this->get(route('industries.show', $industry->slug));
-        $industryResponse->assertOk();
-        $industryResponse->assertSee(
-            '<link rel="canonical" href="' . route('industries.show', $industry->slug) . '">',
-            false
-        );
-        $industryResponse->assertSee('<meta name="robots" content="noindex, follow">', false);
-
         $legalResponse = $this->get(route('privacy-policy'));
         $legalResponse->assertOk();
         $legalResponse->assertSee('<meta name="robots" content="noindex, follow">', false);
@@ -67,69 +36,6 @@ class SeoTest extends TestCase
             $fallback,
             SeoCanonical::resolve('https://localhost/services/search-engine-optimization', $fallback)
         );
-    }
-
-    public function test_service_pages_use_saved_seo_metadata_and_safe_canonicals(): void
-    {
-        $service = Service::create([
-            'title' => 'Canonical Service',
-            'slug' => 'canonical-service',
-            'meta_title' => 'Canonical Service Meta Title',
-            'meta_description' => 'A service-specific search description.',
-            'canonical_url' => 'https://www.retrotechdigital.com/services/canonical-service',
-            'robots_index' => false,
-            'robots_follow' => true,
-        ]);
-
-        $response = $this->get(route('services.show', $service->slug));
-
-        $response->assertOk();
-        $response->assertSee('<title>Canonical Service Meta Title</title>', false);
-        $response->assertSee(
-            '<link rel="canonical" href="https://www.retrotechdigital.com/services/canonical-service">',
-            false
-        );
-        $response->assertSee('<meta name="robots" content="noindex, follow">', false);
-        $response->assertSee('"@type":"Service"', false);
-    }
-
-    public function test_seo_service_alias_redirects_to_the_existing_service_slug(): void
-    {
-        Service::create([
-            'title' => 'Search Engine Optimization',
-            'slug' => 'seo-services',
-            'robots_index' => true,
-        ]);
-
-        $response = $this->get(route('services.show', 'search-engine-optimization'));
-
-        $response->assertRedirect(route('services.show', 'seo-services'));
-        $response->assertStatus(301);
-        $this->get(route('services.show', 'seo-services'))->assertOk();
-    }
-
-    public function test_tech_development_pages_use_indexing_metadata_and_current_canonical_route(): void
-    {
-        $tech = TechDevelopment::create([
-            'name' => 'Canonical Technology',
-            'slug' => 'canonical-technology',
-            'is_published' => true,
-            'meta_title' => 'Canonical Technology Meta Title',
-            'meta_description' => 'Technology-specific search description.',
-            'canonical_url' => 'https://www.retrotechdigital.com/technology/canonical-technology',
-            'robots_index' => false,
-            'robots_follow' => false,
-        ]);
-
-        $response = $this->get(route('services.show', $tech->slug));
-
-        $response->assertOk();
-        $response->assertSee('<title>Canonical Technology Meta Title | Retrotech Digital</title>', false);
-        $response->assertSee(
-            '<link rel="canonical" href="' . route('services.show', $tech->slug) . '">',
-            false
-        );
-        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
     }
 
     public function test_published_blog_posts_without_categories_remain_discoverable(): void
@@ -157,35 +63,6 @@ class SeoTest extends TestCase
         URL::forceRootUrl('https://www.retrotechdigital.com');
         URL::forceScheme('https');
 
-        $service = Service::create([
-            'title' => 'Indexable Service',
-            'slug' => 'indexable-service',
-            'robots_index' => true,
-        ]);
-        Service::create([
-            'title' => 'Noindex Service',
-            'slug' => 'noindex-service',
-            'robots_index' => false,
-        ]);
-        $industry = Industry::create([
-            'name' => 'Indexable Industry',
-            'slug' => 'indexable-industry',
-            'is_published' => true,
-            'canonical_url' => 'https://www.retrotechdigital.com/who-we-serve/indexable-industry',
-            'robots_index' => true,
-        ]);
-        TechDevelopment::create([
-            'name' => 'Indexable Technology',
-            'slug' => 'indexable-technology',
-            'is_published' => true,
-            'robots_index' => true,
-            'canonical_url' => 'https://www.retrotechdigital.com/services/indexable-technology',
-        ]);
-        WebPage::create([
-            'title' => 'Indexable Web Page',
-            'slug' => 'indexable-web-page',
-            'is_published' => true,
-        ]);
         BlogPost::create([
             'title' => 'Indexable Blog Post',
             'slug' => 'indexable-blog-post',
@@ -217,16 +94,10 @@ class SeoTest extends TestCase
             $sitemap = file_get_contents($path);
 
             $this->assertIsString($sitemap);
-            $this->assertStringContainsString(route('services.show', $service->slug), $sitemap);
-            $this->assertStringContainsString('https://www.retrotechdigital.com/who-we-serve/indexable-industry', $sitemap);
-            $this->assertStringContainsString('https://www.retrotechdigital.com/services/indexable-technology', $sitemap);
-            $this->assertStringContainsString(route('web-pages.show', 'indexable-web-page'), $sitemap);
             $this->assertStringContainsString(route('blog.show', 'indexable-blog-post'), $sitemap);
             $this->assertStringContainsString(route('about'), $sitemap);
-            $this->assertStringNotContainsString('noindex-service', $sitemap);
             $this->assertStringNotContainsString('noindex-blog-post', $sitemap);
             $this->assertStringNotContainsString('http://localhost', $sitemap);
-            $this->assertStringNotContainsString('/industries/indexable-industry', $sitemap);
             $this->assertStringNotContainsString('/privacy-policy', $sitemap);
             $this->assertStringNotContainsString('/terms-and-conditions', $sitemap);
         } finally {

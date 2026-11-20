@@ -9,7 +9,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(ServiceSeeder::class);
 
         // User::factory(10)->create();
         User::factory()->create([
@@ -19,9 +18,8 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call([
-            TechDevelopmentSeeder::class,
+            SeoServicePageSeeder::class,
             TestimonialSeeder::class,
-            IndustrySeeder::class,
             FaqSeeder::class,
             BlogSeeder::class,
         ]);

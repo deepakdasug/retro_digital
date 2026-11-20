@@ -5,16 +5,13 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\BlogController; 
 use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\IndustryController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\Admin\WebPageController as AdminWebPageController;
-use App\Http\Controllers\WebPageController as FrontendWebPageController;
 use App\Models\BlogPost; 
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\FaqController as PublicFaqController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Admin\RolePermissionController;
-
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -107,22 +104,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/faqs/{faq}', [AdminFaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.edit');
     Route::delete('/admin/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
 
-    // Web Pages CRUD (Create, Read, Update, Delete)
-    Route::get('/admin/web-pages', [AdminWebPageController::class, 'index'])->name('admin.web-pages.index')->middleware('permission:webpages.view');
-    Route::get('/admin/web-pages/create', [AdminWebPageController::class, 'create'])->name('admin.web-pages.create')->middleware('permission:webpages.create');
-    Route::post('/admin/web-pages/preview', [AdminWebPageController::class, 'preview'])->name('admin.web-pages.preview');
-    Route::post('/admin/web-pages', [AdminWebPageController::class, 'store'])->name('admin.web-pages.store')->middleware('permission:webpages.create');
-    Route::get('/admin/web-pages/{webPage}/edit', [AdminWebPageController::class, 'edit'])->name('admin.web-pages.edit')->middleware('permission:webpages.edit');
-    Route::put('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'update'])->name('admin.web-pages.update')->middleware('permission:webpages.edit');
-    Route::delete('/admin/web-pages/{webPage}', [AdminWebPageController::class, 'destroy'])->name('admin.web-pages.destroy')->middleware('permission:webpages.delete');
 
-    // Services & Tech Developments management
-    Route::get('/admin/services/{service}/edit', [AdminWebPageController::class, 'editService'])->name('admin.services.edit')->middleware('permission:services.edit');
-    Route::put('/admin/services/{service}', [AdminWebPageController::class, 'updateService'])->name('admin.services.update')->middleware('permission:services.edit');
-    Route::delete('/admin/services/{service}', [AdminWebPageController::class, 'destroyService'])->name('admin.services.destroy')->middleware('permission:services.delete');
-    Route::get('/admin/tech-developments/{techDevelopment}/edit', [AdminWebPageController::class, 'editTechDevelopment'])->name('admin.tech-developments.edit')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
-    Route::put('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'updateTechDevelopment'])->name('admin.tech-developments.update')->middleware('permission:tech_developments.edit|services.edit|webpages.edit');
-    Route::delete('/admin/tech-developments/{techDevelopment}', [AdminWebPageController::class, 'destroyTechDevelopment'])->name('admin.tech-developments.destroy')->middleware('permission:tech_developments.delete');
+
 
     // Roles & Permissions Management CRUD
     Route::get('/admin/roles', [RolePermissionController::class, 'index'])->name('admin.roles.index')->middleware('permission:roles.view');
@@ -133,71 +116,27 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| 3. UNIFIED SERVICES ROUTES (Marketing & Tech Development)
-|--------------------------------------------------------------------------
-| Both Marketing and Tech Development pages route through ServiceController.
-| The {service} parameter is resolved by Service::getRouteKeyName() => 'slug'
-| or dynamically by TechDevelopment model.
-*/
-Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
-Route::get('/services/digital-marketing', [ServiceController::class, 'digitalMarketing'])->name('services.digital-marketing');
-Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
 
-/*
-|--------------------------------------------------------------------------
-| 4. INDUSTRY ROUTES (Who We Serve - Database Driven)
-|--------------------------------------------------------------------------
-| Must be declared BEFORE any generic catch-all route.
-*/
-Route::get('/who-we-serve', [IndustryController::class, 'index'])
-    ->name('industries.index');
+Route::get('/services/seo-services', [ServiceController::class, 'show'])
+    ->defaults('section', 'services')
+    ->defaults('slug', 'seo-services')
+    ->name('services.seo');
 
-Route::redirect('/industries', '/who-we-serve', 301);
-
-Route::get('/who-we-serve/{slug}', [IndustryController::class, 'show'])
-    ->name('industries.show');
-
-Route::get('/industries/{slug}', function (string $slug) {
-    return redirect()->route('industries.show', ['slug' => $slug], 301);
+Route::middleware(['auth', 'admin'])->prefix('admin/webpages')->name('admin.webpages.')->group(function () {
+    Route::get('/', [AdminServicePageController::class, 'index'])->name('index');
+    Route::get('/create', [AdminServicePageController::class, 'create'])->name('create');
+    Route::post('/', [AdminServicePageController::class, 'store'])->name('store');
+    Route::get('/{service}/edit', [AdminServicePageController::class, 'edit'])->name('edit');
+    Route::put('/{service}', [AdminServicePageController::class, 'updateSettings'])->name('update');
+    Route::get('/{service}/editor', [AdminServicePageController::class, 'editor'])->name('editor');
+    Route::post('/{service}/save', [AdminServicePageController::class, 'savePage'])->name('save');
+    Route::post('/{service}/sections', [AdminServicePageController::class, 'storeSection'])->name('sections.store');
+    Route::put('/{service}/sections/{section}', [AdminServicePageController::class, 'updateSection'])->name('sections.update');
+    Route::delete('/{service}/sections/{section}', [AdminServicePageController::class, 'destroySection'])->name('sections.destroy');
+    Route::delete('/{service}', [AdminServicePageController::class, 'destroy'])->name('destroy');
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| 5. DYNAMIC WEB PAGES (Frontend Renderer)
-|--------------------------------------------------------------------------
-*/
-Route::get('/web/{webPage}', [FrontendWebPageController::class, 'show'])->name('web-pages.show');
-
-
-/*
-|--------------------------------------------------------------------------
-| 6. DYNAMIC CATALOG CATCH-ALL (Legacy service redirects + fallback)
-|--------------------------------------------------------------------------
-| MUST be the LAST route — otherwise it captures /industries/{slug}, /services/{slug}, etc.
-*/
-Route::get('/{section}/{slug}', function (string $section, string $slug) {
-    $techSlugs = [
-        'web-development' => 'web-development',
-        'mobile-app-development' => 'mobile-app-development',
-        'custom-application' => 'custom-application',
-        'salesforce-erpnext-services' => 'crm-development',
-        'crm-development' => 'crm-development',
-        'saas-application' => 'saas-application',
-        'api-development' => 'api-development',
-        'software-development' => 'software-development',
-        'whatsapp-integration' => 'whatsapp-integration',
-        'tech-development' => 'web-development',
-    ];
-
-    // 1. Preserve legacy 301s
-    if ($section === 'services' && isset($techSlugs[$slug])) {
-        return redirect()->route('services.show', ['service' => $techSlugs[$slug]], 301);
-    }
-
-    // 2. No catalog view yet — return a real 404, never 500
-    abort(404);
-})->where('section', 'services|industries')->name('catalog.show');
+Route::get('/{section}/{slug}', [ServiceController::class, 'show'])
+    ->whereIn('section', ['services', 'industries', 'insights'])
+    ->name('webpages.show');

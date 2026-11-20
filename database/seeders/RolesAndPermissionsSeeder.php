@@ -29,21 +29,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'blogs.edit',
             'blogs.delete',
 
-            // Web Pages (CRUD)
-            'webpages.view',
-            'webpages.create',
-            'webpages.edit',
-            'webpages.delete',
-
-            // Services & Tech Developments
-            'services.view',
-            'services.edit',
-            'services.delete',
-            'tech_developments.view',
-            'tech_developments.create',
-            'tech_developments.edit',
-            'tech_developments.delete',
-
             // Testimonials (CRUD)
             'testimonials.view',
             'testimonials.create',
@@ -88,13 +73,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'blogs.view',
             'blogs.create',
             'blogs.edit',
-            'webpages.view',
-            'webpages.create',
-            'webpages.edit',
-            'services.view',
-            'services.edit',
-            'tech_developments.view',
-            'tech_developments.edit',
+
+
             'testimonials.view',
             'testimonials.create',
             'testimonials.edit',
@@ -119,8 +99,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $viewerRole->syncPermissions([
             'dashboard.view',
             'blogs.view',
-            'webpages.view',
-            'services.view',
             'testimonials.view',
             'faqs.view',
             'contacts.view',

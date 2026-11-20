@@ -8,7 +8,6 @@
     <section class="admin-dashboard-metrics" aria-label="Website overview">
       <article class="admin-metric-card"><div class="admin-metric-icon is-green"><i class="fa-regular fa-address-card"></i></div><div><span class="admin-metric-label">Total enquiries</span><strong>{{ $contacts->count() }}</strong><small>{{ $contactsThisWeek }} received this week</small></div></article>
       <article class="admin-metric-card"><div class="admin-metric-icon is-violet"><i class="fa-regular fa-newspaper"></i></div><div><span class="admin-metric-label">Published articles</span><strong>{{ $publishedBlogs }}</strong><small>{{ $blogsThisMonth }} created this month</small></div></article>
-      <article class="admin-metric-card"><div class="admin-metric-icon is-teal"><i class="fa-solid fa-globe"></i></div><div><span class="admin-metric-label">Web content</span><strong>{{ $webpagesCount }}</strong><small>{{ $services->count() }} services + {{ $techDevelopments->count() }} tech</small></div></article>
       <article class="admin-metric-card"><div class="admin-metric-icon is-orange"><i class="fa-solid fa-star"></i></div><div><span class="admin-metric-label">Testimonials</span><strong>{{ $testimonialsCount }}</strong><small>{{ $averageRating }} avg rating</small></div></article>
     </section>
 
@@ -117,37 +116,6 @@
           </div>
         </div>
         <div class="admin-insight-foot"><span><i class="fa-regular fa-star"></i> {{ $averageRating }}/5.0 average</span><span><i class="fa-solid fa-trophy"></i> {{ $fiveStarCount }} excellent reviews</span></div>
-      </article>
-
-      {{-- Webpages Analysis --}}
-      <article class="admin-insight-panel">
-        <div class="admin-insight-heading"><div><span class="admin-section-eyebrow">WEB CONTENT</span><h2>Pages &amp; Services</h2><p>Marketing services and tech developments.</p></div><span class="admin-insight-icon is-green"><i class="fa-solid fa-globe"></i></span></div>
-        <div class="admin-publishing-summary">
-          <div><span>Total pages</span><strong>{{ $webpagesCount }}</strong></div>
-          <div><span>Services</span><strong>{{ $services->count() }}</strong></div>
-          <div><span>Tech dev</span><strong>{{ $techDevelopments->count() }}</strong></div>
-        </div>
-        @if($webpages->isNotEmpty())
-          <div class="admin-activity-list">
-            @foreach($webpages->take(3) as $page)
-              <div class="admin-activity-item">
-                <span class="admin-activity-icon {{ $page->category === 'Marketing Service' ? 'is-green' : 'is-blue' }}">
-                  <i class="fa-solid {{ $page->category === 'Marketing Service' ? 'fa-bullhorn' : 'fa-code' }}"></i>
-                </span>
-                <div>
-                  <strong>{{ $page->title }}</strong>
-                  <small>{{ $page->category }} · {{ $page->status }}</small>
-                </div>
-                <a href="{{ $page->url }}" target="_blank" rel="noopener" aria-label="View {{ $page->title }}" title="View page">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </a>
-              </div>
-            @endforeach
-          </div>
-        @else
-          <p class="admin-insight-empty">No webpages created yet.</p>
-        @endif
-        <div class="admin-insight-foot"><span><i class="fa-regular fa-file-lines"></i> {{ $webpagesCount }} total pages</span><button class="admin-inline-link" type="button" onclick="showAdminTab('webpage')">Manage webpages <i class="fa-solid fa-arrow-right"></i></button></div>
       </article>
 
       {{-- Contact Enrichment Analysis --}}
@@ -332,171 +300,33 @@
         @endif
     </section>
 
-    <section id="section-webpage" class="admin-dashboard-section" role="tabpanel" aria-label="Webpages" hidden>
+    <section id="section-webpage" class="admin-dashboard-section" role="tabpanel" aria-label="Webpage" hidden>
       <div class="admin-section-heading admin-blog-section-heading">
-        <div>
-          <span class="admin-section-eyebrow">PAGES &amp; ROUTING</span>
-          <h2>Webpages</h2>
-          <p>Information on recently added dynamic marketing and tech development web pages.</p>
-        </div>
+        <div><span class="admin-section-eyebrow">CONTENT LIBRARY</span><h2>Webpages</h2><p>Manage website pages, their URL sections, and editable content.</p></div>
         <div style="display:flex;align-items:center;gap:0.75rem;">
-          <span class="admin-section-total"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ $webpagesCount }} total</span>
-          @can('webpages.create')
-          <a href="{{ route('admin.web-pages.create') }}" class="admin-action-button" aria-label="Add a web page" title="Add a web page" style="display: inline-flex; align-items: center; text-decoration: none;">
-            <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add a web page
-          </a>
-          @endcan
+          <span class="admin-section-total"><i class="fa-regular fa-window-maximize" aria-hidden="true"></i> {{ $servicePages->count() }} total</span>
+          <a href="{{ route('admin.webpages.create') }}" class="admin-action-button" aria-label="Create webpage" title="Create webpage"><i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Create webpage</a>
         </div>
       </div>
+      @if(session('success'))<p class="admin-success-message">{{ session('success') }}</p>@endif
 
-      <div class="admin-dashboard-metrics admin-insight-metrics" style="margin-bottom: 1.5rem;">
-        <article class="admin-metric-card">
-          <div class="admin-metric-icon is-green"><i class="fa-solid fa-globe"></i></div>
-          <div>
-            <span class="admin-metric-label">Total Webpages</span>
-            <strong>{{ $webpagesCount }}</strong>
-            <small>Marketing &amp; tech pages</small>
-          </div>
-        </article>
-        <article class="admin-metric-card">
-          <div class="admin-metric-icon is-blue"><i class="fa-solid fa-bullhorn"></i></div>
-          <div>
-            <span class="admin-metric-label">Marketing Services</span>
-            <strong>{{ $services->count() }}</strong>
-            <small>Under /services/{slug}</small>
-          </div>
-        </article>
-        <article class="admin-metric-card">
-          <div class="admin-metric-icon is-violet"><i class="fa-solid fa-code"></i></div>
-          <div>
-            <span class="admin-metric-label">Tech Development</span>
-            <strong>{{ $techDevelopments->count() }}</strong>
-            <small>Under /services/{slug}</small>
-          </div>
-        </article>
-        <article class="admin-metric-card">
-          <div class="admin-metric-icon is-amber"><i class="fa-solid fa-circle-check"></i></div>
-          <div>
-            <span class="admin-metric-label">Active / Live</span>
-            <strong>{{ $webpages->where('status', 'Active')->count() + $webpages->where('status', 'Published')->count() }}</strong>
-            <small>Publicly accessible</small>
-          </div>
-        </article>
-      </div>
-
-      <div class="admin-table-scroll">
-        <table class="admin-data-table">
-          <thead>
+      <div class="admin-table-scroll"><table class="admin-data-table">
+        <thead><tr><th>Webpage</th><th>Section</th><th>URL</th><th>Updated</th><th>Actions</th></tr></thead>
+        <tbody>
+          @forelse($servicePages as $page)
             <tr>
-              <th>Webpage</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Updated</th>
-              <th>Actions</th>
+              <td><div class="admin-article-cell"><span class="admin-article-placeholder"><i class="fa-regular fa-window-maximize" aria-hidden="true"></i></span><div class="admin-article-title-wrap"><strong>{{ $page->title }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $page->title }}" title="Toggle webpage details" aria-expanded="false" aria-controls="webpage-detail-{{ $page->id }}" onclick="toggleAdminDetails(this, 'webpage-detail-{{ $page->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
+              <td>{{ $pageSectionLabels[$page->page_section] ?? ucfirst($page->page_section) }}</td>
+              <td><code>/{{ $page->page_section }}/{{ $page->slug }}</code></td>
+              <td><strong class="admin-date-primary">{{ $page->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $page->updated_at?->diffForHumans() }}</span></td>
+              <td><div class="admin-row-actions"><a href="{{ route('webpages.show', ['section' => $page->page_section, 'slug' => $page->slug]) }}" class="admin-secondary-button" target="_blank" rel="noopener" aria-label="View {{ $page->title }}" title="View webpage"><i class="fa-regular fa-eye" aria-hidden="true"></i>View</a><a href="{{ route('admin.webpages.edit', $page) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }} settings" title="Edit webpage"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit</a><a href="{{ route('admin.webpages.editor', $page) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }} sections" title="Edit webpage sections"><i class="fa-solid fa-layer-group" aria-hidden="true"></i>Sections</a><form action="{{ route('admin.webpages.destroy', $page) }}" method="POST" onsubmit="return confirm('Delete this webpage and all its sections? This cannot be undone.');">@csrf @method('DELETE')<button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete webpage"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button></form></div></td>
             </tr>
-          </thead>
-          <tbody>
-            @forelse($webpages as $page)
-              <tr>
-                <td>
-                  <div class="admin-article-cell">
-                    @if($page->hero_image)
-                      <img src="{{ \App\Support\ImageUrl::resolve($page->hero_image) }}" alt="" loading="lazy" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
-                    @else
-                      <span class="admin-article-placeholder" style="width: 44px; height: 44px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: #eaf6ec; color: #397b4e; flex-shrink: 0;"><i class="fa-solid fa-globe"></i></span>
-                    @endif
-                    <div class="admin-article-title-wrap">
-                      <strong>{{ $page->title }}</strong>
-                      <span style="font-size: 0.78rem; color: #6b7280; font-family: monospace;">/{{ $page->model_type === 'service' ? 'services' : ($page->model_type === 'tech-development' ? 'tech-development' : 'web') }}/{{ $page->slug }}</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="admin-service-tag" style="{{ $page->model_type === 'tech-development' ? 'background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;' : ($page->model_type === 'web-page' ? 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;' : '') }}">
-                    <i class="fa-solid {{ $page->model_type === 'tech-development' ? 'fa-code' : ($page->model_type === 'web-page' ? 'fa-file-lines' : 'fa-bullhorn') }}" style="font-size: 0.7rem; margin-right: 0.35rem;"></i>{{ $page->category }}
-                  </span>
-                </td>
-                <td>
-                  <span class="admin-status-badge {{ $page->status === 'Draft' ? 'is-draft' : '' }}">
-                    <span></span>{{ $page->status }}
-                  </span>
-                </td>
-                <td>
-                  <strong class="admin-date-primary">{{ \Carbon\Carbon::parse($page->updated_at)->format('M d, Y') }}</strong>
-                  <span class="admin-date-secondary">{{ \Carbon\Carbon::parse($page->updated_at)->diffForHumans() }}</span>
-                </td>
-                <td>
-                  <div class="admin-row-actions">
-                    <a href="{{ $page->url }}" target="_blank" rel="noopener" class="admin-secondary-button" aria-label="View {{ $page->title }}" title="View live page">
-                      <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>View
-                    </a>
-
-                    @if($page->model_type === 'web-page')
-                      @can('webpages.edit')
-                      <a href="{{ route('admin.web-pages.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit web page">
-                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
-                      </a>
-                      @endcan
-                    @elseif($page->model_type === 'service')
-                      @can('services.edit')
-                      <a href="{{ route('admin.services.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit service">
-                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
-                      </a>
-                      @endcan
-                    @elseif($page->model_type === 'tech-development')
-                      @if(auth()->user()->can('tech_developments.edit') || auth()->user()->can('services.edit') || auth()->user()->can('webpages.edit') || auth()->user()->is_admin)
-                      <a href="{{ route('admin.tech-developments.edit', $page->id) }}" class="admin-secondary-button" aria-label="Edit {{ $page->title }}" title="Edit tech development">
-                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>Edit
-                      </a>
-                      @endif
-                    @endif
-
-                    @if($page->model_type === 'web-page')
-                      @can('webpages.delete')
-                      <form action="{{ route('admin.web-pages.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this web page? This cannot be undone.');" style="display:inline-block; margin:0;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete web page">
-                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
-                        </button>
-                      </form>
-                      @endcan
-                    @elseif($page->model_type === 'service')
-                      @can('services.delete')
-                      <form action="{{ route('admin.services.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this service page? This cannot be undone.');" style="display:inline-block; margin:0;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete service">
-                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
-                        </button>
-                      </form>
-                      @endcan
-                    @elseif($page->model_type === 'tech-development')
-                      @can('tech_developments.delete')
-                      <form action="{{ route('admin.tech-developments.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this tech page? This cannot be undone.');" style="display:inline-block; margin:0;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="admin-delete-button" aria-label="Delete {{ $page->title }}" title="Delete tech page">
-                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
-                        </button>
-                      </form>
-                      @endcan
-                    @endif
-                  </div>
-                </td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="5" class="admin-table-empty">
-                  <span class="admin-empty-icon"><i class="fa-solid fa-globe"></i></span>
-                  <strong>No web pages found</strong>
-                  <span>Click "Add a web page" above to create a new page.</span>
-                </td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+            <tr id="webpage-detail-{{ $page->id }}" class="admin-detail-row" hidden><td colspan="5"><div class="admin-blog-detail"><p class="admin-blog-detail-excerpt">{{ $page->short_description ?: $page->description }}</p><div class="admin-blog-detail-meta"><span>URL: /{{ $page->page_section }}/{{ $page->slug }}</span><span>Section: {{ $pageSectionLabels[$page->page_section] ?? ucfirst($page->page_section) }}</span><span>{{ $page->sections_count }} content sections</span>@if($page->meta_title)<span>Meta title: {{ $page->meta_title }}</span>@endif @if($page->meta_description)<span>Meta description: {{ $page->meta_description }}</span>@endif @if($page->meta_keywords)<span>Meta keywords: {{ $page->meta_keywords }}</span>@endif</div></div></td></tr>
+          @empty
+            <tr><td colspan="5" class="admin-table-empty">No webpages have been created yet.</td></tr>
+          @endforelse
+        </tbody>
+      </table></div>
     </section>
 
     <section id="section-testimonials" class="admin-dashboard-section" role="tabpanel" aria-label="Testimonials" hidden>

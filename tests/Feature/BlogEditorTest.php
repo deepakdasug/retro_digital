@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\BlogPost;
 use App\Models\Testimonial;
 use App\Models\User;
-use App\Models\WebPage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -76,50 +75,6 @@ class BlogEditorTest extends TestCase
         $response->assertSee("localStorage.setItem('adminLastTab', tabName)", false);
         $response->assertSee("localStorage.setItem('adminSidebarCollapsed'", false);
         $this->assertSame(1, substr_count($response->getContent(), "sidebarToggle.addEventListener('click'"));
-    }
-
-    public function test_testimonial_and_webpage_views_use_the_expected_layouts(): void
-    {
-        $admin = $this->createAdminUser();
-        $testimonial = Testimonial::create([
-            'name' => 'Taylor Client',
-            'rating' => 5,
-            'content' => 'Excellent service.',
-        ]);
-        $webPage = WebPage::create([
-            'title' => 'Shared Layout Page',
-            'slug' => 'shared-layout-page',
-        ]);
-
-        $testimonialViews = [
-            route('admin.testimonials.index') => 'Manage Testimonials',
-            route('admin.testimonials.create') => 'Add New Testimonial',
-            route('admin.testimonials.edit', $testimonial) => 'Edit Testimonial',
-        ];
-        foreach ($testimonialViews as $url => $content) {
-            $response = $this->actingAs($admin)->get($url);
-            $response->assertOk();
-            $response->assertSee($content);
-            $response->assertSee('data-admin-tab="testimonials"', false);
-            $response->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="testimonials"', false);
-        }
-
-        $this->actingAs($admin)
-            ->get(route('admin.web-pages.index'))
-            ->assertOk()
-            ->assertSee('Dynamic Web Pages')
-            ->assertSee('class="admin-sidebar-link is-active" type="button" data-admin-tab="webpage"', false);
-
-        foreach ([
-            route('admin.web-pages.create') => 'Create Web Page',
-            route('admin.web-pages.edit', $webPage) => 'Edit Web Page',
-        ] as $url => $content) {
-            $response = $this->actingAs($admin)->get($url);
-            $response->assertOk();
-            $response->assertSee($content);
-            $response->assertSee('standalone-editor-shell');
-            $response->assertDontSee('id="adminSidebar"', false);
-        }
     }
 
     public function test_admin_can_create_blog_post_with_rich_content(): void

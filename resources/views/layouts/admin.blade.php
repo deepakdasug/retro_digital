@@ -323,8 +323,8 @@
   $requestedTab = request()->query('tab');
   $routeTab = match (true) {
     request()->routeIs('admin.blog.*') => 'blogs',
+    request()->query('tab') === 'webpage' => 'webpage',
     request()->routeIs('admin.testimonials.*') => 'testimonials',
-    request()->routeIs('admin.web-pages.*') => 'webpage',
     request()->routeIs('admin.faqs.*') => 'faqs',
     request()->routeIs('admin.roles.*') => 'roles',
     default => null,
@@ -363,12 +363,10 @@
       @can('blogs.view')
       <button class="admin-sidebar-link {{ $currentTab == 'blogs' ? 'is-active' : '' }}" type="button" data-admin-tab="blogs" aria-label="Blog articles" title="Blog articles" onclick="showAdminTab('blogs')"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Blog articles</span></button>
       @endcan
+
+      <button class="admin-sidebar-link {{ $currentTab == 'webpage' ? 'is-active' : '' }}" type="button" data-admin-tab="webpage" aria-label="Webpage" title="Webpage" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span></button>
       
-      @can('webpages.view')
-      <button class="admin-sidebar-link {{ $currentTab == 'webpage' ? 'is-active' : '' }}" type="button" data-admin-tab="webpage" aria-label="Webpages" title="Webpages" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span></button>
-      @endcan
-      
-      @can('testimonials.view')
+@can('testimonials.view')
       <button class="admin-sidebar-link {{ $currentTab == 'testimonials' ? 'is-active' : '' }}" type="button" data-admin-tab="testimonials" aria-label="Testimonials" title="Testimonials" onclick="showAdminTab('testimonials')"><i class="fa-regular fa-star" aria-hidden="true"></i><span>Testimonials</span></button>
       @endcan
 
@@ -466,7 +464,7 @@
     'overview': 'Dashboard Overview',
     'contacts': 'Contact Submissions',
     'blogs': 'Blog Articles',
-    'webpage': 'Webpages & Content',
+    'webpage': 'Webpage',
     'testimonials': 'Client Testimonials',
     'faqs': 'Frequently Asked Questions (FAQs)',
     'roles': 'Roles & Permissions Management',

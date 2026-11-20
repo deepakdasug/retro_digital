@@ -33,8 +33,8 @@
           <h2 class="footer-heading" id="footer-who-we-are-heading">Who We Are</h2>
           <ul class="footer-nav">
             <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('services.index') }}">Services</a></li>
-            <li><a href="{{ route('industries.index') }}">Industries</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Services</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Industries</a></li>
             <li><a href="{{ route('faqs') }}">Faqs</a></li>
             <li><a href="{{ route('blog') }}">Blog</a></li>
             <li><a href="{{ route('about') }}">About Us</a></li>
@@ -45,43 +45,43 @@
         <section class="footer-column" aria-labelledby="footer-our-services-heading">
           <h2 class="footer-heading" id="footer-our-services-heading">Our Services</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('services.show', 'digital-marketing') }}">Digital Marketing</a></li>
-            <li><a href="{{ route('services.show', 'search-engine-optimization') }}">Search Engine Optimization</a></li>
-            <li><a href="{{ route('services.show', 'social-media-marketing') }}">Social Media Marketing</a></li>
-            <li><a href="{{ route('services.show', 'paid-marketing') }}">Paid Marketing</a></li>
-            <li><a href="{{ route('services.show', 'email-marketing') }}">Email Marketing</a></li>
-            <li><a href="{{ route('services.show', 'content-marketing') }}">Content Marketing</a></li>
-            <li><a href="{{ route('services.show', 'orm-services') }}">ORM Services</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Search Engine Optimization</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Social Media Marketing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Content Marketing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">ORM Services</a></li>
           </ul>
         </section>
 
         <section class="footer-column" aria-labelledby="footer-technology-solutions-heading">
           <h2 class="footer-heading" id="footer-technology-solutions-heading">Technology Solutions</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('services.show', 'web-development') }}">Web Development</a></li>
-            <li><a href="{{ route('services.show', 'mobile-app-development') }}">App Development</a>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Web Development</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">App Development</a>
             </li>
-            <li><a href="{{ route('services.show', 'custom-application') }}">Custom Application</a>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Custom Application</a>
             </li>
-            <li><a href="{{ route('services.show', 'crm-development') }}">Salesforce Solutions</a>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Salesforce Solutions</a>
             </li>
-            <li><a href="{{ route('services.show', 'whatsapp-integration') }}">Whatsapp
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Whatsapp
                 Integration</a></li>
-            <li><a href="{{ route('services.show', 'crm-development') }}">CRM Development</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">CRM Development</a></li>
           </ul>
         </section>
 
         <section class="footer-column" aria-labelledby="footer-our-industries-heading">
           <h2 class="footer-heading" id="footer-our-industries-heading">Our Industries</h2>
           <ul class="footer-nav">
-            <li><a href="{{ route('industries.show', 'ecommerce-multivendor') }}">Ecommerce &amp; Multivendor</a></li>
-            <li><a href="{{ route('industries.show', 'real-estate-and-construction') }}">Real Estate &amp;
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Ecommerce &amp; Multivendor</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Real Estate &amp;
                 Construction</a></li>
-            <li><a href="{{ route('industries.show', 'manufacturing') }}">Manufacturing</a></li>
-            <li><a href="{{ route('industries.show', 'personal-beauty-care') }}">Personal Beauty Care</a></li>
-            <li><a href="{{ route('industries.show', 'medical-and-healthcare') }}">Medical &amp; Healthcare</a></li>
-            <li><a href="{{ route('industries.show', 'oil-and-gas') }}">Oil &amp; Gas</a></li>
-            <li><a href="{{ route('industries.show', 'finance-and-insurance') }}">Finance &amp; Insurance</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Manufacturing</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Personal Beauty Care</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Medical &amp; Healthcare</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Oil &amp; Gas</a></li>
+            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Finance &amp; Insurance</a></li>
           </ul>
 
           <div class="footer-socials" aria-label="Social media">
