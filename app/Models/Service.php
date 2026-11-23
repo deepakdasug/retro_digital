@@ -22,6 +22,7 @@ class Service extends Model
         'meta_description',
         'meta_keywords',
         'og_image',
+        'schema_markup',
     ];
 
     public function sections(): HasMany

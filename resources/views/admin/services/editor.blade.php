@@ -32,7 +32,10 @@
                 <span class="seo-eyebrow">Page 2 of 2 · {{ $sectionLabels[$service->page_section] ?? 'Webpage' }} visual editor</span>
                 <h1>{{ $service->title }}</h1>
             </div>
-            <span class="seo-editor-section-count"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> {{ $service->sections->count() }} sections</span>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <button id="toggle-all-sections" type="button" class="seo-toggle-all-btn"><i class="fa-solid fa-compress" aria-hidden="true"></i> <span>Collapse all</span></button>
+                <span class="seo-editor-section-count"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> {{ $service->sections->count() }} sections</span>
+            </div>
         </div>
         <p>Edit the page sections below, change their order, or add another reusable layout.</p>
         <div class="seo-editor-url"><span>Page URL</span><code>/{{ $service->page_section }}/{{ $service->slug }}</code></div>
@@ -45,6 +48,54 @@
             <span class="seo-save-page-copy"><strong>Page changes</strong><small>Edits, section order, and removals stay as drafts until saved.</small></span>
             <span data-save-status role="status" aria-live="polite"></span>
             <button class="seo-editor-save" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save page</button>
+        </div>
+
+        <div class="seo-editor-content seo-schema-panel">
+            <details class="seo-schema-accordion" id="schema-accordion">
+                <summary class="seo-schema-summary">
+                    <div class="seo-schema-title">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                        <div>
+                            <strong>Page Schema Markup (JSON-LD)</strong>
+                            <small>Structured data for Google Rich Results, Service Schema &amp; FAQ Page</small>
+                        </div>
+                    </div>
+                    <div class="seo-schema-meta">
+                        <span id="schemaStatusBadge" class="seo-schema-badge {{ $service->schema_markup ? 'configured' : 'auto' }}">
+                            <i class="fa-solid {{ $service->schema_markup ? 'fa-check' : 'fa-wand-magic-sparkles' }}"></i>
+                            <span>{{ $service->schema_markup ? 'Custom Schema Active' : 'Auto-Generated Active' }}</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-down seo-schema-chevron" aria-hidden="true"></i>
+                    </div>
+                </summary>
+
+                <div class="seo-schema-body">
+                    <div class="seo-schema-toolbar">
+                        <div class="seo-schema-toolbar-left">
+                            <button type="button" class="seo-schema-btn" id="generateSchemaBtn">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Generate from Page
+                            </button>
+                            <button type="button" class="seo-schema-btn" id="validateSchemaBtn">
+                                <i class="fa-solid fa-circle-check"></i> Validate JSON
+                            </button>
+                            <button type="button" class="seo-schema-btn danger" id="resetSchemaBtn">
+                                <i class="fa-solid fa-rotate-left"></i> Reset to Default
+                            </button>
+                        </div>
+                        <div id="schemaValidationMsg" class="seo-schema-val-msg"></div>
+                    </div>
+
+                    <div class="seo-schema-editor-wrap">
+                        <label for="schema_markup_input">JSON-LD Script Content <small>(paste valid JSON or &lt;script type="application/ld+json"&gt; tag)</small></label>
+                        <textarea id="schema_markup_input" name="schema_markup" class="seo-schema-textarea" rows="12" placeholder='{&#10;  "@context": "https://schema.org",&#10;  "@type": "Service",&#10;  "name": "{{ $service->title }}"&#10;}'>{{ old('schema_markup', $service->schema_markup) }}</textarea>
+                    </div>
+
+                    <p class="seo-schema-hint">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Agar aap ise empty rakhenge, toh live page par automatically Google-compliant <strong>Service</strong> schema aur page ke active <strong>FAQs</strong> ka <strong>FAQPage</strong> schema generate hoga. Custom schema dalne par wahi live page par inject hoga.
+                    </p>
+                </div>
+            </details>
         </div>
 
     <div class="seo-editor-stage">
@@ -476,6 +527,212 @@ savePageForm?.addEventListener('submit', () => {
         savePageForm.appendChild(input);
     });
 });
+
+// Toggle all sections expand / collapse
+const toggleAllBtn = document.getElementById('toggle-all-sections');
+if (toggleAllBtn) {
+    let allCollapsed = false;
+    toggleAllBtn.addEventListener('click', () => {
+        allCollapsed = !allCollapsed;
+        document.querySelectorAll('.seo-editor-section').forEach((sec) => {
+            sec.classList.toggle('is-collapsed', allCollapsed);
+            const btn = sec.querySelector('[data-toggle-section]');
+            if (btn) {
+                btn.setAttribute('aria-expanded', String(!allCollapsed));
+                const span = btn.querySelector('span');
+                if (span) span.textContent = allCollapsed ? 'Expand' : 'Collapse';
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = allCollapsed ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up';
+            }
+        });
+        toggleAllBtn.innerHTML = allCollapsed
+            ? '<i class="fa-solid fa-expand" aria-hidden="true"></i> <span>Expand all</span>'
+            : '<i class="fa-solid fa-compress" aria-hidden="true"></i> <span>Collapse all</span>';
+    });
+}
+
+// Touchpad & Wheel Scroll Normalization to prevent hyperfast flinging / jumping
+(function() {
+    let scrollYTarget = window.scrollY;
+    let isScrollingAnim = false;
+
+    window.addEventListener('wheel', (e) => {
+        // Allow native scroll inside modals, dropdowns, code blocks, or textareas
+        if (e.target.closest('.seo-section-preview-modal, .seo-section-preview-dialog, .seo-section-preview-content, textarea, .webpage-table-wrap, select')) {
+            return;
+        }
+
+        // Prevent number inputs from changing on scroll which accidentally triggers section reordering
+        if (document.activeElement && document.activeElement.type === 'number') {
+            document.activeElement.blur();
+        }
+
+        let delta = e.deltaY;
+        if (e.deltaMode === 1) delta *= 36;
+        else if (e.deltaMode === 2) delta *= window.innerHeight;
+
+        // Dampen extreme touchpad momentum acceleration flings
+        if (Math.abs(delta) > 100) {
+            delta = Math.sign(delta) * (100 + Math.pow(Math.abs(delta) - 100, 0.62));
+        }
+
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        if (!isScrollingAnim) {
+            scrollYTarget = window.scrollY;
+        }
+        scrollYTarget = Math.max(0, Math.min(maxScroll, scrollYTarget + delta));
+
+        e.preventDefault();
+
+        if (!isScrollingAnim) {
+            isScrollingAnim = true;
+            const animateScroll = () => {
+                const current = window.scrollY;
+                const diff = scrollYTarget - current;
+                if (Math.abs(diff) < 1.5) {
+                    window.scrollTo(0, scrollYTarget);
+                    isScrollingAnim = false;
+                } else {
+                    window.scrollTo(0, current + diff * 0.24);
+                    requestAnimationFrame(animateScroll);
+                }
+            };
+            requestAnimationFrame(animateScroll);
+        }
+    }, { passive: false });
+})();
+
+// Schema Markup Auto-Generator, Validator & Reset
+(function() {
+    const generateBtn = document.getElementById('generateSchemaBtn');
+    const validateBtn = document.getElementById('validateSchemaBtn');
+    const resetBtn = document.getElementById('resetSchemaBtn');
+    const textarea = document.getElementById('schema_markup_input');
+    const badge = document.getElementById('schemaStatusBadge');
+    const msg = document.getElementById('schemaValidationMsg');
+
+    generateBtn?.addEventListener('click', () => {
+        const pageUrl = window.location.origin + '/{{ $service->page_section }}/{{ $service->slug }}';
+        const pageTitle = @json($service->title);
+        const metaDesc = @json($service->meta_description ?: ($service->short_description ?: $service->title));
+        const imageUrl = @json($service->og_image ? (str_starts_with($service->og_image, 'http') ? $service->og_image : asset($service->og_image)) : asset('assets/images/retrotech-mark.png'));
+
+        // Extract FAQs from active page sections in preview
+        const faqItems = [];
+        document.querySelectorAll('.seo-editor-section:not(.is-pending-removal)').forEach(sec => {
+            const questions = sec.querySelectorAll('.seo-lp-faq-list details, .seo-faq-item');
+            questions.forEach(q => {
+                const titleEl = q.querySelector('summary span, summary');
+                const descEl = q.querySelector('p, .seo-faq-answer');
+                if (titleEl && descEl) {
+                    const titleText = titleEl.textContent.trim().replace(/\s*\+\s*$/, '');
+                    const descText = descEl.textContent.trim();
+                    if (titleText && descText) {
+                        faqItems.push({
+                            "@type": "Question",
+                            "name": titleText,
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": descText
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        const schemaGraph = [
+            {
+                "@type": "Organization",
+                "@id": window.location.origin + "/#organization",
+                "name": "Retrotech Digital",
+                "url": window.location.origin,
+                "logo": window.location.origin + "/assets/images/logo.png"
+            },
+            {
+                "@type": "WebPage",
+                "@id": pageUrl + "/#webpage",
+                "url": pageUrl,
+                "name": pageTitle,
+                "description": metaDesc,
+                "isPartOf": { "@id": window.location.origin + "/#website" }
+            },
+            {
+                "@type": "Service",
+                "@id": pageUrl + "/#service",
+                "name": pageTitle,
+                "description": metaDesc,
+                "url": pageUrl,
+                "provider": { "@id": window.location.origin + "/#organization" },
+                "image": imageUrl
+            }
+        ];
+
+        if (faqItems.length > 0) {
+            schemaGraph.push({
+                "@type": "FAQPage",
+                "@id": pageUrl + "/#faq",
+                "mainEntity": faqItems
+            });
+        }
+
+        const fullSchema = {
+            "@context": "https://schema.org",
+            "@graph": schemaGraph
+        };
+
+        textarea.value = JSON.stringify(fullSchema, null, 2);
+        if (badge) {
+            badge.className = 'seo-schema-badge configured';
+            badge.innerHTML = '<i class="fa-solid fa-check"></i> <span>Custom Schema Configured</span>';
+        }
+        if (msg) {
+            msg.className = 'seo-schema-val-msg valid';
+            msg.textContent = `Generated rich schema with ${schemaGraph.length} linked types (${faqItems.length} FAQs included)! Click "Save page" to apply.`;
+        }
+    });
+
+    validateBtn?.addEventListener('click', () => {
+        let val = textarea.value.trim();
+        if (!val) {
+            if (msg) {
+                msg.className = 'seo-schema-val-msg valid';
+                msg.textContent = 'Empty (Default automatic schema will be used).';
+            }
+            return;
+        }
+        if (val.startsWith('<script') && val.endsWith('</script>')) {
+            val = val.replace(/<script[^>]*>/, '').replace(/<\/script>$/, '').trim();
+        }
+        try {
+            const parsed = JSON.parse(val);
+            textarea.value = JSON.stringify(parsed, null, 2);
+            if (msg) {
+                msg.className = 'seo-schema-val-msg valid';
+                msg.textContent = 'Valid JSON-LD schema formatted successfully!';
+            }
+        } catch (err) {
+            if (msg) {
+                msg.className = 'seo-schema-val-msg invalid';
+                msg.textContent = 'Invalid JSON: ' + err.message;
+            }
+        }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+        if (confirm('Clear custom schema? The page will use default auto-generated Service schema.')) {
+            textarea.value = '';
+            if (badge) {
+                badge.className = 'seo-schema-badge auto';
+                badge.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Auto-Generated Active</span>';
+            }
+            if (msg) {
+                msg.className = 'seo-schema-val-msg valid';
+                msg.textContent = 'Custom schema cleared. Default schema will be used upon save.';
+            }
+        }
+    });
+})();
 </script>
 @endpush
 
