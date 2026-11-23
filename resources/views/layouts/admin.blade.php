@@ -323,7 +323,7 @@
   $requestedTab = request()->query('tab');
   $routeTab = match (true) {
     request()->routeIs('admin.blog.*') => 'blogs',
-    request()->query('tab') === 'webpage' => 'webpage',
+    request()->routeIs('admin.webpages.*') || request()->query('tab') === 'webpage' => 'webpage',
     request()->routeIs('admin.testimonials.*') => 'testimonials',
     request()->routeIs('admin.faqs.*') => 'faqs',
     request()->routeIs('admin.roles.*') => 'roles',
