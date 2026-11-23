@@ -171,6 +171,12 @@
                 <label for="og_image_file" style="margin-top: 10px;">Or Upload a Replacement Image</label>
                 <input id="og_image_file" type="file" name="og_image_file" accept="image/jpeg,image/png,image/webp,image/gif">
             </div>
+
+            <div class="seo-settings-field full">
+                <label for="schema_markup">Custom Schema Markup (JSON-LD)</label>
+                <textarea id="schema_markup" name="schema_markup" rows="8" style="font-family: Consolas, Monaco, monospace; font-size: 0.88rem; line-height: 1.55;" placeholder='Paste custom JSON-LD schema or leave empty for auto-generated Service schema...'>{{ old('schema_markup', $service->schema_markup) }}</textarea>
+                <small style="color: #617867;">Leave empty to automatically generate Google Service &amp; FAQPage schemas from page content.</small>
+            </div>
         </div>
 
         <div class="seo-settings-footer" style="padding-top: 1.5rem; border-top: 1px solid #e7efe9; margin-top: 2rem;">

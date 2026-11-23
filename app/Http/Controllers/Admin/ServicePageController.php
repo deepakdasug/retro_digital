@@ -46,6 +46,7 @@ class ServicePageController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'og_image' => 'nullable|string|max:500',
             'og_image_file' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'schema_markup' => 'nullable|string',
         ]);
 
         if ($request->hasFile('og_image_file')) {
@@ -79,6 +80,7 @@ class ServicePageController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'og_image' => 'nullable|string|max:500',
             'og_image_file' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'schema_markup' => 'nullable|string',
         ]);
 
         if ($request->hasFile('og_image_file')) {
@@ -294,6 +296,7 @@ class ServicePageController extends Controller
             'removed_sections.*' => 'required|integer|distinct',
             'ordered_sections' => 'nullable|array',
             'ordered_sections.*' => 'required|integer|distinct',
+            'schema_markup' => 'nullable|string',
         ];
 
         $sections = $service->sections()->get();
@@ -391,7 +394,12 @@ class ServicePageController extends Controller
             foreach ($remainingSections as $index => $item) {
                 $item->update(['sort_order' => $index + 1]);
             }
-            $service->touch();
+            if ($request->has('schema_markup')) {
+                $service->schema_markup = $request->input('schema_markup');
+                $service->save();
+            } else {
+                $service->touch();
+            }
         });
 
         return redirect()->route('admin.webpages.editor', $service)
