@@ -414,7 +414,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing &amp; Technical
+              <a href="{{ route('services.seo') }}">Digital Marketing &amp; Technical
                 SEO</a>
             </h3>
             <p class="sc-desc">
@@ -427,7 +427,7 @@
               <span class="sc-tag">Meta Ads</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('services.seo') }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>

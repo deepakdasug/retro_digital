@@ -2,16 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Admin\BlogController; 
-use App\Http\Controllers\Admin\DashboardController; 
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Models\BlogPost; 
+use App\Models\BlogPost;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\FaqController as PublicFaqController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
+use App\Http\Controllers\IndustryController;
+
 /*
 |--------------------------------------------------------------------------
 | 1. PUBLIC WEBSITE ROUTES (No login required)
@@ -28,7 +30,7 @@ Route::get('/careers', fn () => view('careers'))->name('careers');
 Route::get('/faqs', [PublicFaqController::class, 'index'])->name('faqs');
 
 // --- BLOG ROUTES ---
-Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog'); 
+Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog');
 Route::get('/blog/{slug}', [PublicBlogController::class, 'show'])->name('blog.show');
 
 // --- CONTACT ROUTES ---
@@ -78,7 +80,7 @@ Route::get('/terms-and-conditions', fn () => view('legal', [
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+
     // Blog CRUD (Create, Read, Update, Delete)
     Route::get('/admin/blog/create', [BlogController::class, 'create'])->name('admin.blog.create')->middleware('permission:blogs.create');
     Route::post('/admin/blog', [BlogController::class, 'store'])->name('admin.blog.store')->middleware('permission:blogs.create');
@@ -104,9 +106,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/faqs/{faq}', [AdminFaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.edit');
     Route::delete('/admin/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
 
-
-
-
     // Roles & Permissions Management CRUD
     Route::get('/admin/roles', [RolePermissionController::class, 'index'])->name('admin.roles.index')->middleware('permission:roles.view');
     Route::post('/admin/roles', [RolePermissionController::class, 'storeRole'])->name('admin.roles.store')->middleware('permission:roles.create');
@@ -115,13 +114,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/roles/assign-user', [RolePermissionController::class, 'assignUserRole'])->name('admin.roles.assign-user')->middleware('permission:users.manage');
 });
 
-
-
-
 Route::get('/services/seo-services', [ServiceController::class, 'show'])
     ->defaults('section', 'services')
     ->defaults('slug', 'seo-services')
     ->name('services.seo');
+
+Route::redirect('/industries', '/who-we-serve', 301);
+
+Route::get('/who-we-serve/{slug}', [IndustryController::class, 'show'])
+    ->name('industries.show');
+
+Route::get('/industries/{slug}', function (string $slug) {
+    return redirect()->route('industries.show', ['slug' => $slug], 301);
+});
 
 Route::middleware(['auth', 'admin'])->prefix('admin/webpages')->name('admin.webpages.')->group(function () {
     Route::get('/', [AdminServicePageController::class, 'index'])->name('index');

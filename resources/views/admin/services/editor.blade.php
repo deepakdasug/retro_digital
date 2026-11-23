@@ -223,6 +223,8 @@ const addSectionForm = document.getElementById('add-section-form');
 const sectionTypeSelect = addSectionForm?.querySelector('select[name="section_type"]');
 const sectionFieldsContainer = addSectionForm?.querySelector('[data-add-section-fields]');
 const addSectionSubmit = addSectionForm?.querySelector('[data-add-section-submit]');
+const sectionOrderContainer = addSectionForm?.querySelector('.seo-add-section-order');
+const hasExistingFaq = @json((bool) $service->sections->contains(fn($s) => in_array($s->section_type, ['faq', 'seo_faq'])));
 const sectionPreviewButton = document.querySelector('[data-preview-section]');
 const sectionPreviewModal = document.querySelector('[data-section-preview-modal]');
 const sectionPreviewContent = sectionPreviewModal?.querySelector('[data-preview-content]');
@@ -325,6 +327,17 @@ sectionTypeSelect?.addEventListener('change', async () => {
         const result = await response.json();
         if (sectionTypeSelect.value !== type) return;
         renderSectionFields(result.fields, result.defaults);
+        if (hasExistingFaq && ['faq', 'seo_faq'].includes(type)) {
+            const infoBanner = document.createElement('div');
+            infoBanner.style.cssText = 'padding: 10px 14px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; color: #166534; font-size: 0.85rem; margin-bottom: 1rem;';
+            infoBanner.innerHTML = '<i class="fa-solid fa-circle-info"></i> <strong>Existing FAQ section found:</strong> Questions added here will be appended directly to the existing FAQ list on this page.';
+            sectionFieldsContainer.prepend(infoBanner);
+            if (addSectionSubmit) addSectionSubmit.textContent = 'Add to existing FAQ';
+            if (sectionOrderContainer) sectionOrderContainer.style.display = 'none';
+        } else {
+            if (addSectionSubmit) addSectionSubmit.textContent = 'Add section';
+            if (sectionOrderContainer) sectionOrderContainer.style.display = '';
+        }
         if (sectionPreviewButton) sectionPreviewButton.disabled = false;
         if (addSectionSubmit) addSectionSubmit.disabled = false;
     } catch (error) {

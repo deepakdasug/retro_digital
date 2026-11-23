@@ -46,7 +46,7 @@
           <h2 class="footer-heading" id="footer-our-services-heading">Our Services</h2>
           <ul class="footer-nav">
             <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Search Engine Optimization</a></li>
+            <li><a href="{{ route('services.seo') }}">Search Engine Optimization</a></li>
             <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Social Media Marketing</a></li>
             <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
             <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>

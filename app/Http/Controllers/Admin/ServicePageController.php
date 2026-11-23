@@ -142,6 +142,65 @@ class ServicePageController extends Controller
             }
         }
 
+        // If an FAQ section already exists, append new FAQ questions to it instead of creating a duplicate section
+        if (in_array($validated['section_type'], ['faq', 'seo_faq'], true)) {
+            $existingFaqSection = $service->sections()
+                ->whereIn('section_type', ['faq', 'seo_faq'])
+                ->first();
+
+            if ($existingFaqSection) {
+                $existingContent = is_array($existingFaqSection->content) ? $existingFaqSection->content : [];
+                $existingItems = is_array($existingContent['items'] ?? null) ? $existingContent['items'] : [];
+
+                $rawNewItems = is_array($content['items'] ?? null) ? $content['items'] : [];
+                $validNewItems = [];
+
+                foreach ($rawNewItems as $rawItem) {
+                    if (!is_array($rawItem)) continue;
+
+                    $question = trim((string) ($rawItem['question'] ?? $rawItem['title'] ?? ''));
+                    $answer = trim((string) ($rawItem['answer'] ?? $rawItem['description'] ?? ''));
+
+                    if ($question === '' && $answer === '') continue;
+
+                    if ($existingFaqSection->section_type === 'seo_faq') {
+                        $validNewItems[] = [
+                            'title' => $question,
+                            'description' => $answer,
+                        ];
+                    } else {
+                        $validNewItems[] = [
+                            'question' => $question,
+                            'answer' => $answer,
+                        ];
+                    }
+                }
+
+                if (!empty($validNewItems)) {
+                    $existingContent['items'] = array_merge($existingItems, $validNewItems);
+                }
+
+                if (!empty($content['heading']) && empty($existingContent['heading'])) {
+                    $existingContent['heading'] = $content['heading'];
+                }
+                if (!empty($content['eyebrow']) && empty($existingContent['eyebrow'])) {
+                    $existingContent['eyebrow'] = $content['eyebrow'];
+                }
+                if (!empty($content['subheading']) && empty($existingContent['subheading'])) {
+                    $existingContent['subheading'] = $content['subheading'];
+                }
+
+                $existingFaqSection->update([
+                    'content' => $existingContent,
+                    'is_active' => true,
+                ]);
+                $service->touch();
+
+                return redirect()->route('admin.webpages.editor', $service)
+                    ->with('success', 'New FAQ question(s) successfully added to the existing FAQ section.');
+            }
+        }
+
         DB::transaction(function () use ($service, $validated, $content): void {
             $orderedSections = $service->sections()->orderBy('sort_order')->orderBy('id')->get()->all();
             $newSection = $service->sections()->create([
