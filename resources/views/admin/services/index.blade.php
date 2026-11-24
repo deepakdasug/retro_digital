@@ -84,7 +84,7 @@
                 <thead>
                     <tr>
                         <th>Page Title</th>
-                        <th>Website Section</th>
+                        <th>Category</th>
                         <th>Live URL</th>
                         <th>Sections</th>
                         <th>Actions</th>

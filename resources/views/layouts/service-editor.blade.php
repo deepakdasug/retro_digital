@@ -15,6 +15,7 @@
 </head>
 <body class="seo-editor-layout">
     @yield('content')
+    <script src="{{ asset('js/content-studio.js') }}?v={{ filemtime(public_path('js/content-studio.js')) }}"></script>
     @stack('scripts')
 </body>
 </html>

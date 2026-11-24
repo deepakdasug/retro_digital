@@ -14,8 +14,6 @@ class Service extends Model
         'slug',
         'page_section',
         'title',
-        'short_description',
-        'description',
         'icon',
         'image',
         'meta_title',

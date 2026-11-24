@@ -13,6 +13,11 @@ class ServiceController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('services.show', compact('service'));
+        $layout = config(
+            'page_layouts.' . $service->page_section . '.pages.' . $service->slug . '.show',
+            config('page_layouts.' . $service->page_section . '.show', 'services.show')
+        );
+
+        return view($layout, compact('service'));
     }
 }

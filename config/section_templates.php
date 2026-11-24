@@ -341,8 +341,15 @@ return [
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
-            'body' => ['type' => 'textarea', 'label' => 'Intro', 'rules' => 'nullable|string|max:700'],
-            'items' => ['type' => 'repeater', 'label' => 'Content practices', 'rules' => 'nullable|array|max:4', 'fields' => [
+            'intro' => ['type' => 'textarea', 'label' => 'Intro', 'rules' => 'nullable|string|max:700'],
+            'banner_image' => ['type' => 'image', 'label' => 'Principle banner image'],
+            'banner_image_alt' => ['type' => 'text', 'label' => 'Banner image description', 'default' => 'Helpful beats hollow content banner', 'rules' => 'nullable|string|max:200'],
+            'banner_text' => ['type' => 'text', 'label' => 'Text shown when no banner image is set', 'rules' => 'nullable|string|max:100'],
+            'principle_heading' => ['type' => 'text', 'label' => 'Banner heading', 'default' => 'Make every page earn its place.', 'rules' => 'nullable|string|max:200'],
+            'principle_description' => ['type' => 'textarea', 'label' => 'Banner description', 'default' => 'Answer a real question with clarity, depth, and a next step that feels natural.', 'rules' => 'nullable|string|max:700'],
+            'demo_button_text' => ['type' => 'text', 'label' => 'Optional demo button', 'rules' => 'nullable|string|max:70'],
+            'demo_button_link' => ['type' => 'text', 'label' => 'Demo button link', 'rules' => 'nullable|string|max:500'],
+            'items' => ['type' => 'repeater', 'label' => 'Content practices', 'rules' => 'nullable|array|max:12', 'fields' => [
                 'title' => ['type' => 'text', 'label' => 'Practice', 'rules' => 'nullable|string|max:90'],
                 'description' => ['type' => 'textarea', 'label' => 'Description', 'rules' => 'nullable|string|max:300'],
             ]],

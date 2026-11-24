@@ -58,7 +58,7 @@ html:has(body.seo-editor-layout),
 body.seo-editor-layout {
     scroll-behavior: auto !important;
     scroll-snap-type: none !important;
-    overscroll-behavior-y: none !important;
+    overscroll-behavior-y: auto !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     overflow-anchor: none !important;
@@ -159,4 +159,25 @@ body.seo-editor-layout::-webkit-scrollbar-thumb:hover {
 .seo-schema-textarea:focus{outline:none;border-color:#218847;box-shadow:0 0 0 3px rgba(33,136,71,.15)}
 .seo-schema-hint{display:flex;align-items:flex-start;gap:8px;margin:12px 0 0;font-size:.82rem;color:#5a7362;line-height:1.55}
 .seo-schema-hint i{color:#218847;margin-top:2px}
+
+.seo-editor-insertion-preview{border:2px dashed #4c9a60;background:#f5fbf6;box-shadow:0 10px 28px rgba(33,136,71,.12)}
+.seo-editor-insertion-preview .seo-editor-section-bar{background:#e1f2e4;color:#17492b}
+.seo-editor-insertion-preview .seo-editor-preview{min-height:90px;padding:18px}
+.seo-editor-insertion-empty{margin:0;padding:22px;border:1px dashed #a9c3ad;border-radius:10px;color:#58705d;text-align:center;background:#f9fcf9}
+
+.seo-add-section form{display:flex;flex-direction:column;align-items:stretch;gap:20px}
+.seo-add-section-control-row{display:grid;align-items:end;gap:20px 24px}
+.seo-add-section-top-row{grid-template-columns:minmax(0,1fr) minmax(190px,.42fr)}
+.seo-add-section-top-row .seo-add-section-layout{grid-column:1;grid-row:1}
+.seo-add-section-preview-button{grid-column:2;grid-row:1;align-self:end;justify-self:start;min-width:190px;min-height:48px}
+.seo-add-section-fields:not([hidden]){width:100%;margin:0}
+.seo-add-section-bottom-row{grid-template-columns:minmax(220px,420px) minmax(0,1fr)}
+.seo-add-section-order{grid-column:1;grid-row:1;max-width:none}
+.seo-add-section-actions{grid-column:2;grid-row:1;align-self:end;justify-content:flex-end}
+@media(max-width:720px){.seo-add-section-control-row{grid-template-columns:1fr;gap:16px}.seo-add-section-top-row .seo-add-section-layout,.seo-add-section-preview-button,.seo-add-section-order,.seo-add-section-actions{grid-column:1;grid-row:auto}.seo-add-section-preview-button{justify-self:stretch;width:100%}.seo-add-section-bottom-row .seo-add-section-actions{justify-content:stretch}.seo-add-section-bottom-row .seo-editor-save{width:100%}}
+
+.seo-editor-fields .seo-visibility-field{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0;padding:16px 18px;border:1px solid #d4e5d8;border-radius:11px;background:#f6faf7}
+.seo-editor-fields .seo-visibility-toggle{display:inline-flex;align-items:center;gap:10px;width:auto;max-width:100%;margin:0;color:#173d25;font-size:.91rem;font-weight:800;line-height:1.35;cursor:pointer}
+.seo-editor-fields .seo-visibility-toggle input[type=checkbox]{flex:none;width:18px!important;height:18px;margin:0;accent-color:#218847}
+.seo-editor-fields .seo-visibility-hint{margin:0 0 0 28px;color:#617867;font-size:.8rem;line-height:1.5}
 

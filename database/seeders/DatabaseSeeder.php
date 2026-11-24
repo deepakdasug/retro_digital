@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             SeoServicePageSeeder::class,
+            SocialMediaMarketingSectionsSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
             BlogSeeder::class,

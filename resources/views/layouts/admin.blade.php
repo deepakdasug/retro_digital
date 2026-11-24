@@ -521,28 +521,7 @@
 
   // --- 3. SIDEBAR, MOBILE DRAWER & SCROLL LOGIC ---
   document.addEventListener('DOMContentLoaded', () => {
-    // Keep sidebar scrolling isolated
-    const sidebarNavEl = document.querySelector('.admin-sidebar-nav');
     const adminSidebarEl = document.getElementById('adminSidebar');
-
-    if (sidebarNavEl) {
-      sidebarNavEl.addEventListener('wheel', (e) => {
-        const { scrollTop, scrollHeight, clientHeight } = sidebarNavEl;
-        const canScroll = scrollHeight > clientHeight;
-        if (!canScroll) { e.preventDefault(); return; }
-        const delta = e.deltaY;
-        const isDown = delta > 0;
-        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-        const atTop = scrollTop <= 0;
-        if ((isDown && atBottom) || (!isDown && atTop)) e.preventDefault();
-      }, { passive: false });
-    }
-
-    if (adminSidebarEl) {
-      adminSidebarEl.addEventListener('wheel', (e) => {
-        if (!e.target.closest('.admin-sidebar-nav')) e.preventDefault();
-      }, { passive: false });
-    }
 
     // Handle desktop sidebar collapse toggle
     const sidebarToggle = document.getElementById('sidebarToggle');

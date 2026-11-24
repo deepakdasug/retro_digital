@@ -8,10 +8,13 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/seo-service.css') }}?v={{ filemtime(public_path('css/seo-service.css')) }}">
+<link rel="stylesheet" href="{{ asset('css/seo-landing.css') }}?v={{ filemtime(public_path('css/seo-landing.css')) }}">
 @endpush
 
 @section('content')
-<main class="seo-service-page">
-    @include('sections._render', ['sections' => $service->sections->where('is_active', true)])
+<main class="seo-service-page{{ $service->slug === 'social-media-marketing' ? ' seo-service-page--smm' : '' }}">
+    @foreach($service->sections->where('is_active', true) as $section)
+        @include('sections._service_section', ['section' => $section, 'data' => $section->content])
+    @endforeach
 </main>
 @endsection

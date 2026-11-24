@@ -50,53 +50,7 @@
             <button class="seo-editor-save" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save page</button>
         </div>
 
-        <div class="seo-editor-content seo-schema-panel">
-            <details class="seo-schema-accordion" id="schema-accordion">
-                <summary class="seo-schema-summary">
-                    <div class="seo-schema-title">
-                        <i class="fa-solid fa-code" aria-hidden="true"></i>
-                        <div>
-                            <strong>Page Schema Markup (JSON-LD)</strong>
-                            <small>Structured data for Google Rich Results, Service Schema &amp; FAQ Page</small>
-                        </div>
-                    </div>
-                    <div class="seo-schema-meta">
-                        <span id="schemaStatusBadge" class="seo-schema-badge {{ $service->schema_markup ? 'configured' : 'auto' }}">
-                            <i class="fa-solid {{ $service->schema_markup ? 'fa-check' : 'fa-wand-magic-sparkles' }}"></i>
-                            <span>{{ $service->schema_markup ? 'Custom Schema Active' : 'Auto-Generated Active' }}</span>
-                        </span>
-                        <i class="fa-solid fa-chevron-down seo-schema-chevron" aria-hidden="true"></i>
-                    </div>
-                </summary>
 
-                <div class="seo-schema-body">
-                    <div class="seo-schema-toolbar">
-                        <div class="seo-schema-toolbar-left">
-                            <button type="button" class="seo-schema-btn" id="generateSchemaBtn">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Generate from Page
-                            </button>
-                            <button type="button" class="seo-schema-btn" id="validateSchemaBtn">
-                                <i class="fa-solid fa-circle-check"></i> Validate JSON
-                            </button>
-                            <button type="button" class="seo-schema-btn danger" id="resetSchemaBtn">
-                                <i class="fa-solid fa-rotate-left"></i> Reset to Default
-                            </button>
-                        </div>
-                        <div id="schemaValidationMsg" class="seo-schema-val-msg"></div>
-                    </div>
-
-                    <div class="seo-schema-editor-wrap">
-                        <label for="schema_markup_input">JSON-LD Script Content <small>(paste valid JSON or &lt;script type="application/ld+json"&gt; tag)</small></label>
-                        <textarea id="schema_markup_input" name="schema_markup" class="seo-schema-textarea" rows="12" placeholder='{&#10;  "@context": "https://schema.org",&#10;  "@type": "Service",&#10;  "name": "{{ $service->title }}"&#10;}'>{{ old('schema_markup', $service->schema_markup) }}</textarea>
-                    </div>
-
-                    <p class="seo-schema-hint">
-                        <i class="fa-solid fa-circle-info"></i>
-                        Agar aap ise empty rakhenge, toh live page par automatically Google-compliant <strong>Service</strong> schema aur page ke active <strong>FAQs</strong> ka <strong>FAQPage</strong> schema generate hoga. Custom schema dalne par wahi live page par inject hoga.
-                    </p>
-                </div>
-            </details>
-        </div>
 
     <div class="seo-editor-stage">
         <div class="seo-service-page">
@@ -117,15 +71,15 @@
 
                     <div class="seo-editor-section-content" id="section-content-{{ $section->id }}">
                     <div class="seo-editor-preview">
-                        @include($template['view'], ['data' => $data, 'section' => $section, 'sectionType' => $section->section_type])
+                        @include('sections._service_section', ['data' => $data, 'section' => $section])
                     </div>
 
                     <details class="seo-editor-edit">
                         <summary><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Edit this section</summary>
                             <div class="seo-editor-fields">
-                                <div class="seo-field seo-field-full">
-                                    <label><input type="checkbox" name="sections[{{ $section->id }}][is_active]" value="1" @checked(old('sections.' . $section->id . '.is_active', $section->is_active))> Show this section to visitors</label>
-                                    <small>Checked: visible on the live page. Unchecked: hidden from visitors after you save the page.</small>
+                                <div class="seo-field seo-field-full seo-visibility-field">
+                                    <label class="seo-visibility-toggle"><input type="checkbox" name="sections[{{ $section->id }}][is_active]" value="1" @checked(old('sections.' . $section->id . '.is_active', $section->is_active))><span>Show this section to visitors</span></label>
+                                    <small class="seo-visibility-hint">When enabled, this section appears on the live page after you save.</small>
                                 </div>
                                 <div class="seo-field">
                                     <label for="section-order-{{ $section->id }}">Display order</label>
@@ -133,7 +87,7 @@
                                     <small>Position 1–{{ $service->sections->count() }}. Other sections shift to make room.</small>
                                 </div>
                                 @foreach($template['fields'] as $key => $field)
-                                    @php($value = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, '')))
+                                    @php($value = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, $field['default'] ?? '')))
                                     @if(($field['type'] ?? '') === 'repeater')
                                         @php($items = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, [])))
                                         <div class="seo-field seo-field-full" data-repeater="{{ $section->id }}-{{ $key }}">
@@ -210,8 +164,16 @@
                     </div>
                 </section>
             @empty
-                <div class="seo-editor-content"><p>No sections yet. Add one below to build the page.</p></div>
+                <div class="seo-editor-content" data-no-sections><p>No sections yet. Add one below to build the page.</p></div>
             @endforelse
+            <section class="seo-editor-section seo-editor-insertion-preview" data-insertion-preview hidden>
+                <div class="seo-editor-section-bar">
+                    <span><i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i> New section preview · Position <strong data-insertion-position></strong></span>
+                </div>
+                <div class="seo-editor-preview" data-insertion-content>
+                    <p class="seo-editor-insertion-empty">Choose a layout, then select Preview layout to see it here.</p>
+                </div>
+            </section>
         </div>
     </div>
     </form>
@@ -221,6 +183,7 @@
             <div class="seo-add-section-heading"><span class="seo-add-section-icon"><i class="fa-solid fa-plus" aria-hidden="true"></i></span><div><h2>Add a section</h2><p>Choose a layout, fill in its fields, preview it, then add it to the page.</p></div></div>
             <form id="add-section-form" action="{{ route('admin.webpages.sections.store', $service) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <div class="seo-add-section-control-row seo-add-section-top-row">
                 <div class="seo-add-section-layout">
                 <label for="add-section-type">Section layout</label>
                 <select id="add-section-type" name="section_type" required>
@@ -230,29 +193,24 @@
                     @endforeach
                 </select>
                 </div>
+                <button class="seo-section-preview-button seo-add-section-preview-button" type="button" data-preview-section data-preview-url="{{ route('admin.webpages.sections.preview', ['service' => $service, 'type' => '__template__']) }}" disabled>Preview layout</button>
+                </div>
                 @php($newSectionPosition = $service->sections->count() + 1)
+                <div class="seo-add-section-fields" data-add-section-fields hidden aria-live="polite"></div>
+                <div class="seo-add-section-control-row seo-add-section-bottom-row">
                 <div class="seo-add-section-order">
                     <label for="new-section-order">Insert at position</label>
                     <input id="new-section-order" type="number" name="sort_order" min="1" max="{{ $newSectionPosition }}" value="{{ old('sort_order', $newSectionPosition) }}" required>
                     <small>Choose 1–{{ $newSectionPosition }}. Existing sections shift down.</small>
                 </div>
-                <div class="seo-add-section-fields" data-add-section-fields hidden aria-live="polite"></div>
                 <div class="seo-add-section-actions">
-                <button class="seo-section-preview-button" type="button" data-preview-section data-preview-url="{{ route('admin.webpages.sections.preview', ['service' => $service, 'type' => '__template__']) }}" disabled>Preview layout</button>
                 <button class="seo-editor-save" type="submit" disabled data-add-section-submit>Add section</button>
+                </div>
                 </div>
             </form>
         </section>
     </div>
 </main>
-<div class="seo-section-preview-modal" data-section-preview-modal hidden>
-    <div class="seo-section-preview-backdrop" data-close-section-preview></div>
-    <section class="seo-section-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="section-preview-title">
-        <header><div><span>Reusable layout preview</span><h2 id="section-preview-title" data-preview-title>Section preview</h2></div><button type="button" data-close-section-preview aria-label="Close preview"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></header>
-        <p class="seo-section-preview-note">Sample values are editable in the form. The preview uses your current entries.</p>
-        <div class="seo-section-preview-content" data-preview-content></div>
-    </section>
-</div>
 @endif
 @endsection
 
@@ -275,13 +233,29 @@ const sectionTypeSelect = addSectionForm?.querySelector('select[name="section_ty
 const sectionFieldsContainer = addSectionForm?.querySelector('[data-add-section-fields]');
 const addSectionSubmit = addSectionForm?.querySelector('[data-add-section-submit]');
 const sectionOrderContainer = addSectionForm?.querySelector('.seo-add-section-order');
+const sectionPositionInput = addSectionForm?.querySelector('[name="sort_order"]');
 const hasExistingFaq = @json((bool) $service->sections->contains(fn($s) => in_array($s->section_type, ['faq', 'seo_faq'])));
 const sectionPreviewButton = document.querySelector('[data-preview-section]');
-const sectionPreviewModal = document.querySelector('[data-section-preview-modal]');
-const sectionPreviewContent = sectionPreviewModal?.querySelector('[data-preview-content]');
-const sectionPreviewTitle = sectionPreviewModal?.querySelector('[data-preview-title]');
-let lastPreviewTrigger = null;
+const insertionPreview = document.querySelector('[data-insertion-preview]');
+const insertionPreviewContent = insertionPreview?.querySelector('[data-insertion-content]');
 let sectionFieldId = 0;
+
+const placeInsertionPreview = () => {
+    const container = document.querySelector('.seo-editor-stage .seo-service-page');
+    if (!container || !insertionPreview || !sectionPositionInput || insertionPreview.hidden) return;
+    const sections = Array.from(container.querySelectorAll(':scope > .seo-editor-section:not(.seo-editor-insertion-preview)'));
+    const position = Math.max(1, Math.min(sections.length + 1, Number(sectionPositionInput.value || sections.length + 1)));
+    sectionPositionInput.value = position;
+    sectionPositionInput.max = sections.length + 1;
+    const hint = sectionPositionInput.parentElement.querySelector('small');
+    if (hint) hint.textContent = `Choose 1–${sections.length + 1}. Existing sections shift down.`;
+    insertionPreview.querySelector('[data-insertion-position]').textContent = position;
+    container.insertBefore(insertionPreview, sections[position - 1] || null);
+    document.querySelector('[data-no-sections]')?.setAttribute('hidden', 'hidden');
+};
+
+sectionPositionInput?.addEventListener('input', placeInsertionPreview);
+sectionPositionInput?.addEventListener('change', placeInsertionPreview);
 
 const makeSectionField = (key, field, name, value = '') => {
     const wrapper = document.createElement('div');
@@ -378,6 +352,11 @@ sectionTypeSelect?.addEventListener('change', async () => {
         const result = await response.json();
         if (sectionTypeSelect.value !== type) return;
         renderSectionFields(result.fields, result.defaults);
+        if (insertionPreview) {
+            insertionPreview.hidden = false;
+            insertionPreviewContent.innerHTML = '<p class="seo-editor-insertion-empty">Fill in the fields, then select Preview layout to see it here.</p>';
+            placeInsertionPreview();
+        }
         if (hasExistingFaq && ['faq', 'seo_faq'].includes(type)) {
             const infoBanner = document.createElement('div');
             infoBanner.style.cssText = 'padding: 10px 14px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; color: #166534; font-size: 0.85rem; margin-bottom: 1rem;';
@@ -398,14 +377,11 @@ sectionTypeSelect?.addEventListener('change', async () => {
 
 sectionPreviewButton?.addEventListener('click', async () => {
     const selectedType = sectionTypeSelect?.value;
-    if (!selectedType || !sectionPreviewModal || !sectionPreviewContent) return;
+    if (!selectedType || !insertionPreview || !insertionPreviewContent) return;
 
-    lastPreviewTrigger = sectionPreviewButton;
-    sectionPreviewModal.hidden = false;
-    document.body.classList.add('seo-preview-modal-open');
-    sectionPreviewTitle.textContent = sectionTypeSelect.selectedOptions[0].textContent;
-    sectionPreviewContent.textContent = 'Loading preview…';
-    sectionPreviewModal.querySelector('[data-close-section-preview]')?.focus();
+    insertionPreview.hidden = false;
+    insertionPreviewContent.textContent = 'Loading preview…';
+    placeInsertionPreview();
 
     try {
         const url = sectionPreviewButton.dataset.previewUrl.replace('__template__', encodeURIComponent(selectedType));
@@ -416,24 +392,12 @@ sectionPreviewButton?.addEventListener('click', async () => {
         });
         if (!response.ok) throw new Error('Preview could not be loaded.');
         const result = await response.json();
-        sectionPreviewTitle.textContent = result.name;
-        sectionPreviewContent.innerHTML = result.html;
+        insertionPreview.querySelector('[data-insertion-position]').textContent = sectionPositionInput?.value || '1';
+        insertionPreviewContent.innerHTML = result.html;
+        insertionPreview.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (error) {
-        sectionPreviewContent.textContent = 'Preview could not be loaded. Please try again.';
+        insertionPreviewContent.textContent = 'Preview could not be loaded. Please try again.';
     }
-});
-
-const closeSectionPreview = () => {
-    if (!sectionPreviewModal) return;
-    sectionPreviewModal.hidden = true;
-    document.body.classList.remove('seo-preview-modal-open');
-    lastPreviewTrigger?.focus();
-};
-sectionPreviewModal?.querySelectorAll('[data-close-section-preview]').forEach((button) => {
-    button.addEventListener('click', closeSectionPreview);
-});
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && sectionPreviewModal && !sectionPreviewModal.hidden) closeSectionPreview();
 });
 
 const savePageForm = document.getElementById('save-page-form');
@@ -452,7 +416,7 @@ document.querySelectorAll('[data-toggle-section]').forEach((button) => {
 document.querySelectorAll('[data-section-order]').forEach((input) => {
     const applySectionOrder = () => {
         const container = document.querySelector('.seo-editor-stage .seo-service-page');
-        const sections = Array.from(container?.querySelectorAll(':scope > .seo-editor-section') || []);
+        const sections = Array.from(container?.querySelectorAll(':scope > .seo-editor-section:not(.seo-editor-insertion-preview)') || []);
         const section = input.closest('.seo-editor-section');
         if (!container || !section || !sections.length) return;
 
@@ -473,6 +437,7 @@ document.querySelectorAll('[data-section-order]').forEach((input) => {
             const label = item.querySelector('[data-section-position]');
             if (label) label.textContent = `Section ${position}`;
         });
+        placeInsertionPreview();
     };
     input.addEventListener('change', applySectionOrder);
     input.addEventListener('keydown', (event) => {
@@ -512,7 +477,7 @@ savePageForm?.addEventListener('submit', () => {
 
     savePageForm.querySelectorAll('[name="removed_sections[]"]').forEach((input) => input.remove());
     savePageForm.querySelectorAll('[name="ordered_sections[]"]').forEach((input) => input.remove());
-    document.querySelectorAll('.seo-editor-stage .seo-service-page > .seo-editor-section').forEach((section) => {
+    document.querySelectorAll('.seo-editor-stage .seo-service-page > .seo-editor-section:not(.seo-editor-insertion-preview)').forEach((section) => {
         const orderInput = document.createElement('input');
         orderInput.type = 'hidden';
         orderInput.name = 'ordered_sections[]';
@@ -550,189 +515,5 @@ if (toggleAllBtn) {
             : '<i class="fa-solid fa-compress" aria-hidden="true"></i> <span>Collapse all</span>';
     });
 }
-
-// Touchpad & Wheel Scroll Normalization to prevent hyperfast flinging / jumping
-(function() {
-    let scrollYTarget = window.scrollY;
-    let isScrollingAnim = false;
-
-    window.addEventListener('wheel', (e) => {
-        // Allow native scroll inside modals, dropdowns, code blocks, or textareas
-        if (e.target.closest('.seo-section-preview-modal, .seo-section-preview-dialog, .seo-section-preview-content, textarea, .webpage-table-wrap, select')) {
-            return;
-        }
-
-        // Prevent number inputs from changing on scroll which accidentally triggers section reordering
-        if (document.activeElement && document.activeElement.type === 'number') {
-            document.activeElement.blur();
-        }
-
-        let delta = e.deltaY;
-        if (e.deltaMode === 1) delta *= 36;
-        else if (e.deltaMode === 2) delta *= window.innerHeight;
-
-        // Dampen extreme touchpad momentum acceleration flings
-        if (Math.abs(delta) > 100) {
-            delta = Math.sign(delta) * (100 + Math.pow(Math.abs(delta) - 100, 0.62));
-        }
-
-        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        if (!isScrollingAnim) {
-            scrollYTarget = window.scrollY;
-        }
-        scrollYTarget = Math.max(0, Math.min(maxScroll, scrollYTarget + delta));
-
-        e.preventDefault();
-
-        if (!isScrollingAnim) {
-            isScrollingAnim = true;
-            const animateScroll = () => {
-                const current = window.scrollY;
-                const diff = scrollYTarget - current;
-                if (Math.abs(diff) < 1.5) {
-                    window.scrollTo(0, scrollYTarget);
-                    isScrollingAnim = false;
-                } else {
-                    window.scrollTo(0, current + diff * 0.24);
-                    requestAnimationFrame(animateScroll);
-                }
-            };
-            requestAnimationFrame(animateScroll);
-        }
-    }, { passive: false });
-})();
-
-// Schema Markup Auto-Generator, Validator & Reset
-(function() {
-    const generateBtn = document.getElementById('generateSchemaBtn');
-    const validateBtn = document.getElementById('validateSchemaBtn');
-    const resetBtn = document.getElementById('resetSchemaBtn');
-    const textarea = document.getElementById('schema_markup_input');
-    const badge = document.getElementById('schemaStatusBadge');
-    const msg = document.getElementById('schemaValidationMsg');
-
-    generateBtn?.addEventListener('click', () => {
-        const pageUrl = window.location.origin + '/{{ $service->page_section }}/{{ $service->slug }}';
-        const pageTitle = @json($service->title);
-        const metaDesc = @json($service->meta_description ?: ($service->short_description ?: $service->title));
-        const imageUrl = @json($service->og_image ? (str_starts_with($service->og_image, 'http') ? $service->og_image : asset($service->og_image)) : asset('assets/images/retrotech-mark.png'));
-
-        // Extract FAQs from active page sections in preview
-        const faqItems = [];
-        document.querySelectorAll('.seo-editor-section:not(.is-pending-removal)').forEach(sec => {
-            const questions = sec.querySelectorAll('.seo-lp-faq-list details, .seo-faq-item');
-            questions.forEach(q => {
-                const titleEl = q.querySelector('summary span, summary');
-                const descEl = q.querySelector('p, .seo-faq-answer');
-                if (titleEl && descEl) {
-                    const titleText = titleEl.textContent.trim().replace(/\s*\+\s*$/, '');
-                    const descText = descEl.textContent.trim();
-                    if (titleText && descText) {
-                        faqItems.push({
-                            "@type": "Question",
-                            "name": titleText,
-                            "acceptedAnswer": {
-                                "@type": "Answer",
-                                "text": descText
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
-        const schemaGraph = [
-            {
-                "@type": "Organization",
-                "@id": window.location.origin + "/#organization",
-                "name": "Retrotech Digital",
-                "url": window.location.origin,
-                "logo": window.location.origin + "/assets/images/logo.png"
-            },
-            {
-                "@type": "WebPage",
-                "@id": pageUrl + "/#webpage",
-                "url": pageUrl,
-                "name": pageTitle,
-                "description": metaDesc,
-                "isPartOf": { "@id": window.location.origin + "/#website" }
-            },
-            {
-                "@type": "Service",
-                "@id": pageUrl + "/#service",
-                "name": pageTitle,
-                "description": metaDesc,
-                "url": pageUrl,
-                "provider": { "@id": window.location.origin + "/#organization" },
-                "image": imageUrl
-            }
-        ];
-
-        if (faqItems.length > 0) {
-            schemaGraph.push({
-                "@type": "FAQPage",
-                "@id": pageUrl + "/#faq",
-                "mainEntity": faqItems
-            });
-        }
-
-        const fullSchema = {
-            "@context": "https://schema.org",
-            "@graph": schemaGraph
-        };
-
-        textarea.value = JSON.stringify(fullSchema, null, 2);
-        if (badge) {
-            badge.className = 'seo-schema-badge configured';
-            badge.innerHTML = '<i class="fa-solid fa-check"></i> <span>Custom Schema Configured</span>';
-        }
-        if (msg) {
-            msg.className = 'seo-schema-val-msg valid';
-            msg.textContent = `Generated rich schema with ${schemaGraph.length} linked types (${faqItems.length} FAQs included)! Click "Save page" to apply.`;
-        }
-    });
-
-    validateBtn?.addEventListener('click', () => {
-        let val = textarea.value.trim();
-        if (!val) {
-            if (msg) {
-                msg.className = 'seo-schema-val-msg valid';
-                msg.textContent = 'Empty (Default automatic schema will be used).';
-            }
-            return;
-        }
-        if (val.startsWith('<script') && val.endsWith('</script>')) {
-            val = val.replace(/<script[^>]*>/, '').replace(/<\/script>$/, '').trim();
-        }
-        try {
-            const parsed = JSON.parse(val);
-            textarea.value = JSON.stringify(parsed, null, 2);
-            if (msg) {
-                msg.className = 'seo-schema-val-msg valid';
-                msg.textContent = 'Valid JSON-LD schema formatted successfully!';
-            }
-        } catch (err) {
-            if (msg) {
-                msg.className = 'seo-schema-val-msg invalid';
-                msg.textContent = 'Invalid JSON: ' + err.message;
-            }
-        }
-    });
-
-    resetBtn?.addEventListener('click', () => {
-        if (confirm('Clear custom schema? The page will use default auto-generated Service schema.')) {
-            textarea.value = '';
-            if (badge) {
-                badge.className = 'seo-schema-badge auto';
-                badge.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Auto-Generated Active</span>';
-            }
-            if (msg) {
-                msg.className = 'seo-schema-val-msg valid';
-                msg.textContent = 'Custom schema cleared. Default schema will be used upon save.';
-            }
-        }
-    });
-})();
 </script>
 @endpush
-

@@ -115,7 +115,7 @@
             </div>
             
             <div class="seo-settings-field">
-                <label for="page_section">Website Section *</label>
+                <label for="page_section">Category *</label>
                 <select id="page_section" name="page_section" required>
                     @foreach($sectionOptions as $key => $label)
                         <option value="{{ $key }}" @selected(old('page_section', $service->page_section ?: 'services') === $key)>{{ $label }}</option>
@@ -133,16 +133,6 @@
             <div class="seo-settings-field full seo-url-preview">
                 <label>Live URL Preview</label>
                 <code id="pageUrlPreview" style="font-size: 0.92rem; padding: 0.75rem 1rem;">/{{ old('page_section', $service->page_section ?: 'services') }}/{{ old('slug', $service->slug ?: 'your-page') }}</code>
-            </div>
-
-            <div class="seo-settings-field full">
-                <label for="short_description">Short Description (Summary)</label>
-                <textarea id="short_description" name="short_description" maxlength="500" placeholder="Brief summary of this service or page...">{{ old('short_description', $service->short_description) }}</textarea>
-            </div>
-
-            <div class="seo-settings-field full">
-                <label for="description">Full Page Description</label>
-                <textarea id="description" name="description" maxlength="10000" placeholder="Detailed description of the page...">{{ old('description', $service->description) }}</textarea>
             </div>
 
             <div class="seo-settings-field full">

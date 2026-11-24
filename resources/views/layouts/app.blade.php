@@ -128,6 +128,7 @@
   </script>
   @unless (request()->routeIs('admin.*'))
     <script src="{{ asset('js/main.js') }}?v={{ file_exists(public_path('js/main.js')) ? filemtime(public_path('js/main.js')) : '1.0' }}"></script>
+    <script src="{{ asset('js/content-studio.js') }}?v={{ filemtime(public_path('js/content-studio.js')) }}"></script>
   @endunless
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

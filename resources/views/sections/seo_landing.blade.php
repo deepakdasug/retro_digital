@@ -1,5 +1,7 @@
 @php
     $layout = $sectionType ?? ($section->section_type ?? '');
+    $bannerImage = $data['banner_image'] ?? '';
+    $bannerImageUrl = !$bannerImage ? '' : (str_starts_with($bannerImage, 'http') ? $bannerImage : (str_starts_with($bannerImage, 'assets/') || str_starts_with($bannerImage, 'storage/') ? asset($bannerImage) : asset('storage/' . $bannerImage)));
 @endphp
 
 @if($layout === 'seo_hero')
@@ -44,7 +46,54 @@
 @elseif($layout === 'seo_local')
 <section class="seo-lp seo-lp-local"><div class="seo-lp-container seo-lp-local-grid"><div class="seo-lp-map" aria-hidden="true"><div class="seo-lp-map-grid"></div><svg viewBox="0 0 500 400" role="presentation"><path d="M42 310 C110 260 130 280 182 202 S270 190 290 122 S377 77 455 46"/><path d="M20 90 C100 120 155 88 205 145 S310 255 480 220"/><path d="M104 370 C150 295 235 310 270 245 S382 172 480 180"/></svg><span class="seo-lp-map-pin pin-a"><i class="fa-solid fa-location-dot"></i></span><span class="seo-lp-map-pin pin-b"><i class="fa-solid fa-location-dot"></i></span><span class="seo-lp-map-pin pin-c"><i class="fa-solid fa-location-dot"></i></span><div class="seo-lp-map-label"><i class="fa-solid fa-location-crosshairs"></i> Your local market</div></div><div class="seo-lp-local-copy"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><div class="seo-lp-local-list">@foreach(($data['items'] ?? []) as $item)<article><i class="fa-solid fa-check"></i><div><strong>{{ $item['title'] ?? '' }}</strong><span>{{ $item['description'] ?? '' }}</span></div></article>@endforeach</div></div></div></section>
 @elseif($layout === 'seo_content')
-<section class="seo-lp seo-lp-content"><div class="seo-lp-container"><div class="seo-lp-content-head"><div><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2></div><p>{{ $data['body'] ?? '' }}</p></div><div class="seo-lp-content-board"><div class="seo-lp-content-feature"><div class="seo-lp-content-art"><i class="fa-solid fa-quote-left"></i><span>Helpful<br>beats hollow.</span><i class="fa-solid fa-asterisk"></i></div><div><small>THE CONTENT PRINCIPLE</small><h3>Make every page earn its place.</h3><p>Answer a real question with clarity, depth, and a next step that feels natural.</p></div></div><div class="seo-lp-content-list">@foreach(($data['items'] ?? []) as $index => $item)<article><small>0{{ $index + 1 }} / CONTENT</small><h3>{{ $item['title'] ?? '' }}</h3><p>{{ $item['description'] ?? '' }}</p><i class="fa-solid fa-arrow-right"></i></article>@endforeach</div></div></div></section>
+<section class="seo-lp seo-lp-content">
+    <div class="seo-lp-container">
+        <div class="seo-lp-content-head">
+            <span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span>
+            <h2>{{ $data['heading'] ?? '' }}</h2>
+            @if(!empty($data['intro']))
+                <p class="seo-lp-content-intro">{{ $data['intro'] }}</p>
+            @endif
+        </div>
+        <div class="seo-lp-content-board">
+            <div class="seo-lp-content-feature">
+                <div class="seo-lp-content-art">
+                    @if($bannerImageUrl)
+                        <img class="seo-lp-content-art-image" src="{{ $bannerImageUrl }}" alt="{{ $data['banner_image_alt'] ?? 'Content principle banner' }}" loading="lazy">
+                    @else
+                        <i class="fa-solid fa-quote-left"></i>
+                        <span>{!! nl2br(e($data['banner_text'] ?? 'Make every page earn its place.')) !!}</span>
+                        <i class="fa-solid fa-asterisk"></i>
+                    @endif
+                </div>
+                <div>
+                    <h3>{{ $data['principle_heading'] ?? 'Make every page earn its place.' }}</h3>
+                    <p>{{ $data['principle_description'] ?? 'Answer a real question with clarity, depth, and a next step that feels natural.' }}</p>
+                    @if(!empty($data['demo_button_text']) && !empty($data['demo_button_link']))
+                        <a class="seo-lp-content-demo-link" href="{{ $data['demo_button_link'] }}">
+                            {{ $data['demo_button_text'] }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    @endif
+                </div>
+            </div>
+            <div class="seo-lp-content-list-panel" data-content-list-panel>
+                <div class="seo-lp-content-list-window" data-content-list-window data-lenis-prevent tabindex="0" role="region" aria-label="Content practices">
+                    <div class="seo-lp-content-list">
+                        @foreach(($data['items'] ?? []) as $item)
+                            <article>
+                                <h3>{{ $item['title'] ?? '' }}</h3>
+                                <p>{{ $item['description'] ?? '' }}</p>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+                @if(count($data['items'] ?? []) > 3)
+                    <button class="seo-lp-content-more" type="button" data-content-list-more>Show more</button>
+                @endif
+            </div>
+        </div>
+    </div>
+</section>
 @elseif($layout === 'seo_results')
 <section class="seo-lp seo-lp-results"><div class="seo-lp-container seo-lp-results-panel"><div class="seo-lp-results-copy"><span class="seo-lp-overline">{{ $data['eyebrow'] ?? '' }}</span><h2>{{ $data['heading'] ?? '' }}</h2><p>{{ $data['body'] ?? '' }}</p><span class="seo-lp-results-note"><i class="fa-solid fa-circle-info"></i> We set targets from your baseline and report actual results transparently.</span></div><div class="seo-lp-results-metrics">@foreach(($data['items'] ?? []) as $index => $item)<article><span class="seo-lp-result-icon"><i class="{{ ['fa-solid fa-eye', 'fa-solid fa-users', 'fa-solid fa-bullseye', 'fa-solid fa-heart-pulse'][$index % 4] }}"></i></span><strong>{{ $item['value'] ?? '' }}</strong><small>{{ $item['label'] ?? '' }}</small></article>@endforeach</div><div class="seo-lp-results-glow"></div></div></section>
 @elseif($layout === 'seo_faq')

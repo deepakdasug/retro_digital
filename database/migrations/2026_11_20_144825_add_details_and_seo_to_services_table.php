@@ -10,15 +10,13 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             // Details
-            $table->text('short_description')->nullable()->after('title');
-            $table->longText('description')->nullable()->after('short_description');
-            $table->string('icon')->nullable()->after('description');
+            $table->string('icon')->nullable()->after('title');
             $table->string('image')->nullable()->after('icon');
 
             // SEO
             $table->string('meta_title')->nullable()->after('image');
             $table->text('meta_description')->nullable()->after('meta_title');
-            $table->string('meta_keywords')->nullable()->after('meta_description');
+            $table->text('meta_keywords')->nullable()->after('meta_description');
             $table->string('og_image')->nullable()->after('meta_keywords');
         });
     }
@@ -27,8 +25,6 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             $table->dropColumn([
-                'short_description',
-                'description',
                 'icon',
                 'image',
                 'meta_title',

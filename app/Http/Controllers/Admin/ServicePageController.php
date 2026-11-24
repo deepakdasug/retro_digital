@@ -39,8 +39,6 @@ class ServicePageController extends Controller
             'title' => 'required|string|max:200',
             'slug' => 'required|string|max:120|regex:/^[a-z0-9-]+$/|unique:services,slug',
             'page_section' => 'required|string|in:' . implode(',', array_keys(self::PAGE_SECTIONS)),
-            'short_description' => 'nullable|string|max:500',
-            'description' => 'nullable|string|max:10000',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -73,8 +71,6 @@ class ServicePageController extends Controller
             'title' => 'required|string|max:200',
             'slug' => 'required|string|max:120|regex:/^[a-z0-9-]+$/|unique:services,slug,' . $service->id,
             'page_section' => 'required|string|in:' . implode(',', array_keys(self::PAGE_SECTIONS)),
-            'short_description' => 'nullable|string|max:500',
-            'description' => 'nullable|string|max:10000',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -99,7 +95,9 @@ class ServicePageController extends Controller
         $templates = config('section_templates');
         $sectionLabels = self::PAGE_SECTIONS;
 
-        return view('admin.services.editor', compact('service', 'templates', 'sectionLabels'));
+        $layout = config('page_layouts.' . $service->page_section . '.editor', 'admin.services.editor');
+
+        return view($layout, compact('service', 'templates', 'sectionLabels'));
     }
 
     public function storeSection(Request $request, Service $service)
@@ -118,6 +116,8 @@ class ServicePageController extends Controller
                 foreach ($field['fields'] ?? [] as $childKey => $childField) {
                     $fieldRules["content.{$key}.*.{$childKey}"] = $childField['rules'] ?? 'nullable|string';
                 }
+            } elseif ($type === 'image') {
+                $fieldRules["content.{$key}"] = 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120';
             } else {
                 $fieldRules["content.{$key}"] = $field['rules'] ?? 'nullable|string';
             }
@@ -238,7 +238,10 @@ class ServicePageController extends Controller
         ];
 
         if ($request->isMethod('post')) {
-            $response['html'] = view($template['view'], [
+            $previewView = $service->page_section === 'services'
+                ? 'sections._service_section'
+                : $template['view'];
+            $response['html'] = view($previewView, [
                 'data' => $data,
                 'section' => null,
                 'sectionType' => $type,
@@ -284,6 +287,11 @@ class ServicePageController extends Controller
 
             if ($type === 'image') {
                 $defaults[$key] = '';
+                continue;
+            }
+
+            if (array_key_exists('default', $field)) {
+                $defaults[$key] = $field['default'];
                 continue;
             }
 

@@ -12,7 +12,7 @@
           <li class="mobile-overview-item"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="mobile-overview-link"><span>View All Services</span> <i class="fa-solid fa-arrow-right"></i></a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Marketing Platform</a></li>
           <li><a href="{{ route('services.seo') }}">Search Engine Optimization</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Social Media Marketing</a></li>
+          <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Video Marketing</a></li>

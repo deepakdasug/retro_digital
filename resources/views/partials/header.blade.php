@@ -25,7 +25,7 @@
                 <p>Grow your reach through SEO, paid campaigns, social media, and content marketing.</p>
                 <ul class="services-mega-links">
                   <li><a href="{{ route('services.seo') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
