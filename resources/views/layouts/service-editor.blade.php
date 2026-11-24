@@ -16,6 +16,21 @@
 <body class="seo-editor-layout">
     @yield('content')
     <script src="{{ asset('js/content-studio.js') }}?v={{ filemtime(public_path('js/content-studio.js')) }}"></script>
+    <script>
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'resize-custom-frame' && typeof e.data.height === 'number') {
+                var targetHeight = Math.ceil(e.data.height);
+                document.querySelectorAll('.custom-section-frame').forEach(function(frame) {
+                    if (frame.contentWindow === e.source) {
+                        var currentHeight = frame.offsetHeight;
+                        if (Math.abs(currentHeight - targetHeight) >= 2) {
+                            frame.style.height = targetHeight + 'px';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

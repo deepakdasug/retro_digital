@@ -254,6 +254,16 @@ class ServicePageController extends Controller
                 'customBuilder' => true,
             ];
 
+            if ($request->isMethod('get')) {
+                $response['defaults'] = [
+                    'html' => $this->defaultCustomSectionHtml(),
+                    'css' => $this->defaultCustomSectionCss(),
+                    'js' => $this->defaultCustomSectionJs(),
+                    'schema' => [],
+                    'values' => [],
+                ];
+            }
+
             if ($request->isMethod('post')) {
                 $content = $this->customSectionContent($request, 'content', false);
                 $section = new ServiceSection(['content' => $content]);
@@ -301,9 +311,9 @@ class ServicePageController extends Controller
             $path('schema.*.label') => ['required', 'string', 'max:100'],
             $path('schema.*.type') => ['required', 'in:heading,paragraph,text,image,video,link'],
             $path('values') => ['nullable', 'array'],
-            $path('html') => ['required', 'string', 'max:200000'],
-            $path('css') => ['nullable', 'string', 'max:200000'],
-            $path('js') => ['nullable', 'string', 'max:200000'],
+            $path('html') => ['nullable', 'string', 'max:500000'],
+            $path('css') => ['nullable', 'string', 'max:500000'],
+            $path('js') => ['nullable', 'string', 'max:500000'],
         ];
 
         foreach ($request->input($path('schema'), []) as $field) {
@@ -318,12 +328,17 @@ class ServicePageController extends Controller
             $key = (string) $field['key'];
             if (in_array($field['type'] ?? '', ['image', 'video'], true)) {
                 $existingPath = $path('existing_values.'.$key);
-                $rules[$path('values.'.$key)] = ($field['type'] === 'image')
-                    ? ['required_without:'.$existingPath, 'nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:10240']
-                    : ['required_without:'.$existingPath, 'nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg', 'max:51200'];
+                $valuePath = $path('values.'.$key);
+                if ($request->hasFile($valuePath)) {
+                    $rules[$valuePath] = ($field['type'] === 'image')
+                        ? ['file', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:15360']
+                        : ['file', 'mimetypes:video/mp4,video/webm,video/ogg', 'max:51200'];
+                } else {
+                    $rules[$valuePath] = ['nullable', 'string', 'max:1000'];
+                }
                 $rules[$existingPath] = ['nullable', 'string', 'max:1000'];
             } elseif (($field['type'] ?? '') === 'link') {
-                $rules[$path('values.'.$key)] = ['nullable', 'url', 'max:2000'];
+                $rules[$path('values.'.$key)] = ['nullable', 'string', 'max:2000'];
             } else {
                 $rules[$path('values.'.$key)] = ['nullable', 'string', 'max:50000'];
             }
@@ -338,12 +353,15 @@ class ServicePageController extends Controller
             if (in_array($field['type'], ['image', 'video'], true)) {
                 $file = $request->file($path('values.'.$key));
                 $existing = $request->input($path('existing_values.'.$key), '');
+                $textValue = $request->input($path('values.'.$key), '');
                 if ($file && $storeUploads) {
                     $values[$key] = $file->store('services/sections', 'public');
                 } elseif ($file && ! $storeUploads && $field['type'] === 'image') {
                     $values[$key] = 'data:'.$file->getMimeType().';base64,'.base64_encode(file_get_contents($file->getRealPath()));
-                } else {
+                } elseif (!empty($existing)) {
                     $values[$key] = (string) $existing;
+                } else {
+                    $values[$key] = is_string($textValue) ? $textValue : '';
                 }
             } else {
                 $values[$key] = (string) $request->input($path('values.'.$key), '');
@@ -677,5 +695,192 @@ class ServicePageController extends Controller
         $service->delete();
 
         return redirect()->route('admin.dashboard', ['tab' => 'webpage'])->with('success', 'Webpage deleted.');
+    }
+
+    public function uploadMedia(Request $request)
+    {
+        $request->validate([
+            'image' => ['nullable', 'file', 'max:20480', 'mimes:jpeg,png,jpg,gif,webp,svg'],
+            'upload' => ['nullable', 'file', 'max:20480', 'mimes:jpeg,png,jpg,gif,webp,svg'],
+        ]);
+
+        $file = $request->file('image') ?? $request->file('upload');
+        if (!$file || !$file->isValid()) {
+            return response()->json(['error' => 'Please select a valid image file (PNG, JPG, WEBP, GIF, SVG up to 20MB).'], 422);
+        }
+
+        $path = $file->store('services/sections', 'public');
+        $url = asset('storage/' . $path);
+
+        return response()->json([
+            'success' => true,
+            'url' => $url,
+            'path' => $path,
+            'filename' => $file->getClientOriginalName(),
+        ]);
+    }
+
+    private function defaultCustomSectionHtml(): string
+    {
+        return <<<'HTML'
+<section class="custom-hero-banner">
+  <div class="custom-hero-container">
+    <div class="custom-hero-content">
+      <span class="custom-badge">CUSTOM DESIGN ENGINE</span>
+      <h2 class="custom-title">Build Anything With Raw HTML & CSS</h2>
+      <p class="custom-description">Create bespoke sections with full design freedom. Upload images, write custom styles, and build high-converting layouts.</p>
+      <div class="custom-actions">
+        <a href="/contact#contact" class="custom-btn">Get Started Today <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="custom-hero-media">
+      <div class="custom-image-card">
+        <img src="/assets/images/retrotech-mark.png" alt="Section Banner" class="custom-banner-img">
+        <div class="custom-floating-tag">
+          <i class="fa-solid fa-bolt"></i> 100% Fully Customizable
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+HTML;
+    }
+
+    private function defaultCustomSectionCss(): string
+    {
+        return <<<'CSS'
+.custom-hero-banner {
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #f4fbf7 100%);
+  border-radius: 24px;
+  margin: 1.5rem auto;
+  max-width: 1240px;
+  box-shadow: 0 10px 30px -10px rgba(22, 101, 52, 0.08);
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+}
+
+.custom-hero-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+.custom-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.custom-title {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #0f172a;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.custom-description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 2rem;
+}
+
+.custom-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: #166534;
+  color: #ffffff;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(22, 101, 52, 0.25);
+}
+
+.custom-btn:hover {
+  background: #14532d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(22, 101, 52, 0.35);
+}
+
+.custom-hero-media {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.custom-image-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.custom-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.custom-floating-tag {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-floating-tag i {
+  color: #4ade80;
+}
+
+@media (max-width: 900px) {
+  .custom-hero-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+  .custom-hero-media {
+    order: -1;
+  }
+  .custom-btn {
+    margin: 0 auto;
+  }
+}
+CSS;
+    }
+
+    private function defaultCustomSectionJs(): string
+    {
+        return <<<'JS'
+// Custom JavaScript:
+// Access all dynamic schema fields via window.sectionData
+console.log('Custom section loaded with data:', window.sectionData);
+JS;
     }
 }

@@ -12,7 +12,6 @@ use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
-use App\Http\Controllers\IndustryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,7 +120,8 @@ Route::get('/services/seo-services', [ServiceController::class, 'show'])
 
 Route::redirect('/industries', '/who-we-serve', 301);
 
-Route::get('/who-we-serve/{slug}', [IndustryController::class, 'show'])
+Route::get('/who-we-serve/{slug}', [ServiceController::class, 'show'])
+    ->defaults('section', 'industries')
     ->name('industries.show');
 
 Route::get('/industries/{slug}', function (string $slug) {
@@ -139,6 +139,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/webpages')->name('admin.webp
     Route::post('/{service}/save', [AdminServicePageController::class, 'savePage'])->name('save');
     Route::post('/{service}/sections', [AdminServicePageController::class, 'storeSection'])->name('sections.store');
     Route::put('/{service}/sections/{section}', [AdminServicePageController::class, 'updateSection'])->name('sections.update');
+    Route::post('/upload-media', [AdminServicePageController::class, 'uploadMedia'])->name('upload_media');
     Route::delete('/{service}/sections/{section}', [AdminServicePageController::class, 'destroySection'])->name('sections.destroy');
     Route::delete('/{service}', [AdminServicePageController::class, 'destroy'])->name('destroy');
 });

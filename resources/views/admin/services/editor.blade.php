@@ -253,52 +253,410 @@ const customFieldTypes = {
     link: 'Link URL',
 };
 
-const wireThemeGuide = (root) => {
-    const html = `<section class="brand-card">
-  <p class="brand-card__eyebrow">@{{ eyebrow }}</p>
-  <h2>@{{ heading }}</h2>
-  <p>@{{ paragraph }}</p>
-</section>`;
-    const css = `.brand-card {
-  padding: clamp(2rem, 6vw, 4rem);
-  border: 1px solid #dfe8e1;
-  border-radius: 20px;
-  background: #f5f8f5;
-  color: #26332b;
-  font-family: Inter, Arial, sans-serif;
+const customPresets = {
+    hero: {
+        schema: [],
+        values: {},
+        html: `<section class="custom-hero-banner">
+  <div class="custom-hero-container">
+    <div class="custom-hero-content">
+      <span class="custom-badge">CUSTOM DESIGN ENGINE</span>
+      <h2 class="custom-title">Build Anything With Raw HTML & CSS</h2>
+      <p class="custom-description">Create bespoke sections with full design freedom. Upload images, write custom styles, and build high-converting layouts.</p>
+      <div class="custom-actions">
+        <a href="/contact#contact" class="custom-btn">Get Started Today <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="custom-hero-media">
+      <div class="custom-image-card">
+        <img src="/assets/images/retrotech-mark.png" alt="Section Banner" class="custom-banner-img">
+        <div class="custom-floating-tag">
+          <i class="fa-solid fa-bolt"></i> 100% Fully Customizable
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`,
+        css: `.custom-hero-banner {
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #f4fbf7 100%);
+  border-radius: 24px;
+  margin: 1.5rem auto;
+  max-width: 1240px;
+  box-shadow: 0 10px 30px -10px rgba(22, 101, 52, 0.08);
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
 }
 
-.brand-card__eyebrow {
-  color: #397b4e;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}`;
+.custom-hero-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 3rem;
+}
 
-    const themePanel = root.querySelector('[data-theme-panel]');
-    const toggle = root.querySelector('[data-theme-toggle]');
-    const htmlCode = root.querySelector('[data-theme-html]');
-    const cssCode = root.querySelector('[data-theme-css]');
-    if (htmlCode) htmlCode.textContent = html;
-    if (cssCode) cssCode.textContent = css;
-    toggle?.addEventListener('click', () => {
-        const isHidden = themePanel.hidden;
-        themePanel.hidden = !isHidden;
-        toggle.setAttribute('aria-expanded', String(isHidden));
-    });
+.custom-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.custom-title {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #0f172a;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.custom-description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 2rem;
+}
+
+.custom-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: #166534;
+  color: #ffffff;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(22, 101, 52, 0.25);
+}
+
+.custom-btn:hover {
+  background: #14532d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(22, 101, 52, 0.35);
+}
+
+.custom-hero-media {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.custom-image-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.custom-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.custom-floating-tag {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-floating-tag i {
+  color: #4ade80;
+}
+
+@media (max-width: 900px) {
+  .custom-hero-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+  .custom-hero-media {
+    order: -1;
+  }
+  .custom-btn {
+    margin: 0 auto;
+  }
+}`,
+        js: `console.log('Hero loaded');`
+    },
+    cards: {
+        schema: [],
+        values: {},
+        html: `<section class="custom-cards-section">
+  <div class="custom-cards-container">
+    <div class="custom-cards-header">
+      <span class="custom-cards-badge">WHY CHOOSE US</span>
+      <h2 class="custom-cards-title">Engineered For Peak Performance</h2>
+      <p class="custom-cards-subtitle">Every solution is built with high-velocity architecture, security, and measurable ROI.</p>
+    </div>
+    <div class="custom-cards-grid">
+      <div class="custom-feature-card">
+        <div class="custom-card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+        <h3>Ultra-Fast Performance</h3>
+        <p>Sub-second response times and optimized core web vitals for maximum user retention.</p>
+      </div>
+      <div class="custom-feature-card is-featured">
+        <div class="custom-card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Enterprise Security</h3>
+        <p>Zero-trust architecture, automated threat scanning, and robust end-to-end data encryption.</p>
+      </div>
+      <div class="custom-feature-card">
+        <div class="custom-card-icon"><i class="fa-solid fa-robot"></i></div>
+        <h3>24/7 Intelligent Automation</h3>
+        <p>Seamless automated workflows and conversational bots that generate and qualify leads around the clock.</p>
+      </div>
+    </div>
+  </div>
+</section>`,
+        css: `.custom-cards-section {
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem;
+  background: #f8fafc;
+  border-radius: 24px;
+  margin: 1.5rem auto;
+  max-width: 1240px;
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+}
+.custom-cards-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+.custom-cards-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem;
+}
+.custom-cards-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.custom-cards-title {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.custom-cards-subtitle {
+  font-size: 1.05rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+.custom-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.75rem;
+}
+.custom-feature-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 2.25rem 1.75rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.custom-feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+.custom-feature-card.is-featured {
+  border-color: #86efac;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  box-shadow: 0 12px 28px -10px rgba(22, 101, 52, 0.12);
+}
+.custom-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #166534;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 1.5rem;
+}
+.custom-feature-card.is-featured .custom-card-icon {
+  background: #15803d;
+}
+.custom-feature-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+}
+.custom-feature-card p {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: #64748b;
+}`,
+        js: `console.log('Cards grid loaded');`
+    },
+    cta: {
+        schema: [],
+        values: {},
+        html: `<section class="custom-cta-section">
+  <div class="custom-cta-container">
+    <div class="custom-cta-content">
+      <h2 class="custom-cta-title">Ready To Accelerate Your Growth?</h2>
+      <p class="custom-cta-text">Join 500+ fast-growing enterprises scaling with our engineering and growth stack.</p>
+      <div class="custom-cta-action">
+        <a href="/contact#contact" class="custom-cta-button">Schedule Free Strategy Call <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <p class="custom-cta-highlight"><i class="fa-solid fa-circle-check"></i> 100% Free Consultation • No Commitment</p>
+    </div>
+  </div>
+</section>`,
+        css: `.custom-cta-section {
+  padding: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+  background: linear-gradient(135deg, #0f291e 0%, #174c31 60%, #15803d 100%);
+  border-radius: 24px;
+  margin: 1.5rem auto;
+  max-width: 1240px;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 20px 40px -15px rgba(15, 41, 30, 0.4);
+}
+.custom-cta-container {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.custom-cta-title {
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.25rem;
+}
+.custom-cta-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #d1fae5;
+  margin-bottom: 2.25rem;
+}
+.custom-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background: #ffffff;
+  color: #14532d;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+}
+.custom-cta-button:hover {
+  background: #f0fdf4;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.35);
+}
+.custom-cta-highlight {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}`,
+        js: `console.log('CTA banner loaded');`
+    },
+    blank: {
+        schema: [],
+        values: {},
+        html: `<section class="custom-blank-section">
+  <div class="custom-blank-container">
+    <h2>Custom Section Heading</h2>
+    <p>Design your custom layout with raw HTML, CSS and JavaScript.</p>
+  </div>
+</section>`,
+        css: `.custom-blank-section {
+  padding: 60px 20px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  margin: 20px auto;
+  max-width: 1200px;
+  font-family: 'Inter', sans-serif;
+}
+.custom-blank-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+.custom-blank-section p {
+  color: #64748b;
+  font-size: 1.05rem;
+}`,
+        js: `// Custom JavaScript\n`
+    }
 };
 
-const createCustomFieldControl = (row, prefix, key, type, value = '') => {
+const insertIntoHtml = (root, snippet) => {
+    if (!root) return;
+    const htmlTextarea = root.querySelector('textarea[name$="[html]"]');
+    if (!htmlTextarea) return;
+    const start = htmlTextarea.selectionStart ?? htmlTextarea.value.length;
+    const end = htmlTextarea.selectionEnd ?? htmlTextarea.value.length;
+    const text = htmlTextarea.value;
+    htmlTextarea.value = text.substring(0, start) + snippet + text.substring(end);
+    htmlTextarea.focus();
+    htmlTextarea.selectionStart = htmlTextarea.selectionEnd = start + snippet.length;
+    htmlTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+};
+
+const createCustomFieldControl = (row, prefix, key, type, value = '', root = null) => {
     const container = row.querySelector('[data-custom-value]');
+    if (!container) return;
     const prior = container.querySelector('[data-existing-value]')?.value ?? '';
     container.replaceChildren();
     const fieldName = `${prefix}[values][${key}]`;
+
     if (type === 'paragraph') {
         const input = document.createElement('textarea');
         input.name = fieldName;
-        input.rows = 3;
+        input.rows = 2;
         input.value = value;
-        input.placeholder = 'Enter paragraph text';
+        input.placeholder = 'Enter text';
         container.appendChild(input);
     } else if (type === 'image' || type === 'video') {
         const existing = document.createElement('input');
@@ -307,24 +665,19 @@ const createCustomFieldControl = (row, prefix, key, type, value = '') => {
         existing.value = prior || value;
         existing.dataset.existingValue = '';
         container.appendChild(existing);
-        if (existing.value) {
-            const current = document.createElement('small');
-            current.textContent = `Current file: ${existing.value}`;
-            container.appendChild(current);
-        }
+
         const input = document.createElement('input');
         input.type = 'file';
         input.name = fieldName;
-        input.accept = type === 'image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'video/mp4,video/webm,video/ogg';
-        input.required = !existing.value;
+        input.accept = type === 'image' ? 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml' : 'video/mp4,video/webm,video/ogg';
+        input.required = !(prior || value);
         container.appendChild(input);
     } else {
         const input = document.createElement('input');
-        input.type = 'text';
+        input.type = type === 'link' ? 'url' : 'text';
         input.name = fieldName;
         input.value = value;
-        input.placeholder = type === 'link' ? 'https://example.com' : `Enter ${customFieldTypes[type].toLowerCase()}`;
-        if (type === 'link') input.type = 'url';
+        input.placeholder = type === 'link' ? 'https://example.com' : 'Enter value';
         container.appendChild(input);
     }
 };
@@ -342,107 +695,295 @@ const mountCustomBuilder = (root) => {
         schema = [];
     }
     const list = root.querySelector('[data-custom-fields]');
-    const variables = root.querySelector('[data-custom-variables]');
+    const fileInput = root.querySelector('.csb-upload-file-input');
+    const mediaStatus = root.querySelector('[data-media-status]');
+    const mediaGallery = root.querySelector('[data-media-gallery]');
 
-    const updateVariables = () => {
-        const keys = [...list.querySelectorAll('[data-field-key]')].map((input) => input.value.trim()).filter(Boolean);
-        variables.textContent = keys.length
-            ? `Available HTML variables: ${keys.map((key) => `@{{ ${key} }}`).join(', ')}`
-            : 'Add fields to make variables available in your HTML.';
+    // Tab switching
+    root.querySelectorAll('.csb-tab-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.dataset.tab;
+            root.querySelectorAll('.csb-tab-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+            root.querySelectorAll('.csb-pane').forEach(pane => {
+                const isMatch = pane.dataset.pane === targetTab;
+                pane.hidden = !isMatch;
+                pane.classList.toggle('is-active', isMatch);
+            });
+        });
+    });
+
+    // Helper: Add media card to gallery
+    const addMediaCard = (url, filename) => {
+        if (!mediaGallery) return;
+        if (mediaGallery.querySelector(`[data-url="${url}"]`)) return;
+
+        const card = document.createElement('div');
+        card.className = 'csb-media-card';
+        card.dataset.url = url;
+        card.innerHTML = `
+            <img src="${url}" alt="${filename}" class="csb-media-thumb">
+            <div class="csb-media-details">
+                <span class="csb-media-name" title="${filename}">${filename}</span>
+                <span class="csb-media-url">${url}</span>
+            </div>
+            <div class="csb-media-actions">
+                <button type="button" class="csb-insert-img-btn" title="Insert image tag into HTML editor">
+                    <i class="fa-solid fa-plus"></i> Insert into HTML
+                </button>
+                <button type="button" class="csb-copy-url-btn" title="Copy image URL">
+                    <i class="fa-regular fa-copy"></i> Copy URL
+                </button>
+            </div>
+        `;
+        card.querySelector('.csb-insert-img-btn').addEventListener('click', () => {
+            insertIntoHtml(root, `<img src="${url}" alt="${filename}" class="custom-img" />\n`);
+            // Switch to HTML tab
+            const htmlTabBtn = root.querySelector('.csb-tab-btn[data-tab="html"]');
+            htmlTabBtn?.click();
+        });
+        card.querySelector('.csb-copy-url-btn').addEventListener('click', (e) => {
+            navigator.clipboard?.writeText(url);
+            const btn = e.currentTarget;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy URL'; }, 1500);
+        });
+        mediaGallery.prepend(card);
     };
 
-    const addRow = (field = {}, position = list.children.length) => {
-        const row = document.createElement('div');
-        row.className = 'seo-repeater-item custom-content-field-row';
-        row.dataset.customFieldRow = '';
-        const keyWrap = document.createElement('div');
-        keyWrap.className = 'seo-field';
-        const keyLabel = document.createElement('label');
-        keyLabel.textContent = 'Variable name';
-        const keyInput = document.createElement('input');
-        keyInput.required = true;
-        keyInput.pattern = '[A-Za-z][A-Za-z0-9_]{0,39}';
-        keyInput.placeholder = 'hero_heading';
-        keyInput.value = field.key || `field_${position + 1}`;
-        keyInput.name = `${prefix}[schema][${position}][key]`;
-        keyInput.dataset.fieldKey = '';
-        keyWrap.append(keyLabel, keyInput);
+    // Pre-populate demo / existing images in gallery
+    Object.entries(values).forEach(([k, val]) => {
+        if (typeof val === 'string' && val.match(/\.(jpg|jpeg|png|webp|gif|svg)/i)) {
+            const url = val.startsWith('http') || val.startsWith('/') ? val : (val.startsWith('assets/') ? `/${val}` : `/storage/${val}`);
+            addMediaCard(url, val.split('/').pop());
+        }
+    });
+    addMediaCard('/assets/images/retrotech-mark.png', 'retrotech-mark.png');
 
-        const labelWrap = document.createElement('div');
-        labelWrap.className = 'seo-field';
-        const labelLabel = document.createElement('label');
-        labelLabel.textContent = 'Input label';
-        const labelInput = document.createElement('input');
-        labelInput.required = true;
-        labelInput.maxLength = 100;
-        labelInput.placeholder = 'Hero heading';
-        labelInput.value = field.label || '';
-        labelInput.name = `${prefix}[schema][${position}][label]`;
-        labelWrap.append(labelLabel, labelInput);
+    // AJAX image upload
+    fileInput?.addEventListener('change', async () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        if (mediaStatus) {
+            mediaStatus.hidden = false;
+            mediaStatus.textContent = `Uploading ${file.name}…`;
+            mediaStatus.className = 'csb-media-status is-uploading';
+        }
 
-        const typeWrap = document.createElement('div');
-        typeWrap.className = 'seo-field';
-        const typeLabel = document.createElement('label');
-        typeLabel.textContent = 'Input type';
-        const typeSelect = document.createElement('select');
-        typeSelect.name = `${prefix}[schema][${position}][type]`;
-        Object.entries(customFieldTypes).forEach(([type, title]) => {
-            const option = document.createElement('option');
-            option.value = type;
-            option.textContent = title;
-            option.selected = (field.type || 'heading') === type;
-            typeSelect.appendChild(option);
-        });
-        typeWrap.append(typeLabel, typeSelect);
+        const formData = new FormData();
+        formData.append('image', file);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+            || addSectionForm?.querySelector('input[name="_token"]')?.value
+            || '';
+        formData.append('_token', csrfToken);
 
-        const valueWrap = document.createElement('div');
-        valueWrap.className = 'seo-field custom-content-value';
-        valueWrap.dataset.customValue = '';
-        const remove = document.createElement('button');
-        remove.type = 'button';
-        remove.className = 'seo-add-repeater-remove';
-        remove.textContent = 'Remove field';
-        remove.addEventListener('click', () => {
-            row.remove();
-            [...list.children].forEach((item, index) => {
-                item.querySelectorAll('[name]').forEach((control) => {
-                    control.name = control.name.replace(/\[schema\]\[\d+\]/, `[schema][${index}]`);
-                });
+        try {
+            const uploadUrl = '{{ route("admin.webpages.upload_media") }}';
+            const res = await fetch(uploadUrl, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
             });
-            updateVariables();
+            const json = await res.json();
+            if (!res.ok || !json.success) throw new Error(json.error || 'Upload failed');
+            if (mediaStatus) {
+                mediaStatus.hidden = false;
+                mediaStatus.textContent = `✓ Uploaded ${json.filename} successfully!`;
+                mediaStatus.className = 'csb-media-status is-success';
+                setTimeout(() => { mediaStatus.hidden = true; }, 3000);
+            }
+            addMediaCard(json.url, json.filename);
+            fileInput.value = '';
+        } catch (err) {
+            if (mediaStatus) {
+                mediaStatus.hidden = false;
+                mediaStatus.textContent = err.message || 'Image upload failed. Please try again.';
+                mediaStatus.className = 'csb-media-status is-error';
+            }
+        }
+    });
+
+    // Preset buttons
+    root.querySelectorAll('[data-preset]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const presetKey = btn.dataset.preset;
+            const preset = customPresets[presetKey];
+            if (!preset) return;
+            const htmlArea = root.querySelector('textarea[name$="[html]"]');
+            const cssArea = root.querySelector('textarea[name$="[css]"]');
+            const jsArea = root.querySelector('textarea[name$="[js]"]');
+            if (htmlArea) htmlArea.value = preset.html;
+            if (cssArea) cssArea.value = preset.css;
+            if (jsArea) jsArea.value = preset.js;
+            // Switch to HTML tab
+            root.querySelector('.csb-tab-btn[data-tab="html"]')?.click();
         });
-        row.append(keyWrap, labelWrap, typeWrap, valueWrap, remove);
+    });
+
+    // Tab indentation
+    root.querySelectorAll('textarea').forEach((textarea) => {
+        if (textarea.dataset.tabIndented) return;
+        textarea.dataset.tabIndented = 'true';
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + 2;
+            }
+        });
+    });
+
+    // Dynamic fields (optional tab)
+    const addRow = (field = {}, position = list?.children.length || 0) => {
+        if (!list) return;
+        const row = document.createElement('div');
+        row.className = 'csb-field-row';
+        row.innerHTML = `
+            <div class="csb-field-col">
+                <label>Tag name</label>
+                <input name="${prefix}[schema][${position}][key]" value="${field.key || 'tag_' + (position + 1)}" placeholder="heading" required>
+            </div>
+            <div class="csb-field-col">
+                <label>Label</label>
+                <input name="${prefix}[schema][${position}][label]" value="${field.label || ''}" placeholder="Main Heading" required>
+            </div>
+            <div class="csb-field-col">
+                <label>Type</label>
+                <select name="${prefix}[schema][${position}][type]">
+                    <option value="heading" ${field.type === 'heading' ? 'selected' : ''}>Heading</option>
+                    <option value="paragraph" ${field.type === 'paragraph' ? 'selected' : ''}>Paragraph</option>
+                    <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short text</option>
+                    <option value="image" ${field.type === 'image' ? 'selected' : ''}>Image upload</option>
+                    <option value="link" ${field.type === 'link' ? 'selected' : ''}>Link</option>
+                </select>
+            </div>
+            <div class="csb-field-col csb-field-col-val" data-custom-value></div>
+            <button type="button" class="csb-remove-btn" title="Remove field"><i class="fa-solid fa-xmark"></i></button>
+        `;
+        row.querySelector('.csb-remove-btn').addEventListener('click', () => row.remove());
         list.appendChild(row);
-        createCustomFieldControl(row, prefix, keyInput.value, typeSelect.value, values[keyInput.value] || '');
-        keyInput.addEventListener('input', () => {
-            const value = row.querySelector('[data-custom-value] input:not([type="hidden"]), [data-custom-value] textarea');
-            const hidden = row.querySelector('[data-existing-value]');
-            if (value) value.name = `${prefix}[values][${keyInput.value}]`;
-            if (hidden) hidden.name = `${prefix}[existing_values][${keyInput.value}]`;
-            updateVariables();
-        });
-        typeSelect.addEventListener('change', () => {
-            const existing = row.querySelector('[data-existing-value]');
-            if (existing) existing.value = '';
-            createCustomFieldControl(row, prefix, keyInput.value, typeSelect.value);
-        });
-        updateVariables();
+        createCustomFieldControl(row, prefix, field.key || 'tag_' + (position + 1), field.type || 'heading', values[field.key] || '', root);
     };
 
     schema.forEach((field, index) => addRow(field, index));
     root.querySelector('[data-add-custom-field]')?.addEventListener('click', () => addRow());
-    wireThemeGuide(root);
 };
 
-const renderCustomBuilder = () => {
+const renderCustomBuilder = (defaults = null) => {
     sectionFieldsContainer.replaceChildren();
     const root = document.createElement('div');
     root.className = 'seo-field-full custom-section-builder';
     root.dataset.customBuilder = '';
     root.dataset.prefix = 'content';
-    root.dataset.schema = '[]';
-    root.dataset.values = '{}';
-    root.innerHTML = '<h3>Section content fields</h3><p>Choose inputs for this section. Use <code>@{{ heading }}</code> in HTML or read values in JavaScript from <code>window.sectionData.heading</code>. HTML values are escaped; image and video values become uploaded URLs. Files go to public storage; the database stores their paths and section content.</p><div data-custom-fields></div><button type="button" class="seo-section-preview-button" data-add-custom-field>Add content field</button><button type="button" class="seo-section-preview-button" data-theme-toggle aria-expanded="false">Theme</button><div class="custom-theme-panel" data-theme-panel hidden><p>Starter example using the website’s forest green, leaf green, and soft background palette. Define matching fields named eyebrow, heading, and paragraph to use these variables.</p><h4>HTML</h4><pre><code data-theme-html></code></pre><h4>CSS</h4><pre><code data-theme-css></code></pre></div><div class="custom-section-code"><label>HTML layout</label><textarea name="content[html]" rows="10" required></textarea><label>CSS</label><textarea name="content[css]" rows="7"></textarea><label>JavaScript</label><textarea name="content[js]" rows="7"></textarea></div><p data-custom-variables class="custom-section-variables"></p>';
+
+    const initialSchema = defaults?.schema || [];
+    const initialValues = defaults?.values || {};
+    const initialHtml = defaults?.html ?? customPresets.hero.html;
+    const initialCss = defaults?.css ?? customPresets.hero.css;
+    const initialJs = defaults?.js ?? customPresets.hero.js;
+
+    root.dataset.schema = JSON.stringify(initialSchema);
+    root.dataset.values = JSON.stringify(initialValues);
+
+    root.innerHTML = `
+        <div class="csb-toolbar">
+            <div class="csb-toolbar-info">
+                <span class="csb-badge"><i class="fa-solid fa-code"></i> Custom Section Builder</span>
+                <span class="csb-hint">Write raw HTML & CSS below, or click a template to start:</span>
+            </div>
+            <div class="csb-presets">
+                <button type="button" class="csb-preset-btn" data-preset="hero" title="Load Hero Banner"><i class="fa-solid fa-star"></i> Hero Banner</button>
+                <button type="button" class="csb-preset-btn" data-preset="cards" title="Load 3-Card Grid"><i class="fa-solid fa-grip"></i> 3-Card Grid</button>
+                <button type="button" class="csb-preset-btn" data-preset="cta" title="Load Gradient CTA"><i class="fa-solid fa-bullhorn"></i> Gradient CTA</button>
+                <button type="button" class="csb-preset-btn" data-preset="blank" title="Start with clean blank canvas"><i class="fa-regular fa-file"></i> Blank Canvas</button>
+            </div>
+        </div>
+
+        <div class="csb-tabs">
+            <button type="button" class="csb-tab-btn is-active" data-tab="html">
+                <i class="fa-brands fa-html5" style="color: #ea580c;"></i> HTML Layout
+            </button>
+            <button type="button" class="csb-tab-btn" data-tab="css">
+                <i class="fa-brands fa-css3-alt" style="color: #2563eb;"></i> Custom CSS
+            </button>
+            <button type="button" class="csb-tab-btn" data-tab="js">
+                <i class="fa-brands fa-js" style="color: #ca8a04;"></i> JavaScript
+            </button>
+            <button type="button" class="csb-tab-btn" data-tab="media">
+                <i class="fa-solid fa-photo-film" style="color: #166534;"></i> Upload Images & Media
+            </button>
+            <button type="button" class="csb-tab-btn" data-tab="vars">
+                <i class="fa-solid fa-sliders" style="color: #64748b;"></i> Dynamic Fields (Optional)
+            </button>
+        </div>
+
+        <!-- Tab 1: HTML Layout -->
+        <div class="csb-pane is-active" data-pane="html">
+            <div class="csb-pane-header">
+                <label><i class="fa-brands fa-html5" style="color: #ea580c;"></i> HTML Code</label>
+                <span class="csb-pane-tip">Press <strong>[Tab]</strong> to indent. Real content can be written directly inside HTML tags.</span>
+            </div>
+            <textarea name="content[html]" class="csb-code-textarea" rows="12" spellcheck="false" placeholder="<!-- Write your raw HTML here -->" required></textarea>
+        </div>
+
+        <!-- Tab 2: Custom CSS -->
+        <div class="csb-pane" data-pane="css" hidden>
+            <div class="csb-pane-header">
+                <label><i class="fa-brands fa-css3-alt" style="color: #2563eb;"></i> CSS Styles</label>
+                <span class="csb-pane-tip">Styles written here are automatically scoped to this section.</span>
+            </div>
+            <textarea name="content[css]" class="csb-code-textarea" rows="12" spellcheck="false" placeholder="/* Write custom CSS rules here */"></textarea>
+        </div>
+
+        <!-- Tab 3: Custom JS -->
+        <div class="csb-pane" data-pane="js" hidden>
+            <div class="csb-pane-header">
+                <label><i class="fa-brands fa-js" style="color: #ca8a04;"></i> JavaScript Code (Optional)</label>
+                <span class="csb-pane-tip">Runs automatically when the section loads. Access dynamic data at <code>window.sectionData</code>.</span>
+            </div>
+            <textarea name="content[js]" class="csb-code-textarea" rows="8" spellcheck="false" placeholder="// Optional JavaScript"></textarea>
+        </div>
+
+        <!-- Tab 4: Upload Images & Media -->
+        <div class="csb-pane" data-pane="media" hidden>
+            <div class="csb-media-uploader">
+                <div class="csb-upload-dropzone">
+                    <i class="fa-solid fa-cloud-arrow-up csb-upload-icon"></i>
+                    <div class="csb-upload-prompt">
+                        <strong>Choose an image to upload from your computer</strong>
+                        <span>Supports JPG, PNG, WEBP, GIF, SVG (up to 20MB)</span>
+                    </div>
+                    <input type="file" class="csb-upload-file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml">
+                </div>
+                <div class="csb-media-status" data-media-status hidden></div>
+                <div class="csb-media-gallery" data-media-gallery>
+                    <!-- Uploaded images appear here with [Insert <img> into HTML] button -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Dynamic Fields (Optional) -->
+        <div class="csb-pane" data-pane="vars" hidden>
+            <div class="csb-fields-panel">
+                <div class="csb-fields-header">
+                    <p>Define dynamic variables (e.g. <code>@{{ heading }}</code>) to bind inputs. If not needed, you can simply write text directly in the HTML tab.</p>
+                    <button type="button" class="seo-section-preview-button csb-add-field-btn" data-add-custom-field>
+                        <i class="fa-solid fa-plus"></i> Add field
+                    </button>
+                </div>
+                <div data-custom-fields class="csb-fields-list"></div>
+            </div>
+        </div>
+    `;
+
+    const htmlArea = root.querySelector('textarea[name="content[html]"]');
+    const cssArea = root.querySelector('textarea[name="content[css]"]');
+    const jsArea = root.querySelector('textarea[name="content[js]"]');
+    if (htmlArea) htmlArea.value = initialHtml;
+    if (cssArea) cssArea.value = initialCss;
+    if (jsArea) jsArea.value = initialJs;
+
     sectionFieldsContainer.appendChild(root);
     mountCustomBuilder(root);
 };
@@ -560,7 +1101,7 @@ sectionTypeSelect?.addEventListener('change', async () => {
         if (!response.ok) throw new Error('Template fields could not be loaded.');
         const result = await response.json();
         if (sectionTypeSelect.value !== type) return;
-        if (result.customBuilder) renderCustomBuilder();
+        if (result.customBuilder) renderCustomBuilder(result.defaults);
         else renderSectionFields(result.fields, result.defaults);
         if (insertionPreview) {
             insertionPreview.hidden = false;
