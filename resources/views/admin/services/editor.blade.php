@@ -86,6 +86,9 @@
                                     <input id="section-order-{{ $section->id }}" type="number" value="{{ old('sections.' . $section->id . '.sort_order', $index + 1) }}" min="1" max="{{ $service->sections->count() }}" data-section-order data-section-id="{{ $section->id }}">
                                     <small>Position 1–{{ $service->sections->count() }}. Other sections shift to make room.</small>
                                 </div>
+                                @if($section->section_type === 'custom')
+                                    @include('admin.services._custom_section_fields', ['section' => $section, 'data' => $data])
+                                @else
                                 @foreach($template['fields'] as $key => $field)
                                     @php($value = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, $field['default'] ?? '')))
                                     @if(($field['type'] ?? '') === 'repeater')
@@ -159,6 +162,7 @@
                                         </div>
                                     @endif
                                 @endforeach
+                                @endif
                             </div>
                     </details>
                     </div>
@@ -239,6 +243,211 @@ const sectionPreviewButton = document.querySelector('[data-preview-section]');
 const insertionPreview = document.querySelector('[data-insertion-preview]');
 const insertionPreviewContent = insertionPreview?.querySelector('[data-insertion-content]');
 let sectionFieldId = 0;
+
+const customFieldTypes = {
+    heading: 'Heading',
+    paragraph: 'Paragraph',
+    text: 'Short text',
+    image: 'Image upload',
+    video: 'Video clip upload',
+    link: 'Link URL',
+};
+
+const wireThemeGuide = (root) => {
+    const html = `<section class="brand-card">
+  <p class="brand-card__eyebrow">@{{ eyebrow }}</p>
+  <h2>@{{ heading }}</h2>
+  <p>@{{ paragraph }}</p>
+</section>`;
+    const css = `.brand-card {
+  padding: clamp(2rem, 6vw, 4rem);
+  border: 1px solid #dfe8e1;
+  border-radius: 20px;
+  background: #f5f8f5;
+  color: #26332b;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.brand-card__eyebrow {
+  color: #397b4e;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}`;
+
+    const themePanel = root.querySelector('[data-theme-panel]');
+    const toggle = root.querySelector('[data-theme-toggle]');
+    const htmlCode = root.querySelector('[data-theme-html]');
+    const cssCode = root.querySelector('[data-theme-css]');
+    if (htmlCode) htmlCode.textContent = html;
+    if (cssCode) cssCode.textContent = css;
+    toggle?.addEventListener('click', () => {
+        const isHidden = themePanel.hidden;
+        themePanel.hidden = !isHidden;
+        toggle.setAttribute('aria-expanded', String(isHidden));
+    });
+};
+
+const createCustomFieldControl = (row, prefix, key, type, value = '') => {
+    const container = row.querySelector('[data-custom-value]');
+    const prior = container.querySelector('[data-existing-value]')?.value ?? '';
+    container.replaceChildren();
+    const fieldName = `${prefix}[values][${key}]`;
+    if (type === 'paragraph') {
+        const input = document.createElement('textarea');
+        input.name = fieldName;
+        input.rows = 3;
+        input.value = value;
+        input.placeholder = 'Enter paragraph text';
+        container.appendChild(input);
+    } else if (type === 'image' || type === 'video') {
+        const existing = document.createElement('input');
+        existing.type = 'hidden';
+        existing.name = `${prefix}[existing_values][${key}]`;
+        existing.value = prior || value;
+        existing.dataset.existingValue = '';
+        container.appendChild(existing);
+        if (existing.value) {
+            const current = document.createElement('small');
+            current.textContent = `Current file: ${existing.value}`;
+            container.appendChild(current);
+        }
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.name = fieldName;
+        input.accept = type === 'image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'video/mp4,video/webm,video/ogg';
+        input.required = !existing.value;
+        container.appendChild(input);
+    } else {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = fieldName;
+        input.value = value;
+        input.placeholder = type === 'link' ? 'https://example.com' : `Enter ${customFieldTypes[type].toLowerCase()}`;
+        if (type === 'link') input.type = 'url';
+        container.appendChild(input);
+    }
+};
+
+const mountCustomBuilder = (root) => {
+    if (!root || root.dataset.mounted === 'true') return;
+    root.dataset.mounted = 'true';
+    const prefix = root.dataset.prefix || 'content';
+    let schema = [];
+    let values = {};
+    try {
+        schema = JSON.parse(root.dataset.schema || '[]');
+        values = JSON.parse(root.dataset.values || '{}');
+    } catch (error) {
+        schema = [];
+    }
+    const list = root.querySelector('[data-custom-fields]');
+    const variables = root.querySelector('[data-custom-variables]');
+
+    const updateVariables = () => {
+        const keys = [...list.querySelectorAll('[data-field-key]')].map((input) => input.value.trim()).filter(Boolean);
+        variables.textContent = keys.length
+            ? `Available HTML variables: ${keys.map((key) => `@{{ ${key} }}`).join(', ')}`
+            : 'Add fields to make variables available in your HTML.';
+    };
+
+    const addRow = (field = {}, position = list.children.length) => {
+        const row = document.createElement('div');
+        row.className = 'seo-repeater-item custom-content-field-row';
+        row.dataset.customFieldRow = '';
+        const keyWrap = document.createElement('div');
+        keyWrap.className = 'seo-field';
+        const keyLabel = document.createElement('label');
+        keyLabel.textContent = 'Variable name';
+        const keyInput = document.createElement('input');
+        keyInput.required = true;
+        keyInput.pattern = '[A-Za-z][A-Za-z0-9_]{0,39}';
+        keyInput.placeholder = 'hero_heading';
+        keyInput.value = field.key || `field_${position + 1}`;
+        keyInput.name = `${prefix}[schema][${position}][key]`;
+        keyInput.dataset.fieldKey = '';
+        keyWrap.append(keyLabel, keyInput);
+
+        const labelWrap = document.createElement('div');
+        labelWrap.className = 'seo-field';
+        const labelLabel = document.createElement('label');
+        labelLabel.textContent = 'Input label';
+        const labelInput = document.createElement('input');
+        labelInput.required = true;
+        labelInput.maxLength = 100;
+        labelInput.placeholder = 'Hero heading';
+        labelInput.value = field.label || '';
+        labelInput.name = `${prefix}[schema][${position}][label]`;
+        labelWrap.append(labelLabel, labelInput);
+
+        const typeWrap = document.createElement('div');
+        typeWrap.className = 'seo-field';
+        const typeLabel = document.createElement('label');
+        typeLabel.textContent = 'Input type';
+        const typeSelect = document.createElement('select');
+        typeSelect.name = `${prefix}[schema][${position}][type]`;
+        Object.entries(customFieldTypes).forEach(([type, title]) => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = title;
+            option.selected = (field.type || 'heading') === type;
+            typeSelect.appendChild(option);
+        });
+        typeWrap.append(typeLabel, typeSelect);
+
+        const valueWrap = document.createElement('div');
+        valueWrap.className = 'seo-field custom-content-value';
+        valueWrap.dataset.customValue = '';
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'seo-add-repeater-remove';
+        remove.textContent = 'Remove field';
+        remove.addEventListener('click', () => {
+            row.remove();
+            [...list.children].forEach((item, index) => {
+                item.querySelectorAll('[name]').forEach((control) => {
+                    control.name = control.name.replace(/\[schema\]\[\d+\]/, `[schema][${index}]`);
+                });
+            });
+            updateVariables();
+        });
+        row.append(keyWrap, labelWrap, typeWrap, valueWrap, remove);
+        list.appendChild(row);
+        createCustomFieldControl(row, prefix, keyInput.value, typeSelect.value, values[keyInput.value] || '');
+        keyInput.addEventListener('input', () => {
+            const value = row.querySelector('[data-custom-value] input:not([type="hidden"]), [data-custom-value] textarea');
+            const hidden = row.querySelector('[data-existing-value]');
+            if (value) value.name = `${prefix}[values][${keyInput.value}]`;
+            if (hidden) hidden.name = `${prefix}[existing_values][${keyInput.value}]`;
+            updateVariables();
+        });
+        typeSelect.addEventListener('change', () => {
+            const existing = row.querySelector('[data-existing-value]');
+            if (existing) existing.value = '';
+            createCustomFieldControl(row, prefix, keyInput.value, typeSelect.value);
+        });
+        updateVariables();
+    };
+
+    schema.forEach((field, index) => addRow(field, index));
+    root.querySelector('[data-add-custom-field]')?.addEventListener('click', () => addRow());
+    wireThemeGuide(root);
+};
+
+const renderCustomBuilder = () => {
+    sectionFieldsContainer.replaceChildren();
+    const root = document.createElement('div');
+    root.className = 'seo-field-full custom-section-builder';
+    root.dataset.customBuilder = '';
+    root.dataset.prefix = 'content';
+    root.dataset.schema = '[]';
+    root.dataset.values = '{}';
+    root.innerHTML = '<h3>Section content fields</h3><p>Choose inputs for this section. Use <code>@{{ heading }}</code> in HTML or read values in JavaScript from <code>window.sectionData.heading</code>. HTML values are escaped; image and video values become uploaded URLs. Files go to public storage; the database stores their paths and section content.</p><div data-custom-fields></div><button type="button" class="seo-section-preview-button" data-add-custom-field>Add content field</button><button type="button" class="seo-section-preview-button" data-theme-toggle aria-expanded="false">Theme</button><div class="custom-theme-panel" data-theme-panel hidden><p>Starter example using the website’s forest green, leaf green, and soft background palette. Define matching fields named eyebrow, heading, and paragraph to use these variables.</p><h4>HTML</h4><pre><code data-theme-html></code></pre><h4>CSS</h4><pre><code data-theme-css></code></pre></div><div class="custom-section-code"><label>HTML layout</label><textarea name="content[html]" rows="10" required></textarea><label>CSS</label><textarea name="content[css]" rows="7"></textarea><label>JavaScript</label><textarea name="content[js]" rows="7"></textarea></div><p data-custom-variables class="custom-section-variables"></p>';
+    sectionFieldsContainer.appendChild(root);
+    mountCustomBuilder(root);
+};
+
+document.querySelectorAll('[data-custom-builder]').forEach(mountCustomBuilder);
 
 const placeInsertionPreview = () => {
     const container = document.querySelector('.seo-editor-stage .seo-service-page');
@@ -351,7 +560,8 @@ sectionTypeSelect?.addEventListener('change', async () => {
         if (!response.ok) throw new Error('Template fields could not be loaded.');
         const result = await response.json();
         if (sectionTypeSelect.value !== type) return;
-        renderSectionFields(result.fields, result.defaults);
+        if (result.customBuilder) renderCustomBuilder();
+        else renderSectionFields(result.fields, result.defaults);
         if (insertionPreview) {
             insertionPreview.hidden = false;
             insertionPreviewContent.innerHTML = '<p class="seo-editor-insertion-empty">Fill in the fields, then select Preview layout to see it here.</p>';

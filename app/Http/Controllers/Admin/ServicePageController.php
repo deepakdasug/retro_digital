@@ -107,6 +107,28 @@ class ServicePageController extends Controller
             'sort_order' => 'required|integer|min:1|max:' . ($service->sections()->count() + 1),
             'content' => 'nullable|array',
         ]);
+
+        if ($validated['section_type'] === 'custom') {
+            $content = $this->customSectionContent($request, 'content');
+
+            DB::transaction(function () use ($service, $validated, $content): void {
+                $orderedSections = $service->sections()->orderBy('sort_order')->orderBy('id')->get()->all();
+                $newSection = $service->sections()->create([
+                    'section_type' => 'custom',
+                    'content' => $content,
+                    'sort_order' => count($orderedSections) + 1,
+                    'is_active' => true,
+                ]);
+
+                array_splice($orderedSections, $validated['sort_order'] - 1, 0, [$newSection]);
+                foreach ($orderedSections as $index => $section) {
+                    $section->update(['sort_order' => $index + 1]);
+                }
+            });
+
+            return redirect()->route('admin.webpages.editor', $service)->with('success', 'Custom section added.');
+        }
+
         $template = config('section_templates.' . $validated['section_type']);
         $fieldRules = [];
         foreach ($template['fields'] as $key => $field) {
@@ -226,6 +248,25 @@ class ServicePageController extends Controller
         $template = config("section_templates.{$type}");
         abort_unless($template, 404);
 
+        if ($type === 'custom') {
+            $response = [
+                'name' => $template['name'],
+                'customBuilder' => true,
+            ];
+
+            if ($request->isMethod('post')) {
+                $content = $this->customSectionContent($request, 'content', false);
+                $section = new ServiceSection(['content' => $content]);
+                $response['html'] = view('sections._custom_service', [
+                    'data' => $content,
+                    'section' => $section,
+                    'sectionType' => 'custom',
+                ])->render();
+            }
+
+            return response()->json($response);
+        }
+
         $defaults = $this->sectionPreviewDefaults($template['fields']);
         $data = $request->isMethod('post')
             ? $this->mergeSectionPreviewData($template['fields'], $defaults, $request->input('content', []))
@@ -249,6 +290,73 @@ class ServicePageController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    private function customSectionContent(Request $request, string $prefix, bool $storeUploads = true): array
+    {
+        $path = fn (string $field): string => $prefix === '' ? $field : $prefix.'.'.$field;
+        $rules = [
+            $path('schema') => ['nullable', 'array', 'max:30'],
+            $path('schema.*.key') => ['required', 'string', 'max:40', 'distinct', 'regex:/^[A-Za-z][A-Za-z0-9_]{0,39}$/'],
+            $path('schema.*.label') => ['required', 'string', 'max:100'],
+            $path('schema.*.type') => ['required', 'in:heading,paragraph,text,image,video,link'],
+            $path('values') => ['nullable', 'array'],
+            $path('html') => ['required', 'string', 'max:200000'],
+            $path('css') => ['nullable', 'string', 'max:200000'],
+            $path('js') => ['nullable', 'string', 'max:200000'],
+        ];
+
+        foreach ($request->input($path('schema'), []) as $field) {
+            if (
+                ! is_array($field)
+                || empty($field['key'])
+                || ! preg_match('/^[A-Za-z][A-Za-z0-9_]{0,39}$/', (string) $field['key'])
+            ) {
+                continue;
+            }
+
+            $key = (string) $field['key'];
+            if (in_array($field['type'] ?? '', ['image', 'video'], true)) {
+                $existingPath = $path('existing_values.'.$key);
+                $rules[$path('values.'.$key)] = ($field['type'] === 'image')
+                    ? ['required_without:'.$existingPath, 'nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:10240']
+                    : ['required_without:'.$existingPath, 'nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg', 'max:51200'];
+                $rules[$existingPath] = ['nullable', 'string', 'max:1000'];
+            } elseif (($field['type'] ?? '') === 'link') {
+                $rules[$path('values.'.$key)] = ['nullable', 'url', 'max:2000'];
+            } else {
+                $rules[$path('values.'.$key)] = ['nullable', 'string', 'max:50000'];
+            }
+        }
+
+        $request->validate($rules);
+        $schema = array_values($request->input($path('schema'), []));
+        $values = [];
+
+        foreach ($schema as $field) {
+            $key = $field['key'];
+            if (in_array($field['type'], ['image', 'video'], true)) {
+                $file = $request->file($path('values.'.$key));
+                $existing = $request->input($path('existing_values.'.$key), '');
+                if ($file && $storeUploads) {
+                    $values[$key] = $file->store('services/sections', 'public');
+                } elseif ($file && ! $storeUploads && $field['type'] === 'image') {
+                    $values[$key] = 'data:'.$file->getMimeType().';base64,'.base64_encode(file_get_contents($file->getRealPath()));
+                } else {
+                    $values[$key] = (string) $existing;
+                }
+            } else {
+                $values[$key] = (string) $request->input($path('values.'.$key), '');
+            }
+        }
+
+        return [
+            'schema' => $schema,
+            'values' => $values,
+            'html' => (string) $request->input($path('html'), ''),
+            'css' => (string) $request->input($path('css'), ''),
+            'js' => (string) $request->input($path('js'), ''),
+        ];
     }
 
     private function mergeSectionPreviewData(array $fields, array $defaults, array $submitted): array
@@ -373,6 +481,10 @@ class ServicePageController extends Controller
                 continue;
             }
 
+            if ($section->section_type === 'custom') {
+                continue;
+            }
+
             $prefix = 'sections.' . $section->id;
             $rules[$prefix] = 'nullable|array';
             $rules[$prefix . '.is_active'] = 'nullable|boolean';
@@ -413,6 +525,17 @@ class ServicePageController extends Controller
 
                 $template = config('section_templates.' . $section->section_type);
                 if (! $template) {
+                    continue;
+                }
+
+                if ($section->section_type === 'custom') {
+                    $section->update([
+                        'content' => $this->customSectionContent(
+                            $request,
+                            "sections.{$section->id}.content"
+                        ),
+                        'is_active' => $request->boolean("sections.{$section->id}.is_active"),
+                    ]);
                     continue;
                 }
 
@@ -479,6 +602,15 @@ class ServicePageController extends Controller
         abort_unless((int) $section->service_id === (int) $service->id, 404);
         $template = config('section_templates.' . $section->section_type);
         abort_unless($template, 404);
+
+        if ($section->section_type === 'custom') {
+            $section->update([
+                'content' => $this->customSectionContent($request, 'content'),
+                'is_active' => $request->boolean('is_active'),
+            ]);
+
+            return redirect()->route('admin.webpages.editor', $service)->with('success', 'Custom section saved.');
+        }
 
         $rules = ['is_active' => 'nullable|boolean'];
         foreach ($template['fields'] as $key => $field) {

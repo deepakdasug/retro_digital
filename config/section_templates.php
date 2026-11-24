@@ -2,6 +2,13 @@
 
 return [
 
+    'custom' => [
+        'name' => 'Custom Section Builder',
+        'view' => 'sections._custom_service',
+        'icon' => 'fa-solid fa-code',
+        'fields' => [],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Section Templates Registry
