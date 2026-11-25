@@ -1,12 +1,12 @@
-/* Per-service visual themes layered on top of the landing section system. */
+/* Unified forest/mint theme layered on top of the landing section system. */
 .seo-service-page{
-    --svc-a:#2f6f46;
-    --svc-b:#6ec088;
-    --svc-deep:#0f2317;
-    --svc-deep-2:#1b3d29;
-    --svc-tint:#eef7ef;
-    --svc-soft:#f7fbf7;
-    --svc-line:rgba(47,111,70,.14);
+    --svc-a:var(--theme-green-brand);
+    --svc-b:var(--theme-green-bright);
+    --svc-deep:var(--theme-forest-deep);
+    --svc-deep-2:var(--theme-forest-dark);
+    --svc-tint:var(--theme-mint-soft);
+    --svc-soft:var(--theme-mint-bg);
+    --svc-line:var(--theme-border-light);
     --svc-glow:rgba(110,192,136,.24);
 }
 
@@ -370,21 +370,7 @@
         linear-gradient(115deg,var(--svc-deep),var(--svc-a));
 }
 
-/* Distinct palettes per service */
-.seo-service-page--seo{--svc-a:#2f6f46;--svc-b:#bbdc9f;--svc-deep:#0c2115;--svc-deep-2:#1a4a2d;--svc-tint:#eef8ef;--svc-soft:#f7fcf7;--svc-line:rgba(47,111,70,.15);--svc-glow:rgba(123,196,139,.3)}
-.seo-service-page--video{--svc-a:#5c8a2f;--svc-b:#c4e08a;--svc-deep:#131d0f;--svc-deep-2:#2c3d1b;--svc-tint:#f3f8e9;--svc-soft:#fafcf5;--svc-line:rgba(92,138,47,.18);--svc-glow:rgba(196,224,138,.32)}
-.seo-service-page--paid{--svc-a:#0b7a5c;--svc-b:#7ff2b0;--svc-deep:#06241b;--svc-deep-2:#0f503b;--svc-tint:#e8fbf1;--svc-soft:#f4fdf8;--svc-line:rgba(11,122,92,.17);--svc-glow:rgba(127,242,176,.32)}
-.seo-service-page--email{--svc-a:#1d7a86;--svc-b:#7fe3d2;--svc-deep:#082326;--svc-deep-2:#11505a;--svc-tint:#e8faf7;--svc-soft:#f3fdfb;--svc-line:rgba(29,122,134,.16);--svc-glow:rgba(127,227,210,.32)}
-.seo-service-page--content{--svc-a:#6b7f2a;--svc-b:#e1ee91;--svc-deep:#1b200d;--svc-deep-2:#3d4a18;--svc-tint:#f6f9e6;--svc-soft:#fbfcf3;--svc-line:rgba(107,127,42,.18);--svc-glow:rgba(214,229,138,.34)}
-.seo-service-page--orm{--svc-a:#286b64;--svc-b:#9fe8d5;--svc-deep:#071d1b;--svc-deep-2:#17433f;--svc-tint:#e9f8f4;--svc-soft:#f4fcfa;--svc-line:rgba(40,107,100,.17);--svc-glow:rgba(159,232,213,.32)}
-.seo-service-page--web{--svc-a:#0f766e;--svc-b:#6ee7d8;--svc-deep:#062522;--svc-deep-2:#0d4f49;--svc-tint:#e7faf7;--svc-soft:#f2fdfb;--svc-line:rgba(15,118,110,.17);--svc-glow:rgba(110,231,216,.32)}
-.seo-service-page--mobile-app{--svc-a:#1d5fd1;--svc-b:#a5c8ff;--svc-deep:#08182f;--svc-deep-2:#123b74;--svc-tint:#edf4ff;--svc-soft:#f6f9ff;--svc-line:rgba(29,95,209,.16);--svc-glow:rgba(165,200,255,.32)}
-.seo-service-page--custom-app{--svc-a:#b15b13;--svc-b:#ffd479;--svc-deep:#241306;--svc-deep-2:#65360f;--svc-tint:#fff5e7;--svc-soft:#fffbf4;--svc-line:rgba(177,91,19,.16);--svc-glow:rgba(255,212,121,.36)}
-.seo-service-page--salesforce{--svc-a:#4b55c9;--svc-b:#c3c9ff;--svc-deep:#0d1030;--svc-deep-2:#2c337e;--svc-tint:#f0f1ff;--svc-soft:#f8f8ff;--svc-line:rgba(75,85,201,.16);--svc-glow:rgba(195,201,255,.32)}
-.seo-service-page--saas{--svc-a:#7a3fd1;--svc-b:#dcc4ff;--svc-deep:#1b0b2e;--svc-deep-2:#462173;--svc-tint:#f7efff;--svc-soft:#fcf7ff;--svc-line:rgba(122,63,209,.16);--svc-glow:rgba(220,196,255,.32)}
-.seo-service-page--api{--svc-a:#0b7f9e;--svc-b:#7ee9ff;--svc-deep:#061e26;--svc-deep-2:#0d5367;--svc-tint:#e7faff;--svc-soft:#f4fdff;--svc-line:rgba(11,127,158,.17);--svc-glow:rgba(126,233,255,.32)}
-.seo-service-page--software{--svc-a:#3b7a2a;--svc-b:#a8e36b;--svc-deep:#101f0a;--svc-deep-2:#2e561e;--svc-tint:#eff9e9;--svc-soft:#f8fdf4;--svc-line:rgba(59,122,42,.17);--svc-glow:rgba(168,227,107,.32)}
-.seo-service-page--whatsapp{--svc-a:#128c4a;--svc-b:#8bf0aa;--svc-deep:#062315;--svc-deep-2:#0c5c31;--svc-tint:#e9fbef;--svc-soft:#f4fdf7;--svc-line:rgba(18,140,74,.17);--svc-glow:rgba(139,240,170,.32)}
+/* All service pages share the unified forest/mint theme above. */
 
 @media(max-width:620px){
     .seo-service-page .seo-lp-hero-stats strong{color:var(--svc-b)}
