@@ -41,6 +41,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'faqs.edit',
             'faqs.delete',
 
+            // Industries (CRUD)
+            'industries.view',
+            'industries.create',
+            'industries.edit',
+            'industries.delete',
+
             // Contacts / Enquiries
             'contacts.view',
             'contacts.delete',
@@ -81,6 +87,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'faqs.view',
             'faqs.create',
             'faqs.edit',
+            'industries.view',
+            'industries.create',
+            'industries.edit',
             'contacts.view',
         ]);
 
@@ -101,6 +110,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'blogs.view',
             'testimonials.view',
             'faqs.view',
+            'industries.view',
             'contacts.view',
         ]);
 

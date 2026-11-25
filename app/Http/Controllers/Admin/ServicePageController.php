@@ -12,7 +12,6 @@ class ServicePageController extends Controller
 {
     private const PAGE_SECTIONS = [
         'services' => 'Services',
-        'industries' => 'Industries',
         'insights' => 'Insights',
     ];
 

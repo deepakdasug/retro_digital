@@ -319,11 +319,12 @@
 
 @section('content')
 @php
-  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs', 'roles'];
+  $adminTabs = ['overview', 'contacts', 'blogs', 'webpage', 'industries', 'testimonials', 'faqs', 'roles'];
   $requestedTab = request()->query('tab');
   $routeTab = match (true) {
     request()->routeIs('admin.blog.*') => 'blogs',
     request()->routeIs('admin.webpages.*') || request()->query('tab') === 'webpage' => 'webpage',
+    request()->routeIs('admin.industries.*') => 'industries',
     request()->routeIs('admin.testimonials.*') => 'testimonials',
     request()->routeIs('admin.faqs.*') => 'faqs',
     request()->routeIs('admin.roles.*') => 'roles',
@@ -365,6 +366,10 @@
       @endcan
 
       <button class="admin-sidebar-link {{ $currentTab == 'webpage' ? 'is-active' : '' }}" type="button" data-admin-tab="webpage" aria-label="Webpage" title="Webpage" onclick="showAdminTab('webpage')"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Webpage</span></button>
+
+      @can('industries.view')
+      <button class="admin-sidebar-link {{ $currentTab == 'industries' ? 'is-active' : '' }}" type="button" data-admin-tab="industries" aria-label="Industries" title="Industries" onclick="showAdminTab('industries')"><i class="fa-solid fa-industry" aria-hidden="true"></i><span>Industries</span></button>
+      @endcan
       
 @can('testimonials.view')
       <button class="admin-sidebar-link {{ $currentTab == 'testimonials' ? 'is-active' : '' }}" type="button" data-admin-tab="testimonials" aria-label="Testimonials" title="Testimonials" onclick="showAdminTab('testimonials')"><i class="fa-regular fa-star" aria-hidden="true"></i><span>Testimonials</span></button>
@@ -459,12 +464,13 @@
 @push('scripts')
 <script>
   // --- 1. TAB SWITCHING LOGIC ---
-  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'testimonials', 'faqs', 'roles'];
+  const adminSidebarTabs = ['overview', 'contacts', 'blogs', 'webpage', 'industries', 'testimonials', 'faqs', 'roles'];
   const adminTabTitles = {
     'overview': 'Dashboard Overview',
     'contacts': 'Contact Submissions',
     'blogs': 'Blog Articles',
     'webpage': 'Webpage',
+    'industries': 'Industries',
     'testimonials': 'Client Testimonials',
     'faqs': 'Frequently Asked Questions (FAQs)',
     'roles': 'Roles & Permissions Management',

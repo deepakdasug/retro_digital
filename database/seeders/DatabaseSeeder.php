@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SeoServicePageSeeder::class,
             SocialMediaMarketingSectionsSeeder::class,
             VideoMarketingPageSeeder::class,
+            IndustrySeeder::class,
             MarketingServicePagesSeeder::class,
             TechDevelopmentServicePagesSeeder::class,
             TestimonialSeeder::class,

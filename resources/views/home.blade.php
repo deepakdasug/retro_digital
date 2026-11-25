@@ -948,7 +948,7 @@
       <div class="ind-slider-viewport" id="indSliderViewport">
         <div class="industries-pro-grid ind-slider-track" id="indSliderTrack">
           {{-- Industry 1 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="left"
+          <a href="{{ route('industries.show', ['slug' => 'ecommerce-multivendor']) }}" class="industry-card-pro" data-anim="left"
             data-industry-cat="commerce">
             {{-- Image 19: E-Commerce Storefronts --}}
             <div class="icp-img-wrap">
@@ -976,7 +976,7 @@
           </a>
 
           {{-- Industry 2 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="up"
+          <a href="{{ route('industries.show', ['slug' => 'medical-and-healthcare']) }}" class="industry-card-pro" data-anim="up"
             data-industry-cat="fintech">
             {{-- Image 20: Healthcare & Telemedicine --}}
             <div class="icp-img-wrap">
@@ -1008,7 +1008,7 @@
           </a>
 
           {{-- Industry 3 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="down"
+          <a href="{{ route('industries.show', ['slug' => 'finance-and-insurance']) }}" class="industry-card-pro" data-anim="down"
             data-industry-cat="fintech">
             {{-- Image 21: Banking & FinTech --}}
             <div class="icp-img-wrap">
@@ -1035,7 +1035,7 @@
           </a>
 
           {{-- Industry 4 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro"
+          <a href="{{ route('industries.show', ['slug' => 'real-estate-and-construction']) }}" class="industry-card-pro"
             data-anim="right" data-industry-cat="commerce">
             {{-- Image 22: Real Estate & PropTech --}}
             <div class="icp-img-wrap">
@@ -1063,7 +1063,7 @@
           </a>
 
           {{-- Industry 5 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="left"
+          <a href="{{ route('industries.show', ['slug' => 'edtech-and-e-learning']) }}" class="industry-card-pro" data-anim="left"
             data-industry-cat="enterprise">
             {{-- Image 23: Education & EdTech --}}
             <div class="icp-img-wrap">
@@ -1091,7 +1091,7 @@
           </a>
 
           {{-- Industry 6 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="up"
+          <a href="{{ route('industries.show', ['slug' => 'other-industries']) }}" class="industry-card-pro" data-anim="up"
             data-industry-cat="enterprise">
             {{-- Image 24: SaaS & Tech Startups --}}
             <div class="icp-img-wrap">
@@ -1119,7 +1119,7 @@
           </a>
 
           {{-- Industry 7 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="down"
+          <a href="{{ route('industries.show', ['slug' => 'manufacturing']) }}" class="industry-card-pro" data-anim="down"
             data-industry-cat="enterprise">
             {{-- Image 25: Manufacturing & Logistics --}}
             <div class="icp-img-wrap">
@@ -1147,7 +1147,7 @@
           </a>
 
           {{-- Industry 8 --}}
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="industry-card-pro" data-anim="right"
+          <a href="{{ route('industries.show', ['slug' => 'travel-and-hospitality']) }}" class="industry-card-pro" data-anim="right"
             data-industry-cat="commerce">
             {{-- Image 26: Travel & Hospitality --}}
             <div class="icp-img-wrap">

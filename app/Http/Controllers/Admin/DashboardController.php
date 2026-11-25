@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\Contact;
 use App\Models\Faq;
+use App\Models\Industry;
 use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\User;
@@ -38,9 +39,10 @@ class DashboardController extends Controller
         $servicePages = Service::withCount('sections')->orderBy('page_section')->orderBy('title')->get();
         $pageSectionLabels = [
             'services' => 'Services',
-            'industries' => 'Industries',
             'insights' => 'Insights',
         ];
+        $industries = Industry::ordered()->get();
+        $industriesCount = $industries->count();
 
 
         $contactsThisMonth = Contact::where('created_at', '>=', now()->startOfMonth())->count();
@@ -140,6 +142,8 @@ class DashboardController extends Controller
             'allUsers',
             'servicePages',
             'pageSectionLabels',
+            'industries',
+            'industriesCount',
         ));
     }
 
