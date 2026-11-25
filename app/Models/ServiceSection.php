@@ -89,7 +89,8 @@ class ServiceSection extends Model
             .'#custom-section-root { display: flow-root; width: 100%; margin: 0; padding: 0; height: auto; }'
             .'img { max-width: 100%; height: auto; }'
             .(string) ($content['css'] ?? '')
-            .'</style></head><body>'
+            .'</style><link rel="stylesheet" href="'.htmlspecialchars(asset('css/custom-section-theme.css'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'">'
+            .'</head><body>'
             .'<div id="custom-section-root">'
             .$html
             .'</div>'

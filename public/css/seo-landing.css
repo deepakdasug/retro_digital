@@ -125,10 +125,10 @@
 .seo-lp-technical .seo-lp-tech-card h3{margin:10px 0 6px;color:#1b3524;font-size:1.08rem;line-height:1.35}
 .seo-lp-technical .seo-lp-tech-symbol{width:46px;height:46px;margin-bottom:18px;border:1px solid #d5e8d8;border-radius:13px;background:#eaf4ec;color:#2f6f46;font-size:1.08rem}
 .seo-lp-technical .seo-lp-tech-1 .seo-lp-tech-symbol{background:#dcebd8;color:#2f6f46}
-.seo-lp-technical .seo-lp-tech-aside{grid-column:1/-1;min-height:86px;padding:22px 26px;border:1px solid #4cad6a;border-radius:15px;background:#55b875;color:#123d23;font-size:1rem}
-.seo-lp-technical .seo-lp-tech-aside i{color:#174a2a}
-@media(max-width:900px){.seo-lp-technical .seo-lp-tech-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.seo-lp-technical .seo-lp-tech-1{grid-column:1/-1}.seo-lp-technical .seo-lp-tech-aside{grid-column:1/-1}}
-@media(max-width:620px){.seo-lp-technical .seo-lp-tech-grid{grid-template-columns:1fr;gap:14px}.seo-lp-technical .seo-lp-tech-card,.seo-lp-technical .seo-lp-tech-1,.seo-lp-technical .seo-lp-tech-aside{grid-column:1;min-height:0;padding:21px}}
+    .seo-lp-technical .seo-lp-tech-aside{grid-column:3;grid-row:2;align-self:stretch;justify-content:space-between;gap:18px;min-height:0;padding:26px;border:1px solid #4cad6a;border-radius:17px;background:#55b875;color:#123d23;font-size:1rem}
+    .seo-lp-technical .seo-lp-tech-aside i{font-size:1.9rem}
+    @media(max-width:900px){.seo-lp-technical .seo-lp-tech-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.seo-lp-technical .seo-lp-tech-1{grid-column:1/-1}.seo-lp-technical .seo-lp-tech-aside{grid-column:1/-1;grid-row:auto}}
+    @media(max-width:620px){.seo-lp-technical .seo-lp-tech-grid{grid-template-columns:1fr;gap:14px}.seo-lp-technical .seo-lp-tech-card,.seo-lp-technical .seo-lp-tech-1,.seo-lp-technical .seo-lp-tech-aside{grid-column:1;min-height:0;padding:21px}.seo-lp-technical .seo-lp-tech-aside{grid-row:auto;text-align:center}.seo-lp-technical .seo-lp-tech-aside i{font-size:1.6rem}}
 .seo-lp-hero-photo{display:block;width:min(100%,480px);aspect-ratio:1/1;object-fit:cover;border:7px solid rgba(255,255,255,.8);border-radius:26px;box-shadow:0 25px 70px rgba(0,0,0,.24)}.seo-lp-service-image{display:block;width:100%;height:142px;margin:0 0 16px;border:1px solid var(--lp-line);border-radius:12px;object-fit:cover;background:#eaf4ec}.seo-lp-service-card.has-image{padding-top:18px}.seo-lp-service-card.has-image .seo-lp-service-number{top:23px;right:23px;padding:4px 7px;border-radius:6px;background:rgba(255,255,255,.92);color:#2f6f46}
 .seo-lp-content-art-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .seo-lp-content-head{display:block;width:100%;margin-bottom:16px}
@@ -189,3 +189,32 @@
 .seo-service-page--smm .seo-lp-content-intro{max-width:900px;margin:14px auto 0;color:var(--lp-muted);text-align:center}
 .seo-service-page--smm .seo-lp-content-demo-link{display:inline-flex;align-items:center;gap:8px;margin-top:10px;color:#2f6f46;font-size:.76rem;font-weight:800;text-decoration:none}
 .seo-service-page--smm .seo-lp-content-demo-link:hover{color:#193c2b}
+
+/* Per-service accent themes keep the shared green system while giving every
+   services-dropdown page its own attitude inside the same design language. */
+.seo-service-page--video .seo-lp{--lp-green:#5c8a2f;--lp-lime:#c4e08a}
+.seo-service-page--video .seo-lp-hero{background:radial-gradient(ellipse at 82% 18%,rgba(196,224,138,.18),transparent 32%),linear-gradient(125deg,#182413,#2c3d1b 58%,#415a2b)}
+.seo-service-page--video .seo-lp-cta-card{background:radial-gradient(circle at 84% 14%,rgba(196,224,138,.24),transparent 24%),linear-gradient(115deg,#182413,#415a2b)}
+.seo-service-page--video .seo-lp-overline{color:#5c8a2f}
+.seo-service-page--video .seo-lp-h2,.seo-service-page--video .seo-lp-h1{color:#1f2e14}
+
+.seo-service-page--paid .seo-lp{--lp-green:#1f7a4d;--lp-lime:#7ff2b0}
+.seo-service-page--paid .seo-lp-hero{background:radial-gradient(ellipse at 82% 18%,rgba(127,242,176,.2),transparent 32%),linear-gradient(125deg,#14251d,#215a35 58%,#2d7a46)}
+.seo-service-page--paid .seo-lp-cta-card{background:radial-gradient(circle at 84% 14%,rgba(127,242,176,.24),transparent 24%),linear-gradient(115deg,#14251d,#2d7a46)}
+.seo-service-page--paid .seo-lp-overline{color:#1f7a4d}
+
+.seo-service-page--email .seo-lp{--lp-green:#227a6b;--lp-lime:#7fe3c8}
+.seo-service-page--email .seo-lp-hero{background:radial-gradient(ellipse at 82% 18%,rgba(127,227,200,.2),transparent 32%),linear-gradient(125deg,#142424,#1c4a41 58%,#256a57)}
+.seo-service-page--email .seo-lp-cta-card{background:radial-gradient(circle at 84% 14%,rgba(127,227,200,.24),transparent 24%),linear-gradient(115deg,#142424,#256a57)}
+.seo-service-page--email .seo-lp-overline{color:#227a6b}
+
+.seo-service-page--content .seo-lp{--lp-green:#6b7f2a;--lp-lime:#d6e58a}
+.seo-service-page--content .seo-lp-hero{background:radial-gradient(ellipse at 82% 18%,rgba(214,229,138,.2),transparent 32%),linear-gradient(125deg,#23261a,#3d4420 58%,#5a6430)}
+.seo-service-page--content .seo-lp-cta-card{background:radial-gradient(circle at 84% 14%,rgba(214,229,138,.24),transparent 24%),linear-gradient(115deg,#23261a,#5a6430)}
+.seo-service-page--content .seo-lp-overline{color:#6b7f2a}
+
+.seo-service-page--orm .seo-lp{--lp-green:#2c5f5a;--lp-lime:#9fe0d0}
+.seo-service-page--orm .seo-lp-hero{background:radial-gradient(ellipse at 82% 18%,rgba(159,224,208,.2),transparent 32%),linear-gradient(125deg,#181f1b,#1f3a33 58%,#2c5f5a)}
+.seo-service-page--orm .seo-lp-cta-card{background:radial-gradient(circle at 84% 14%,rgba(159,224,208,.24),transparent 24%),linear-gradient(115deg,#181f1b,#2c5f5a)}
+.seo-service-page--orm .seo-lp-overline{color:#2c5f5a}
+

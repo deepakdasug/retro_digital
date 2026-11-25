@@ -87,10 +87,10 @@ class SeoServicePageSeeder extends Seeder
                 'heading' => 'Find what is holding search growth back.',
                 'body' => 'Before producing more content or changing everything, understand where the strongest opportunities are and what could be preventing the right pages from being found.',
                 'items' => [
-                    ['title' => 'Technical friction', 'description' => 'Spot crawl, indexing, speed, and site-structure issues that get in the way.'],
-                    ['title' => 'Missed demand', 'description' => 'Discover relevant searches your current pages do not answer well yet.'],
-                    ['title' => 'Content gaps', 'description' => 'Find where a clearer, more useful page can serve customers better.'],
-                    ['title' => 'Conversion obstacles', 'description' => 'Make the path from search result to useful next step easier to follow.'],
+                    ['image' => 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80', 'title' => 'Technical friction', 'description' => 'Spot crawl, indexing, speed, and site-structure issues that get in the way.'],
+                    ['image' => 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=900&q=80', 'title' => 'Missed demand', 'description' => 'Discover relevant searches your current pages do not answer well yet.'],
+                    ['image' => 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80', 'title' => 'Content gaps', 'description' => 'Find where a clearer, more useful page can serve customers better.'],
+                    ['image' => 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80', 'title' => 'Conversion obstacles', 'description' => 'Make the path from search result to useful next step easier to follow.'],
                 ],
             ]],
             ['seo_services', [
@@ -98,12 +98,12 @@ class SeoServicePageSeeder extends Seeder
                 'heading' => 'The right work, in the right order.',
                 'body' => 'SEO works best when the technical experience, content, and search strategy support one another.',
                 'items' => [
-                    ['icon' => 'fa-solid fa-screwdriver-wrench', 'title' => 'Technical SEO', 'description' => 'Improve crawlability, indexing, site speed, structured data, and page experience.'],
-                    ['icon' => 'fa-solid fa-magnifying-glass-chart', 'title' => 'Research & strategy', 'description' => 'Map demand, search intent, competition, and opportunity into an actionable roadmap.'],
-                    ['icon' => 'fa-solid fa-pen-nib', 'title' => 'Content optimization', 'description' => 'Create and improve pages that answer real questions with clarity and depth.'],
-                    ['icon' => 'fa-solid fa-location-dot', 'title' => 'Local SEO', 'description' => 'Strengthen location relevance and help nearby customers find your business.'],
-                    ['icon' => 'fa-solid fa-link', 'title' => 'Authority & links', 'description' => 'Build a credible presence through useful assets and thoughtful outreach.'],
-                    ['icon' => 'fa-solid fa-chart-pie', 'title' => 'Measurement', 'description' => 'Track visibility, qualified visits, and enquiries against agreed business goals.'],
+                    ['icon' => 'fa-solid fa-screwdriver-wrench', 'image' => 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80', 'title' => 'Technical SEO', 'description' => 'Improve crawlability, indexing, site speed, structured data, and page experience.'],
+                    ['icon' => 'fa-solid fa-magnifying-glass-chart', 'image' => 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=900&q=80', 'title' => 'Research & strategy', 'description' => 'Map demand, search intent, competition, and opportunity into an actionable roadmap.'],
+                    ['icon' => 'fa-solid fa-pen-nib', 'image' => 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80', 'title' => 'Content optimization', 'description' => 'Create and improve pages that answer real questions with clarity and depth.'],
+                    ['icon' => 'fa-solid fa-location-dot', 'image' => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80', 'title' => 'Local SEO', 'description' => 'Strengthen location relevance and help nearby customers find your business.'],
+                    ['icon' => 'fa-solid fa-link', 'image' => 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=900&q=80', 'title' => 'Authority & links', 'description' => 'Build a credible presence through useful assets and thoughtful outreach.'],
+                    ['icon' => 'fa-solid fa-chart-pie', 'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80', 'title' => 'Measurement', 'description' => 'Track visibility, qualified visits, and enquiries against agreed business goals.'],
                 ],
             ]],
             ['seo_process', [
@@ -117,16 +117,6 @@ class SeoServicePageSeeder extends Seeder
                     ['title' => 'Learn', 'description' => 'Review the evidence, share progress, and adjust the roadmap as you grow.'],
                 ],
             ]],
-            ['seo_intent', [
-                'eyebrow' => 'Meet people at the right moment',
-                'heading' => 'Match your pages to what people really mean.',
-                'body' => 'A search phrase is a clue to a need. We organize content around the questions and decisions behind it, so visitors land on a page that feels relevant.',
-                'items' => [
-                    ['title' => 'Learning', 'description' => '“How can I improve my website visibility?”'],
-                    ['title' => 'Comparing', 'description' => '“Which SEO approach fits a growing business?”'],
-                    ['title' => 'Ready to act', 'description' => '“SEO services for a B2B software company”'],
-                ],
-            ]],
             ['seo_technical', [
                 'eyebrow' => 'Strong foundations',
                 'heading' => 'Make your website easier to discover and use.',
@@ -136,16 +126,6 @@ class SeoServicePageSeeder extends Seeder
                     ['title' => 'Crawl paths', 'description' => 'Help important pages get discovered through clear architecture and internal links.'],
                     ['title' => 'Index quality', 'description' => 'Make canonical, sitemap, and indexing signals consistent and intentional.'],
                     ['title' => 'Structured context', 'description' => 'Use semantic markup and structured data where they genuinely help.'],
-                ],
-            ]],
-            ['seo_local', [
-                'eyebrow' => 'Be present where customers are',
-                'heading' => 'Make local discovery feel effortless.',
-                'body' => 'For businesses serving specific locations, local SEO connects your services with nearby intent through accurate information and genuinely useful location pages.',
-                'items' => [
-                    ['title' => 'Consistent business details', 'description' => 'Keep your name, contact information, and service areas clear.'],
-                    ['title' => 'Useful location pages', 'description' => 'Give each location distinct information that helps local customers.'],
-                    ['title' => 'Reputation signals', 'description' => 'Build a clear process for listening to and learning from customer feedback.'],
                 ],
             ]],
             ['seo_content', [
@@ -161,7 +141,7 @@ class SeoServicePageSeeder extends Seeder
             ['seo_results', [
                 'eyebrow' => 'Measure progress with context',
                 'heading' => 'See the signals that matter to your business.',
-                'body' => 'We report the work completed and the outcomes it supports—using your starting point and agreed goals as the reference, not generic promises.',
+                'body' => 'We report the work completed and the outcomes it supportsâ€”using your starting point and agreed goals as the reference, not generic promises.',
                 'items' => [
                     ['value' => 'Visibility', 'label' => 'Priority searches and landing pages'],
                     ['value' => 'Qualified visits', 'label' => 'Organic sessions with relevant intent'],
@@ -183,11 +163,12 @@ class SeoServicePageSeeder extends Seeder
             ]],
             ['seo_cta', [
                 'eyebrow' => 'A good next step starts with a conversation',
-                'heading' => 'Let’s find your clearest path to organic growth.',
-                'body' => 'Tell us what you want search to do for your business. We’ll help you see where to begin and what to prioritize next.',
+                'heading' => 'Letâ€™s find your clearest path to organic growth.',
+                'body' => 'Tell us what you want search to do for your business. Weâ€™ll help you see where to begin and what to prioritize next.',
                 'button_text' => 'Talk with our SEO team',
                 'button_link' => '/contact#contact',
             ]],
         ];
     }
 }
+

@@ -160,19 +160,6 @@ class VideoMarketingPageSeeder extends Seeder
                     ['title' => 'Ready to act', 'description' => '"Book a video strategy and production call"'],
                 ],
             ]],
-            ['features', [
-                'eyebrow' => 'Why Retrotech',
-                'heading' => 'Creative that performs.',
-                'subheading' => 'A practical mix of storytelling, production quality, and marketing discipline.',
-                'items' => [
-                    ['icon' => 'fa-solid fa-film', 'title' => 'Story-led creative', 'description' => 'Every video starts with a real audience need, not just a nice visual.'],
-                    ['icon' => 'fa-solid fa-mobile-screen', 'title' => 'Platform-native formats', 'description' => 'Vertical, square, and widescreen cuts built for where your audience actually watches.'],
-                    ['icon' => 'fa-solid fa-bullseye', 'title' => 'Conversion-focused CTAs', 'description' => 'Clear next steps that turn views into enquiries, sign-ups, or sales.'],
-                    ['icon' => 'fa-solid fa-palette', 'title' => 'Consistent brand system', 'description' => 'Titles, graphics, and tone that make every video recognisably yours.'],
-                    ['icon' => 'fa-solid fa-bolt', 'title' => 'Fast, collaborative workflow', 'description' => 'Transparent milestones, quick reviews, and fewer production bottlenecks.'],
-                    ['icon' => 'fa-solid fa-chart-line', 'title' => 'Clear reporting', 'description' => 'Understand views, watch time, and the actions that matter to your business.'],
-                ],
-            ]],
             ['seo_content', [
                 'eyebrow' => 'Content with a job to do',
                 'heading' => 'Build a video library that keeps working.',
@@ -202,11 +189,6 @@ class VideoMarketingPageSeeder extends Seeder
                     ['value' => 'Click-through rate', 'label' => 'How many viewers took the next step'],
                     ['value' => 'Qualified enquiries', 'label' => 'Conversations and leads influenced by video'],
                 ],
-            ]],
-            ['rich_text', [
-                'eyebrow' => 'Our approach',
-                'heading' => 'Creative that respects the audience and the algorithm.',
-                'body' => 'The best video marketing does not chase trends at the expense of clarity. We build content around useful stories, strong hooks, and honest claims, then adapt format and length to each platform. That means fewer wasted views and more meaningful attention - for brand campaigns, product launches, and always-on social content alike.',
             ]],
             ['seo_faq', [
                 'eyebrow' => 'Good questions, clear answers',

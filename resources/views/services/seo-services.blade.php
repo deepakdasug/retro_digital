@@ -9,10 +9,31 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/seo-service.css') }}?v={{ filemtime(public_path('css/seo-service.css')) }}">
 <link rel="stylesheet" href="{{ asset('css/seo-landing.css') }}?v={{ filemtime(public_path('css/seo-landing.css')) }}">
+<link rel="stylesheet" href="{{ asset('css/service-page-vibrant.css') }}?v={{ filemtime(public_path('css/service-page-vibrant.css')) }}">
 @endpush
 
 @section('content')
-<main class="seo-service-page{{ $service->slug === 'social-media-marketing' ? ' seo-service-page--smm' : '' }}">
+@php
+    $pageModifiers = [
+        'social-media-marketing' => 'smm',
+        'seo-services' => 'seo',
+        'video-marketing' => 'video',
+        'paid-marketing' => 'paid',
+        'email-marketing' => 'email',
+        'content-marketing' => 'content',
+        'orm-services' => 'orm',
+        'web-development' => 'web',
+        'mobile-app-development' => 'mobile-app',
+        'custom-application' => 'custom-app',
+        'salesforce-erpnext-services' => 'salesforce',
+        'saas-application' => 'saas',
+        'api-development' => 'api',
+        'software-development' => 'software',
+        'whatsapp-integration' => 'whatsapp',
+    ];
+    $pageModifier = $pageModifiers[$service->slug] ?? '';
+@endphp
+<main class="seo-service-page{{ $pageModifier ? ' seo-service-page--' . $pageModifier : '' }}">
     @foreach($service->sections->where('is_active', true) as $section)
         @include('sections._service_section', ['section' => $section, 'data' => $section->content])
     @endforeach

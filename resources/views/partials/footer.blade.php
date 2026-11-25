@@ -33,7 +33,7 @@
           <h2 class="footer-heading" id="footer-who-we-are-heading">Who We Are</h2>
           <ul class="footer-nav">
             <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Services</a></li>
+            <li><a href="{{ route('home') }}#services">Services</a></li>
             <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Industries</a></li>
             <li><a href="{{ route('faqs') }}">Faqs</a></li>
             <li><a href="{{ route('blog') }}">Blog</a></li>
@@ -45,30 +45,30 @@
         <section class="footer-column" aria-labelledby="footer-our-services-heading">
           <h2 class="footer-heading" id="footer-our-services-heading">Our Services</h2>
           <ul class="footer-nav">
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing</a></li>
+            <li><a href="{{ route('services.seo') }}">Digital Marketing</a></li>
             <li><a href="{{ route('services.seo') }}">Search Engine Optimization</a></li>
             <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'paid-marketing']) }}">Paid Marketing</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'email-marketing']) }}">Email Marketing</a></li>
             <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'video-marketing']) }}">Video Marketing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Content Marketing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">ORM Services</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'content-marketing']) }}">Content Marketing</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'orm-services']) }}">ORM Services</a></li>
           </ul>
         </section>
 
         <section class="footer-column" aria-labelledby="footer-technology-solutions-heading">
           <h2 class="footer-heading" id="footer-technology-solutions-heading">Technology Solutions</h2>
           <ul class="footer-nav">
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Web Development</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">App Development</a>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}">Web Development</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}">App Development</a>
             </li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Custom Application</a>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'custom-application']) }}">Custom Application</a>
             </li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Salesforce Solutions</a>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}">Salesforce Solutions</a>
             </li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Whatsapp
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}">Whatsapp
                 Integration</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">CRM Development</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}">CRM Development</a></li>
           </ul>
         </section>
 
