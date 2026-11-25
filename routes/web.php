@@ -12,6 +12,8 @@ use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
+use App\Http\Controllers\IndustryController;
+use App\Http\Controllers\Admin\IndustryController as AdminIndustryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +113,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/roles/{role}', [RolePermissionController::class, 'updateRole'])->name('admin.roles.update')->middleware('permission:roles.edit');
     Route::delete('/admin/roles/{role}', [RolePermissionController::class, 'destroyRole'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
     Route::post('/admin/roles/assign-user', [RolePermissionController::class, 'assignUserRole'])->name('admin.roles.assign-user')->middleware('permission:users.manage');
+
+    // Industries Management CRUD (separate industries table + shared industries.layout)
+    Route::get('/admin/industries', [AdminIndustryController::class, 'index'])->name('admin.industries.index')->middleware('permission:industries.view');
+    Route::get('/admin/industries/create', [AdminIndustryController::class, 'create'])->name('admin.industries.create')->middleware('permission:industries.create');
+    Route::post('/admin/industries', [AdminIndustryController::class, 'store'])->name('admin.industries.store')->middleware('permission:industries.create');
+    Route::get('/admin/industries/{industry}/edit', [AdminIndustryController::class, 'edit'])->name('admin.industries.edit')->middleware('permission:industries.edit');
+    Route::put('/admin/industries/{industry}', [AdminIndustryController::class, 'update'])->name('admin.industries.update')->middleware('permission:industries.edit');
+    Route::get('/admin/industries/{industry}/editor', [AdminIndustryController::class, 'editor'])->name('admin.industries.editor')->middleware('permission:industries.edit');
+    Route::post('/admin/industries/{industry}/save', [AdminIndustryController::class, 'savePage'])->name('admin.industries.save')->middleware('permission:industries.edit');
+    Route::delete('/admin/industries/{industry}', [AdminIndustryController::class, 'destroy'])->name('admin.industries.destroy')->middleware('permission:industries.delete');
 });
 
 Route::get('/services/seo-services', [ServiceController::class, 'show'])
@@ -120,8 +132,7 @@ Route::get('/services/seo-services', [ServiceController::class, 'show'])
 
 Route::redirect('/industries', '/who-we-serve', 301);
 
-Route::get('/who-we-serve/{slug}', [ServiceController::class, 'show'])
-    ->defaults('section', 'industries')
+Route::get('/who-we-serve/{slug}', [IndustryController::class, 'show'])
     ->name('industries.show');
 
 Route::get('/industries/{slug}', function (string $slug) {
@@ -145,5 +156,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin/webpages')->name('admin.webp
 });
 
 Route::get('/{section}/{slug}', [ServiceController::class, 'show'])
-    ->whereIn('section', ['services', 'industries', 'insights'])
+    ->whereIn('section', ['services', 'insights'])
     ->name('webpages.show');

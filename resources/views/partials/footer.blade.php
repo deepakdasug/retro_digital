@@ -75,14 +75,14 @@
         <section class="footer-column" aria-labelledby="footer-our-industries-heading">
           <h2 class="footer-heading" id="footer-our-industries-heading">Our Industries</h2>
           <ul class="footer-nav">
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Ecommerce &amp; Multivendor</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Real Estate &amp;
+            <li><a href="{{ route('industries.show', ['slug' => 'ecommerce-multivendor']) }}">Ecommerce &amp; Multivendor</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'real-estate-and-construction']) }}">Real Estate &amp;
                 Construction</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Manufacturing</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Personal Beauty Care</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Medical &amp; Healthcare</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Oil &amp; Gas</a></li>
-            <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Finance &amp; Insurance</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'manufacturing']) }}">Manufacturing</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'personal-beauty-care']) }}">Personal Beauty Care</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'medical-and-healthcare']) }}">Medical &amp; Healthcare</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'oil-and-gas']) }}">Oil &amp; Gas</a></li>
+            <li><a href="{{ route('industries.show', ['slug' => 'finance-and-insurance']) }}">Finance &amp; Insurance</a></li>
           </ul>
 
           <div class="footer-socials" aria-label="Social media">

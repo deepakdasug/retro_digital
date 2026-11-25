@@ -329,6 +329,103 @@
       </table></div>
     </section>
 
+    @can('industries.view')
+    <section id="section-industries" class="admin-dashboard-section" role="tabpanel" aria-label="Industries" hidden>
+      <div class="admin-section-heading admin-blog-section-heading">
+        <div>
+          <span class="admin-section-eyebrow">SHARED INDUSTRY LAYOUT</span>
+          <h2>Industries</h2>
+          <p>Manage industry landing pages rendered via <code>industries.layout</code> and <code>industries.css</code>.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span class="admin-section-total"><i class="fa-solid fa-industry" aria-hidden="true"></i> {{ $industriesCount }} total</span>
+          @can('industries.create')
+          <a href="{{ route('admin.industries.create') }}" class="admin-action-button" aria-label="Add Industry" title="Add Industry">
+            <i class="fa-solid fa-plus" aria-hidden="true" style="margin-right: 0.45rem;"></i>Add Industry
+          </a>
+          @endcan
+        </div>
+      </div>
+
+      <div class="admin-table-scroll">
+        <table class="admin-data-table">
+          <thead>
+            <tr>
+              <th>Industry</th>
+              <th>Live URL</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($industries as $industry)
+              <tr>
+                <td>
+                  <div class="admin-person-cell">
+                    <span class="admin-person-avatar" style="background:#eaf6ec; color:#2f6f46; font-weight:700;">
+                      <i class="{{ $industry->icon ?: 'fa-solid fa-industry' }}" aria-hidden="true"></i>
+                    </span>
+                    <div>
+                      <strong>{{ $industry->name }}</strong>
+                      @if($industry->short_description)
+                        <span style="display:block; font-size:0.8rem; color:#64748b; max-width:340px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $industry->short_description }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </td>
+                <td><code>/who-we-serve/{{ $industry->slug }}</code></td>
+                <td>
+                  <span class="admin-status-badge {{ $industry->is_published ? '' : 'is-draft' }}">
+                    <span></span>{{ $industry->is_published ? 'Published' : 'Draft' }}
+                  </span>
+                </td>
+                <td>
+                  <strong class="admin-date-primary">{{ $industry->updated_at?->format('M d, Y') ?? '—' }}</strong>
+                  <span class="admin-date-secondary">{{ $industry->updated_at?->diffForHumans() }}</span>
+                </td>
+                <td>
+                  <div class="admin-row-actions">
+                    @if($industry->is_published)
+                      <a href="{{ route('industries.show', ['slug' => $industry->slug]) }}" target="_blank" rel="noopener" class="admin-secondary-button">
+                        <i class="fa-regular fa-eye" aria-hidden="true"></i>View
+                      </a>
+                    @endif
+                    @can('industries.edit')
+                      <a href="{{ route('admin.industries.edit', $industry) }}" class="admin-secondary-button" title="Edit industry settings">
+                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>Edit
+                      </a>
+                      <a href="{{ route('admin.industries.editor', $industry) }}" class="admin-secondary-button" title="Open visual sections editor">
+                        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>Sections
+                      </a>
+                    @endcan
+                    @can('industries.delete')
+                      <form action="{{ route('admin.industries.destroy', $industry) }}" method="POST" onsubmit="return confirm('Delete this industry? This cannot be undone.');" style="display:inline-block; margin:0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-delete-button">
+                          <i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete
+                        </button>
+                      </form>
+                    @endcan
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5" class="admin-table-empty">
+                  <span class="admin-empty-icon"><i class="fa-solid fa-industry"></i></span>
+                  <strong>No industries yet</strong>
+                  <span>Select “Add Industry” or run <code>IndustrySeeder</code>.</span>
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </section>
+    @endcan
+
     <section id="section-testimonials" class="admin-dashboard-section" role="tabpanel" aria-label="Testimonials" hidden>
       <div class="admin-section-heading admin-blog-section-heading">
         <div>

@@ -41,18 +41,18 @@
         <summary class="mobile-nav-link">Industries</summary>
         <ul class="mobile-services-links" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true">
           <li class="mobile-overview-item"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="mobile-overview-link"><span>View All Industries</span> <i class="fa-solid fa-arrow-right"></i></a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Ecommerce &amp; Multivendor</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Real Estate &amp; Construction</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Manufacturing</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Media &amp; Entertainment</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Medical &amp; Healthcare</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Personal Beauty Care</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">EdTech &amp; E-Learning</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Travel &amp; Hospitality</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Transportation &amp; Logistics</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Oil and Gas</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Finance &amp; Insurance</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Other Industries</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'ecommerce-multivendor']) }}">Ecommerce &amp; Multivendor</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'real-estate-and-construction']) }}">Real Estate &amp; Construction</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'manufacturing']) }}">Manufacturing</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'media-and-entertainment']) }}">Media &amp; Entertainment</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'medical-and-healthcare']) }}">Medical &amp; Healthcare</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'personal-beauty-care']) }}">Personal Beauty Care</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'edtech-and-e-learning']) }}">EdTech &amp; E-Learning</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'travel-and-hospitality']) }}">Travel &amp; Hospitality</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'transportation-and-logistics']) }}">Transportation &amp; Logistics</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'oil-and-gas']) }}">Oil and Gas</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'finance-and-insurance']) }}">Finance &amp; Insurance</a></li>
+          <li><a href="{{ route('industries.show', ['slug' => 'other-industries']) }}">Other Industries</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Our Platform</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Exploration</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Solutions</a></li>
