@@ -28,7 +28,7 @@
                   <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'video-marketing']) }}"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>Content Marketing</a></li>
                   <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>ORM Services</a></li>
                 </ul>

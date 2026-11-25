@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-
         $this->call([
             SeoServicePageSeeder::class,
             SocialMediaMarketingSectionsSeeder::class,
+            VideoMarketingPageSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
             BlogSeeder::class,

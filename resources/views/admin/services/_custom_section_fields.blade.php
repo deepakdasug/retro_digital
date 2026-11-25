@@ -48,7 +48,7 @@
             <label><i class="fa-brands fa-html5" style="color: #ea580c;"></i> HTML Code</label>
             <span class="csb-pane-tip">Press <strong>[Tab]</strong> to indent. Real content can be written directly inside HTML tags.</span>
         </div>
-        <textarea name="{{ $prefix }}[html]" class="csb-code-textarea" rows="12" spellcheck="false" placeholder="<!-- Write your raw HTML here -->" required>{{ old('sections.'.$section->id.'.content.html', $data['html'] ?? '') }}</textarea>
+        <textarea name="{{ $prefix }}[html]" class="csb-code-textarea" rows="12" spellcheck="false" placeholder="<!-- Write your raw HTML here -->">{{ old('sections.'.$section->id.'.content.html', $data['html'] ?? '') }}</textarea>
     </div>
 
     <!-- Tab 2: Custom CSS -->

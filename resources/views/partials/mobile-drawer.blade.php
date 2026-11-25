@@ -15,7 +15,7 @@
           <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}">Social Media Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Paid Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Email Marketing</a></li>
-          <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Video Marketing</a></li>
+            <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'video-marketing']) }}">Video Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Content Marketing</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">ORM Services</a></li>
           <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Development</a></li>

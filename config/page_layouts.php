@@ -15,6 +15,9 @@ return [
             'seo-services' => [
                 'show' => 'services.seo-services',
             ],
+            'video-marketing' => [
+                'show' => 'services.seo-services',
+            ],
         ],
     ],
 ];

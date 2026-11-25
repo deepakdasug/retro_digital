@@ -16,6 +16,8 @@
         Business Made Easy<br><span class="hero-title-gradient">with Retrotech</span>
       </h1>
 
+      <p class="hero-desc-main" style="margin-top: 1rem; font-weight: 600;">hi himanshu</p>
+
       <p class="hero-desc-main">
         Boost revenue through WhatsApp marketing and custom software
       </p>

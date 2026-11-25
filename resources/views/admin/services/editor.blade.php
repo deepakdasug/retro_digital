@@ -42,7 +42,7 @@
     </div>
     @if(session('success'))<div class="seo-editor-flash seo-editor-content" role="status" aria-live="polite">{{ session('success') }}</div>@endif
     @if($errors->any())<div class="seo-editor-flash seo-editor-content" style="border-color:#e5b9b9;background:#fff3f3;color:#8f2727">Some section values need attention. Review the fields and save again.</div>@endif
-    <form id="save-page-form" action="{{ route('admin.webpages.save', $service) }}" method="POST" enctype="multipart/form-data">
+    <form id="save-page-form" action="{{ route('admin.webpages.save', $service) }}" method="POST" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="seo-editor-content seo-save-page-form">
             <span class="seo-save-page-copy"><strong>Page changes</strong><small>Edits, section order, and removals stay as drafts until saved.</small></span>
@@ -1219,10 +1219,6 @@ document.querySelectorAll('[data-remove-section]').forEach((button) => {
 });
 
 savePageForm?.addEventListener('submit', () => {
-    document.querySelectorAll('.seo-editor-edit').forEach((editor) => {
-        editor.removeAttribute('open');
-        editor.open = false;
-    });
     const saveStatus = savePageForm.querySelector('[data-save-status]');
     if (saveStatus) saveStatus.textContent = 'Saving your page…';
 
