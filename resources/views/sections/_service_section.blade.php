@@ -3,20 +3,11 @@
     $data = is_array($data ?? null) ? $data : (is_array($section->content ?? null) ? $section->content : []);
 @endphp
 
-@if($sectionType === 'hero')
+@if($sectionType === 'seo_hero')
     @include('sections.seo_landing', [
         'section' => $section,
         'sectionType' => 'seo_hero',
-        'data' => [
-            'eyebrow' => $data['eyebrow'] ?? '',
-            'heading' => $data['title'] ?? '',
-            'body' => $data['subtitle'] ?? '',
-            'hero_image' => $data['background_image'] ?? '',
-            'hero_image_alt' => $data['title'] ?? 'Service page hero',
-            'button_text' => $data['cta_text'] ?? '',
-            'button_link' => $data['cta_link'] ?? '',
-            'items' => [],
-        ],
+        'data' => $data,
     ])
 @else
     @php($template = config("section_templates.{$sectionType}"))
