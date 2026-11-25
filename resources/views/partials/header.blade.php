@@ -21,53 +21,53 @@
             <div class="dropdown-arrow-indicator"></div>
             <div class="services-mega-columns">
               <section class="services-mega-group" aria-labelledby="marketing-services-heading">
-                <h2 id="marketing-services-heading"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Digital Marketing <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="marketing-services-heading"><a href="{{ route('services.seo') }}">Digital Marketing <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Grow your reach through SEO, paid campaigns, social media, and content marketing.</p>
                 <ul class="services-mega-links">
                   <li><a href="{{ route('services.seo') }}"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>Search Engine Optimization</a></li>
                   <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'social-media-marketing']) }}"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i>Social Media Marketing</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'paid-marketing']) }}"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>Paid Marketing</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'email-marketing']) }}"><i class="fa-regular fa-envelope" aria-hidden="true"></i>Email Marketing</a></li>
                   <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'video-marketing']) }}"><i class="fa-solid fa-video" aria-hidden="true"></i>Video Marketing</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>Content Marketing</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>ORM Services</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'content-marketing']) }}"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>Content Marketing</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'orm-services']) }}"><i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>ORM Services</a></li>
                 </ul>
               </section>
 
               <section class="services-mega-group" aria-labelledby="development-services-heading">
-                <h2 id="development-services-heading"><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                <h2 id="development-services-heading"><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}">Tech Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                 <p>Plan and support the digital systems your organization relies on every day.</p>
                 <ul class="services-mega-links">
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
-                  <li><a href="#" aria-disabled="true" tabindex="-1" onclick="return false"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}"><i class="fa-solid fa-code" aria-hidden="true"></i>Web Development</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile App Development</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'custom-application']) }}"><i class="fa-solid fa-gears" aria-hidden="true"></i>Custom Application</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'salesforce-erpnext-services']) }}"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>Salesforce &amp; ERPNext Services</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'saas-application']) }}"><i class="fa-solid fa-cloud" aria-hidden="true"></i>SaaS Application</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'api-development']) }}"><i class="fa-solid fa-plug" aria-hidden="true"></i>API Development</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'software-development']) }}"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i>Software Development</a></li>
+                  <li><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp Integration</a></li>
                 </ul>
               </section>
 
               <section class="services-mega-group services-mega-platforms" aria-label="Platforms and solutions">
                 <article>
-                  <h2><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Our Services <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('home') }}#services">Our Services <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore digital marketing and software development capabilities for your business.</p>
                 </article>
                 <article>
-                  <h2><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'custom-application']) }}">Tech Exploration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Explore practical ways to improve how your team works with technology.</p>
                 </article>
                 <article>
-                  <h2><a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Software Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
+                  <h2><a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'software-development']) }}">Software Development <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></h2>
                   <p>Deliver software shaped around your workflows and business requirements.</p>
                 </article>
               </section>
             </div>
             <div class="services-mega-cards">
               <a href="{{ route('services.seo') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Search Engine Optimization</strong><small>Improve organic visibility with search-focused website and content optimization.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Search engine optimization services" loading="lazy"></a>
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="services-mega-card"><span class="services-mega-card-copy"><strong>Web Development</strong><small>Build responsive websites and web applications around your business requirements.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Web development services" loading="lazy"></a>
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Digital Marketing Services" loading="lazy"></a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Web Development</strong><small>Build responsive websites and web applications around your business requirements.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Web development services" loading="lazy"></a>
+              <a href="{{ route('services.seo') }}" class="services-mega-card"><span class="services-mega-card-copy"><strong>Digital Marketing Services</strong><small>Grow your online presence with SEO, social media marketing, PPC advertising, content creation, and data-driven digital marketing strategies.</small></span><img class="services-mega-card-art" src="{{ asset('assets/images/enterprise.webp') }}" alt="Digital Marketing Services" loading="lazy"></a>
             </div>
           </div>
         </li>

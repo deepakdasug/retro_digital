@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             SocialMediaMarketingSectionsSeeder::class,
             VideoMarketingPageSeeder::class,
             IndustrySeeder::class,
+            MarketingServicePagesSeeder::class,
+            TechDevelopmentServicePagesSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
             BlogSeeder::class,

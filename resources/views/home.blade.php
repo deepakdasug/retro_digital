@@ -16,7 +16,7 @@
         Business Made Easy<br><span class="hero-title-gradient">with Retrotech</span>
       </h1>
 
-      <p class="hero-desc-main" style="margin-top: 1rem; font-weight: 600;">hi himanshu</p>
+      
 
       <p class="hero-desc-main">
         Boost revenue through WhatsApp marketing and custom software
@@ -28,7 +28,7 @@
             <span>Get a Free Consultation</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
-          <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="hero-secondary-btn">
+          <a href="#services" class="hero-secondary-btn">
             <span>Explore Services</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
@@ -289,7 +289,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Web Development &amp; Architecture</a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}">Web Development &amp; Architecture</a>
             </h3>
             <p class="sc-desc">
               High-performance, responsive websites and dynamic web applications built with modern frameworks, sub-80ms
@@ -301,7 +301,7 @@
               <span class="sc-tag">REST &amp; GraphQL</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'web-development']) }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -323,7 +323,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Mobile App Development</a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}">Mobile App Development</a>
             </h3>
             <p class="sc-desc">
               Native and cross-platform iOS and Android mobile apps engineered for fluid 120Hz gesture response, offline
@@ -335,7 +335,7 @@
               <span class="sc-tag">iOS &amp; Android</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'mobile-app-development']) }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -353,7 +353,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">Custom Software Development</a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'custom-application']) }}">Custom Software Development</a>
             </h3>
             <p class="sc-desc">
               Tailored enterprise software designed to eliminate manual bottlenecks, automate operational workflows, and
@@ -365,7 +365,7 @@
               <span class="sc-tag">Microservices</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'custom-application']) }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -386,7 +386,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">SaaS &amp; Cloud Applications</a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'saas-application']) }}">SaaS &amp; Cloud Applications</a>
             </h3>
             <p class="sc-desc">
               Scalable multi-tenant cloud software platforms built for recurring revenue, featuring automated billing,
@@ -398,7 +398,7 @@
               <span class="sc-tag">Stripe Billing</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'saas-application']) }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -447,7 +447,7 @@
           </div>
           <div class="sc-content">
             <h3 class="sc-title">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false">WhatsApp Automation &amp; CRM Bot</a>
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}">WhatsApp Automation &amp; CRM Bot</a>
             </h3>
             <p class="sc-desc">
               Automate 24/7 customer support, qualify inbound sales leads, and run verified broadcasts using the official
@@ -459,7 +459,7 @@
               <span class="sc-tag">Chatbots</span>
             </div>
             <div class="sc-footer">
-              <a href="#" aria-disabled="true" tabindex="-1" onclick="return false" class="sc-action-btn">
+              <a href="{{ route('webpages.show', ['section' => 'services', 'slug' => 'whatsapp-integration']) }}" class="sc-action-btn">
                 <span>Explore Service</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>

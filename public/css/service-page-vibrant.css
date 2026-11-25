@@ -1,0 +1,381 @@
+/* Unified forest/mint theme layered on top of the landing section system. */
+.seo-service-page{
+    --svc-a:var(--theme-green-brand);
+    --svc-b:var(--theme-green-bright);
+    --svc-deep:var(--theme-forest-deep);
+    --svc-deep-2:var(--theme-forest-dark);
+    --svc-tint:var(--theme-mint-soft);
+    --svc-soft:var(--theme-mint-bg);
+    --svc-line:var(--theme-border-light);
+    --svc-glow:rgba(110,192,136,.24);
+}
+
+.seo-service-page .seo-lp{
+    --lp-green:var(--svc-a);
+    --lp-lime:var(--svc-b);
+    --lp-line:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-hero{
+    background:
+        radial-gradient(ellipse at 82% 18%,var(--svc-glow),transparent 38%),
+        radial-gradient(ellipse at 8% 88%,rgba(255,255,255,.08),transparent 32%),
+        linear-gradient(125deg,var(--svc-deep) 0%,var(--svc-deep-2) 56%,var(--svc-a) 100%);
+}
+
+.seo-service-page .seo-lp-hero:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.18;
+    background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);
+    background-size:62px 62px;
+    mask-image:linear-gradient(120deg,#000,transparent 68%);
+}
+
+.seo-service-page .seo-lp-kicker,
+.seo-service-page .seo-lp-overline,
+.seo-service-page .seo-eyebrow{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-hero .seo-lp-kicker{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-button-lime{
+    background:var(--svc-b);
+    color:var(--svc-deep);
+    box-shadow:0 12px 28px -12px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-button-lime:hover{
+    background:#fff;
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-hero-stats strong,
+.seo-service-page .seo-lp-hero-note i{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-proof{
+    background:linear-gradient(90deg,var(--svc-tint),#fff 62%);
+    border-bottom:1px solid var(--svc-line);
+}
+
+.seo-service-page .seo-lp-proof-icon{
+    background:var(--svc-tint);
+    color:var(--svc-a);
+    box-shadow:inset 0 0 0 1px var(--svc-line);
+}
+
+.seo-service-page .seo-lp-audit{
+    background:
+        radial-gradient(circle at 88% 16%,var(--svc-glow),transparent 30%),
+        linear-gradient(135deg,var(--svc-deep),#0a1410 72%);
+    color:#fff;
+}
+
+.seo-service-page .seo-lp-audit h2{
+    color:#fff;
+}
+
+.seo-service-page .seo-lp-audit-copy>p{
+    color:rgba(255,255,255,.74);
+}
+
+.seo-service-page .seo-lp-audit-stamp{
+    border-color:rgba(255,255,255,.18);
+    color:rgba(255,255,255,.72);
+}
+
+.seo-service-page .seo-lp-audit-stamp strong{
+    color:#fff;
+}
+
+.seo-service-page .seo-lp-audit .seo-lp-overline,
+.seo-service-page .seo-lp-audit-index,
+.seo-service-page .seo-lp-audit-stamp>i,
+.seo-service-page .seo-lp-audit-list article>i{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-audit-list article:hover{
+    border-color:var(--svc-b);
+    box-shadow:0 0 0 1px var(--svc-b),0 18px 38px -24px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-audit-list article.has-image{
+    grid-template-columns:76px 34px minmax(0,1fr) 20px;
+}
+
+.seo-service-page .seo-lp-audit-thumb{
+    display:block;
+    width:76px;
+    height:58px;
+    overflow:hidden;
+    border-radius:10px;
+    background:var(--svc-tint);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);
+}
+
+.seo-service-page .seo-lp-audit-thumb img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.seo-service-page .seo-lp-services{
+    background:linear-gradient(180deg,#fff,var(--svc-soft));
+}
+
+.seo-service-page .seo-lp-service-card{
+    background:linear-gradient(145deg,#fff,var(--svc-soft));
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-service-card:before{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    height:3px;
+    border-radius:16px 16px 0 0;
+    background:linear-gradient(90deg,var(--svc-a),var(--svc-b));
+    opacity:.72;
+}
+
+.seo-service-page .seo-lp-service-card:hover{
+    border-color:var(--svc-a);
+    box-shadow:0 22px 44px -24px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-service-icon{
+    background:var(--svc-tint);
+    color:var(--svc-a);
+    box-shadow:inset 0 0 0 1px var(--svc-line);
+}
+
+.seo-service-page .seo-lp-service-number,
+.seo-service-page .seo-lp-card-arrow{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-process{
+    background:linear-gradient(180deg,var(--svc-soft),#fff);
+}
+
+.seo-service-page .seo-lp-timeline:before{
+    border-top-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-timeline-node{
+    background:linear-gradient(135deg,var(--svc-a),var(--svc-deep-2));
+    border-color:var(--svc-soft);
+    box-shadow:0 0 0 1px var(--svc-b),0 10px 22px -12px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-timeline-card{
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-timeline-card small{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-intent{
+    background:linear-gradient(180deg,#fff,var(--svc-soft));
+}
+
+.seo-service-page .seo-lp-intent-decoration,
+.seo-service-page .seo-lp-intent-cards article>i{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-intent-decoration i{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-intent-cards article{
+    background:var(--svc-soft);
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-intent-cards article:nth-child(2){
+    background:var(--svc-tint);
+}
+
+.seo-service-page .seo-lp-intent-cards article:nth-child(3){
+    background:linear-gradient(90deg,var(--svc-tint),#fff);
+    box-shadow:-8px 0 0 -5px var(--svc-a);
+}
+
+.seo-service-page .seo-lp-intent-count{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-technical{
+    background:linear-gradient(135deg,var(--svc-tint),#fff 68%);
+}
+
+.seo-service-page .seo-lp-tech-card{
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-tech-1{
+    background:
+        radial-gradient(circle at 82% 16%,var(--svc-glow),transparent 38%),
+        linear-gradient(135deg,var(--svc-deep),var(--svc-deep-2));
+    color:#fff;
+}
+
+.seo-service-page .seo-lp-tech-1 h3,
+.seo-service-page .seo-lp-tech-1 p{
+    color:#fff;
+}
+
+.seo-service-page .seo-lp-tech-1 p{
+    opacity:.82;
+}
+
+.seo-service-page .seo-lp-tech-1>small{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-audit-index,
+.seo-service-page .seo-lp-audit-list article>i{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-tech-symbol{
+    background:var(--svc-tint);
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-tech-1 .seo-lp-tech-symbol{
+    background:rgba(255,255,255,.12);
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-lp-tech-aside{
+    background:linear-gradient(90deg,var(--svc-b),var(--svc-a));
+    color:var(--svc-deep);
+}
+
+.seo-service-page .seo-lp-content{
+    background:linear-gradient(180deg,var(--svc-soft),#fff);
+}
+
+.seo-service-page .seo-lp-content-art{
+    background:
+        radial-gradient(circle at 77% 17%,var(--svc-b),transparent 28%),
+        radial-gradient(circle at 16% 84%,var(--svc-glow),transparent 34%),
+        linear-gradient(135deg,var(--svc-deep),var(--svc-a));
+}
+
+.seo-service-page .seo-lp-content-art>i,
+.seo-service-page .seo-lp-content-demo-link,
+.seo-service-page .seo-lp-content-more{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-content-list article{
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-content-list article:hover{
+    border-color:var(--svc-a);
+    box-shadow:0 12px 30px -20px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-results-panel{
+    background:
+        radial-gradient(circle at 92% 12%,var(--svc-glow),transparent 32%),
+        linear-gradient(135deg,var(--svc-soft),var(--svc-tint));
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-result-icon{
+    background:var(--svc-tint);
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-results-metrics article{
+    border-color:rgba(255,255,255,.9);
+    background:rgba(255,255,255,.82);
+}
+
+.seo-service-page .seo-lp-results-metrics strong{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-results-note i{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-faq{
+    background:linear-gradient(180deg,#fff,var(--svc-soft));
+}
+
+.seo-service-page .seo-lp-faq-list details{
+    border-color:var(--svc-line);
+}
+
+.seo-service-page .seo-lp-faq-list details[open]{
+    border-color:var(--svc-a);
+    box-shadow:0 12px 30px -22px var(--svc-glow);
+}
+
+.seo-service-page .seo-lp-faq-list summary i,
+.seo-service-page .seo-lp-faq-mark{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-lp-cta-card{
+    background:
+        radial-gradient(circle at 84% 14%,var(--svc-glow),transparent 30%),
+        radial-gradient(circle at 8% 92%,rgba(255,255,255,.08),transparent 28%),
+        linear-gradient(115deg,var(--svc-deep),var(--svc-a));
+}
+
+.seo-service-page .seo-lp-cta-card .seo-lp-overline,
+.seo-service-page .seo-lp-cta-sparkle{
+    color:var(--svc-b);
+}
+
+.seo-service-page .seo-section{
+    background:linear-gradient(180deg,#fff,var(--svc-soft));
+}
+
+.seo-service-page .seo-split-image img{
+    box-shadow:0 28px 60px -30px var(--svc-glow);
+}
+
+.seo-service-page .seo-text-link{
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-feature-icon{
+    background:var(--svc-tint);
+    color:var(--svc-a);
+}
+
+.seo-service-page .seo-cta-card{
+    background:
+        radial-gradient(circle at 84% 14%,var(--svc-glow),transparent 32%),
+        linear-gradient(115deg,var(--svc-deep),var(--svc-a));
+}
+
+/* All service pages share the unified forest/mint theme above. */
+
+@media(max-width:620px){
+    .seo-service-page .seo-lp-hero-stats strong{color:var(--svc-b)}
+    .seo-service-page .seo-lp-service-card:before{border-radius:13px 13px 0 0}
+    .seo-service-page .seo-lp-audit-list article.has-image{grid-template-columns:60px minmax(0,1fr) 18px}
+    .seo-service-page .seo-lp-audit-list article.has-image .seo-lp-audit-index{display:none}
+    .seo-service-page .seo-lp-audit-thumb{width:60px;height:52px}
+}

@@ -276,6 +276,7 @@ return [
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
             'body' => ['type' => 'textarea', 'label' => 'Copy', 'rules' => 'nullable|string|max:1000'],
             'items' => ['type' => 'repeater', 'label' => 'Opportunity cards', 'rules' => 'nullable|array|max:4', 'fields' => [
+                'image' => ['type' => 'image', 'label' => 'Optional card image', 'rules' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:5120'],
                 'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'nullable|string|max:100'],
                 'description' => ['type' => 'textarea', 'label' => 'Description', 'rules' => 'nullable|string|max:300'],
             ]],
