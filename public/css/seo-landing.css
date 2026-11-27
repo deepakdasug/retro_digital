@@ -192,11 +192,6 @@ body.inner-page:has(.seo-service-page > .service-landing-hero:first-child) .site
   scroll-margin-top: 6rem;
 }
 
-.seo-editor-preview .service-landing-hero {
-  min-height: min(60svh, 32rem);
-  padding-block: 2.5rem;
-}
-
 /* ==========================================================================
    PROOF
    ========================================================================== */

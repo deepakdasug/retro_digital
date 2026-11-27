@@ -1,16 +1,13 @@
 @extends('layouts.app')
 
 @section('title', $service->meta_title ?: ($service->title . ' | Retrotech Digital'))
-@section('description', $service->meta_description ?: $service->short_description)
-@section('keywords', $service->meta_keywords)
+@section('description', $service->meta_description ?: $service->short_description ?: $service->title)
+@section('keywords', $service->meta_keywords ?? '')
 @section('canonical', route('webpages.show', ['section' => $service->page_section, 'slug' => $service->slug]))
 @section('og_image', $service->og_image ? (str_starts_with($service->og_image, 'http') ? $service->og_image : (str_starts_with($service->og_image, 'assets/') || str_starts_with($service->og_image, 'storage/') ? asset($service->og_image) : asset('storage/' . $service->og_image))) : asset('assets/images/enterprise.webp'))
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/seo-service.css') }}?v={{ filemtime(public_path('css/seo-service.css')) }}">
-<link rel="stylesheet" href="{{ asset('css/seo-landing.css') }}?v={{ filemtime(public_path('css/seo-landing.css')) }}">
-<link rel="stylesheet" href="{{ asset('css/service-page-vibrant.css') }}?v={{ filemtime(public_path('css/service-page-vibrant.css')) }}">
-<link rel="stylesheet" href="{{ asset('css/service-page-cinematic-v2.css') }}?v={{ filemtime(public_path('css/service-page-cinematic-v2.css')) }}">
+@include('services.layouts.service-styles')
 @endpush
 
 @section('content')

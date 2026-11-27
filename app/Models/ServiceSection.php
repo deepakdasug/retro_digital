@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,16 @@ class ServiceSection extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public static function excludedLayoutTypes(string $pageSection): array
+    {
+        return $pageSection === 'services' ? ['seo_proof', 'seo_technical'] : [];
+    }
+
+    public function scopeForPageLayout(Builder $query, string $pageSection): Builder
+    {
+        return $query->whereNotIn('section_type', self::excludedLayoutTypes($pageSection));
     }
 
     public function getSrcdocAttribute(): string

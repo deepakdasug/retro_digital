@@ -39,6 +39,13 @@
         </div>
         <p>Edit the page sections below, change their order, or add another reusable layout.</p>
         <div class="seo-editor-url"><span>Page URL</span><code>/{{ $service->page_section }}/{{ $service->slug }}</code></div>
+        @if($service->page_section === 'services')
+            <details class="seo-editor-live-page">
+                <summary>Preview the saved page</summary>
+                <iframe src="{{ route('webpages.show', ['section' => $service->page_section, 'slug' => $service->slug]) }}"
+                    title="Saved {{ $service->title }} page" loading="lazy"></iframe>
+            </details>
+        @endif
     </div>
     @if(session('success'))<div class="seo-editor-flash seo-editor-content" role="status" aria-live="polite">{{ session('success') }}</div>@endif
     @if($errors->any())<div class="seo-editor-flash seo-editor-content" style="border-color:#e5b9b9;background:#fff3f3;color:#8f2727">Some section values need attention. Review the fields and save again.</div>@endif

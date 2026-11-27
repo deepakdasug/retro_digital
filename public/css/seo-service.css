@@ -70,6 +70,23 @@ body.seo-editor-layout * {
     scroll-snap-stop: normal !important;
 }
 
+.seo-editor-live-page {
+  margin-block: 1rem;
+}
+.seo-editor-live-page > summary {
+  color: var(--seo-green);
+  font-weight: 700;
+  cursor: pointer;
+}
+.seo-editor-live-page > iframe {
+  display: block;
+  width: 100%;
+  height: 75svh;
+  margin-top: .75rem;
+  border: 1px solid var(--seo-line);
+  border-radius: 12px;
+}
+
 .seo-editor-stage,
 .seo-editor-stage .seo-service-page {
     overflow: visible !important;

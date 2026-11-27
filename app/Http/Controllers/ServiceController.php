@@ -10,8 +10,8 @@ class ServiceController extends Controller
     {
         $service = Service::with(['sections' => fn ($query) => $query
             ->where('is_active', true)
-            ->when($section === 'services', fn ($query) => $query->whereNotIn('section_type', ['seo_proof', 'seo_technical']))
-            ->orderBy('sort_order')])
+            ->forPageLayout($section)
+            ->orderBy('sort_order')->orderBy('id')])
             ->where('page_section', $section)
             ->where('slug', $slug)
             ->firstOrFail();

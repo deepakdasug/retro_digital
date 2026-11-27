@@ -155,7 +155,7 @@
                 <input id="og_image" name="og_image" value="{{ old('og_image', $service->og_image) }}" maxlength="500" placeholder="https://example.com/image.jpg or assets/images/...">
                 @if($service->og_image)
                     <div style="margin-top: 8px;">
-                        <img class="seo-existing-image" src="{{ str_starts_with($service->og_image, 'http') ? $service->og_image : (str_starts_with($service->og_image, 'assets/') || str_starts_with($service->og_image, 'storage/') ? asset($service->og_image) : asset('storage/' . $service->og_image)) }}" alt="Current social preview image">
+                        <img class="seo-existing-image" src="{{ \App\Support\ImageUrl::resolve($service->og_image) }}" alt="Current social preview image">
                     </div>
                 @endif
                 <label for="og_image_file" style="margin-top: 10px;">Or Upload a Replacement Image</label>

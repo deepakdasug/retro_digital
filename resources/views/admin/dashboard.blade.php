@@ -315,7 +315,7 @@
         <tbody>
           @forelse($servicePages as $page)
             <tr>
-              <td><div class="admin-article-cell"><span class="admin-article-placeholder"><i class="fa-regular fa-window-maximize" aria-hidden="true"></i></span><div class="admin-article-title-wrap"><strong class="admin-article-name" title="{{ $page->title }}">{{ $page->display_name }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $page->display_name }}" title="Toggle webpage details" aria-expanded="false" aria-controls="webpage-detail-{{ $page->id }}" onclick="toggleAdminDetails(this, 'webpage-detail-{{ $page->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
+              <td><div class="admin-article-cell"><x-service-thumbnail :page="$page" /><div class="admin-article-title-wrap"><strong class="admin-article-name" title="{{ $page->title }}">{{ $page->display_name }}</strong><button class="admin-article-title-button" type="button" aria-label="Toggle details for {{ $page->display_name }}" title="Toggle webpage details" aria-expanded="false" aria-controls="webpage-detail-{{ $page->id }}" onclick="toggleAdminDetails(this, 'webpage-detail-{{ $page->id }}')"><span>Details</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></div></div></td>
               <td>{{ $pageSectionLabels[$page->page_section] ?? ucfirst($page->page_section) }}</td>
               <td><code>/{{ $page->page_section }}/{{ $page->slug }}</code></td>
               <td><strong class="admin-date-primary">{{ $page->updated_at?->format('M d, Y') }}</strong><span class="admin-date-secondary">{{ $page->updated_at?->diffForHumans() }}</span></td>

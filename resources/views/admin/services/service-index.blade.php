@@ -93,7 +93,7 @@
                 <tbody>
                 @forelse($pages as $page)
                     <tr>
-                        <td><strong>{{ $page->title }}</strong></td>
+                        <td><div class="admin-article-cell"><x-service-thumbnail :page="$page" /><strong>{{ $page->title }}</strong></div></td>
                         <td><span style="display:inline-block; padding: 3px 10px; border-radius: 6px; background: #eaf3ec; color: #27623c; font-weight: 600; font-size: 0.8rem;">{{ $sectionLabels[$page->page_section] ?? ucfirst($page->page_section) }}</span></td>
                         <td><code>/{{ $page->page_section }}/{{ $page->slug }}</code></td>
                         <td><strong>{{ $page->sections_count }}</strong></td>

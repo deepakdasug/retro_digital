@@ -23,6 +23,60 @@ class ContentStudioSectionTest extends TestCase
         ]);
     }
 
+    public function test_dashboard_service_records_show_configured_and_fallback_thumbnails(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $page = $this->createPage();
+        $page->update(['og_image' => 'storage/app/public/services/seo/upload.webp']);
+        Service::create(['slug' => 'video-marketing', 'page_section' => 'services', 'title' => 'Video Marketing']);
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard', ['tab' => 'webpage']));
+
+        $response->assertOk()
+            ->assertSee('src="' . asset('storage/services/seo/upload.webp') . '"', false)
+            ->assertSee('data-fallback="' . asset('assets/images/tech-development/business-growth.webp') . '"', false)
+            ->assertSee('src="' . asset('assets/images/enterprise-clients.jpg') . '"', false);
+    }
+
+    public function test_editor_uses_live_service_layout_and_preserves_excluded_sections(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $service = $this->createPage();
+        $technical = $service->sections()->create([
+            'section_type' => 'seo_technical',
+            'content' => ['heading' => 'Excluded technical content'],
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+        $hero = $service->sections()->create([
+            'section_type' => 'seo_hero',
+            'content' => ['heading' => 'Shared hero heading'],
+            'sort_order' => 2,
+            'is_active' => true,
+        ]);
+
+        $liveUrl = route('webpages.show', ['section' => 'services', 'slug' => $service->slug]);
+        $this->get($liveUrl)->assertOk()
+            ->assertSee('Shared hero heading')
+            ->assertSee('css/service-page-vibrant.css')
+            ->assertDontSee('Excluded technical content');
+        $this->actingAs($admin)->get(route('admin.webpages.editor', $service))->assertOk()
+            ->assertSee('Shared hero heading')
+            ->assertSee('css/service-page-vibrant.css')
+            ->assertSee('src="' . $liveUrl . '"', false)
+            ->assertDontSee('Excluded technical content')
+            ->assertDontSee('value="seo_technical"', false);
+
+        $this->post(route('admin.webpages.save', $service), [
+            'ordered_sections' => [$hero->id],
+            'sections' => [$hero->id => ['is_active' => '1', 'content' => ['heading' => 'Updated hero']]],
+        ])->assertRedirect(route('admin.webpages.editor', $service));
+
+        $this->assertSame(['heading' => 'Excluded technical content'], $technical->refresh()->content);
+        $this->assertTrue($technical->is_active);
+        $this->get($liveUrl)->assertOk()->assertSee('Updated hero');
+    }
+
     public function test_admin_can_upload_banner_and_edit_its_description(): void
     {
         Storage::fake('public');

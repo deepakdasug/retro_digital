@@ -90,8 +90,9 @@ class ServicePageController extends Controller
 
     public function editor(Service $service)
     {
-        $service->load(['sections' => fn ($query) => $query->orderBy('sort_order')->orderBy('id')]);
-        $templates = config('section_templates');
+        $service->load(['sections' => fn ($query) => $query
+            ->forPageLayout($service->page_section)->orderBy('sort_order')->orderBy('id')]);
+        $templates = $this->layoutTemplates($service);
         $sectionLabels = self::PAGE_SECTIONS;
 
         $layout = config('page_layouts.' . $service->page_section . '.editor', 'admin.services.service-editor');
@@ -101,9 +102,10 @@ class ServicePageController extends Controller
 
     public function storeSection(Request $request, Service $service)
     {
+        $templates = $this->layoutTemplates($service);
         $validated = $request->validate([
-            'section_type' => 'required|string|in:' . implode(',', array_keys(config('section_templates'))),
-            'sort_order' => 'required|integer|min:1|max:' . ($service->sections()->count() + 1),
+            'section_type' => 'required|string|in:' . implode(',', array_keys($templates)),
+            'sort_order' => 'required|integer|min:1|max:' . ($service->sections()->forPageLayout($service->page_section)->count() + 1),
             'content' => 'nullable|array',
         ]);
 
@@ -111,7 +113,7 @@ class ServicePageController extends Controller
             $content = $this->customSectionContent($request, 'content');
 
             DB::transaction(function () use ($service, $validated, $content): void {
-                $orderedSections = $service->sections()->orderBy('sort_order')->orderBy('id')->get()->all();
+                $orderedSections = $service->sections()->forPageLayout($service->page_section)->orderBy('sort_order')->orderBy('id')->get()->all();
                 $newSection = $service->sections()->create([
                     'section_type' => 'custom',
                     'content' => $content,
@@ -128,7 +130,7 @@ class ServicePageController extends Controller
             return redirect()->route('admin.webpages.editor', $service)->with('success', 'Custom section added.');
         }
 
-        $template = config('section_templates.' . $validated['section_type']);
+        $template = $templates[$validated['section_type']];
         $fieldRules = [];
         foreach ($template['fields'] as $key => $field) {
             $type = $field['type'] ?? 'text';
@@ -225,7 +227,7 @@ class ServicePageController extends Controller
         }
 
         DB::transaction(function () use ($service, $validated, $content): void {
-            $orderedSections = $service->sections()->orderBy('sort_order')->orderBy('id')->get()->all();
+            $orderedSections = $service->sections()->forPageLayout($service->page_section)->orderBy('sort_order')->orderBy('id')->get()->all();
             $newSection = $service->sections()->create([
                 'section_type' => $validated['section_type'],
                 'content' => $content,
@@ -244,7 +246,7 @@ class ServicePageController extends Controller
 
     public function previewSection(Request $request, Service $service, string $type)
     {
-        $template = config("section_templates.{$type}");
+        $template = $this->layoutTemplates($service)[$type] ?? null;
         abort_unless($template, 404);
 
         if ($type === 'custom') {
@@ -266,10 +268,11 @@ class ServicePageController extends Controller
             if ($request->isMethod('post')) {
                 $content = $this->customSectionContent($request, 'content', false);
                 $section = new ServiceSection(['content' => $content]);
-                $response['html'] = view('services.sections.service-custom-section', [
+                $response['html'] = view('services.sections.service-section', [
                     'data' => $content,
                     'section' => $section,
                     'sectionType' => 'custom',
+                    'service' => $service,
                 ])->render();
             }
 
@@ -300,6 +303,11 @@ class ServicePageController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    private function layoutTemplates(Service $service): array
+    {
+        return array_diff_key(config('section_templates'), array_flip(ServiceSection::excludedLayoutTypes($service->page_section)));
     }
 
     private function customSectionContent(Request $request, string $prefix, bool $storeUploads = true): array
@@ -492,7 +500,7 @@ class ServicePageController extends Controller
             'schema_markup' => 'nullable|string',
         ];
 
-        $sections = $service->sections()->get();
+        $sections = $service->sections()->forPageLayout($service->page_section)->get();
         foreach ($sections as $section) {
             $template = config('section_templates.' . $section->section_type);
             if (! $template) {
@@ -528,16 +536,16 @@ class ServicePageController extends Controller
         $validated = $request->validate($rules);
 
         $removedIds = $validated['removed_sections'] ?? [];
-        $ownedIds = $service->sections()->whereIn('id', $removedIds)->pluck('id')->all();
+        $ownedIds = $sections->whereIn('id', $removedIds)->pluck('id')->all();
         abort_unless(count($ownedIds) === count($removedIds), 404);
         $removedLookup = array_fill_keys(array_map('intval', $ownedIds), true);
         $orderedIds = array_map('intval', $validated['ordered_sections'] ?? []);
-        $ownedOrderedIds = $service->sections()->whereIn('id', $orderedIds)->pluck('id')->map(fn ($id) => (int) $id)->all();
+        $ownedOrderedIds = $sections->whereIn('id', $orderedIds)->pluck('id')->all();
         abort_unless(count($ownedOrderedIds) === count($orderedIds), 404);
 
         DB::transaction(function () use ($request, $service, $sections, $ownedIds, $removedLookup, $orderedIds): void {
             foreach ($sections as $section) {
-                if (isset($removedLookup[(int) $section->id])) {
+                if (isset($removedLookup[(int) $section->id]) || ! $request->has("sections.{$section->id}")) {
                     continue;
                 }
 
@@ -589,7 +597,7 @@ class ServicePageController extends Controller
                 $service->sections()->whereIn('id', $ownedIds)->delete();
             }
 
-            $remainingSections = $service->sections()->get()->all();
+            $remainingSections = $service->sections()->forPageLayout($service->page_section)->get()->all();
             $orderLookup = array_flip($orderedIds);
             usort($remainingSections, function (ServiceSection $left, ServiceSection $right) use ($orderLookup): int {
                 $leftPosition = $orderLookup[$left->id] ?? PHP_INT_MAX;
