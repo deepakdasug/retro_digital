@@ -139,7 +139,7 @@
       </ul>
     </nav>
 
-    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+    <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-controls="mobileNavDrawer" aria-expanded="false">
       <span class="hamburger-bar"></span>
       <span class="hamburger-bar"></span>
       <span class="hamburger-bar"></span>

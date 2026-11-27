@@ -1,4 +1,4 @@
-<aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+<aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile navigation" aria-hidden="true" inert data-lenis-prevent>
   <div class="drawer-header">
     <img src="{{ asset('assets/images/logo.png') }}" alt="Retrotech Logo" class="drawer-logo">
     <button class="drawer-close-btn icon-only-control" id="drawerCloseBtn" aria-label="Close menu" title="Close menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>

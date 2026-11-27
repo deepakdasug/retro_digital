@@ -284,11 +284,11 @@ function initRetrotech() {
       lastRadius = roundedRadius;
     }
 
-    // Fade dark overlay out to reveal bright video with zero GPU decode stall
+    // Keep the overlay inside the video frame while easing its intensity as it docks.
     if (videoDarkOverlay) {
-      const overlayOpacity = Math.max(0, 1 - p * 1.5);
-      if (Math.abs(overlayOpacity - (lastDarkOverlayOpacity ?? -1)) > 0.02) {
-        videoDarkOverlay.style.opacity = overlayOpacity.toFixed(2);
+      const overlayOpacity = (1 - p * 0.48).toFixed(2);
+      if (overlayOpacity !== lastDarkOverlayOpacity) {
+        videoDarkOverlay.style.opacity = overlayOpacity;
         lastDarkOverlayOpacity = overlayOpacity;
       }
     }
@@ -430,23 +430,36 @@ function initRetrotech() {
   });
 
   function openMobileDrawer() {
-    if (mobileNavDrawer) mobileNavDrawer.classList.add('active');
-    if (drawerBackdrop) drawerBackdrop.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    if (!mobileNavDrawer) return;
+    mobileNavDrawer.inert = false;
+    mobileNavDrawer.setAttribute('aria-hidden', 'false');
+    mobileNavDrawer.classList.add('active');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+    drawerBackdrop?.classList.add('active');
+    document.documentElement.classList.add('mobile-drawer-open');
+    drawerCloseBtn?.focus({ preventScroll: true });
   }
 
   function closeMobileDrawer() {
-    if (mobileNavDrawer) mobileNavDrawer.classList.remove('active');
-    if (drawerBackdrop) drawerBackdrop.classList.remove('active');
-    document.body.style.overflow = '';
+    if (!mobileNavDrawer?.classList.contains('active')) return;
+    if (mobileMenuBtn?.getClientRects().length) mobileMenuBtn.focus({ preventScroll: true });
+    mobileNavDrawer.inert = true;
+    mobileNavDrawer.setAttribute('aria-hidden', 'true');
+    mobileNavDrawer.classList.remove('active');
+    mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+    drawerBackdrop?.classList.remove('active');
+    document.documentElement.classList.remove('mobile-drawer-open');
   }
 
   if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMobileDrawer);
   if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileDrawer);
   if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeMobileDrawer);
 
-  document.querySelectorAll('a.mobile-nav-link, .mobile-services-links a').forEach((link) => {
+  mobileNavDrawer?.querySelectorAll('a[href]:not([aria-disabled="true"])').forEach((link) => {
     link.addEventListener('click', closeMobileDrawer);
+  });
+  window.matchMedia('(min-width: 1025px)').addEventListener('change', (event) => {
+    if (event.matches) closeMobileDrawer();
   });
 
   document.addEventListener('keydown', (e) => {
@@ -610,6 +623,7 @@ function initRetrotech() {
   const card2 = document.querySelector('.why-cards-stage .why-stack-card[data-index="2"]');
 
   if (whyTrack && card0 && card1 && card2) {
+    const stackedLayout = window.matchMedia('(max-width: 1024px), (max-height: 700px)');
     let whyTrackDocTop = 0;
     let whyTrackHeight = 0;
     let whyStickyTop = 72;
@@ -661,6 +675,17 @@ function initRetrotech() {
     };
 
     const updateStackPhysics = (scrollY, w, h) => {
+      if (stackedLayout.matches) {
+        if (lastStackProgress !== -1) {
+          [card0, card1, card2].forEach((card) => {
+            card.style.removeProperty('transform');
+            card.style.removeProperty('opacity');
+            card.style.removeProperty('visibility');
+          });
+          lastStackProgress = -1;
+        }
+        return;
+      }
       if (whyTrackHeight === 0) return;
       const scrollDistance = whyTrackHeight - h;
       if (scrollDistance <= 0) return;
