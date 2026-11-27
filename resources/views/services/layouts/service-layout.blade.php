@@ -36,7 +36,7 @@
 @endphp
 <main class="seo-service-page{{ $pageModifier ? ' seo-service-page--' . $pageModifier : '' }}">
     @foreach($service->sections->where('is_active', true) as $section)
-        @include('sections._service_section', ['section' => $section, 'data' => $section->content])
+        @include('services.sections.service-section', ['section' => $section, 'data' => $section->content])
     @endforeach
 </main>
 @endsection

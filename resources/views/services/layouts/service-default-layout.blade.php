@@ -98,7 +98,7 @@
     $pageModifier = $pageModifiers[$service->slug] ?? '';
 @endphp
 <main class="seo-service-page{{ $pageModifier ? ' seo-service-page--' . $pageModifier : '' }}">
-    @include('sections._render', ['sections' => $service->sections->where('is_active', true)])
+    @include('services.sections.service-sections', ['sections' => $service->sections->where('is_active', true)])
 </main>
 @endsection
 

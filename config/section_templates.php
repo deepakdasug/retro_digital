@@ -4,7 +4,7 @@ return [
 
     'custom' => [
         'name' => 'Custom Section Builder',
-        'view' => 'sections._custom_service',
+        'view' => 'services.sections.service-custom-section',
         'icon' => 'fa-solid fa-code',
         'fields' => [],
     ],
@@ -19,7 +19,7 @@ return [
     |
     | Structure:
     |   name   => Human-readable label shown in the admin "Add Section" dropdown
-    |   view   => Blade view path that renders it (resources/views/sections/*)
+    |   view   => Blade view path that renders it (resources/views/services/sections/*)
     |   icon   => Bootstrap icon class (optional, for admin UI)
     |   fields => Array of editable fields, keyed by field name
     |
@@ -33,7 +33,7 @@ return [
 
     'hero' => [
         'name' => 'Hero Banner',
-        'view' => 'sections.hero',
+        'view' => 'services.sections.service-hero-section',
         'icon' => 'fa-solid fa-sparkles',
         'fields' => [
             'eyebrow' => [
@@ -69,7 +69,7 @@ return [
 
     'features' => [
         'name' => 'Features Grid',
-        'view' => 'sections.features',
+        'view' => 'services.sections.service-features-section',
         'icon' => 'fa-solid fa-grip',
         'fields' => [
             'eyebrow' => [
@@ -114,7 +114,7 @@ return [
 
     'image_text' => [
         'name' => 'Image + Text',
-        'view' => 'sections.image_text',
+        'view' => 'services.sections.service-image-text-section',
         'icon' => 'fa-regular fa-image',
         'fields' => [
             'eyebrow' => [
@@ -162,7 +162,7 @@ return [
 
     'rich_text' => [
         'name' => 'Rich Text Block',
-        'view' => 'sections.rich_text',
+        'view' => 'services.sections.service-rich-text-section',
         'icon' => 'fa-solid fa-align-left',
         'fields' => [
             'eyebrow' => [
@@ -183,7 +183,7 @@ return [
 
     'cta' => [
         'name' => 'Call to Action',
-        'view' => 'sections.cta',
+        'view' => 'services.sections.service-cta-section',
         'icon' => 'fa-solid fa-bullhorn',
         'fields' => [
             'eyebrow' => [
@@ -219,7 +219,7 @@ return [
 
     'faq' => [
         'name' => 'Frequently Asked Questions',
-        'view' => 'sections.faq',
+        'view' => 'services.sections.service-faq-section',
         'icon' => 'fa-regular fa-circle-question',
         'fields' => [
             'eyebrow' => [
@@ -244,7 +244,7 @@ return [
     ],
 
     'seo_hero' => [
-        'name' => 'SEO — Hero', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-sparkles',
+        'name' => 'SEO — Hero', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-sparkles',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Main heading', 'rules' => 'nullable|string|max:200'],
@@ -260,7 +260,7 @@ return [
         ],
     ],
     'seo_proof' => [
-        'name' => 'SEO — Proof Bar', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-award',
+        'name' => 'SEO — Proof Bar', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-award',
         'fields' => [
             'heading' => ['type' => 'text', 'label' => 'Intro', 'rules' => 'nullable|string|max:160'],
             'items' => ['type' => 'repeater', 'label' => 'Proof points', 'rules' => 'nullable|array|max:4', 'fields' => [
@@ -270,7 +270,7 @@ return [
         ],
     ],
     'seo_audit' => [
-        'name' => 'SEO — Opportunity Audit', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-magnifying-glass-chart',
+        'name' => 'SEO — Opportunity Audit', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-magnifying-glass-chart',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -283,7 +283,7 @@ return [
         ],
     ],
     'seo_services' => [
-        'name' => 'SEO — Service Cards', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-layer-group',
+        'name' => 'SEO — Service Cards', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-layer-group',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -297,7 +297,7 @@ return [
         ],
     ],
     'seo_process' => [
-        'name' => 'SEO — Process Timeline', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-route',
+        'name' => 'SEO — Process Timeline', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-route',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -309,7 +309,7 @@ return [
         ],
     ],
     'seo_intent' => [
-        'name' => 'SEO — Search Intent', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-crosshairs',
+        'name' => 'SEO — Search Intent', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-crosshairs',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -321,7 +321,7 @@ return [
         ],
     ],
     'seo_technical' => [
-        'name' => 'SEO — Technical Bento', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-screwdriver-wrench',
+        'name' => 'SEO — Technical Bento', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-screwdriver-wrench',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -333,7 +333,7 @@ return [
         ],
     ],
     'seo_local' => [
-        'name' => 'SEO — Local Search', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-location-dot',
+        'name' => 'SEO — Local Search', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-location-dot',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -345,7 +345,7 @@ return [
         ],
     ],
     'seo_content' => [
-        'name' => 'SEO — Content Studio', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-pen-nib',
+        'name' => 'SEO — Content Studio', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-pen-nib',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -364,7 +364,7 @@ return [
         ],
     ],
     'seo_results' => [
-        'name' => 'SEO — Results Story', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-chart-line',
+        'name' => 'SEO — Results Story', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-chart-line',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -376,7 +376,7 @@ return [
         ],
     ],
     'seo_faq' => [
-        'name' => 'SEO — FAQ', 'view' => 'sections.seo_landing', 'icon' => 'fa-regular fa-circle-question',
+        'name' => 'SEO — FAQ', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-regular fa-circle-question',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],
@@ -388,7 +388,7 @@ return [
         ],
     ],
     'seo_cta' => [
-        'name' => 'SEO — Closing CTA', 'view' => 'sections.seo_landing', 'icon' => 'fa-solid fa-bullhorn',
+        'name' => 'SEO — Closing CTA', 'view' => 'services.sections.service-section-layout', 'icon' => 'fa-solid fa-bullhorn',
         'fields' => [
             'eyebrow' => ['type' => 'text', 'label' => 'Eyebrow', 'rules' => 'nullable|string|max:100'],
             'heading' => ['type' => 'text', 'label' => 'Heading', 'rules' => 'nullable|string|max:200'],

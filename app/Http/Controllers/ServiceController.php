@@ -15,7 +15,7 @@ class ServiceController extends Controller
 
         $layout = config(
             'page_layouts.' . $service->page_section . '.pages.' . $service->slug . '.show',
-            config('page_layouts.' . $service->page_section . '.show', 'services.show')
+            config('page_layouts.' . $service->page_section . '.show', 'services.layouts.service-default-layout')
         );
 
         return view($layout, compact('service'));

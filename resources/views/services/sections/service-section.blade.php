@@ -4,7 +4,7 @@
 @endphp
 
 @if($sectionType === 'seo_hero')
-    @include('sections.seo_landing', [
+    @include('services.sections.service-section-layout', [
         'section' => $section,
         'sectionType' => 'seo_hero',
         'data' => $data,

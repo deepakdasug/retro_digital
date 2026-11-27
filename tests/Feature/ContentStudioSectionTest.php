@@ -77,7 +77,7 @@ class ContentStudioSectionTest extends TestCase
         $this->assertCount(5, $savedContent['items']);
         Storage::disk('public')->assertExists($savedContent['banner_image']);
 
-        $renderedSection = view('sections.seo_landing', [
+        $renderedSection = view('services.sections.service-section-layout', [
             'data' => $savedContent,
             'sectionType' => 'seo_content',
         ])->render();
@@ -90,7 +90,7 @@ class ContentStudioSectionTest extends TestCase
         $this->assertStringNotContainsString('THE CONTENT PRINCIPLE', $renderedSection);
         $this->assertStringNotContainsString(' / CONTENT', $renderedSection);
 
-        $renderedThreeCardSection = view('sections.seo_landing', [
+        $renderedThreeCardSection = view('services.sections.service-section-layout', [
             'data' => array_merge($savedContent, ['items' => array_slice($savedContent['items'], 0, 3)]),
             'sectionType' => 'seo_content',
         ])->render();

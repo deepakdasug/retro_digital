@@ -146,11 +146,11 @@ body {
 /* First sections on interior pages need room below the fixed navigation. */
 body.inner-page main>section:first-child:not(.topic-section),
 body.inner-page>section:first-of-type:not(.topic-section) {
-  padding-top: 8rem;
+  padding-top: 6rem;
 }
 
 body.inner-page section[id] {
-  scroll-margin-top: 8rem;
+  scroll-margin-top: 6rem;
 }
 
 /* --- Video Content System (Smooth Scroll Docking) --- */
@@ -1458,11 +1458,11 @@ body.home-page .hero-section::before {
 
   body.inner-page main>section:first-child:not(.topic-section),
   body.inner-page>section:first-of-type:not(.topic-section) {
-    padding-top: 6.5rem;
+    padding-top: 4rem;
   }
 
   body.inner-page section[id] {
-    scroll-margin-top: 6.5rem;
+    scroll-margin-top: 4rem;
   }
 
   .contact-container#contact {

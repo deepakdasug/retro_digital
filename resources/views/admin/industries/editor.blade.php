@@ -1,4 +1,4 @@
-@extends('layouts.service-editor')
+@extends('services.layouts.service-editor-layout')
 
 @section('title', $industry->name . ' Visual Editor')
 

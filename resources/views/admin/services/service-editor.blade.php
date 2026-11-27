@@ -1,4 +1,4 @@
-@extends('layouts.service-editor')
+@extends('services.layouts.service-editor-layout')
 
 @section('title', $service->title . ' Visual Editor')
 
@@ -71,7 +71,7 @@
 
                     <div class="seo-editor-section-content" id="section-content-{{ $section->id }}">
                     <div class="seo-editor-preview">
-                        @include('sections._service_section', ['data' => $data, 'section' => $section])
+                        @include('services.sections.service-section', ['data' => $data, 'section' => $section])
                     </div>
 
                     <details class="seo-editor-edit">
@@ -87,7 +87,7 @@
                                     <small>Position 1–{{ $service->sections->count() }}. Other sections shift to make room.</small>
                                 </div>
                                 @if($section->section_type === 'custom')
-                                    @include('admin.services._custom_section_fields', ['section' => $section, 'data' => $data])
+                                    @include('admin.services.service-custom-section-fields', ['section' => $section, 'data' => $data])
                                 @else
                                 @foreach($template['fields'] as $key => $field)
                                     @php($value = old('sections.' . $section->id . '.content.' . $key, data_get($data, $key, $field['default'] ?? '')))

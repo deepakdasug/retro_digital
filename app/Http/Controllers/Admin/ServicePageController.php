@@ -20,7 +20,7 @@ class ServicePageController extends Controller
         $pages = Service::withCount('sections')->orderBy('page_section')->orderBy('title')->get();
         $sectionLabels = self::PAGE_SECTIONS;
 
-        return view('admin.services.index', compact('pages', 'sectionLabels'));
+        return view('admin.services.service-index', compact('pages', 'sectionLabels'));
     }
 
     public function create()
@@ -29,7 +29,7 @@ class ServicePageController extends Controller
         $sectionOptions = self::PAGE_SECTIONS;
         $isCreate = true;
 
-        return view('admin.services.settings', compact('service', 'sectionOptions', 'isCreate'));
+        return view('admin.services.service-settings', compact('service', 'sectionOptions', 'isCreate'));
     }
 
     public function store(Request $request)
@@ -61,7 +61,7 @@ class ServicePageController extends Controller
         $sectionOptions = self::PAGE_SECTIONS;
         $isCreate = false;
 
-        return view('admin.services.settings', compact('service', 'sectionOptions', 'isCreate'));
+        return view('admin.services.service-settings', compact('service', 'sectionOptions', 'isCreate'));
     }
 
     public function updateSettings(Request $request, Service $service)
@@ -94,7 +94,7 @@ class ServicePageController extends Controller
         $templates = config('section_templates');
         $sectionLabels = self::PAGE_SECTIONS;
 
-        $layout = config('page_layouts.' . $service->page_section . '.editor', 'admin.services.editor');
+        $layout = config('page_layouts.' . $service->page_section . '.editor', 'admin.services.service-editor');
 
         return view($layout, compact('service', 'templates', 'sectionLabels'));
     }
@@ -266,7 +266,7 @@ class ServicePageController extends Controller
             if ($request->isMethod('post')) {
                 $content = $this->customSectionContent($request, 'content', false);
                 $section = new ServiceSection(['content' => $content]);
-                $response['html'] = view('sections._custom_service', [
+                $response['html'] = view('services.sections.service-custom-section', [
                     'data' => $content,
                     'section' => $section,
                     'sectionType' => 'custom',
@@ -289,7 +289,7 @@ class ServicePageController extends Controller
 
         if ($request->isMethod('post')) {
             $previewView = $service->page_section === 'services'
-                ? 'sections._service_section'
+                ? 'services.sections.service-section'
                 : $template['view'];
             $response['html'] = view($previewView, [
                 'data' => $data,
