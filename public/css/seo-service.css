@@ -620,3 +620,35 @@ body.seo-editor-layout::-webkit-scrollbar-thumb:hover {
   background: #ef4444;
   color: #ffffff;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal="split"].is-reveal-ready {
+    overflow: clip;
+  }
+
+  [data-reveal="split"].is-reveal-ready :is(.seo-split-copy, .seo-split-image) {
+    transition: transform 1100ms cubic-bezier(.45, 0, .25, 1), opacity 950ms ease-in-out;
+  }
+
+  [data-reveal="split"].is-reveal-ready:not(.is-visible, :focus-within) .seo-split-copy {
+    opacity: 0;
+    transform: translateX(var(--split-reveal-distance));
+  }
+
+  [data-reveal="split"].is-reveal-ready:not(.is-visible, :focus-within) .seo-split-image {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--split-reveal-distance)));
+  }
+
+  [data-reveal="split"] .seo-split {
+    --split-reveal-distance: clamp(2rem, 7vw, 7rem);
+  }
+
+  [data-reveal="split"] .seo-split-reverse {
+    --split-reveal-distance: calc(-1 * clamp(2rem, 7vw, 7rem));
+  }
+
+  [data-reveal="split"].is-reveal-ready:focus-within :is(.seo-split-copy, .seo-split-image) {
+    transition: none;
+  }
+}

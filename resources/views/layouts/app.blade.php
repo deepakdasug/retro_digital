@@ -82,7 +82,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
-  <link rel="stylesheet" href="{{ asset('vendor/lenis/lenis.css') }}?v={{ file_exists(public_path('vendor/lenis/lenis.css')) ? filemtime(public_path('vendor/lenis/lenis.css')) : '1.0' }}">
+  @include('partials.smooth-scroll')
 
   {{-- page-specific extras (JSON-LD, preloads, per-page <style>) --}}
   @stack('head')
@@ -108,24 +108,6 @@
     @include('partials.whatsapp-widget')
   @endunless
 
-  <script src="{{ asset('vendor/lenis/lenis.min.js') }}?v={{ file_exists(public_path('vendor/lenis/lenis.min.js')) ? filemtime(public_path('vendor/lenis/lenis.min.js')) : '1.0' }}"></script>
-  <script>
-    (function () {
-      if (!window.Lenis || window.retroLenis) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      window.retroLenis = new window.Lenis({
-        autoRaf: true,
-        duration: 0.65,
-        wheelMultiplier: 1.0,
-        touchMultiplier: 1.0,
-        smoothWheel: true,
-        syncTouch: false,
-        anchors: false,
-        allowNestedScroll: true,
-        stopInertiaOnNavigate: true
-      });
-    })();
-  </script>
   @unless (request()->routeIs('admin.*'))
     <script src="{{ asset('js/main.js') }}?v={{ file_exists(public_path('js/main.js')) ? filemtime(public_path('js/main.js')) : '1.0' }}"></script>
     <script src="{{ asset('js/content-studio.js') }}?v={{ filemtime(public_path('js/content-studio.js')) }}"></script>

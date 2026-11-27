@@ -9,37 +9,40 @@
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lenis = window.retroLenis || null;
 
-  /* ---------- Intersection reveal ---------- */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        if (entry.target.dataset.revealOnce) revealObserver.unobserve(entry.target);
-      } else if (!entry.target.dataset.revealOnce) {
-        entry.target.classList.remove('is-visible');
-      }
+  if (prefersReduced || !('IntersectionObserver' in window)) return;
+
+  /* Observe the stationary section so the sliding columns cannot retrigger it. */
+  const splitSections = document.querySelectorAll('[data-reveal="split"]');
+  const splitObserver = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, intersectionRatio }) => {
+      target.classList.toggle('is-visible', intersectionRatio >= 0.15);
+      target.classList.add('is-reveal-ready');
     });
-  }, { threshold: 0.07, rootMargin: '0px 0px -12% 0px' });
+  }, { threshold: 0.15 });
+
+  splitSections.forEach((section) => splitObserver.observe(section));
+
+  /* Reveal each section and stagger group once, then keep its content visible. */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) {
+        target.classList.add('is-visible');
+        revealObserver.unobserve(target);
+      }
+      target.classList.add('is-reveal-ready');
+    });
+  });
 
   const revealTargets = document.querySelectorAll(
-    '[data-reveal], .seo-motion-in, .seo-motion-float, .seo-lp-hero-copy, .seo-lp-heading, ' +
-    '.seo-lp-service-card, .seo-lp-audit-list article, .seo-lp-process article, ' +
-    '.seo-lp-tech-card, .seo-lp-intent-cards article, .seo-lp-results-metrics article, ' +
-    '.seo-lp-faq-list details, .seo-lp-proof-point'
+    '.seo-reveal, .seo-reveal-up, .seo-reveal-left, .seo-reveal-right, .seo-reveal-fade, .seo-reveal-scale, .seo-stagger'
   );
+  revealTargets.forEach((element) => revealObserver.observe(element));
 
-  revealTargets.forEach((el) => {
-    if (!el.dataset.reveal) el.dataset.reveal = 'up';
-    revealObserver.observe(el);
-  });
-
-  /* Stagger groups */
-  document.querySelectorAll('[data-stagger]').forEach((group) => {
-    group.querySelectorAll(':scope > *').forEach((item, i) => {
-      item.style.setProperty('--stagger-delay', `${i * 0.07}s`);
-      revealObserver.observe(item);
+  document.querySelectorAll('.seo-service-page > .seo-section:not([data-reveal]), .seo-service-page > .custom-section-container')
+    .forEach((section) => {
+      section.classList.add('seo-reveal-up');
+      revealObserver.observe(section);
     });
-  });
 
   /* ---------- Magnetic buttons ---------- */
   const magnets = document.querySelectorAll(
@@ -79,7 +82,7 @@
   }
 
   /* ---------- Subtle cursor follower (desktop, fine pointer) ---------- */
-  if (!prefersReduced && window.matchMedia('(pointer: fine)').matches) {
+  if (window.matchMedia('(pointer: fine)').matches) {
     const cursor = document.createElement('div');
     cursor.className = 'cinema-cursor';
     document.body.appendChild(cursor);

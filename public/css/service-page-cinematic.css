@@ -78,13 +78,7 @@
   background: var(--cinema-bright);
   border-radius: 2px;
   margin-right: 8px;
-  animation: cinema-kicker-pulse 2.2s ease infinite;
 }
-@keyframes cinema-kicker-pulse {
-  0%,100% { opacity: .55; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.5); }
-}
-
 .seo-lp-hero h1, .seo-lp h2 {
   font-weight: 800;
   letter-spacing: -.045em;

@@ -93,13 +93,7 @@
     border-radius: 50%;
     background: #10b981;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22);
-    animation: adminPulse 2s infinite ease-in-out;
   }
-  @keyframes adminPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.55; transform: scale(0.85); }
-  }
-
   .admin-topbar-title h1 {
     margin: 0;
     color: #1a2f21;

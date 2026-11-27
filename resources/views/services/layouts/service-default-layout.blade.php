@@ -103,5 +103,5 @@
 @endsection
 
 @push('scripts')
-<script defer src="{{ asset('js/cinematic-v2.js') }}?v={{ filemtime(public_path('js/cinematic-v2.js')) }}"></script>
+<script defer src="{{ asset('js/service-cinematic.js') }}?v={{ filemtime(public_path('js/service-cinematic.js')) }}"></script>
 @endpush

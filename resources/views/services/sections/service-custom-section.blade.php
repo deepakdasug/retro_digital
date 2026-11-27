@@ -1,7 +1,7 @@
 @php
     $frameId = 'custom-frame-' . ($section->id ?? uniqid());
 @endphp
-<div class="custom-section-container" style="width:100%;position:relative;clear:both;">
+<div class="custom-section-container" @if(!empty($anchorId)) id="{{ $anchorId }}" @endif style="width:100%;position:relative;clear:both;">
     <iframe
         id="{{ $frameId }}"
         name="{{ $frameId }}"

@@ -65,8 +65,8 @@ class VideoMarketingPageSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'VIDEO MARKETING',
-                'heading' => 'Turn attention into action with video that converts.',
-                'body' => 'From first idea to final edit, we plan, produce, and distribute video content that helps the right audience find your brand, understand your offer, and take the next step.',
+                'heading' => 'Watch. Engage. Convert. Repeat.',
+                'body' => 'Video built to stop the scroll and move people to act.',
                 'hero_image' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1600&q=80',
                 'hero_image_alt' => 'Video production team filming a brand campaign',
                 'button_text' => 'Plan your video strategy',

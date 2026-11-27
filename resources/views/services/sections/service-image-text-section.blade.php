@@ -2,7 +2,7 @@
     $image = $data['image'] ?? '';
     $imageUrl = !$image ? '' : (str_starts_with($image, 'http') ? $image : (str_starts_with($image, 'assets/') || str_starts_with($image, 'storage/') ? asset($image) : asset('storage/' . $image)));
 @endphp
-<section class="seo-section">
+<section class="seo-section" data-reveal="split">
     <div class="seo-container seo-split {{ ($data['image_position'] ?? 'left') === 'right' ? 'seo-split-reverse' : '' }}">
         <div class="seo-split-image">
             @if($imageUrl)<img src="{{ $imageUrl }}" alt="{{ $data['image_alt'] ?? ($data['heading'] ?? 'Section image') }}" loading="lazy">@else

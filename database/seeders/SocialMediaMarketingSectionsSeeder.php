@@ -10,17 +10,20 @@ class SocialMediaMarketingSectionsSeeder extends Seeder
 {
     public function run(): void
     {
-        $service = Service::where('page_section', 'services')
-            ->where('slug', 'social-media-marketing')
-            ->first();
+        $service = Service::firstOrCreate(
+            ['slug' => 'social-media-marketing'],
+            [
+                'page_section' => 'services',
+                'title' => 'Social Media Marketing',
+                'meta_description' => 'Social media strategy, content, and campaigns that turn followers into customers.',
+            ],
+        );
 
-        if (! $service) {
+        if ($service->page_section !== 'services' || $service->sections()->exists()) {
             return;
         }
 
         DB::transaction(function () use ($service): void {
-            $service->sections()->delete();
-
             foreach ($this->sections() as $index => $section) {
                 $service->sections()->create([
                     'section_type' => 'custom',
@@ -78,9 +81,9 @@ class SocialMediaMarketingSectionsSeeder extends Seeder
             ],
             'values' => [
                 'eyebrow' => 'Social Media Marketing Agency',
-                'heading' => 'Turn scrolls into',
-                'heading_accent' => 'revenue.',
-                'body' => 'We build scroll-stopping social strategies, content engines and paid campaigns that turn followers into loyal customers — across Instagram, TikTok, LinkedIn, YouTube and beyond.',
+                'heading' => 'Scroll. Stop. Click.',
+                'heading_accent' => 'Convert.',
+                'body' => 'Social strategies that turn followers into loyal customers.',
                 'cta1_text' => 'Get a Free Strategy Call',
                 'cta1_link' => '/contact#contact',
                 'cta2_text' => 'See Our Work',

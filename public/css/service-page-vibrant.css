@@ -60,11 +60,6 @@
     color:var(--svc-b);
 }
 
-.seo-service-page .seo-lp-proof{
-    background:linear-gradient(90deg,var(--svc-tint),#fff 62%);
-    border-bottom:1px solid var(--svc-line);
-}
-
 .seo-service-page .seo-lp-proof-icon{
     background:var(--svc-tint);
     color:var(--svc-a);
@@ -147,6 +142,10 @@
     border-radius:16px 16px 0 0;
     background:linear-gradient(90deg,var(--svc-a),var(--svc-b));
     opacity:.72;
+}
+
+.seo-service-page .seo-lp-service-card.has-image:before{
+    display:none;
 }
 
 .seo-service-page .seo-lp-service-card:hover{
@@ -333,18 +332,6 @@
 .seo-service-page .seo-lp-faq-list summary i,
 .seo-service-page .seo-lp-faq-mark{
     color:var(--svc-a);
-}
-
-.seo-service-page .seo-lp-cta-card{
-    background:
-        radial-gradient(circle at 84% 14%,var(--svc-glow),transparent 30%),
-        radial-gradient(circle at 8% 92%,rgba(255,255,255,.08),transparent 28%),
-        linear-gradient(115deg,var(--svc-deep),var(--svc-a));
-}
-
-.seo-service-page .seo-lp-cta-card .seo-lp-overline,
-.seo-service-page .seo-lp-cta-sparkle{
-    color:var(--svc-b);
 }
 
 .seo-service-page .seo-section{

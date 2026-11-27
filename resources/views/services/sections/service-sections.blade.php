@@ -58,7 +58,7 @@
     @endif
 
     {{-- Render the actual section content --}}
-    @include($template['view'], ['section' => $section, 'sectionType' => $section->section_type, 'data' => $data])
+    @include('services.sections.service-section', ['section' => $section, 'sectionType' => $section->section_type, 'data' => $data])
 
     @if(!empty($isAdmin))
         </div> {{-- End Admin Wrapper --}}

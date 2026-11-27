@@ -68,12 +68,6 @@
             border-radius: 50%;
             background: #ef4444;
             box-shadow: 0 0 8px #ef4444;
-            animation: errorPulse 2s infinite ease-in-out;
-        }
-
-        @keyframes errorPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.5; }
         }
 
         .error-num-red {

@@ -293,6 +293,7 @@ class ServicePageController extends Controller
                 : $template['view'];
             $response['html'] = view($previewView, [
                 'data' => $data,
+                'service' => $service,
                 'section' => null,
                 'sectionType' => $type,
             ])->render();

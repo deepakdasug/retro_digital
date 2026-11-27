@@ -8,7 +8,10 @@ class ServiceController extends Controller
 {
     public function show(string $section, string $slug)
     {
-        $service = Service::with(['sections' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')])
+        $service = Service::with(['sections' => fn ($query) => $query
+            ->where('is_active', true)
+            ->when($section === 'services', fn ($query) => $query->whereNotIn('section_type', ['seo_proof', 'seo_technical']))
+            ->orderBy('sort_order')])
             ->where('page_section', $section)
             ->where('slug', $slug)
             ->firstOrFail();

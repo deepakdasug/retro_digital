@@ -71,8 +71,8 @@ class MarketingServicePagesSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'PAID MEDIA THAT PREDICTABLY PROFITS',
-                'heading' => 'Turn every ad rupee into more than you put in.',
-                'body' => 'We build Google, Meta and LinkedIn campaigns that start with real intent, test creative fast, and scale only what proves itself — with reporting you can trust.',
+                'heading' => 'Test. Learn. Scale. Profit.',
+                'body' => 'Paid media that turns every rupee into measurable growth.',
                 'hero_image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80',
                 'hero_image_alt' => 'Paid media dashboard review',
                 'button_text' => 'Get a media plan',
@@ -207,8 +207,8 @@ class MarketingServicePagesSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'EMAIL THAT EARNS THE INBOX',
-                'heading' => 'Turn subscribers into repeat customers.',
-                'body' => 'We build lifecycle flows and campaigns that put useful, timely messages where your customers already look — with deliverability you can count on.',
+                'heading' => 'Reach. Retain. Repeat.',
+                'body' => 'Lifecycle emails that earn the inbox and the next sale.',
                 'hero_image' => 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?auto=format&fit=crop&w=1600&q=80',
                 'hero_image_alt' => 'Email automation dashboard',
                 'button_text' => 'Get a flow audit',
@@ -334,8 +334,8 @@ class MarketingServicePagesSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'CONTENT MARKETING WITH MISSION',
-                'heading' => 'Create content that makes you first to trust.',
-                'body' => 'We plan, write, publish and iterate around the questions your customers actually ask — turning audiences into qualified demand.',
+                'heading' => 'Inform. Engage. Convert. Repeat.',
+                'body' => 'Content that answers real questions and earns real trust.',
                 'hero_image' => 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80',
                 'hero_image_alt' => 'Content marketing collaboration team',
                 'button_text' => 'Plan a content audit',
@@ -468,8 +468,8 @@ class MarketingServicePagesSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'ORM SERVICES FOR A CALM REPUTATION',
-                'heading' => 'Turn casual mentions into clear, protected stories.',
-                'body' => 'We watch review sites, social and SERP placements, respond consistently, generate more genuine ratings, and control your page-1 story — with a playbook for slow problems.',
+                'heading' => 'Listen. Respond. Protect. Grow.',
+                'body' => 'Reputation strategies that keep your brand trusted online.',
                 'hero_image' => 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80',
                 'hero_image_alt' => 'Online reputation management dashboard',
                 'button_text' => 'Get a reputation audit',

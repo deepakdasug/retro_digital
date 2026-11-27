@@ -7,8 +7,17 @@
 function initRetrotech() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lenisEasing = (time) => 1 - Math.pow(1 - time, 3);
-  // Lenis is initialised globally in layouts/app.blade.php for every page.
   const lenis = window.retroLenis || null;
+
+  const homeMarquees = document.querySelectorAll('.home-page :is(.marquee-ticker-bar, .testi-marquee-stage)');
+  if (homeMarquees.length && 'IntersectionObserver' in window) {
+    const marqueeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        target.classList.toggle('is-motion-paused', !isIntersecting);
+      });
+    });
+    homeMarquees.forEach((marquee) => marqueeObserver.observe(marquee));
+  }
 
   /* =========================================================================
      0. SMOOTH ANCHOR SCROLL

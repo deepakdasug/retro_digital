@@ -346,8 +346,8 @@
         {{-- Card 3: Custom Software Development --}}
         <article class="service-card" data-anim="up" data-category="enterprise">
           <div class="sc-media">
-            <img src="{{ asset('assets/images/data-center-new.jpg') }}" alt="Custom Enterprise Software Development"
-              loading="lazy" decoding="async">
+            <x-home-photo photo="1555066931-4365d14bab8c" fallback="tech-development/software-development.jpg"
+              alt="Custom Enterprise Software Development" />
             <div class="sc-media-overlay"></div>
             <span class="sc-floating-badge"><i class="fa-solid fa-server"></i> Bespoke Systems</span>
           </div>
@@ -409,8 +409,8 @@
         {{-- Card 5: Digital Marketing & Technical SEO --}}
         <article class="service-card" data-anim="up" data-category="growth">
           <div class="sc-media">
-            <img src="{{ asset('assets/images/enterprise-clients.jpg') }}" alt="Digital Marketing & Technical SEO"
-              loading="lazy" decoding="async">
+            <x-home-photo photo="1460925895917-afdab827c52f" fallback="tech-development/business-growth.webp"
+              alt="Digital Marketing & Technical SEO" />
             <div class="sc-media-overlay"></div>
             <span class="sc-floating-badge"><i class="fa-solid fa-chart-line"></i> Revenue Engine</span>
           </div>
@@ -440,8 +440,8 @@
         {{-- Card 6: WhatsApp Business API & AI Automation --}}
         <article class="service-card" data-anim="up" data-category="growth">
           <div class="sc-media">
-            <img src="{{ asset('assets/images/it-asset-management.jpg') }}"
-              alt="WhatsApp Business API & Conversational AI" loading="lazy" decoding="async">
+            <x-home-photo photo="1611162616475-46b635cb6868" fallback="tech-development/whatsapp-integration.jpg"
+              alt="WhatsApp Business API & Conversational AI" />
             <div class="sc-media-overlay"></div>
             <span class="sc-floating-badge"><i class="fa-brands fa-whatsapp"></i> Conversational AI</span>
           </div>
@@ -571,8 +571,9 @@
                 {{-- Right: Seamless Bleed Image with Soft Gradient Fade --}}
                 <div class="wsc-media">
                   <div class="wsc-img-backdrop">
-                    <img src="{{ asset('assets/images/process-1.png') }}" alt="Experienced IT Professionals"
-                      class="wsc-bleed-img" loading="lazy">
+                    <x-home-photo photo="1522071820081-009f0129c71c" fallback="tech-development/custom-application.webp"
+                      alt="Experienced IT Professionals"
+                      class="wsc-bleed-img" sizes="(max-width: 860px) 90vw, 50vw" />
                     <div class="wsc-floating-pill wsc-pill-top">
                       <span class="wsc-fp-icon"><i class="fa-solid fa-circle-check"></i></span>
                       <span>Senior Devs (L5+)</span>
@@ -635,8 +636,9 @@
                 {{-- Right: Seamless Bleed Image with Soft Gradient Fade --}}
                 <div class="wsc-media">
                   <div class="wsc-img-backdrop">
-                    <img src="{{ asset('assets/images/it-asset-management.jpg') }}" alt="Customised Business Solutions"
-                      class="wsc-bleed-img" loading="lazy">
+                    <x-home-photo photo="1552664730-d307ca884978" fallback="tech-development/custom-application.webp"
+                      alt="Customised Business Solutions"
+                      class="wsc-bleed-img" sizes="(max-width: 860px) 90vw, 50vw" />
                     <div class="wsc-floating-pill wsc-pill-top">
                       <span class="wsc-fp-icon"><i class="fa-solid fa-circle-check"></i></span>
                       <span>100% Bespoke Code</span>
@@ -699,8 +701,9 @@
                 {{-- Right: Seamless Bleed Image with Soft Gradient Fade --}}
                 <div class="wsc-media">
                   <div class="wsc-img-backdrop">
-                    <img src="{{ asset('assets/images/process-3.png') }}" alt="On-Time Project Delivery & SLA"
-                      class="wsc-bleed-img" loading="lazy">
+                    <x-home-photo photo="1531482615713-2afd69097998" fallback="tech-development/business-growth.webp"
+                      alt="On-Time Project Delivery & SLA"
+                      class="wsc-bleed-img" sizes="(max-width: 860px) 90vw, 50vw" />
                     <div class="wsc-floating-pill wsc-pill-top">
                       <span class="wsc-fp-icon"><i class="fa-solid fa-circle-check"></i></span>
                       <span>99.98% Uptime SLA</span>
@@ -1012,7 +1015,8 @@
             data-industry-cat="fintech">
             {{-- Image 21: Banking & FinTech --}}
             <div class="icp-img-wrap">
-              <img src="{{ asset('assets/images/enterprise.webp') }}" alt="Banking &amp; FinTech" loading="lazy">
+              <x-home-photo photo="1559526324-c1f275fbfa32" fallback="tech-development/crm-development.jpg"
+                alt="Banking & FinTech" />
               <div class="icp-img-overlay"></div>
               <span class="icp-img-tag">FinTech</span>
             </div>
@@ -1039,8 +1043,8 @@
             data-anim="right" data-industry-cat="commerce">
             {{-- Image 22: Real Estate & PropTech --}}
             <div class="icp-img-wrap">
-              <img src="{{ asset('assets/images/global-locations.jpg') }}" alt="Real Estate &amp; PropTech"
-                loading="lazy">
+              <x-home-photo photo="1600596542815-ffad4c1539a9" fallback="global-locations.jpg"
+                alt="Real Estate & PropTech" />
               <div class="icp-img-overlay"></div>
               <span class="icp-img-tag">PropTech</span>
             </div>
@@ -1123,8 +1127,8 @@
             data-industry-cat="enterprise">
             {{-- Image 25: Manufacturing & Logistics --}}
             <div class="icp-img-wrap">
-              <img src="{{ asset('assets/images/it-asset-remarketing.jpg') }}" alt="Manufacturing &amp; Logistics"
-                loading="lazy">
+              <x-home-photo photo="1716643863806-989dd76ae093" fallback="it-asset-remarketing.jpg"
+                alt="Manufacturing & Logistics" />
               <div class="icp-img-overlay"></div>
               <span class="icp-img-tag">Logistics</span>
             </div>
@@ -1151,8 +1155,8 @@
             data-industry-cat="commerce">
             {{-- Image 26: Travel & Hospitality --}}
             <div class="icp-img-wrap">
-              <img src="{{ asset('assets/images/hard-drive-disposal.jpg') }}" alt="Travel &amp; Hospitality"
-                loading="lazy">
+              <x-home-photo photo="1621293954908-907159247fc8" fallback="enterprise-clients.jpg"
+                alt="Travel & Hospitality" />
               <div class="icp-img-overlay"></div>
               <span class="icp-img-tag">Hospitality</span>
             </div>

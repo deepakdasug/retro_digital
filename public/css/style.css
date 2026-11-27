@@ -165,10 +165,10 @@ body.inner-page section[id] {
   overflow: hidden;
   pointer-events: none;
   transform-origin: 0 0;
-  will-change: transform, width, height, border-radius;
+  will-change: transform;
   border-radius: 0px;
   box-shadow: none !important;
-  contain: paint;
+  contain: layout paint;
   backface-visibility: hidden;
 }
 
@@ -181,11 +181,17 @@ body.inner-page section[id] {
   object-fit: cover;
   display: block;
   border-radius: inherit;
-  filter: brightness(0.55);
   transform: translateZ(0);
 }
 
-/* No colour overlay — brightness via #heroVideo filter */
+.video-content-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, .45);
+}
+
 .video-dark-overlay {
   position: absolute;
   inset: 0;
@@ -193,9 +199,9 @@ body.inner-page section[id] {
   border-radius: inherit;
   background: linear-gradient(
     180deg,
-    rgba(8, 18, 12, 0.35) 0%,
-    rgba(8, 18, 12, 0.15) 45%,
-    rgba(8, 18, 12, 0.48) 100%
+    rgba(8, 18, 12, 0.55) 0%,
+    rgba(8, 18, 12, 0.44) 45%,
+    rgba(8, 18, 12, 0.62) 100%
   );
   opacity: 1;
   pointer-events: none;
@@ -223,6 +229,15 @@ body.inner-page section[id] {
   -webkit-backdrop-filter: blur(20px);
   border-bottom-color: var(--theme-border-light, rgba(47, 111, 70, 0.15));
   box-shadow: 0 4px 25px rgba(21, 39, 29, 0.08);
+}
+
+body.home-page .site-header.scrolled {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.home-page .is-motion-paused :is(.ticker-track, .testi-marquee-track) {
+  animation-play-state: paused;
 }
 
 /* Interior pages header visibility - leaves Home Page header completely intact */
@@ -865,21 +880,6 @@ body.home-page .hero-section::before {
   background: var(--whatsapp-green);
   border-radius: 50%;
   box-shadow: 0 0 10px var(--whatsapp-green);
-  animation: pulseDot 2s infinite;
-}
-
-@keyframes pulseDot {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.3);
-    opacity: 0.6;
-  }
 }
 
 /* Hero Titles (H1): Extra-large display sizing with tight tracking */
@@ -1933,7 +1933,6 @@ body.home-page .hero-section::before {
   inset: -3px;
   border-radius: 50%;
   background: rgba(16, 185, 129, 0.4);
-  animation: bentoPulse 2s infinite ease-in-out;
 }
 
 .bkb-ping-dot {
@@ -1977,20 +1976,6 @@ body.home-page .hero-section::before {
   line-height: 1.65;
   margin: 0;
   max-width: 760px;
-}
-
-@keyframes bentoPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.3);
-    opacity: 0.6;
-  }
 }
 
 /* ==========================================================================
@@ -2041,7 +2026,6 @@ body.home-page .hero-section::before {
   inset: -3px;
   border-radius: 50%;
   background: rgba(16, 185, 129, 0.4);
-  animation: bentoPulse 2s infinite ease-in-out;
 }
 
 .sk-ping-dot {
@@ -2685,7 +2669,6 @@ body.home-page .hero-section::before {
   border-radius: 50%;
   background: #6ec088;
   box-shadow: 0 0 8px #6ec088;
-  animation: pulseDot 2s infinite;
 }
 
 .h-hud-graph {
@@ -2773,7 +2756,6 @@ body.home-page .hero-section::before {
   border-radius: 50%;
   background: #6ec088;
   box-shadow: 0 0 10px #6ec088;
-  animation: pulseDot 2s infinite;
 }
 
 .hap-text {
@@ -3392,21 +3374,6 @@ body.home-page .acred-card--expertise:hover {
   height: 7px;
   border-radius: 50%;
   background: #34d399;
-  animation: acredPulse 1.8s ease-in-out infinite;
-}
-
-@keyframes acredPulse {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.45;
-    transform: scale(1.5);
-  }
 }
 
 @media (max-width: 1100px) {
@@ -3497,21 +3464,6 @@ body.home-page .acred-card--expertise:hover {
   border-radius: 50%;
   background: #34d399;
   box-shadow: 0 0 10px #34d399;
-  animation: pulseGreen 2s infinite;
-}
-
-@keyframes pulseGreen {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.5;
-    transform: scale(0.85);
-  }
 }
 
 .acc-quote-box {
@@ -3769,7 +3721,6 @@ body.home-page .acred-card--expertise:hover {
   border-radius: 50%;
   background: #10b981;
   box-shadow: 0 0 8px #10b981;
-  animation: pulseDot 2s infinite;
 }
 
 /* Studio IDE Interactive Benchmark Bar */
@@ -4133,7 +4084,6 @@ body.home-page .acred-card--expertise:hover {
   height: 6px;
   border-radius: 50%;
   background: #10b981;
-  animation: pulseDot 2s infinite;
 }
 
 .wmc-vis-lock {
@@ -4183,7 +4133,6 @@ body.home-page .acred-card--expertise:hover {
   border-radius: 50%;
   background: #10b981;
   box-shadow: 0 0 8px #10b981;
-  animation: pulseDot 2s infinite;
 }
 
 .wmp-sla {
@@ -10578,6 +10527,15 @@ body.contact-page-leaving::after {
   overflow-wrap: anywhere;
 }
 
+.admin-article-title-wrap>strong.admin-article-name {
+  display: block;
+  max-width: 15rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+}
+
 .icon-only-control:focus-visible {
   outline: 3px solid rgba(57, 129, 88, 0.35);
   outline-offset: 3px;
@@ -11272,7 +11230,6 @@ body.home-page .site-footer,
   inset: 0;
   border-radius: 50%;
   background: #34d399;
-  animation: pingDot 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .te-label {
@@ -11982,7 +11939,6 @@ body.home-page .site-footer,
   inset: 0;
   border-radius: 50%;
   background: #10b981;
-  animation: pingDot 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .clsp-text {
@@ -13062,7 +13018,6 @@ body.home-page .site-footer,
   border-radius: 50%;
   background: #34d399;
   box-shadow: 0 0 10px #34d399;
-  animation: pulseGreen 2s infinite;
 }
 
 .acc-quote {

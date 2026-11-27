@@ -64,8 +64,8 @@ class SeoServicePageSeeder extends Seeder
         return [
             ['seo_hero', [
                 'eyebrow' => 'Organic growth, built with intent',
-                'heading' => 'Turn search demand into your next growth channel.',
-                'body' => 'Build lasting visibility with technical SEO, useful content, and a clear plan to reach the people already looking for what you do.',
+                'heading' => 'Rank. Reach. Grow. Repeat.',
+                'body' => 'Search strategies that turn demand into steady growth.',
                 'button_text' => 'Plan your SEO growth',
                 'button_link' => '/contact#contact',
                 'items' => [
